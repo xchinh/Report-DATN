@@ -1,0 +1,74 @@
+\section{Đặt vấn đề}
+\label{sec:datvande}
+
+Trường Đại học Bách khoa - ĐHQG-HCM hiện có quy mô hơn 1000 cán bộ, giảng viên trong đó có 667 thường xuyên di chuyển giữa 2 cơ sở (268 Lý Thường Kiệt, quận 10 và Thủ Đức) để giảng dạy, nghiên cứu và quản lý. Nhà trường đã đầu tư hệ sinh thái phần mêm quản trị trên nền tảng Web bao gồm hệ thống quản lý nhân sự (HRM), hệ thống quản văn phòng điện tử (iOffice). Các hệ thống này hoạt động hiệu quả trên máy tính văn phòng với đầy đủ chức năng, quy chuẩn nghiệp vu, tuy nhiên khi chuyển sang bối cảnh làm việc di dộng, chúng bộc lộ những hạn chế nghiêm trọng qua khảo sát thực tế. Nhóm đã xác định được 4 vấn đề cốt lõi.
+\begin{itemize}
+    \item \textit{Giao diện Web không tối ưu trên thiết bị di động:} Nhận sự gặp khó khăn khi truy cập vào các hệ thống HRM hoặc iOffice trên điện thoại với chữ nhỏ, menu phức tạp, phải phóng to/cuộn nhiều lần để xem nộ dung văn bản hoặc điền phiếu nghỉ phép, một số trang bị vỡ layout trên màn hình di động,\dots 
+    \item \textit{Thiếu thông báo đẩy thời gian thực:} Cán bộ không nhận được thông báo  tức thời khi có các đơn nghỉ phép/công tác cần duyệt/từ chối, văn bản mới được phân công, hoặc lịch họp đột xuất thay đổi phòng/giờ, mà phải chủ động đăng nhập web để kiểm tra nhiều lần trong ngày gây bất tiện không đáng có.
+    \item \textit{Hạn chế khi thực hiện phê duyệt:} Đối với các lãnh đạo đơn vị (Trưởng/Phó Khoa, Phòng) thường xuyên đi công tác hoặc họp liên tục, khi không có máy tính xách tay bên canh, các đơn từ có thể bị treo, ảnh hướng tới tiến độ công việc và quyền lợi của người lao động.
+    \item \textit{Công tác điểm danh trong các buổi họp toàn trường:} Việc điểm danh thủ công làm giảm tính minh bạch, gặp nhiều hạn chế cho việc thu thập, nhập liệu, tổng hợp
+\end{itemize}
+
+Xuất phát từ những bất cập thực tiễn đó, đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} được thực hiện nhằm xây dựng ứng dụng di động **MyHCMUT** (Flutter Monorepo) đóng vai trò là một Cổng giao tiếp di động tập trung, tích hợp trực tiếp với các dịch vụ Backend hiện hữu của Nhà trường.
+
+\section{Mục tiêu của đề tài}
+\label{sec:muctieu}
+
+\subsection{Mục tiêu tổng quát}
+Nghiên cứu, thiết kế và phát triển thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} trên nền tảng Flutter, phục vụ công tác quản lý nhân sự, văn phòng điện tử, điều hành nhiệm vụ, lịch họp và thông báo đẩy; đồng thời xây dựng kiến trúc tích hợp hướng API (API-based Integration Architecture) an toàn với hệ thống dịch vụ Backend hiện hữu của Trường Đại học Bách khoa -- ĐHQG-HCM.
+
+\subsection{Mục tiêu cụ thể}
+\begin{itemize}
+    \item Xây dựng ứng dụng di động hỗ trợ tra cứu hồ sơ lý lịch 11 danh mục, giao diện Diff Viewer thẩm định chỉnh sửa thông tin cá nhân trực quan.
+    \item Hiện thực hóa quy trình đăng ký nghỉ phép Form Wizard 4 bước kết hợp thuật toán kiểm tra ràng buộc thời gian thực (Real-time Validation); đăng ký và phê duyệt đi công tác đa cấp.
+    \item Tích hợp phân hệ Văn phòng số (iOffice) hỗ trợ tra cứu văn bản đến/đi, tích hợp trình đọc PDF trực tiếp và phân phối chỉ đạo văn bản.
+    \item Xây dựng phân hệ Quản lý Nhiệm vụ \& Công việc (Tasks/Missions) hỗ trợ phân loại 3 nhóm nhiệm vụ, duyệt cây đầu việc phân cấp (\texttt{outlined-tree}) và nộp báo cáo tiến độ đợt.
+    \item Phát triển phân hệ Lịch công tác và Điểm danh cuộc họp thời gian thực qua WebSocket (\texttt{Socket.IO}) trong khung giờ mở trước 1 giờ.
+    \item Xây dựng Trung tâm Thông báo đẩy (FCM) hỗ trợ điều hướng sâu (Deep Linking) dựa trên 4 trường Metadata có cấu trúc.
+    \item Thiết lập bộ kiểm thử 4 tầng (Testing Pyramid) và cấu hình tự động hóa kiểm thử, đóng gói ứng dụng với GitLab CI Pipeline.
+\end{itemize}
+
+\section{Phạm vi đề tài}
+\label{sec:phamvi}
+
+Để đảm bảo tính minh bạch học thuật và tính khả thi trong quá trình thực hiện, phạm vi đề tài được phân định rõ ràng như sau:
+\begin{itemize}
+    \item \textbf{Phần Sinh viên trực tiếp phát triển mới (100\%):} Toàn bộ ứng dụng di động MyHCMUT (Flutter Monorepo, Design System Material 3 Semantic Tokens, Riverpod State, Interceptor, UI/UX 5 phân hệ, Bộ Unit/Widget Tests, CI/CD Pipeline) và các thành phần Mobile API Adapters bổ sung trên Backend (\texttt{staff\_ly\_lich\_mobile}, helper validate nghỉ phép 4 tầng trên \texttt{hrm-be}, bổ sung metadata thông báo trên \texttt{ioffice-be}).
+    \item \textbf{Hệ thống Hiện hữu của Nhà trường:} Các dịch vụ nghiệp vụ HRM Core, iOffice Core, Tasks Backend, Hệ thống Cơ sở dữ liệu PostgreSQL và Cụm Kafka/Redis nội bộ của Nhà trường.
+    \item \textbf{Dịch vụ Bên thứ ba tích hợp:} Máy chủ xác thực tập trung HCMUT CAS SSO / LDAP và dịch vụ Google Firebase Cloud Messaging (FCM).
+    \item \textbf{Giới hạn nghiên cứu (Out of Scope / Future Works):} Không xây dựng lại toàn bộ database hay backend có sẵn của trường; Phân hệ Kê khai Khoa học Công nghệ (KHCN) và Phòng họp trực tuyến (Meetings) dừng ở mức UI Mock; Loại bỏ tích hợp Chữ ký số Viettel CA.
+\end{itemize}
+
+\section{Chức năng chính của hệ thống}
+\label{sec:chucnangchinh}
+
+Ứng dụng di động MyHCMUT được thiết kế với 5 nhóm chức năng cốt lõi:
+\begin{enumerate}
+    \item \textbf{Xác thực \& Quản lý Phiên (Auth):} Đăng nhập CAS SSO, Mật khẩu, lưu trữ Token an toàn trong Keychain/Keystore, tự động Silent Refresh Token khi gặp lỗi 401.
+    \item \textbf{Quản lý Nhân sự (HRM):} Tra cứu lý lịch 11 nhóm, Diff Viewer so sánh sửa lý lịch, Wizard đăng ký nghỉ phép 4 bước + Validate 4 tầng, Đăng ký \& duyệt đi công tác, Phê duyệt hàng loạt (\texttt{BatchActionBar}).
+    \item \textbf{Văn phòng số (iOffice):} Tra cứu văn bản đến/đi, trình xem PDF trực tiếp, phân phối chỉ đạo xử lý văn bản.
+    \item \textbf{Quản lý Nhiệm vụ (Tasks/Missions):} Phân loại 3 nhóm nhiệm vụ, lọc 5 tab, chi tiết 4 tab (Tổng quan, Cây đầu việc \texttt{outlined-tree}, Báo cáo đợt, Liên kết) và Modal chi tiết việc.
+    \item \textbf{Lịch công tác \& Điểm danh họp (Schedule):} Lịch tuần trường/đơn vị, Điểm danh có mặt trước giờ họp 1 giờ, Báo vắng mặt có lý do, đồng bộ dữ liệu tức thời qua WebSocket.
+\end{enumerate}
+
+\section{Ý nghĩa đề tài và Bố cục Báo cáo}
+\label{sec:ynghia_bocuc}
+
+\subsection{Ý nghĩa đề tài}
+\begin{itemize}
+    \item \textbf{Ý nghĩa khoa học:} Đề tài làm rõ mô hình kiến trúc tích hợp đa dịch vụ hướng API (API-based Multi-backend Integration Architecture) trong việc phát triển ứng dụng di động doanh nghiệp trên nền tảng hạ tầng phân tán sẵn có.
+    \item \textbf{Ý nghĩa thực tiễn:} Đóng góp một giải pháp ứng dụng di động hoàn chỉnh cho Trường ĐHBK -- ĐHQG-HCM, giúp nâng cao hiệu quả điều hành, giảm độ trễ phê duyệt văn bản, tối ưu hóa công tác quản lý nhân sự và hiện đại hóa quy trình điểm danh cuộc họp.
+\end{itemize}
+
+\subsection{Bố cục Báo cáo}
+Báo cáo Đồ án Tốt nghiệp được cấu trúc thành 8 chương:
+\begin{itemize}
+    \item \textbf{Chương 1: Giới thiệu} -- Đặt vấn đề, mục tiêu, phạm vi, chức năng chính và ý nghĩa đề tài.
+    \item \textbf{Chương 2: Phân tích các hệ thống có liên quan trên thị trường} -- Khảo sát các hệ thống Web và App hiện hữu, đánh giá và đề xuất giải pháp.
+    \item \textbf{Chương 3: Cơ sở lý thuyết và công nghệ} -- Lý thuyết kiến trúc, công nghệ Frontend Mobile, Backend tích hợp và các công nghệ hỗ trợ.
+    \item \textbf{Chương 4: Phân tích yêu cầu hệ thống} -- Tác nhân, ma trận phân quyền RBAC, yêu cầu chức năng và phi chức năng.
+    \item \textbf{Chương 5: Đặc tả chi tiết các use-case và biểu đồ hoạt động} -- Đặc tả 5 Use Case cốt lõi, 4 Activity Diagrams và 8 Sequence Diagrams.
+    \item \textbf{Chương 6: Phân tích và thiết kế hệ thống} -- Targeted ERD, kiến trúc Clean Architecture, MultiDomainAuthInterceptor và luồng vận hành System Operation.
+    \item \textbf{Chương 7: Kết quả hiện thực và kiểm thử} -- Kết quả hiện thực giao diện các phân hệ, kết quả kiểm thử 4 tầng (Unit, Widget, Integration, E2E) và số liệu Benchmark hiệu năng.
+    \item \textbf{Chương 8: Tổng kết và hướng phát triển} -- Nhận xét kết quả đạt được, hạn chế và hướng mở rộng tương lai.
+\end{itemize}

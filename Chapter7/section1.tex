@@ -1,0 +1,49 @@
+\section{Kết quả Hiện thực Giao diện và Logic các Phân hệ}
+\label{sec:ketqua_hienthuc}
+
+\subsection{Cấu trúc Dự án Mã nguồn Modular Monorepo (Melos)}
+Toàn bộ mã nguồn ứng dụng di động MyHCMUT được tổ chức tại \texttt{myhcmut-mobile}:
+\begin{itemize}
+    \item \texttt{apps/myhcmut}: Ứng dụng chính, cấu hình \texttt{GoRouter}, Firebase Messaging.
+    \item \texttt{packages/core/global\_system}: Hệ thống Design System Material 3 Semantic Tokens.
+    \item \texttt{packages/core/network}: Dio Client, \texttt{MultiDomainAuthInterceptor}.
+    \item \texttt{packages/core/auth}: Xử lý phiên đăng nhập và mã hóa Token.
+    \item \texttt{modules/hrm}: Phân hệ Quản trị Nhân sự.
+    \item \texttt{modules/ioffice}: Phân hệ Văn phòng số, Nhiệm vụ (\texttt{mission}) và Lịch (\texttt{schedule}).
+    \item \texttt{modules/notification}: Phân hệ Thông báo đẩy FCM và giải mã Deep Link.
+\end{itemize}
+
+\subsection{Hiện thực Phân hệ Quản trị Nhân sự (HRM Mobile)}
+\begin{itemize}
+    \item \textbf{Màn hình Tra cứu Lý lịch (\texttt{PersonalProfilePage}):} Sử dụng \texttt{TabBarView} phân chia 11 nhóm danh mục lý lịch, hỗ trợ lưu đệm SQLite.
+    \item \textbf{Màn hình Thẩm định So sánh Sai khác (\texttt{ApproveProfileDetailPage}):} Thẻ \texttt{ReviewDiffCard} hiển thị giá trị cũ (màu đỏ) và giá trị mới (màu xanh lá) giúp chuyên viên TCCB đối chiếu và duyệt đề xuất sửa lý lịch.
+    \item \textbf{Đăng ký Nghỉ phép Form Wizard 4 bước (\texttt{LeaveRequestPage}):} Tích hợp kiểm tra ràng buộc thời gian thực 4 tầng từ API \texttt{/api/tcns-nghi-phep/validate}, tự động cảnh báo nộp trễ và tính toán số ngày nghỉ chính xác.
+    \item \textbf{Đăng ký \& Duyệt Đi công tác (\texttt{BusinessTripEditPage}, \texttt{ApproveBtripListPage}):} Tạo form chuyến đi, đính kèm dự toán/kế hoạch và phê duyệt danh sách cán bộ đi công tác.
+    \item \textbf{Phê duyệt Đơn Hàng loạt (\texttt{ApproveTimeOffListPage}):} Sử dụng thanh tác vụ nhóm \texttt{AppBatchActionBar} duyệt nhiều đơn cùng lúc.
+\end{itemize}
+
+\subsection{Hiện thực Phân hệ Văn phòng số (iOffice Mobile)}
+\begin{itemize}
+    \item \textbf{Danh sách Văn bản đến/đi (\texttt{IncomingDocsListPage}, \texttt{OutgoingDocsListPage}):} Phân loại theo độ khẩn cấp, tìm kiếm nhanh và tải cuộn vô tận (Infinite Scroll).
+    \item \textbf{Trình xem PDF Trực tiếp (\texttt{IncomingDocDetailPage}):} Tích hợp trình xem tài liệu PDF trực tiếp trên ứng dụng.
+    \item \textbf{Phân phối \& Chỉ đạo Văn bản (\texttt{AssignmentCard}):} Bút phê chỉ đạo và giao việc cho cán bộ cấp dưới.
+\end{itemize}
+
+\subsection{Hiện thực Phân hệ Quản lý Nhiệm vụ \& Công việc (Tasks / Missions)}
+\begin{itemize}
+    \item \textbf{Danh sách Nhiệm vụ (\texttt{MissionsListPage}):} Phân loại 3 nhóm (Trọng tâm, Được giao, Chung) kết hợp bộ lọc 5 Tab trạng thái.
+    \item \textbf{Chi tiết Nhiệm vụ 4 Tab (\texttt{MissionDetailPage}):} Tab Tổng quan, Tab Phân công với cây đầu việc \texttt{outlined-tree}, Tab Báo cáo tiến độ đợt và Tab Liên kết văn bản.
+    \item \textbf{Modals Chi tiết Công việc (\texttt{TaskDetailBottomSheet}) \& Báo cáo Đợt (\texttt{ReportBatchDetailBottomSheet}).}
+\end{itemize}
+
+\subsection{Hiện thực Phân hệ Lịch công tác \& Điểm danh Cuộc họp Thời gian thực}
+\begin{itemize}
+    \item \textbf{Lịch công tác Tuần (\texttt{ScheduleView}):} Chuyển đổi linh hoạt giữa Lịch tuần trường và Lịch đơn vị.
+    \item \textbf{Điểm danh Cuộc họp Thời gian thực:} Nút điểm danh chỉ sáng trong khung giờ mở trước 1 giờ; xử lý luồng có mặt và báo vắng mặt kèm lý do (1--200 ký tự); phát tán sự kiện \texttt{Socket.IO: scheduleCheckin} đồng bộ tức thời.
+\end{itemize}
+
+\subsection{Hiện thực Trung tâm Thông báo Đẩy FCM \& Tự động hóa CI/CD}
+\begin{itemize}
+    \item \textbf{FCM Push \& Deep Linking:} Đăng ký Token, lắng nghe thông báo nền/foreground, phân tích 4 trường metadata trong \texttt{NotificationRouteParser} để kích hoạt \texttt{GoRouter} điều hướng sâu.
+    \item \textbf{GitLab CI Pipeline:} Tự động hóa quy trình qua \texttt{.gitlab-ci.yml} gồm 3 giai đoạn: \texttt{setup} $\rightarrow$ \texttt{quality} (format check, static analyze, test coverage) $\rightarrow$ \texttt{build} (APK / AAB release).
+\end{itemize}

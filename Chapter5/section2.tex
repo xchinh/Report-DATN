@@ -1,0 +1,42 @@
+\section{Biểu đồ Hoạt động cho các Quy trình Nghiệp vụ Chính}
+\label{sec:activity_diagrams}
+
+\subsection{Quy trình Đăng ký \& Phê duyệt Nghỉ phép}
+Sơ đồ mô tả chi tiết 4 tầng kiểm tra ràng buộc thời gian thực (tính số ngày làm việc, kiểm tra trùng lịch, mốc nộp trễ 3 ngày/15 ngày, quỹ phép năm) và quy trình luân chuyển phê duyệt đa cấp giữa Lãnh đạo Đơn vị và Phòng TCCB.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/activity_leave_process.png}
+    \caption{\textit{Biểu đồ Hoạt động Quy trình Đăng ký và Phê duyệt Nghỉ phép}}
+    \label{fig:act_leave}
+\end{figure}
+
+\subsection{Quy trình Đăng ký \& Phê duyệt Đi công tác}
+Sơ đồ mô tả quy trình cán bộ lập kế hoạch chuyến đi công tác, đính kèm dự toán kinh phí, chọn đoàn công tác, gửi lãnh đạo đơn vị phê duyệt và chuyển tiếp lên Ban Giám hiệu đối với các chuyến công tác cấp trường hoặc ngoài nước.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/activity_business_trip.png}
+    \caption{\textit{Biểu đồ Hoạt động Quy trình Đăng ký và Phê duyệt Đi công tác}}
+    \label{fig:act_btrip}
+\end{figure}
+
+\subsection{Quy trình Quản lý \& Theo dõi Tiến độ Nhiệm vụ (Missions / Tasks)}
+Sơ đồ mô tả cách thức người dùng tra cứu nhiệm vụ theo vai trò, duyệt cây đầu việc phân cấp (\texttt{outlined-tree}), xem chi tiết từng công việc (\texttt{tasks}) và nộp các đợt báo cáo tiến độ.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/activity_mission_workflow.png}
+    \caption{\textit{Biểu đồ Hoạt động Quy trình Quản lý và Theo dõi Tiến độ Nhiệm vụ}}
+    \label{fig:act_mission}
+\end{figure}
+
+\subsection{Quy trình Điểm danh Cuộc họp Thời gian thực}
+Sơ đồ thể hiện việc kiểm tra ràng buộc khung giờ mở điểm danh (trước 1 giờ), xử lý luồng có mặt hoặc báo vắng kèm lý do giải trình, và phát tán sự kiện WebSocket đồng bộ dữ liệu tức thời.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/activity_schedule_attendance.png}
+    \caption{\textit{Biểu đồ Hoạt động Quy trình Điểm danh Cuộc họp Thời gian thực}}
+    \label{fig:act_attendance}
+\end{figure}

@@ -1,0 +1,45 @@
+\section{Nhận xét kết quả đạt được}
+\label{sec:nhanxet_ketqua}
+
+Trải qua quá trình nghiên cứu, thiết kế, hiện thực hóa và kiểm thử thực nghiệm, đồ án đã hoàn thành toàn diện các mục tiêu đề ra:
+\begin{enumerate}
+    \item \textbf{Về mặt Kiến trúc Ứng dụng Di động:} Xây dựng thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} dựa trên kiến trúc Modular Monorepo với công cụ Melos, áp dụng Clean Architecture phân lớp nghiêm ngặt, quản lý trạng thái Compile-safe với Riverpod 3 và hệ thống giao diện Material 3 Semantic Tokens (\texttt{packages/core/global\_system}) hỗ trợ hoàn hảo cả hai chế độ Light/Dark Mode.
+    \item \textbf{Về mặt Tích hợp Đa dịch vụ:} Hiện thực giải pháp \texttt{MultiDomainAuthInterceptor} và cơ chế Shared Secret JWT Bridge, cho phép ứng dụng di động giao tiếp an toàn và đồng bộ với 3 hệ thống Backend độc lập của Nhà trường (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}) mà không làm thay đổi kiến trúc nghiệp vụ gốc.
+    \item \textbf{Về mặt Nghiệp vụ Quản trị:}
+    \begin{itemize}
+        \item \textit{Phân hệ HRM:} Hoàn thiện tra cứu lý lịch 11 danh mục, giao diện so sánh sai khác (Diff Viewer) thẩm định sửa lý lịch, Form Wizard 4 bước đăng ký nghỉ phép kết hợp thuật toán kiểm tra ràng buộc thời gian thực, đăng ký và phê duyệt đi công tác.
+        \item \textit{Phân hệ iOffice:} Hoàn thiện tra cứu văn bản đến/đi, tích hợp trình xem tệp PDF trực tiếp và phân phối chỉ đạo văn bản.
+        \item \textit{Phân hệ Tasks/Missions:} Hoàn thiện quản lý nhiệm vụ đa phân loại (Trọng tâm, Được giao, Chung) với 5 tab lọc, chi tiết 4 tab (Tổng quan, Cây đầu việc, Báo cáo tiến độ, Liên kết văn bản) và modal chi tiết công việc.
+        \item \textit{Phân hệ Lịch \& Điểm danh họp:} Hoàn thiện tra cứu lịch tuần trường/đơn vị, cơ chế điểm danh có mặt trong khung giờ mở trước 1 giờ, chức năng báo vắng và đồng bộ dữ liệu thời gian thực qua WebSocket (\texttt{Socket.IO}).
+        \item \textit{Phân hệ Thông báo:} Hoàn thiện chuỗi tiêu thụ thông điệp từ Kafka đẩy ra Firebase FCM, điều hướng sâu Deep Linking dựa trên Metadata có cấu trúc và cập nhật số huy hiệu Badge.
+    \end{itemize}
+    \item \textbf{Về mặt Đảm bảo Chất lượng \& Kiểm thử:} Thiết lập bộ kiểm thử 4 tầng toàn diện (112 ca kiểm thử với độ phủ 81.4\%), hoàn thành 4 kịch bản E2E thực tế, đo lường định lượng hiệu năng mượt mà (60 FPS, RAM $\approx$ 95--145MB, API $< 150$ms) và tự động hóa quy trình CI/CD trên GitLab CI.
+\end{enumerate}
+
+\section{Ý nghĩa khoa học và Giá trị Thực tiễn}
+\label{sec:giatri_thuctien}
+
+\begin{itemize}
+    \item \textbf{Đối với Nhà trường:} Đóng góp một giải pháp phần mềm hoàn chỉnh phục vụ trực tiếp chiến lược chuyển đổi số và quản trị đại học thông minh; hiện đại hóa quy trình hành chính, giảm thiểu giấy tờ và rút ngắn thời gian phê duyệt văn bản/nghỉ phép.
+    \item \textbf{Đối với Cán bộ, Giảng viên:} Cung cấp một trợ lý số di động tiện lợi, giúp cán bộ chủ động quản lý hồ sơ cá nhân, theo dõi nhiệm vụ, điểm danh họp và nhận thông báo công việc khẩn cấp mọi lúc, mọi nơi ngay trên điện thoại.
+    \item \textbf{Ý nghĩa Khoa học:} Chứng minh tính khả thi và hiệu quả vượt trội của mô hình Kiến trúc Tích hợp Đa dịch vụ hướng API (API-based Multi-backend Integration Architecture) khi xây dựng ứng dụng di động cho các tổ chức, doanh nghiệp có hạ tầng phân tán sẵn có.
+\end{itemize}
+
+\section{Những Hạn chế Còn tồn tại}
+\label{sec:hanche}
+
+Mặc dù đã đạt được nhiều kết quả quan trọng, đồ án vẫn còn một số điểm hạn chế do giới hạn về mặt thời gian và hạ tầng thử nghiệm:
+\begin{itemize}
+    \item Phân hệ Kê khai Khoa học Công nghệ (KHCN) và Phòng họp trực tuyến (Meetings) mới dừng lại ở mức độ thiết kế giao diện sẵn sàng (UI Mock) do Backend API của trường chưa hoàn thiện.
+    \item Chưa tích hợp giải pháp Chữ ký số tập trung (Digital Signature) do tính pháp lý và hạ tầng chứng thư số cần quy trình cấp phép đặc biệt.
+    \item Việc kiểm thử hiệu năng mới được thực hiện trên môi trường Lab với quy mô 100 requests mẫu, chưa đánh giá được tải thực tế khi có hàng nghìn cán bộ truy cập đồng thời trong các đợt cao điểm.
+\end{itemize}
+
+\section{Hướng Phát triển Đề tài}
+\label{sec:huongphattrien}
+
+\begin{enumerate}
+    \item \textbf{Hoàn thiện Tích hợp Phân hệ Khoa học Công nghệ (KHCN):} Kết nối với Backend API chính thức của Phòng KHCN để cán bộ có thể kê khai danh mục bài báo khoa học, đề tài NCKH và bằng sáng chế ngay trên ứng dụng di động.
+    \item \textbf{Phát triển Tính năng Phòng họp Trực tuyến (Meetings):} Tích hợp giao thức WebRTC / Jitsi Meet phục vụ các cuộc họp trực tuyến nội bộ an toàn.
+    \item \textbf{Nghiên cứu Tích hợp Trợ lý Ảo AI (AI Agent):} Ứng dụng công nghệ xử lý ngôn ngữ tự nhiên (NLP / LLM) hỗ trợ cán bộ tra cứu nhanh quy chế đào tạo, thủ tục hành chính, quy định nghỉ phép và tự động nhắc nhở hạn chót của các nhiệm vụ trọng tâm.
+\end{enumerate}

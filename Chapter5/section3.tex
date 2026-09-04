@@ -1,0 +1,66 @@
+\section{Biểu đồ Tuần tự Tương tác Hệ thống (Sequence Diagrams)}
+\label{sec:sequence_diagrams}
+
+\subsection{Sequence 1: Đăng nhập Hệ thống \& Phân phối Shared JWT}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_login_token.png}
+    \caption{\textit{Biểu đồ Tuần tự Đăng nhập SSO và Phân phối Token Dùng chung}}
+    \label{fig:seq_login}
+\end{figure}
+
+\subsection{Sequence 2: Đăng ký \& Validate Nghỉ phép Thời gian thực}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_leave_validation.png}
+    \caption{\textit{Biểu đồ Tuần tự Đăng ký và Kiểm tra Ràng buộc Nghỉ phép}}
+    \label{fig:seq_leave_val}
+\end{figure}
+
+\subsection{Sequence 3: Phê duyệt Đơn Nghỉ phép Đa cấp}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_leave_approval.png}
+    \caption{\textit{Biểu đồ Tuần tự Phê duyệt Đơn Nghỉ phép Đa cấp}}
+    \label{fig:seq_leave_app}
+\end{figure}
+
+\subsection{Sequence 4: Đăng ký \& Phê duyệt Chuyến Đi công tác}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_business_trip.png}
+    \caption{\textit{Biểu đồ Tuần tự Đăng ký và Phê duyệt Đi công tác}}
+    \label{fig:seq_btrip}
+\end{figure}
+
+\subsection{Sequence 5: Thẩm định So sánh Sai khác (Diff Viewer) Sửa Lý lịch}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_profile_diff.png}
+    \caption{\textit{Biểu đồ Tuần tự Thẩm định So sánh Sai khác (Diff Viewer) Sửa Lý lịch}}
+    \label{fig:seq_diff}
+\end{figure}
+
+\subsection{Sequence 6: Quản lý Nhiệm vụ, Cây Đầu việc \& Báo cáo Tiến độ}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_mission_tasks.png}
+    \caption{\textit{Biểu đồ Tuần tự Quản lý Nhiệm vụ, Cây Đầu việc và Báo cáo Tiến độ}}
+    \label{fig:seq_mission}
+\end{figure}
+
+\subsection{Sequence 7: Điểm danh Cuộc họp qua WebSocket Socket.IO}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_meeting_checkin.png}
+    \caption{\textit{Biểu đồ Tuần tự Điểm danh Cuộc họp Thời gian thực qua WebSocket}}
+    \label{fig:seq_checkin}
+\end{figure}
+
+\subsection{Sequence 8: Pipeline Thông báo Đẩy Bất đồng bộ (Kafka sang FCM sang Mobile)}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_kafka_fcm_push.png}
+    \caption{\textit{Biểu đồ Tuần tự Pipeline Xử lý Thông báo Đẩy Bất đồng bộ và Điều hướng sâu}}
+    \label{fig:seq_fcm}
+\end{figure}

@@ -1,0 +1,78 @@
+## LaTeX auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## LaTeX build tools & sync files
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+## Bibliography / Citations auxiliary files (bibtex / biblatex / biber)
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+*.brf
+
+## Glossaries & Indexes
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.ist
+*.idx
+*.ilg
+*.ind
+*.nlg
+*.nlo
+*.nls
+
+## Listings & Minted
+*.lol
+*.los
+_minted*
+*.pyg
+
+## Other intermediate results
+*.dvi
+*.xdv
+*.nav
+*.snm
+*.vrb
+*.upa
+*.upb
+*.tdo
+
+## Build output folders
+build/
+latex.out/
+
+## PDF Output (bỏ comment dòng dưới nếu muốn loại bỏ file PDF build ra)
+*.pdf
+
+## OS & Editor temporary files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

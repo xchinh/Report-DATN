@@ -1,0 +1,28 @@
+\section{Cơ sở lý thuyết}
+\label{sec:coso_lythuyet}
+
+\subsection{Mô hình Kiến trúc Phân lớp Sạch (Clean Architecture)}
+Kiến trúc Phân lớp Sạch (Clean Architecture) do Robert C. Martin đề xuất nhằm mục đích phân tách mã nguồn thành các lớp độc lập với nguyên tắc phụ thuộc hướng vào trong (Dependency Rule). Đối với ứng dụng di động doanh nghiệp có quy mô lớn, kiến trúc này mang lại các lợi ích cốt lõi:
+\begin{itemize}
+    \item \textbf{Độc lập với Framework và UI:} Logic nghiệp vụ không bị ràng buộc vào các widget hiển thị của Flutter, cho phép dễ dàng tái cấu trúc giao diện mà không ảnh hưởng đến quy tắc xử lý dữ liệu.
+    \item \textbf{Dễ dàng Kiểm thử (Testability):} Tầng nghiệp vụ (Domain) và Tầng dữ liệu (Data) có thể được kiểm thử độc lập thông qua Mock Repositories mà không cần khởi chạy môi trường giao diện người dùng.
+    \item \textbf{Độc lập với Nguồn dữ liệu:} Ứng dụng có thể dễ dàng chuyển đổi hoặc kết hợp giữa Local Cache (SQLite / Secure Storage) và Remote Data Source (Dio HTTP Client) một cách minh bạch.
+\end{itemize}
+
+\subsection{Kiến trúc RESTful API và Giao thức HTTPS}
+REST (Representational State Transfer) là kiến trúc giao tiếp chuẩn hóa giữa Client và Server dựa trên giao thức HTTP không trạng thái (Stateless). Ứng dụng MyHCMUT sử dụng các phương thức HTTP chuẩn:
+\begin{itemize}
+    \item \texttt{GET}: Truy vấn dữ liệu (danh sách văn bản, lịch trình, lý lịch cán bộ).
+    \item \texttt{POST}: Tạo mới bản ghi hoặc kích hoạt xử lý nghiệp vụ (nộp đơn nghỉ phép, điểm danh họp).
+    \item \texttt{PUT / PATCH}: Cập nhật thông tin (duyệt đơn nghỉ phép, sửa lý lịch).
+    \item \texttt{DELETE}: Xóa hoặc hủy yêu cầu.
+\end{itemize}
+Mọi luồng truyền tin giữa ứng dụng di động và máy chủ đều được mã hóa bằng giao thức HTTPS/TLS đảm bảo an toàn thông tin, chống nghe lén và tấn công Man-in-the-Middle (MITM).
+
+\subsection{Quản lý Phiên (Session Management) và Cơ chế Shared Secret JWT Bridge}
+Trong môi trường ứng dụng di động phân tán giao tiếp đồng thời với 3 dịch vụ Backend độc lập (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}), cơ chế xác thực đóng vai trò sống còn:
+\begin{enumerate}
+    \item \textbf{Cơ chế JSON Web Token (JWT - RFC 7519):} Chuỗi Token mã hóa chứa thông tin định danh cán bộ (\texttt{id}, \texttt{username}, \texttt{shcc}, \texttt{maDonVi}, \texttt{roles}, \texttt{permissions}).
+    \item \textbf{Shared Secret JWT Bridge:} Thay vì mỗi Backend phải gửi request xác thực chéo về Auth Server mỗi khi nhận một request từ Mobile, tất cả các dịch vụ Backend của Nhà trường cùng chia sẻ chung một khóa bí mật (\texttt{AUTH\_JWT\_SECRET}). Khi Mobile gửi Token kèm Header \texttt{Authorization: Bearer <token>}, từng dịch vụ Backend tự giải mã và xác thực Token cục bộ chỉ trong vòng dưới 5ms, triệt tiêu hoàn toàn điểm nghẽn hiệu năng (Bottleneck).
+    \item \textbf{Cơ chế Dual-Token và Tự động Làm mới (Silent Refresh):} Access Token có thời hạn ngắn (Short-lived) để đảm bảo an toàn, kết hợp với Refresh Token dài hạn lưu trữ mã hóa trong Keychain/Keystore. Khi Access Token hết hạn, Interceptor của ứng dụng di động tự động gọi endpoint làm mới token ở tầng nền mà không làm gián đoạn phiên làm việc của người dùng.
+\end{enumerate}

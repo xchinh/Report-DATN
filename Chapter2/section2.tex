@@ -1,0 +1,85 @@
+\section{Công nghệ Phát triển Ứng dụng Di động (Frontend Mobile Stack)}
+\label{sec:frontend_tech}
+
+\subsection{Lựa chọn Nền tảng Phát triển Ứng dụng Di động}
+Để lựa chọn giải pháp công nghệ tối ưu cho ứng dụng MyHCMUT, nhóm đã tiến hành phân tích và so sánh giữa ba hướng tiếp cận: Native (Kotlin/Swift), React Native (JavaScript Bridge), và Flutter (Dart & Canvas Engine).
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{|p{3cm}|X|X|X|}
+    \hline
+    \textbf{Tiêu chí So sánh} & \textbf{Native (Kotlin/Swift)} & \textbf{React Native} & \textbf{Flutter (Google)} \\
+    \hline
+    \textbf{Cơ chế biên dịch \& Render} & Biên dịch Native trực tiếp cho từng hệ điều hành. & Chạy mã JavaScript qua tầng cầu nối JavaScript Bridge. & Biên dịch AOT sang mã máy C/C++, tự vẽ giao diện bằng Impeller/Skia Engine. \\
+    \hline
+    \textbf{Hiệu năng Khung hình} & Cực cao, ổn định 60--120 FPS. & Có thể bị giảm FPS hoặc nghẽn bridge khi dữ liệu I/O lớn. & Cực cao, duy trì ổn định 60 FPS khi cuộn danh sách lớn. \\
+    \hline
+    \textbf{Tính nhất quán Giao diện} & Phụ thuộc vào UI Components gốc của từng OS. & Giao diện ánh xạ Native Widgets, có thể sai lệch giữa các OS. & Nhất quán 100\% trên cả Android và iOS nhờ cơ chế Widget riêng. \\
+    \hline
+    \textbf{Chi phí \& Tốc độ Phát triển} & Cao, cần 2 đội ngũ phát triển và bảo trì riêng biệt. & Nhanh, dùng chung mã nguồn JavaScript/TypeScript. & Nhanh, dùng chung mã nguồn Dart, hỗ trợ Stateful Hot Reload tức thì. \\
+    \hline
+    \end{tabularx}
+    \caption{\textit{Bảng so sánh lựa chọn nền tảng phát triển ứng dụng di động}}
+    \label{tab:compare_mobile}
+\end{table}
+
+\noindent \textbf{$\rightarrow$ Quyết định Kỹ thuật:} Nhóm lựa chọn **Flutter và ngôn ngữ Dart** vì Flutter đảm bảo tính nhất quán giao diện Material 3 trên mọi thiết bị, hiệu năng AOT mượt mà và tiết kiệm chi phí bảo trì.
+
+\subsection{Lựa chọn Giải pháp Quản lý Trạng thái (State Management)}
+Trong ứng dụng di động doanh nghiệp với nhiều phân hệ độc lập, việc lựa chọn kiến trúc quản lý trạng thái quyết định tính ổn định và khả năng mở rộng của mã nguồn. Nhóm đã thực hiện so sánh giữa các giải pháp phổ biến trong hệ sinh thái Flutter:
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{|p{3cm}|X|X|X|}
+    \hline
+    \textbf{Tiêu chí So sánh} & \textbf{Provider} & \textbf{BLoC (Business Logic Component)} & \textbf{Riverpod 3 (Được chọn)} \\
+    \hline
+    \textbf{Tính an toàn biên dịch (Compile-safe)} & Thấp, dễ gặp lỗi \texttt{ProviderNotFoundException} lúc runtime. & Cao, kiểm soát chặt chẽ qua Events và States. & Tuyệt đối (Compile-time safe), bắt lỗi phụ thuộc ngay khi biên dịch. \\
+    \hline
+    \textbf{Phụ thuộc BuildContext} & Bắt buộc phải có \texttt{BuildContext} trong cây Widget. & Yêu cầu \texttt{BuildContext} để đọc BlocProvider. & Hoàn toàn không phụ thuộc \texttt{BuildContext}, đọc state từ bất kỳ đâu. \\
+    \hline
+    \textbf{Xử lý Dữ liệu Bất đồng bộ (Async State)} & Thủ công, cần tự viết cờ \texttt{isLoading}, \texttt{error}. & Cần định nghĩa nhiều class State (\texttt{Loading}, \texttt{Loaded}, \texttt{Error}). & Chuẩn hóa hoàn hảo qua \texttt{AsyncValue} (\texttt{loading}, \texttt{data}, \texttt{error}). \\
+    \hline
+    \textbf{Quản lý Bộ nhớ (Memory Management)} & Thủ công gọi \texttt{dispose()}. & Cần đóng các StreamControllers thủ công. & Tự động hủy và giải phóng bộ nhớ khi rời màn hình với \texttt{.autoDispose}. \\
+    \hline
+    \end{tabularx}
+    \caption{\textit{Bảng so sánh các giải pháp Quản lý Trạng thái trong Flutter}}
+    \label{tab:compare_state}
+\end{table}
+
+\noindent \textbf{$\rightarrow$ Quyết định Kỹ thuật:} Nhóm lựa chọn **Riverpod 3 (kết hợp AsyncNotifier và Code Generation)** làm kiến trúc quản lý trạng thái chuẩn mực cho toàn bộ dự án.
+
+\subsection{Lựa chọn Kiến trúc Cấu trúc Dự án: Monorepo với Melos}
+Để giải quyết bài toán phát triển nhiều phân hệ lớn (HRM, iOffice, Tasks, Schedule) mà không làm phình to một gói mã nguồn nguyên khối (Monolithic), nhóm áp dụng mô hình **Modular Monorepo** được quản lý bởi công cụ **Melos**:
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{|p{3cm}|X|X|}
+    \hline
+    \textbf{Tiêu chí} & \textbf{Single Package (Nguyên khối)} & \textbf{Modular Monorepo với Melos (Được chọn)} \\
+    \hline
+    \textbf{Cấu trúc Mã nguồn} & Toàn bộ code nằm trong một thư mục \texttt{lib/} duy nhất. & Chia tách thành các Core Packages và Feature Modules riêng biệt. \\
+    \hline
+    \textbf{Tính Tái sử dụng} & Khó tái sử dụng Design System hoặc Network Client. & Gói \texttt{global\_system} và \texttt{network} được chia sẻ cho mọi module. \\
+    \hline
+    \textbf{Phụ thuộc vòng} & Dễ xảy ra import chéo, gây phụ thuộc vòng lộn xộn. & Phân tầng nghiêm ngặt: Feature Module chỉ phụ thuộc Core Packages. \\
+    \hline
+    \textbf{Tự động hóa CI/CD} & Chạy test toàn bộ dự án dù chỉ sửa một dòng code. & Chạy phân tích tĩnh, định dạng và kiểm thử độc lập cho từng module. \\
+    \hline
+    \end{tabularx}
+    \caption{\textit{Bảng so sánh kiến trúc cấu trúc dự án Monorepo và Single Package}}
+    \label{tab:compare_monorepo}
+\end{table}
+
+\subsection{Lựa chọn Giải pháp Điều hướng: GoRouter}
+Nhóm lựa chọn thư viện **GoRouter** của đội ngũ phát triển Flutter thay vì Navigator 2.0 thuần. GoRouter hỗ trợ Declarative URL-based Routing, tích hợp cơ chế kiểm tra quyền truy cập (Route Guards) trước khi chuyển trang và đặc biệt hỗ trợ phân giải Deep Linking từ thông báo đẩy FCM một cách tự nhiên và chính xác.
+
+\subsection{Tầng Giao tiếp Mạng và Quản lý Bộ nhớ đệm}
+\begin{itemize}
+    \item \textbf{Dio HTTP Client:} Hỗ trợ Interceptors mạnh mẽ, thiết lập Timeout toàn cục và xử lý chuyển đổi JSON tự động.
+    \item \textbf{Flutter Secure Storage:} Lưu trữ an toàn Token xác thực mã hóa trong Keychain (iOS) và Keystore (Android).
+    \item \textbf{SQLite (sqflite) Caching:} Lưu trữ dữ liệu danh mục tĩnh (Master Data) để hỗ trợ hiển thị tức thì và giảm tải số lượng request lên máy chủ.
+\end{itemize}

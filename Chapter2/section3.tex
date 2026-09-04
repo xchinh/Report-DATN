@@ -1,0 +1,34 @@
+\section{Công nghệ Backend Hiện hữu và Tích hợp Đa dịch vụ}
+\label{sec:backend_tech}
+
+Hệ thống dịch vụ Backend phục vụ ứng dụng di động MyHCMUT là nền tảng hiện hữu của Trường Đại học Bách khoa -- ĐHQG-HCM, bao gồm các dịch vụ \texttt{myhcmut-be}, \texttt{hrm-be}, và \texttt{ioffice-be}. Dưới đây là phân tích các công nghệ nền tảng và cơ chế tích hợp then chốt:
+
+\subsection{Môi trường Thực thi và Web Framework}
+\begin{itemize}
+    \item \textbf{Node.js \& TypeScript:} Môi trường thực thi JavaScript phía máy chủ dựa trên V8 Engine với cơ chế Non-blocking I/O hướng sự kiện (Event-driven Event Loop), kết hợp cùng TypeScript cung cấp kiểu dữ liệu tĩnh nghiêm ngặt giúp giảm thiểu lỗi runtime.
+    \item \textbf{Express.js Framework:} Khung ứng dụng web tối giản, xử lý định tuyến RESTful API và chuỗi xử lý Middleware (xác thực, phân quyền, logging, xử lý lỗi toàn cục).
+\end{itemize}
+
+\subsection{Cơ chế Xác thực Tập trung và Shared Secret JWT Bridge}
+Hệ thống Nhà trường áp dụng mô hình xác thực tập trung kết hợp cơ chế mã khóa dùng chung nhằm giải quyết triệt để bài toán hiệu năng và bảo mật trong kiến trúc đa dịch vụ:
+\begin{enumerate}
+    \item \textbf{HCMUT CAS SSO & LDAP Directory Service:} Cung cấp cổng đăng nhập tập trung một lần (Single Sign-On). Khi cán bộ đăng nhập thành công qua CAS hoặc LDAP, dịch vụ \texttt{myhcmut-be} tiến hành tạo phiên làm việc và cấp phát một mã khóa \textbf{JSON Web Token (JWT)}.
+    \item \textbf{Shared Secret JWT Bridge:} Chuỗi JWT chứa các thông tin định danh cán bộ (\texttt{id}, \texttt{username}, \texttt{shcc}, \texttt{maDonVi}, \texttt{roles}, \texttt{permissions}). Tất cả các dịch vụ Backend (\texttt{hrm-be}, \texttt{ioffice-be}) cùng sử dụng chung một khóa bí mật (\texttt{AUTH\_JWT\_SECRET}) để giải mã và xác thực Token cục bộ mà không cần phải gửi request xác thực chéo về Auth Server, giúp triệt tiêu điểm nghẽn cổ chai (Bottleneck) và giảm độ trễ phản hồi xuống dưới 5ms.
+\end{enumerate}
+
+\subsection{Hàng đợi Thông điệp Phân tán Apache Kafka (KRaft Mode)}
+Hệ thống sử dụng cụm **Apache Kafka** làm xương sống truyền thông điệp bất đồng bộ (Event Streaming Broker) để xử lý tác vụ gửi thông báo đẩy:
+\begin{itemize}
+    \item Khi một hành động nghiệp vụ hoàn tất trên Backend (ví dụ: Lãnh đạo duyệt đơn nghỉ phép), dịch vụ sẽ đóng gói dữ liệu và đẩy vào Kafka topic \texttt{SEND\_NOTIFY\_SERVICE} dưới dạng một Event Message rồi phản hồi HTTP 200 ngay lập tức cho người dùng trong vòng dưới 100ms.
+    \item Tiến trình \texttt{NotificationConsumer} ở tầng nền tiêu thụ thông điệp từ Kafka, lưu vết vào cơ sở dữ liệu và gọi Google Firebase Cloud Messaging (FCM) API để đẩy thông báo tới thiết bị di động mà hoàn toàn không làm chậm luồng xử lý chính.
+\end{itemize}
+
+\subsection{Truyền thông Thời gian thực với WebSocket (Socket.IO)}
+Để phục vụ nghiệp vụ **Điểm danh cuộc họp thời gian thực**, dịch vụ \texttt{ioffice-be} tích hợp công cụ **Socket.IO**. Khi một đại biểu thực hiện điểm danh có mặt hoặc báo vắng, sự kiện \texttt{scheduleCheckin} được phát tán (broadcast) ngay lập tức tới máy chủ và đồng bộ tới màn hình ứng dụng di động của Ban tổ chức cũng như các đại biểu khác mà không cần người dùng phải tải lại trang (Pull-to-refresh).
+
+\subsection{Hệ Quản trị Cơ sở Dữ liệu Quan hệ PostgreSQL}
+Hệ thống sử dụng **PostgreSQL** kết hợp cùng **Sequelize ORM** để quản lý dữ liệu với các đặc tính:
+\begin{itemize}
+    \item Đảm bảo tính toàn vẹn giao dịch (ACID) tuyệt đối trong các bài toán luân chuyển trạng thái duyệt đơn và trừ số dư quỹ phép năm.
+    \item Hỗ trợ kiểu dữ liệu JSONB linh hoạt để lưu trữ cấu trúc đợt báo cáo tiến độ, cây phân việc và các trường dữ liệu tùy biến.
+\end{itemize}

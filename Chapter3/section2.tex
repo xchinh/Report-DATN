@@ -1,0 +1,81 @@
+\section{Công nghệ Frontend (Mobile Client Stack)}
+\label{sec:frontend_tech}
+
+\subsection{Nền tảng Flutter \& Ngôn ngữ Dart}
+Flutter là bộ công cụ phát triển ứng dụng đa nền tảng mã nguồn mở do Google phát triển. Flutter sử dụng ngôn ngữ lập trình Dart với cơ chế kiểm tra kiểu dữ liệu nghiêm ngặt (Sound Null Safety) và biên dịch AOT (Ahead-of-Time) trực tiếp sang mã máy C/C++, tự vẽ giao diện bằng Impeller/Skia Engine mà không phụ thuộc vào OEM widgets gốc.
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{|p{3cm}|X|X|X|}
+    \hline
+    \textbf{Tiêu chí So sánh} & \textbf{Native (Kotlin/Swift)} & \textbf{React Native} & \textbf{Flutter (Google)} \\
+    \hline
+    \textbf{Cơ chế biên dịch \& Render} & Biên dịch Native trực tiếp cho từng hệ điều hành. & Chạy mã JavaScript qua tầng cầu nối JavaScript Bridge. & Biên dịch AOT sang mã máy C/C++, tự vẽ giao diện bằng Impeller Engine. \\
+    \hline
+    \textbf{Hiệu năng Khung hình} & Cực cao, ổn định 60--120 FPS. & Có thể bị giảm FPS hoặc nghẽn bridge khi dữ liệu I/O lớn. & Cực cao, duy trì ổn định 60 FPS khi cuộn danh sách lớn. \\
+    \hline
+    \textbf{Tính nhất quán Giao diện} & Phụ thuộc vào UI Components gốc của từng OS. & Giao diện ánh xạ Native Widgets, có thể sai lệch giữa các OS. & Nhất quán 100\% trên cả Android và iOS nhờ cơ chế Widget riêng. \\
+    \hline
+    \textbf{Chi phí \& Tốc độ Phát triển} & Cao, cần 2 đội ngũ phát triển và bảo trì riêng biệt. & Nhanh, dùng chung mã nguồn JavaScript/TypeScript. & Nhanh, dùng chung mã nguồn Dart, hỗ trợ Stateful Hot Reload tức thì. \\
+    \hline
+    \end{tabularx}
+    \caption{\textit{Bảng so sánh lựa chọn nền tảng phát triển ứng dụng di động}}
+    \label{tab:compare_mobile}
+\end{table}
+
+\noindent \textbf{$\rightarrow$ Kết luận:} Nhóm lựa chọn **Flutter** để phát triển ứng dụng MyHCMUT.
+
+\subsection{Quản lý Trạng thái: Riverpod 3}
+Riverpod 3 là giải pháp quản lý trạng thái an toàn biên dịch (Compile-safe), hiện đại và mạnh mẽ nhất trong hệ sinh thái Flutter:
+
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{|p{3cm}|X|X|X|}
+    \hline
+    \textbf{Tiêu chí So sánh} & \textbf{Provider} & \textbf{BLoC (Business Logic Component)} & \textbf{Riverpod 3 (Được chọn)} \\
+    \hline
+    \textbf{Tính an toàn biên dịch} & Thấp, dễ gặp lỗi \texttt{ProviderNotFoundException} lúc runtime. & Cao, kiểm soát chặt chẽ qua Events và States. & Tuyệt đối (Compile-time safe), bắt lỗi phụ thuộc ngay khi biên dịch. \\
+    \hline
+    \textbf{Phụ thuộc BuildContext} & Bắt buộc phải có \texttt{BuildContext} trong cây Widget. & Yêu cầu \texttt{BuildContext} để đọc BlocProvider. & Hoàn toàn không phụ thuộc \texttt{BuildContext}, đọc state từ bất kỳ đâu. \\
+    \hline
+    \textbf{Xử lý Dữ liệu Bất đồng bộ} & Thủ công, cần tự viết cờ \texttt{isLoading}, \texttt{error}. & Cần định nghĩa nhiều class State (\texttt{Loading}, \texttt{Loaded}, \texttt{Error}). & Chuẩn hóa hoàn hảo qua \texttt{AsyncValue} (\texttt{loading}, \texttt{data}, \texttt{error}). \\
+    \hline
+    \textbf{Quản lý Bộ nhớ (RAM)} & Thủ công gọi \texttt{dispose()}. & Cần đóng các StreamControllers thủ công. & Tự động hủy và giải phóng bộ nhớ khi rời màn hình với \texttt{.autoDispose}. \\
+    \hline
+    \end{tabularx}
+    \caption{\textit{Bảng so sánh các giải pháp Quản lý Trạng thái trong Flutter}}
+    \label{tab:compare_state}
+\end{table}
+
+\subsection{Điều hướng trong Flutter với \texttt{go\_router}}
+Nhóm sử dụng thư viện **GoRouter** hỗ trợ Declarative URL-based Routing, tích hợp cơ chế kiểm tra quyền truy cập (Route Guards) và phân giải Deep Linking từ thông báo đẩy FCM trực tiếp vào màn hình chi tiết.
+
+\subsection{Kiến trúc Đa gói Modular Monorepo với Melos}
+\begin{table}[H]
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{|p{3cm}|X|X|}
+    \hline
+    \textbf{Tiêu chí} & \textbf{Single Package (Nguyên khối)} & \textbf{Modular Monorepo với Melos (Được chọn)} \\
+    \hline
+    \textbf{Cấu trúc Mã nguồn} & Toàn bộ code nằm trong một thư mục \texttt{lib/} duy nhất. & Chia tách thành các Core Packages và Feature Modules riêng biệt. \\
+    \hline
+    \textbf{Tính Tái sử dụng} & Khó tái sử dụng Design System hoặc Network Client. & Gói \texttt{global\_system} và \texttt{network} được chia sẻ cho mọi module. \\
+    \hline
+    \textbf{Phụ thuộc vòng} & Dễ xảy ra import chéo, gây phụ thuộc vòng lộn xộn. & Phân tầng nghiêm ngặt: Feature Module chỉ phụ thuộc Core Packages. \\
+    \hline
+    \textbf{Tự động hóa CI/CD} & Chạy test toàn bộ dự án dù chỉ sửa một dòng code. & Chạy phân tích tĩnh, định dạng và kiểm thử độc lập cho từng module. \\
+    \hline
+    \end{tabularx}
+    \caption{\textit{Bảng so sánh kiến trúc cấu trúc dự án Monorepo và Single Package}}
+    \label{tab:compare_monorepo}
+\end{table}
+
+\subsection{Quản lý Yêu cầu HTTP và Bộ nhớ đệm Cục bộ}
+\begin{itemize}
+    \item \textbf{Dio HTTP Client:} Hỗ trợ Interceptors gắn token tự động, thiết lập Timeout và chuyển đổi JSON.
+    \item \textbf{Flutter Secure Storage:} Lưu trữ an toàn Token trong iOS Keychain và Android Keystore.
+    \item \textbf{SQLite (sqflite):} Bộ nhớ đệm cục bộ lưu danh mục tĩnh (Master Data) để hỗ trợ hiển thị tức thì.
+\end{itemize}

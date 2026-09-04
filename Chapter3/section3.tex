@@ -1,0 +1,21 @@
+\section{Công nghệ Backend, Cơ sở dữ liệu và Tích hợp}
+\label{sec:backend_tech}
+
+\subsection{Công nghệ Backend Hiện hữu của Nhà trường}
+\begin{itemize}
+    \item \textbf{Môi trường thực thi Node.js \& TypeScript:} Xử lý I/O bất đồng bộ (Non-blocking I/O) theo mô hình Event Loop đơn luồng, kết hợp cùng TypeScript đảm bảo an toàn kiểu dữ liệu.
+    \item \textbf{Web Framework Express.js:} Cung cấp cơ chế định tuyến RESTful API linh hoạt và chuỗi Middleware kiểm soát bảo mật, xác thực người dùng.
+\end{itemize}
+
+\subsection{Hệ Quản trị Cơ sở Dữ liệu (Database)}
+\begin{itemize}
+    \item \textbf{PostgreSQL:} Hệ quản trị cơ sở dữ liệu quan hệ mạnh mẽ, đảm bảo tính toàn vẹn giao dịch (ACID) tuyệt đối trong việc luân chuyển trạng thái duyệt đơn và trừ số dư quỹ phép năm; hỗ trợ lưu trữ JSONB linh hoạt cho các trường dữ liệu tùy biến.
+    \item \textbf{Sequelize ORM:} Ánh xạ dữ liệu quan hệ đối tượng (Object-Relational Mapping), cung cấp cơ chế Transactions an toàn và quản lý quan hệ bảng chặt chẽ.
+\end{itemize}
+
+\subsection{Công nghệ Hỗ trợ và Tích hợp Đa dịch vụ}
+\begin{itemize}
+    \item \textbf{Hàng đợi Thông điệp Apache Kafka (KRaft Mode):} Đóng vai trò là xương sống truyền thông điệp bất đồng bộ (Event Streaming Broker). Khi một sự kiện nghiệp vụ xảy ra (duyệt đơn nghỉ phép, phân công nhiệm vụ), backend phát một event vào topic \texttt{SEND\_NOTIFY\_SERVICE} và phản hồi HTTP 200 ngay lập tức, trong khi tiến trình ngầm tiêu thụ thông điệp từ Kafka để gọi Firebase FCM gửi thông báo tới điện thoại.
+    \item \textbf{Firebase Cloud Messaging (FCM HTTP v1 API):} Dịch vụ gửi thông báo đẩy đa nền tảng của Google, hỗ trợ đẩy thông báo ngay cả khi ứng dụng đang chạy ngầm hoặc đã tắt hoàn toàn.
+    \item \textbf{WebSocket với Socket.IO Engine:} Cung cấp kết nối 2 chiều liên tục với độ trễ cực thấp, phục vụ nghiệp vụ Điểm danh cuộc họp thời gian thực và đồng bộ trạng thái đại biểu tức thời.
+\end{itemize}

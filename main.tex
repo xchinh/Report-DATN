@@ -1,0 +1,299 @@
+\documentclass[a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{a4wide,amssymb,epsfig,latexsym,multicol,array,hhline,fancyhdr}
+\usepackage{vntex}
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{fancybox}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{listings}
+\usepackage{gensymb}
+\usepackage{tabularx, caption}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{tocloft}
+\usepackage{etoolbox}
+\usepackage{indentfirst}
+\setlength{\parindent}{0.5cm}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\usepackage{xcolor}
+\definecolor{darkblue}{RGB}{0, 51, 153}
+\patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+\usepackage{sectsty}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\usepackage{float}
+\usepackage{subcaption}
+
+\usetikzlibrary{arrows,snakes,backgrounds}
+\usepackage{hyperref}
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+
+\newtheorem{theorem}{{\bf Theorem}}
+\newtheorem{property}{{\bf Property}}
+\newtheorem{proposition}{{\bf Proposition}}
+\newtheorem{corollary}[proposition]{{\bf Corollary}}
+\newtheorem{lemma}[proposition]{{\bf Lemma}}
+
+% Chỉnh tiêu đề Mục lục (TOC)
+\renewcommand{\cfttoctitlefont}{\Huge\bfseries} 
+% Chỉnh tiêu đề Danh sách bảng (LOT)
+\renewcommand{\cftlottitlefont}{\Huge\bfseries}
+% Chỉnh tiêu đề Danh sách hình (LOF)
+\renewcommand{\cftloftitlefont}{\Huge\bfseries}
+
+\setlength{\cftaftertoctitleskip}{1cm}
+\setlength{\cftafterlottitleskip}{1cm}
+\setlength{\cftafterloftitleskip}{1cm}
+
+\AtBeginDocument{\renewcommand*\contentsname{Mục lục}}
+\AtBeginDocument{\renewcommand*\refname{Tài liệu tham khảo}}
+
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyhead[L]{
+ \begin{tabular}{rl}
+    \begin{picture}(25,15)(0,0)
+    \put(0,-8){\includegraphics[width=8mm, height=8mm]{hcmut.png}}
+   \end{picture}&
+	\begin{tabular}{l}
+		\textbf{\bf \ttfamily Trường Đại học Bách khoa - ĐHQG-HCM}\\
+		\textbf{\bf \ttfamily Khoa Khoa học và Kỹ thuật Máy tính}
+	\end{tabular} 	
+ \end{tabular}
+}
+\fancyhead[R]{
+	\begin{tabular}{l}
+		\tiny \bf \\
+		\tiny \bf 
+	\end{tabular}  }
+\fancyfoot{}
+\fancyfoot[L]{\scriptsize \ttfamily Báo cáo Đồ án tốt nghiệp (CO4337) - HK2 2025 - 2026}
+\fancyfoot[R]{\scriptsize \ttfamily Trang {\thepage}/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\begin{document}
+
+\begin{titlepage}
+\definecolor{bkblue}{RGB}{0,71,186}
+\definecolor{bklightblue}{RGB}{100,181,246}
+
+\begin{tikzpicture}[remember picture,overlay,inner sep=0,outer sep=0]
+  \draw[bkblue,line width=3pt] 
+    ([xshift=1cm,yshift=1cm]current page.south west) rectangle 
+    ([xshift=-1cm,yshift=-1cm]current page.north east);
+  
+  \draw[bklightblue,line width=1.5pt] 
+    ([xshift=1.5cm,yshift=1.5cm]current page.south west) rectangle 
+    ([xshift=-1.5cm,yshift=-1.5cm]current page.north east);
+\end{tikzpicture}
+
+\begin{center}
+ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH \\
+TRƯỜNG ĐẠI HỌC BÁCH KHOA \\
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+\end{center}
+
+\vspace{1cm}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=4cm]{hcmut.png}
+\end{center}
+\end{figure}
+
+\begin{center}
+\begin{tabular}{c}
+\multicolumn{1}{c}
+{\textbf{{\large BÁO CÁO ĐỒ ÁN TỐT NGHIỆP}}}\\
+\multicolumn{1}{c}
+{\textbf{{\large MÃ HỌC PHẦN: CO4337}}}\\
+\\
+\hline
+\\
+\textbf{\textcolor{darkblue}{\Large PHÁT TRIỂN ỨNG DỤNG DI ĐỘNG}}\\
+
+\textbf{\textcolor{darkblue}{\Large PHỤC VỤ NHÂN SỰ TRƯỜNG ĐẠI HỌC}}\\
+\\
+\hline
+\\
+\textbf{\large NGÀNH: KHOA HỌC MÁY TÍNH}
+\end{tabular}
+\end{center}
+
+% --- Bảng 1: Danh sách Hội đồng ---
+\begin{table}[h]
+    \begin{tabular}{lllc}
+        \hspace{3cm} & \large{GVHD}: & \large{ThS. Nguyễn Thanh Tùng} & \\
+        \hspace{3cm} & \large{CTHĐ}: & \large{TS. Nguyễn Lê Duy Lai}  & \\
+        \hspace{3cm} & \large{TKHĐ}: & \large{ThS. Trần Hồng Tài}     & 
+    \end{tabular}
+\end{table}
+
+% --- Phần trang trí (Bông o0o) ---
+\begin{center}
+    \rule[0.25ex]{3.5cm}{0.5pt} \ \textbf{\large o0o} \ \rule[0.25ex]{3.5cm}{0.5pt}
+\end{center}
+
+% --- Bảng 2: Danh sách Sinh viên ---
+\begin{table}[h]
+    \begin{tabular}{lllc}
+        \hspace{3cm} & \large{SVTH1}: & \large{Vũ Xuân Chính - 2210392} & \\
+        \hspace{3cm} & \large{SVTH2}: & \large{Tống Duy Khang - 2211467} & 
+    \end{tabular}
+\end{table}
+
+\vspace{2cm}
+\begin{center}
+{\footnotesize \large{TP. Hồ Chí Minh, năm 2026}}
+\end{center}
+\end{titlepage}
+
+% trang trống
+\newpage
+\thispagestyle{empty}
+\mbox{}
+
+%trang lời cam đoan
+\newpage
+\begin{center}
+\textbf{\fontsize{24}{28}\selectfont LỜI CAM ĐOAN}\\ 
+\end{center}
+\vspace{1cm}
+Chúng tôi xin cam đoan đây là công trình nghiên cứu và hiện thực của riêng nhóm chúng tôi dưới sự hướng dẫn của ThS. Nguyễn Thanh Tùng. Mọi sao chép không hợp lệ, vi phạm quy chế đào tạo, chúng tôi hoàn toàn chịu trách nhiệm và nhận mọi hình thức kỷ luật.
+\vspace{1cm}
+\begin{flushright}
+    NHÓM SINH VIÊN THỰC HIỆN \\
+    \vspace{0.1 cm}
+    \textit{Vũ Xuân Chính} \\
+    \textit{Tống Duy Khang}
+\end{flushright}
+
+%trang lời cảm ơn
+\newpage
+\begin{center}
+\textbf{\fontsize{24}{28}\selectfont LỜI CẢM ƠN}\\ 
+\end{center}
+\vspace{1cm}
+Trước khi đi vào nội dung chi tiết của báo cáo, nhóm xin được dành hết lòng biết ơn của mình tới \textbf{ThS. Nguyễn Thanh Tùng} - giảng viên khoa Khoa học và Kỹ thuật Máy tính trường Đại học Bách Khoa TPHCM, người đã tận tình định hướng, hỗ trợ và đóng góp nhiều ý kiến chuyên môn quý báu trong suốt quá trình thực hiện đồ án tốt nghiệp. \\
+\\
+Bên cạnh đó, nhóm cũng xin chân thành gửi lời cảm ơn đến quý thầy cô hiện đã và đang công tác tại \textbf{Khoa Khoa học và Kỹ thuật Máy tính - Trường Đại học Bách Khoa - ĐHQG-HCM} đã truyền đạt cho nhóm nền tảng kiến thức chuyên môn và kỹ năng thực hành vững chắc trong suốt những năm học vừa qua. \\
+\\
+Cuối cùng, xin gửi lời cảm ơn sâu sắc đến gia đình, bạn bè đã luôn động viên, tạo điều kiện thuận lợi và đồng hành cùng nhóm để hoàn thành tốt đồ án tốt nghiệp này.
+\vspace{1cm}
+\begin{flushright}
+    NHÓM SINH VIÊN THỰC HIỆN \\
+    \vspace{0.1 cm}
+    \textit{Vũ Xuân Chính} \\
+    \textit{Tống Duy Khang}
+\end{flushright}
+
+%%tóm tắt
+\newpage
+\begin{center}
+\textbf{\fontsize{24}{28}\selectfont TÓM TẮT BÁO CÁO}\\ 
+\end{center}
+\vspace{1cm}
+Báo cáo Đồ án Tốt nghiệp đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} trình bày quá trình nghiên cứu, thiết kế, hiện thực hóa và kiểm thử ứng dụng di động \textbf{MyHCMUT} tích hợp với hệ thống dịch vụ Backend hiện hữu của Nhà trường. Báo cáo được cấu trúc thành 8 chương chính như sau:
+\begin{itemize}
+    \item \textbf{CHƯƠNG I: GIỚI THIỆU} \\
+    Giới thiệu chung về đề tài, đặt vấn đề, mục tiêu, phạm vi ranh giới nghiên cứu, chức năng chính và ý nghĩa đề tài.
+    \item \textbf{CHƯƠNG II: PHÂN TÍCH CÁC HỆ THỐNG CÓ LIÊN QUAN TRÊN THỊ TRƯỜNG} \\
+    Khảo sát và phân tích các hệ thống quản trị đại học, ứng dụng di động đơn phân hệ và hệ thống Web nội bộ; từ đó đánh giá ưu điểm, hạn chế và đề xuất mô hình Cổng di động tập trung.
+    \item \textbf{CHƯƠNG III: CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ} \\
+    Trình bày cơ sở lý thuyết kiến trúc, công nghệ Frontend Mobile (Flutter, Riverpod 3, Melos, GoRouter), công nghệ Backend tích hợp (Node.js, Express, Shared JWT Bridge), Cơ sở dữ liệu và công nghệ hỗ trợ (Kafka, FCM, Socket.IO).
+    \item \textbf{CHƯƠNG IV: PHÂN TÍCH YÊU CẦU HỆ THỐNG} \\
+    Xác định người dùng, ma trận phân quyền RBAC, yêu cầu chức năng chi tiết theo 5 phân hệ và các yêu cầu phi chức năng.
+    \item \textbf{CHƯƠNG V: ĐẶC TẢ CHI TIẾT CÁC USE-CASE VÀ BIỂU ĐỒ HOẠT ĐỘNG} \\
+    Sơ đồ Use Case tổng thể, bảng đặc tả chi tiết 5 Use Cases cốt lõi, hệ thống Biểu đồ hoạt động (Activity Diagrams) và Biểu đồ tuần tự (Sequence Diagrams).
+    \item \textbf{CHƯƠNG VI: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG} \\
+    Thiết kế Cơ sở dữ liệu (Targeted ERD, Data Dictionary), Kiến trúc hệ thống phân tầng Clean Architecture, MultiDomainAuthInterceptor, Notification Metadata và mô hình Vận hành (System Operation E2E).
+    \item \textbf{CHƯƠNG VII: KẾT QUẢ HIỆN THỰC VÀ KIỂM THỬ} \\
+    Hiện thực hóa giao diện và logic các phân hệ, kết quả kiểm thử Đơn vị (Unit Tests \& Coverage), Widget Tests, Integration Tests, kịch bản E2E và đánh giá định lượng hiệu năng thực nghiệm (API Benchmarks, FCM Latency, RAM/FPS).
+    \item \textbf{CHƯƠNG VIII: TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN} \\
+    Nhận xét kết quả đạt được, ý nghĩa khoa học và thực tiễn đối với Trường ĐHBK, những hạn chế còn tồn tại và hướng phát triển tiếp theo.
+\end{itemize}
+
+\newpage
+\tableofcontents
+\newpage
+\listoftables
+\newpage
+\listoffigures
+
+%%% CHUONG 1: GIOI THIEU
+\newpage
+\input{Chapter1/index}
+
+%%% CHUONG 2: PHAN TICH CAC HE THONG LIEN QUAN
+\newpage
+\input{Chapter2/index}
+
+%%% CHUONG 3: CO SO LY THUYET VA CONG NGHE
+\newpage
+\input{Chapter3/index}
+
+%%% CHUONG 4: PHAN TICH YEU CAU HE THONG
+\newpage
+\input{Chapter4/index}
+
+%%% CHUONG 5: DAC TA CHI TIET USE-CASE VA BIEU DO HOAT DONG
+\newpage
+\input{Chapter5/index}
+
+%%% CHUONG 6: PHAN TICH VA THIET KE HE THONG
+\newpage
+\input{Chapter6/index}
+
+%%% CHUONG 7: KET QUA HIEN THUC VA KIEM THU
+\newpage
+\input{Chapter7/index}
+
+%%% CHUONG 8: TONG KET VA HUONG PHAT TRIEN
+\newpage
+\input{Chapter8/index}
+
+%%Reference
+\newpage
+\input{reference}
+\end{document}

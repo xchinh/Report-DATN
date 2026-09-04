@@ -1,0 +1,30 @@
+\section{Sơ lược Cấu trúc Backend Hiện hữu và Cơ chế Hoạt động Luồng Dữ liệu}
+\label{sec:backend_operation}
+
+\subsection{Sơ lược Cấu trúc Hệ thống Backend Hiện hữu của Nhà trường}
+Hệ thống Backend của Nhà trường được tổ chức theo kiến trúc phân lớp hướng dịch vụ gồm 4 tầng:
+\begin{enumerate}
+    \item \textbf{Tầng Định tuyến \& Middleware:} Tiếp nhận request HTTPS, giải mã Shared Secret JWT (\texttt{session.ts}) và kiểm tra phân quyền RBAC (\texttt{authorize.ts}).
+    \item \textbf{Tầng Điều khiển (Controller Layer / Mobile API Adapters):} Validate tham số và chuyển tiếp dữ liệu xuống Service (bao gồm \texttt{staff\_ly\_lich\_mobile.controller.ts}, \texttt{eofficeVanBanDenMobile.controller.js}).
+    \item \textbf{Tầng Nghiệp vụ \& Event Streaming:} Thực thi nghiệp vụ, phát event vào Kafka topic \texttt{SEND\_NOTIFY\_SERVICE} hoặc phát WebSocket qua \texttt{Socket.IO}.
+    \item \textbf{Tầng Truy xuất Dữ liệu (Sequelize ORM):} Ánh xạ cơ sở dữ liệu PostgreSQL (\texttt{tcns-dev}, \texttt{hcmut\_hrm\_release}, \texttt{hcmut\_hanh\_chinh\_dev}).
+\end{enumerate}
+
+\subsection{Mô hình Vận hành và Luồng Dữ liệu Tổng thể (System Operation Overview)}
+Mô hình dưới đây mô tả chi tiết luồng vận hành đầu-cuối của một chu trình tương tác:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\linewidth]{img/architecture/overall_system_operation.png}
+    \caption{\textit{Mô hình Vận hành và Luồng dữ liệu Tổng thể Hệ thống MyHCMUT}}
+    \label{fig:sys_op}
+\end{figure}
+
+\begin{enumerate}
+    \item \textbf{Tương tác Người dùng:} Cán bộ thực hiện thao tác trên màn hình điện thoại (điền form nghỉ phép, nhấn điểm danh họp, xem nhiệm vụ).
+    \item \textbf{Điều phối Trạng thái Client:} Widget gọi phương thức tương ứng trong Riverpod \texttt{AsyncNotifier}.
+    \item \textbf{Truy xuất Dữ liệu \& Gửi Request:} Notifier gọi Repository $\rightarrow$ Dio Client sử dụng \texttt{MultiDomainAuthInterceptor} tự động gắn Bearer Token và gửi request HTTPS tới Backend đích.
+    \item \textbf{Xác thực \& Xử lý tại Backend:} Middleware giải mã Token bằng Shared Secret, Controller chuyển dữ liệu cho Service thực thi quy tắc nghiệp vụ và thực thi SQL trong PostgreSQL.
+    \item \textbf{Xử lý Sự kiện Bất đồng bộ:} Nếu hành động làm đổi trạng thái, Backend bắn Event vào Kafka Topic $\rightarrow$ Consumer tiêu thụ và đẩy Push Notification qua Firebase FCM tới điện thoại người liên quan.
+    \item \textbf{Phản hồi \& Render Giao diện:} Backend trả về HTTP 200 kèm JSON $\rightarrow$ Client deserialize sang Freezed DTO $\rightarrow$ Cập nhật State trong Riverpod $\rightarrow$ Giao diện tự động cập nhật dữ liệu mới tức thì.
+\end{enumerate}

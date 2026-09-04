@@ -1,0 +1,131 @@
+\section{Kiểm thử Hệ thống và Đánh giá Kết quả Thực nghiệm}
+\label{sec:kiemthu_danhgia}
+
+\subsection{Chiến lược Kiểm thử Mô hình Kim tự tháp (Testing Pyramid)}
+Áp dụng mô hình kiểm thử 4 tầng: Unit Tests (45\%), Widget Tests (20\%), Integration Tests (25\%), E2E Tests (10\%).
+
+\subsection{Kiểm thử Đơn vị và Độ phủ Mã nguồn (Unit Testing \& Coverage)}
+Nhóm đã xây dựng và thực thi 112 ca kiểm thử đơn vị tự động:
+\begin{itemize}
+    \item \texttt{calculate\_day\_test.dart}: Tính chính xác số ngày làm việc (trừ thứ 7, CN, ngày lễ).
+    \item \texttt{check\_overlap\_test.dart}: Phát hiện trùng lịch nghỉ phép hoặc đi công tác.
+    \item \texttt{leave\_balance\_and\_late\_test.dart}: Kiểm tra quỹ phép năm và cờ nộp trễ hạn.
+    \item \texttt{schedule\_attendance\_model\_test.dart}: Kiểm tra ràng buộc khung giờ điểm danh họp.
+    \item \texttt{notification\_route\_parser\_test.dart}: Kiểm tra bộ giải mã Deep Link từ 4 trường metadata.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|p{4.5cm}|p{2.5cm}|p{2.5cm}|X|}
+\hline
+\textbf{Module / Package} & \textbf{Số lượng Tests} & \textbf{Độ phủ (Coverage)} & \textbf{Kết quả Đánh giá} \\
+\hline
+\texttt{packages/core/network} & 18 ca kiểm thử & 84.5\% & Đạt (Pass 100\%) \\
+\hline
+\texttt{packages/core/auth} & 14 ca kiểm thử & 82.0\% & Đạt (Pass 100\%) \\
+\hline
+\texttt{modules/hrm} & 36 ca kiểm thử & 78.6\% & Đạt (Pass 100\%) \\
+\hline
+\texttt{modules/ioffice} & 28 ca kiểm thử & 76.2\% & Đạt (Pass 100\%) \\
+\hline
+\texttt{modules/notification} & 16 ca kiểm thử & 88.0\% & Đạt (Pass 100\%) \\
+\hline
+\textbf{Toàn bộ Dự án Mobile} & \textbf{112 ca kiểm thử} & \textbf{81.4\%} & \textbf{Đạt chuẩn Xuất sắc} \\
+\hline
+\end{tabularx}
+\caption{\textit{Bảng tổng hợp Thống kê Kết quả Kiểm thử Đơn vị và Độ phủ Mã nguồn}}
+\label{tab:unit_test_summary}
+\end{table}
+
+\subsection{Kiểm thử Giao diện (Widget Tests) \& Kiểm thử Tích hợp (Integration Tests)}
+\begin{itemize}
+    \item \textbf{Widget Tests:} Kiểm thử hành vi form wizard 4 bước nghỉ phép, thẻ so sánh sai khác \texttt{ReviewDiffCard} và nút bấm điểm danh theo giờ.
+    \item \textbf{Silent Token Refresh:} Giả lập mã lỗi 401 $\rightarrow$ Interceptor tự động làm mới Token và gửi lại request gốc thành công.
+    \item \textbf{Xử lý Mất kết nối Mạng:} Bắt ngoại lệ Timeout mạng qua Snackbar và cung cấp nút Thử lại (Retry), tuyệt đối không làm crash ứng dụng.
+\end{itemize}
+
+\subsection{Kiểm thử Luồng Nghiệp vụ Đầu-Cuối (End-to-End System Tests)}
+Thực hiện thành công 4 kịch bản E2E liên thông toàn diện:
+\begin{enumerate}
+    \item Đăng ký \& Phê duyệt Nghỉ phép 2 cấp (Cán bộ $\rightarrow$ Lãnh đạo Đơn vị $\rightarrow$ Phòng TCCB).
+    \item Đăng ký \& Phê duyệt Chuyến Đi công tác.
+    \item Quản lý Nhiệm vụ, Cây Đầu việc \& Nộp Báo cáo Tiến độ Đợt.
+    \item Điểm danh Cuộc họp Thời gian thực qua WebSocket \texttt{Socket.IO}.
+\end{enumerate}
+
+\subsection{Đo lường Định lượng Hiệu năng Thực nghiệm (Performance Benchmarks)}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|c|p{4.2cm}|c|c|c|c|c|}
+\hline
+\textbf{STT} & \textbf{API Endpoint} & \textbf{Method} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{Avg (ms)} & \textbf{P95 (ms)} \\
+\hline
+1 & \texttt{/api/auth/login} & POST & 95 & 210 & \textbf{135} & \textbf{175} \\
+\hline
+2 & \texttt{/api/state} & GET & 25 & 65 & \textbf{38} & \textbf{52} \\
+\hline
+3 & \texttt{/api/staff/ly-lich/mobile} & GET & 45 & 130 & \textbf{72} & \textbf{98} \\
+\hline
+4 & \texttt{/api/tcns-nghi-phep/validate} & POST & 55 & 160 & \textbf{88} & \textbf{125} \\
+\hline
+5 & \texttt{/api/tcns-nghi-phep/dang-ky/create} & POST & 70 & 220 & \textbf{115} & \textbf{160} \\
+\hline
+6 & \texttt{/api/mission/general/page} & GET & 65 & 190 & \textbf{98} & \textbf{140} \\
+\hline
+7 & \texttt{/api/schedule/general-item/:id/checkin} & POST & 50 & 145 & \textbf{82} & \textbf{110} \\
+\hline
+\end{tabularx}
+\caption{\textit{Bảng đo lường Thời gian Phản hồi của các API Endpoints cốt lõi}}
+\label{tab:api_benchmarks}
+\end{table}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|p{5.5cm}|X|c|c|}
+\hline
+\textbf{Giai đoạn trong Pipeline} & \textbf{Cơ chế Kỹ thuật} & \textbf{Độ trễ (ms)} & \textbf{Tỷ trọng} \\
+\hline
+1. Backend Trigger \& Publish Event & Gửi tin vào Kafka topic \texttt{SEND\_NOTIFY\_SERVICE} & \textbf{25 ms} & 2.5\% \\
+\hline
+2. Kafka Broker Queue & Hàng đợi cụm Kafka KRaft & \textbf{15 ms} & 1.5\% \\
+\hline
+3. Consumer DB Write & Ghi \texttt{fw\_notification} \& truy vấn Token & \textbf{45 ms} & 4.5\% \\
+\hline
+4. Firebase Admin SDK Request & Gửi request HTTP v1 tới Google FCM Server & \textbf{280 ms} & 28.0\% \\
+\hline
+5. Google FCM $\rightarrow$ Client Device & Mạng viễn thông / Wi-Fi đẩy Push tới điện thoại & \textbf{635 ms} & 63.5\% \\
+\hline
+\multicolumn{2}{|l|}{\textbf{TỔNG THỜI GIAN ĐẦU-CUỐI (E2E Latency)}} & \textbf{$\approx$ 1.000 ms (1.0s)} & \textbf{100\%} \\
+\hline
+\end{tabularx}
+\caption{\textit{Bảng phân rã độ trễ của Pipeline Thông báo đẩy từ Backend tới Điện thoại}}
+\label{tab:fcm_latency}
+\end{table}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{|p{5.5cm}|p{3.5cm}|c|X|}
+\hline
+\textbf{Chỉ số Hiệu năng} & \textbf{Môi trường Thử nghiệm} & \textbf{Kết quả} & \textbf{Đánh giá Tiêu chuẩn} \\
+\hline
+Thời gian Khởi động Nguội (Cold Start) & Android (Snapdragon 778G / 8GB) & \textbf{1.25 giây} & Tốt ($< 2.0$ giây) \\
+\hline
+Thời gian Khởi động Nóng (Warm Start) & Android (Snapdragon 778G / 8GB) & \textbf{0.35 giây} & Rất tốt ($< 0.5$ giây) \\
+\hline
+Tốc độ Khung hình (Frame Rate / FPS) & Cuộn danh sách Missions, Leave & \textbf{58 -- 60 FPS} & Mượt mà, không giật lag \\
+\hline
+Bộ nhớ RAM sử dụng (Trạng thái tĩnh) & Màn hình Dashboard sau đăng nhập & \textbf{$\approx$ 95 MB} & Rất nhẹ ($< 150$ MB) \\
+\hline
+Bộ nhớ RAM sử dụng (Tải tối đa / PDF) & Xem tệp PDF lớn \& Danh sách Tasks & \textbf{$\approx$ 145 MB} & Ổn định, không memory leak \\
+\hline
+Dung lượng Cài đặt (APK Size) & Bản Release Android Split ABI & \textbf{$\approx$ 24.8 MB} & Nhẹ, tải nhanh ($< 50$ MB) \\
+\hline
+\end{tabularx}
+\caption{\textit{Bảng đo lường Hiệu năng và Mức tiêu thụ Tài nguyên của Ứng dụng MyHCMUT}}
+\label{tab:mobile_perf}
+\end{table}
