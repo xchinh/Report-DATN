@@ -1,147 +1,57 @@
-\section{Sơ đồ Ca sử dụng Tổng thể Toàn hệ thống}
-\label{sec:system_usecase}
+\section{Entity Relationship Diagram (ERD) và Thiết kế Dữ liệu}
+\label{sec:erd_design}
+
+\subsection{Lược đồ Thực thể Quan hệ Dữ liệu (Targeted Database ERD)}
+Lược đồ dưới đây thể hiện các thực thể dữ liệu cốt lõi trong cơ sở dữ liệu hiện hữu của Nhà trường mà Ứng dụng Di động MyHCMUT trực tiếp truy vấn và cập nhật:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{img/uml/system_usecase_diagram.png}
-    \caption{\textit{Sơ đồ Ca sử dụng Tổng thể Hệ thống MyHCMUT}}
-    \label{fig:usecase_overall}
+    \includegraphics[width=0.95\linewidth]{img/erd/targeted_system_erd.png}
+    \caption{\textit{Lược đồ Thực thể Quan hệ Dữ liệu Phục vụ Ứng dụng Di động MyHCMUT}}
+    \label{fig:targeted_erd}
 \end{figure}
 
-\section{Bảng Đặc tả Chi tiết các Ca sử dụng Cốt lõi}
-\label{sec:dacta_usecase_chitiet}
+\subsection{Từ điển Dữ liệu các Bảng Phục vụ Phân hệ Mobile}
 
-\subsection{UC01: Tra cứu \& Đề xuất Thẩm định Chỉnh sửa Lý lịch Cán bộ}
 \begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\ttfamily\small}p{5.2cm}|>{\RaggedRight\arraybackslash\small}p{2.6cm}|Y|}
 \hline
-\textbf{Tên Ca sử dụng} & \textbf{UC01: Tra cứu \& Đề xuất Thẩm định Chỉnh sửa Lý lịch Cán bộ} \\
+\textrm{\textbf{Tên Bảng Dữ liệu}} & \textbf{Khóa chính / Ngoại} & \textbf{Ý nghĩa Nghiệp vụ đối với Mobile App} \\
 \hline
-\textbf{Tác nhân} & Cán bộ/Giảng viên (Người gửi), Chuyên viên Phòng TCCB (Người duyệt) \\
+fw\_user & PK: \texttt{id} & Tài khoản người dùng, tên đăng nhập, email, trạng thái kích hoạt. \\
 \hline
-\textbf{Tiền điều kiện} & Cán bộ đã đăng nhập thành công vào ứng dụng MyHCMUT. \\
+staff\_ly\_lich & PK: \texttt{shcc}, FK: \texttt{user\_id} & Hồ sơ thông tin cán bộ (11 danh mục: cá nhân, đào tạo, lương, quá trình công tác...). \\
 \hline
-\textbf{Hậu điều kiện} & Dữ liệu hồ sơ lý lịch được cập nhật chính thức vào cơ sở dữ liệu nhân sự. \\
+staff\_ly\_lich\_request & PK: \texttt{id}, FK: \texttt{shcc} & Lưu các đề xuất chỉnh sửa thông tin lý lịch (chứa JSON \texttt{old\_value} và \texttt{new\_value}). \\
 \hline
-\textbf{Luồng sự kiện chính} & 
-1. Cán bộ mở màn hình \texttt{PersonalProfilePage}, xem 11 tab lý lịch chi tiết. \newline
-2. Cán bộ chọn mục cần chỉnh sửa, nhập giá trị mới và đính kèm ảnh minh chứng. \newline
-3. Nhấn nút \textit{``Gửi đề xuất''} $\rightarrow$ Hệ thống lưu vào bảng \texttt{staff\_ly\_lich\_request} (trạng thái \texttt{PENDING}) và đẩy thông báo cho Phòng TCCB. \newline
-4. Chuyên viên TCCB mở màn hình \texttt{ApproveProfileDetailPage}, xem giao diện Diff Viewer so sánh trực quan giá trị cũ (màu đỏ) và giá trị mới (màu xanh). \newline
-5. Chuyên viên chọn \textit{``Duyệt''} $\rightarrow$ Hệ thống ghi đè dữ liệu mới vào \texttt{staff\_ly\_lich} và gửi thông báo hoàn tất cho Cán bộ. \\
+tcns\_nghi\_phep\_dang\_ky & PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin đơn đăng ký nghỉ phép, khoảng thời gian, lý do và giải trình nộp trễ. \\
 \hline
-\textbf{Luồng ngoại lệ} & Nếu Chuyên viên chọn \textit{``Từ chối''}, bắt buộc nhập lý do $\rightarrow$ Đề xuất chuyển trạng thái \texttt{REJECTED} và thông báo cho Cán bộ. \\
+tcns\_so\_nghi\_phep\_nam & PK: \texttt{id}, FK: \texttt{shcc} & Quản lý số ngày phép năm tiêu chuẩn, số ngày đã nghỉ, số ngày còn lại của cán bộ. \\
 \hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC01: Tra cứu và Thẩm định Sửa Lý lịch}}
-\label{tab:uc01_profile}
-\end{table}
-
-\subsection{UC02: Đăng ký Nghỉ phép (Form Wizard 4 bước \& Real-time Validation)}
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+tcns\_qua\_trinh\_di\_cong\_tac & PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin chuyến đi công tác, địa điểm, mục đích, đoàn công tác và dự toán kinh phí. \\
 \hline
-\textbf{Tên Ca sử dụng} & \textbf{UC02: Đăng ký Nghỉ phép với Kiểm tra Ràng buộc Thời gian thực} \\
+van\_ban\_den\_general & PK: \texttt{id} & Sổ văn bản đến, số hiệu, ngày ban hành, trích yếu và đường dẫn tệp PDF đính kèm. \\
 \hline
-\textbf{Tác nhân} & Cán bộ / Giảng viên \\
+van\_ban\_den\_distribution & PK: \texttt{id}, FK: \texttt{van\_ban\_id} & Phân phối văn bản đến và chỉ đạo xử lý cho cán bộ/đơn vị. \\
 \hline
-\textbf{Tiền điều kiện} & Cán bộ đã đăng nhập; còn tài khoản hoạt động trong hệ thống. \\
+mission\_general & PK: \texttt{id}, FK: \texttt{host\_shcc} & Lưu thông tin nhiệm vụ, loại nhiệm vụ (Trọng tâm/Giao/Chung), \% tiến độ, hạn chót. \\
 \hline
-\textbf{Hậu điều kiện} & Đơn nghỉ phép được tạo thành công ở trạng thái \texttt{CHO\_DUYET} và kích hoạt quy trình phê duyệt. \\
+mission\_outlined & PK: \texttt{id}, FK: \texttt{mission\_id} & Cấu trúc cây đầu việc phân cấp nhiều tầng (\texttt{parent\_id}, \texttt{order\_index}). \\
 \hline
-\textbf{Luồng sự kiện chính} & 
-1. Cán bộ mở màn hình \texttt{LeaveRequestPage}, bắt đầu Bước 1: Chọn loại nghỉ và lý do. \newline
-2. Bước 2: Chọn khoảng thời gian (Từ ngày $\rightarrow$ Đến ngày). \newline
-3. Hệ thống tự động gọi API \texttt{/api/tcns-nghi-phep/validate} để thực thi 4 tầng kiểm tra: (a) Tính số ngày làm việc thực tế, (b) Kiểm tra trùng lịch cá nhân, (c) Kiểm tra mốc nộp trễ 3 ngày/15 ngày, (d) Kiểm tra số dư quỹ phép năm. \newline
-4. Nếu nộp trễ hạn quy định $\rightarrow$ Bước 3 yêu cầu bắt buộc nhập lý do giải trình trễ. \newline
-5. Bước 4: Cán bộ xác nhận cam kết bàn giao công việc và nhấn nút \textit{``Gửi duyệt''}. \newline
-6. Hệ thống lưu bản ghi vào \texttt{tcns\_nghi\_phep\_dang\_ky} và đẩy thông báo tới Lãnh đạo Đơn vị. \\
+mission\_task\_general & PK: \texttt{id}, FK: \texttt{mission\_id} & Công việc chi tiết phân công cho từng cán bộ, thời hạn và checklist. \\
 \hline
-\textbf{Luồng ngoại lệ} & Nếu số ngày nghỉ vượt quá quỹ phép năm hoặc trùng lịch công tác $\rightarrow$ Hệ thống báo lỗi và không cho phép chuyển tiếp sang bước tiếp theo. \\
+mission\_report\_batch & PK: \texttt{id}, FK: \texttt{mission\_id} & Các đợt báo cáo tiến độ thực hiện nhiệm vụ kèm tài liệu minh chứng. \\
+\hline
+schedule\_general\_item & PK: \texttt{id} & Sự kiện lịch tuần trường, lịch đơn vị, thời gian bắt đầu, kết thúc, phòng họp. \\
+\hline
+schedule\_meeting\_attendance & PK: \texttt{id}, FK: \texttt{item\_id} & Lưu vết điểm danh có mặt hoặc báo vắng của đại biểu tham dự cuộc họp. \\
+\hline
+fw\_user\_device\_token & PK: \texttt{id}, FK: \texttt{user\_id} & Lưu trữ FCM Device Token của điện thoại cán bộ phục vụ gửi thông báo đẩy. \\
 \hline
 \end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC02: Đăng ký Nghỉ phép}}
-\label{tab:uc02_leave}
-\end{table}
-
-\subsection{UC03: Đăng ký \& Phê duyệt Đi công tác (Business Trip Workflow)}
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
-\hline
-\textbf{Tên Ca sử dụng} & \textbf{UC03: Đăng ký và Phê duyệt Chuyến Đi công tác} \\
-\hline
-\textbf{Tác nhân} & Cán bộ đăng ký, Lãnh đạo Đơn vị, Ban Giám hiệu / Phòng TCCB \\
-\hline
-\textbf{Tiền điều kiện} & Cán bộ có kế hoạch đi công tác trong hoặc ngoài nước. \\
-\hline
-\textbf{Hậu điều kiện} & Quyết định cử cán bộ đi công tác được phê duyệt và lưu vào lịch trình công tác. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Cán bộ mở màn hình \texttt{BusinessTripEditPage}, điền mục đích, địa điểm, thời gian, phương tiện di chuyển, dự toán kinh phí và chọn thành viên đoàn công tác. \newline
-2. Đính kèm tệp PDF thư mời/kế hoạch công tác $\rightarrow$ Nhấn \textit{``Gửi duyệt''}. \newline
-3. Lãnh đạo Đơn vị nhận thông báo đẩy FCM, mở \texttt{ApproveBtripListPage} xem xét chi tiết chuyến đi $\rightarrow$ Chọn \textit{``Phê duyệt''}. \newline
-4. Nếu chuyến công tác yêu cầu phê duyệt cấp trường $\rightarrow$ Hệ thống chuyển tiếp lên BGH/Phòng TCCB duyệt và cấp số quyết định. \newline
-5. Hệ thống cập nhật trạng thái \texttt{DA\_DUYET} và thông báo tới toàn bộ thành viên đoàn công tác. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC03: Đăng ký và Phê duyệt Đi công tác}}
-\label{tab:uc03_btrip}
-\end{table}
-
-\subsection{UC04: Quản lý \& Giám sát Tiến độ Nhiệm vụ/Công việc (Tasks/Missions)}
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
-\hline
-\textbf{Tên Ca sử dụng} & \textbf{UC04: Quản lý và Giám sát Tiến độ Nhiệm vụ} \\
-\hline
-\textbf{Tác nhân} & Cán bộ phụ trách, Lãnh đạo Đơn vị, Ban Giám hiệu \\
-\hline
-\textbf{Tiền điều kiện} & Nhiệm vụ đã được khởi tạo trên hệ thống điều hành của Nhà trường. \\
-\hline
-\textbf{Hậu điều kiện} & Cán bộ cập nhật tiến độ công việc và gửi báo cáo đợt thành công. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Người dùng mở \texttt{MissionsListPage}, lọc theo loại nhiệm vụ (Trọng tâm, Được giao, Chung) và trạng thái (Cần xử lý, Đang làm, Đã xong). \newline
-2. Chọn một nhiệm vụ cụ thể $\rightarrow$ Mở màn hình \texttt{MissionDetailPage} với 4 tab: (a) Tổng quan \% tiến độ \& hạn chót, (b) Cây đầu việc phân cấp (\texttt{outlined-tree}), (c) Báo cáo tiến độ các đợt, (d) Văn bản liên kết. \newline
-3. Cán bộ nhấn vào một công việc cụ thể $\rightarrow$ Mở \texttt{TaskDetailBottomSheet} để xem người thực hiện và checklist. \newline
-4. Cán bộ gửi đợt báo cáo tiến độ kèm tệp minh chứng $\rightarrow$ Hệ thống ghi nhận và cập nhật tỷ lệ hoàn thành chung của nhiệm vụ. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC04: Quản lý và Giám sát Nhiệm vụ}}
-\label{tab:uc04_mission}
-\end{table}
-
-\subsection{UC05: Điểm danh Cuộc họp Thời gian thực \& Báo vắng (Real-time Attendance)}
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
-\hline
-\textbf{Tên Ca sử dụng} & \textbf{UC05: Điểm danh Cuộc họp Thời gian thực và Báo vắng} \\
-\hline
-\textbf{Tác nhân} & Cán bộ tham dự cuộc họp, Ban Tổ chức cuộc họp \\
-\hline
-\textbf{Tiền điều kiện} & Cuộc họp đã được ban hành trong Lịch tuần trường hoặc Lịch đơn vị. \\
-\hline
-\textbf{Hậu điều kiện} & Trạng thái có mặt/báo vắng của đại biểu được cập nhật thời gian thực tới toàn bộ hệ thống. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Cán bộ mở màn hình \texttt{ScheduleView}, chọn cuộc họp trong ngày. \newline
-2. Ứng dụng kiểm tra ràng buộc khung giờ: từ trước giờ họp 1 giờ đến hết ngày diễn ra cuộc họp. \newline
-3. Nút \textit{``Điểm danh có mặt''} sáng lên $\rightarrow$ Cán bộ nhấn nút. \newline
-4. Hệ thống gọi API \texttt{/api/schedule/general-item/:id/checkin}, ghi nhận vào cơ sở dữ liệu và phát sự kiện WebSocket (\texttt{Socket.IO: scheduleCheckin}). \newline
-5. Màn hình của Ban tổ chức và các đại biểu khác tự động cập nhật danh sách có mặt tức thời. \newline
-6. Nếu vắng mặt, cán bộ nhấn \textit{``Báo vắng''} và nhập lý do (1--200 ký tự) $\rightarrow$ Hệ thống đồng bộ trạng thái vắng có lý do. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC05: Điểm danh Cuộc họp Thời gian thực}}
-\label{tab:uc05_attendance}
+\caption{\textit{Từ điển Dữ liệu Tóm tắt các Thực thể Phục vụ Mobile App}}
+\label{tab:data_dictionary}
 \end{table}

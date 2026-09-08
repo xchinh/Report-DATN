@@ -1,55 +1,37 @@
-\section{Lược đồ Thực thể Quan hệ Dữ liệu (Targeted Database ERD)}
-\label{sec:erd_design}
+\section{Yêu cầu Phi chức năng và Ràng buộc Kỹ thuật}
+\label{sec:yeucau_phichucnang}
 
-Lược đồ dưới đây thể hiện các thực thể dữ liệu cốt lõi trong cơ sở dữ liệu hiện hữu của Nhà trường mà Ứng dụng Di động MyHCMUT trực tiếp truy vấn và cập nhật:
+Để đảm bảo trải nghiệm sử dụng tin cậy, an toàn và mượt mà cho đội ngũ cán bộ, giảng viên, ứng dụng MyHCMUT phải đáp ứng các tiêu chuẩn yêu cầu phi chức năng nghiêm ngặt:
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\linewidth]{img/erd/targeted_system_erd.png}
-    \caption{\textit{Lược đồ Thực thể Quan hệ Dữ liệu Phục vụ Ứng dụng Di động MyHCMUT}}
-    \label{fig:targeted_erd}
-\end{figure}
+\begin{itemize}
+    \item \textbf{Hiệu năng và Độ mượt mà (Rendering Performance):}
+    \begin{itemize}
+        \item Tốc độ khung hình (Frame Rate) duy trì ổn định trong khoảng **58--60 FPS** khi cuộn các danh sách dữ liệu lớn (danh sách văn bản, danh sách công việc).
+        \item Thời gian khởi động ứng dụng ở trạng thái nguội (Cold Start) $< 1.5$ giây; khởi động nóng (Warm Start) $< 0.5$ giây.
+        \item Thời gian phản hồi trung bình của các API Endpoints cốt lõi $< 150$ms.
+    \end{itemize}
+    
+    \item \textbf{Độ trễ Thông báo Đẩy (Notification Latency):}
+    \begin{itemize}
+        \item Tổng độ trễ truyền phát thông điệp đầu-cuối từ khi sự kiện nghiệp vụ phát sinh trên Backend, luân chuyển qua Kafka broker, chuyển tiếp tới Google FCM Server và hiển thị lên thiết bị di động của người dùng đạt mức $\approx 1.0$ giây (luôn duy trì dưới $2.0$ giây).
+    \end{itemize}
 
-\subsection{Từ điển Dữ liệu các Bảng Cốt lõi}
+    \item \textbf{Bảo mật và Quyền riêng tư (Security \& Privacy):}
+    \begin{itemize}
+        \item Toàn bộ các kết nối giao tiếp mạng giữa ứng dụng di động và máy chủ đều bắt buộc mã hóa qua giao thức an toàn HTTPS/TLS.
+        \item Mã hóa cặp khóa xác thực Access Token và Refresh Token trong không gian lưu trữ an toàn của hệ điều hành.
+        \item Kiểm soát phân quyền đa tầng (RBAC) nghiêm ngặt tại cả tầng giao diện (Route Guards trên Mobile) và tầng dịch vụ (Middleware trên Backend).
+    \end{itemize}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.5cm}|p{3.2cm}|X|}
-\hline
-\textbf{Tên Bảng Dữ liệu} & \textbf{Khóa chính / Ngoại} & \textbf{Ý nghĩa Nghiệp vụ đối với Mobile App} \\
-\hline
-\texttt{fw\_user} & PK: \texttt{id} & Tài khoản người dùng, tên đăng nhập, email, trạng thái kích hoạt. \\
-\hline
-\texttt{staff\_ly\_lich} & PK: \texttt{shcc}, FK: \texttt{user\_id} & Hồ sơ thông tin cán bộ (11 danh mục: cá nhân, đào tạo, lương, quá trình công tác...). \\
-\hline
-\texttt{staff\_ly\_lich\_request} & PK: \texttt{id}, FK: \texttt{shcc} & Lưu các đề xuất chỉnh sửa thông tin lý lịch (chứa JSON \texttt{old\_value} và \texttt{new\_value}). \\
-\hline
-\texttt{tcns\_nghi\_phep\_dang\_ky}& PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin đơn đăng ký nghỉ phép, khoảng thời gian, lý do và giải trình nộp trễ. \\
-\hline
-\texttt{tcns\_so\_nghi\_phep\_nam} & PK: \texttt{id}, FK: \texttt{shcc} & Quản lý số ngày phép năm tiêu chuẩn, số ngày đã nghỉ, số ngày còn lại của cán bộ. \\
-\hline
-\texttt{tcns\_qua\_trinh\_di\_cong\_tac}& PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin chuyến đi công tác, địa điểm, mục đích, đoàn công tác và dự toán kinh phí. \\
-\hline
-\texttt{van\_ban\_den\_general} & PK: \texttt{id} & Sổ văn bản đến, số hiệu, ngày ban hành, trích yếu và đường dẫn tệp PDF đính kèm. \\
-\hline
-\texttt{van\_ban\_den\_distribution}& PK: \texttt{id}, FK: \texttt{van\_ban\_id} & Phân phối văn bản đến và chỉ đạo xử lý cho cán bộ/đơn vị. \\
-\hline
-\texttt{mission\_general} & PK: \texttt{id}, FK: \texttt{host\_shcc} & Lưu thông tin nhiệm vụ, loại nhiệm vụ (Trọng tâm/Giao/Chung), \% tiến độ, hạn chót. \\
-\hline
-\texttt{mission\_outlined} & PK: \texttt{id}, FK: \texttt{mission\_id} & Cấu trúc cây đầu việc phân cấp nhiều tầng (\texttt{parent\_id}, \texttt{order\_index}). \\
-\hline
-\texttt{mission\_task\_general} & PK: \texttt{id}, FK: \texttt{mission\_id} & Công việc chi tiết phân công cho từng cán bộ, thời hạn và checklist. \\
-\hline
-\texttt{mission\_report\_batch} & PK: \texttt{id}, FK: \texttt{mission\_id} & Các đợt báo cáo tiến độ thực hiện nhiệm vụ kèm tài liệu minh chứng. \\
-\hline
-\texttt{schedule\_general\_item} & PK: \texttt{id} & Sự kiện lịch tuần trường, lịch đơn vị, thời gian bắt đầu, kết thúc, phòng họp. \\
-\hline
-\texttt{schedule\_meeting\_attendance}& PK: \texttt{id}, FK: \texttt{item\_id} & Lưu vết điểm danh có mặt hoặc báo vắng của đại biểu tham dự cuộc họp. \\
-\hline
-\texttt{fw\_user\_device\_token} & PK: \texttt{id}, FK: \texttt{user\_id} & Lưu trữ FCM Device Token của điện thoại cán bộ phục vụ gửi thông báo đẩy. \\
-\hline
-\end{tabularx}
-\caption{\textit{Từ điển Dữ liệu Tóm tắt các Thực thể Phục vụ Mobile App}}
-\label{tab:data_dictionary}
-\end{table}
+    \item \textbf{Độ tin cậy và Khả năng Chịu lỗi (Reliability \& Fault-Tolerance):}
+    \begin{itemize}
+        \item Khi xảy ra sự cố mất kết nối mạng hoặc lỗi máy chủ (Timeout), ứng dụng bắt lỗi tập trung và thông báo nhẹ nhàng qua giao diện thông báo (Snackbar / Toast), cung cấp nút Thử lại (Retry), tuyệt đối không làm ứng dụng bị dừng đột ngột (Crash).
+        \item Tự động làm mới phiên làm việc ngầm (Silent Refresh) khi Access Token hết hạn, đảm bảo trải nghiệm liền mạch cho người dùng.
+    \end{itemize}
+
+    \item \textbf{Tối ưu hóa Tài nguyên Phần cứng (Resource Consumption):}
+    \begin{itemize}
+        \item Mức tiêu thụ bộ nhớ RAM ở trạng thái tĩnh duy trì dưới 100 MB; khi tải dữ liệu tối đa và xem tài liệu PDF lớn không vượt quá 150 MB.
+        \item Kích thước tệp cài đặt ứng dụng (APK Release) tối ưu dưới 30 MB nhờ cơ chế nén tài nguyên và phân tách kiến trúc ABI.
+    \end{itemize}
+\end{itemize}

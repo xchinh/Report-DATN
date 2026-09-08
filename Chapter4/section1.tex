@@ -1,81 +1,39 @@
-\section{Xác định người dùng và Ma trận Phân quyền (RBAC Matrix)}
+\section{Xác định Người dùng và Ma trận Phân quyền (RBAC Matrix)}
 \label{sec:nguoidung_rbac}
 
-Hệ thống ứng dụng MyHCMUT phục vụ đội ngũ nhân sự của Trường Đại học Bách khoa -- ĐHQG-HCM, được phân quyền chặt chẽ theo vai trò (Role-Based Access Control):
+Hệ thống ứng dụng MyHCMUT phục vụ đội ngũ cán bộ, giảng viên và nhân viên của Trường Đại học Bách khoa -- ĐHQG-HCM, được phân quyền chặt chẽ theo vai trò (Role-Based Access Control) thông qua bảng mã quyền hệ thống:
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.3}
-    \begin{tabularx}{\textwidth}{|p{3.2cm}|p{3.8cm}|X|}
+    \small
+    \begin{tabularx}{\textwidth}{|L{3cm}|>{\RaggedRight\arraybackslash\ttfamily\footnotesize}p{4cm}|Y|}
     \hline
-    \textbf{Tác nhân (Actor)} & \textbf{Quyền hệ thống} & \textbf{Phạm vi Chức năng trên Mobile App} \\
+    \textrm{\textbf{Tác nhân (Actor)}} & \textrm{\textbf{Quyền hệ thống}} & \textbf{Phạm vi Chức năng trên Mobile App} \\
     \hline
-    \textbf{Cán bộ / Giảng viên} & \texttt{cn:ly\_lich}, \texttt{cn:nghi\_phep}, \texttt{cn:di\_cong\_tac}, \texttt{iofficeMission:read}, \texttt{scheduleGeneral:read} & Tra cứu 11 mục lý lịch; gửi đề xuất sửa hồ sơ; nộp đơn nghỉ phép; đăng ký đi công tác; xem văn bản đến; theo dõi nhiệm vụ; điểm danh họp/báo vắng. \\
+    \textbf{Cán bộ / Giảng viên} & cn:ly\_lich, cn:nghi\_phep, cn:di\_cong\_tac, iofficeMission:read, scheduleGeneral:read & Tra cứu 11 mục lý lịch; gửi đề xuất sửa hồ sơ; nộp đơn nghỉ phép; đăng ký đi công tác; xem văn bản đến; theo dõi nhiệm vụ; điểm danh họp/báo vắng. \\
     \hline
-    \textbf{Lãnh đạo Đơn vị} (Trưởng/Phó Khoa, Phòng) & \texttt{dv:nghi\_phep:read/write}, \texttt{dv:di\_cong\_tac:read/write}, \texttt{eofficeVanBanDen:manage}, \texttt{iofficeMission:manage} & Thẩm định \& phê duyệt đơn nghỉ phép đơn vị; duyệt danh sách đi công tác; phân phối chỉ đạo văn bản đến; giám sát tiến độ nhiệm vụ đơn vị; tạo lịch họp đơn vị. \\
+    \textbf{Lãnh đạo Đơn vị} (Trưởng/Phó Khoa, Phòng) & dv:nghi\_phep:\allowbreak read/write, dv:di\_cong\_tac:\allowbreak read/write, eofficeVanBanDen:\allowbreak manage, iofficeMission:\allowbreak manage & Thẩm định \& phê duyệt đơn nghỉ phép đơn vị; duyệt danh sách đi công tác; phân phối chỉ đạo văn bản đến; giám sát tiến độ nhiệm vụ đơn vị; tạo lịch họp đơn vị. \\
     \hline
-    \textbf{Ban Giám hiệu} (Hiệu trưởng, Phó HT) & \texttt{tcns:quy\_trinh:manage}, \texttt{eofficeVanBanDi:read}, \texttt{scheduleGeneral:manage} & Xem xét văn bản đi cấp trường; chỉ đạo văn bản đến quan trọng; theo dõi nhiệm vụ trọng tâm trường; duyệt lịch tuần trường. \\
+    \textbf{Ban Giám hiệu} (Hiệu trưởng, Phó HT) & tcns:quy\_trinh:\allowbreak manage, eofficeVanBanDi:\allowbreak read, scheduleGeneral:\allowbreak manage & Xem xét văn bản đi cấp trường; chỉ đạo văn bản đến quan trọng; theo dõi nhiệm vụ trọng tâm trường; duyệt lịch tuần trường. \\
     \hline
-    \textbf{Chuyên viên TCCB} (Mã đơn vị 94) & \texttt{tcns:ly\_lich:manage}, \texttt{tcns:request\_ly\_lich:read}, \texttt{tcns:nghi\_phep:write} & Thẩm định Diff sửa lý lịch cán bộ; duyệt đơn nghỉ phép bước cuối \& cấp số quyết định; quản lý quỹ phép năm. \\
+    \textbf{Chuyên viên TCCB} (Mã đơn vị 94) & tcns:ly\_lich:\allowbreak manage, tcns:request\_ly\_lich:\allowbreak read, tcns:nghi\_phep:\allowbreak write & Thẩm định Diff sửa lý lịch cán bộ; duyệt đơn nghỉ phép bước cuối \& cấp số quyết định; quản lý quỹ phép năm. \\
     \hline
-    \textbf{Văn thư Trường/ĐV} & \texttt{eofficeVanBanDen:write}, \texttt{scheduleGeneral:write} & Nhập metadata văn bản đến; theo dõi luân chuyển văn bản đi; tổng hợp lịch tuần trường. \\
+    \textbf{Văn thư Trường/ĐV} & eofficeVanBanDen:\allowbreak write, scheduleGeneral:\allowbreak write & Nhập metadata văn bản đến; theo dõi luân chuyển văn bản đi; tổng hợp lịch tuần trường. \\
     \hline
     \end{tabularx}
     \caption{\textit{Ma trận Phân quyền người dùng theo vai trò (RBAC Matrix)}}
     \label{tab:rbac_matrix}
 \end{table}
 
-\section{Yêu cầu Chức năng (Functional Requirements)}
-\label{sec:yeucau_chucnang}
+\subsection{Sơ đồ Ca sử dụng Tổng thể Toàn hệ thống (Overall Use Case Diagram)}
+\label{subsec:system_usecase_overall}
 
-\subsection{Phân hệ Xác thực và Quản lý Phiên (Auth Module)}
-\begin{itemize}
-    \item Đăng nhập qua HCMUT CAS SSO và xác thực Mật khẩu nội bộ.
-    \item Quản lý Token mã hóa an toàn trong Keychain/Keystore.
-    \item Tự động làm mới phiên làm việc ngầm (Silent Refresh) khi gặp mã lỗi 401 Unauthorized.
-\end{itemize}
+Sơ đồ hình \ref{fig:usecase_overall} thể hiện mối tương tác tổng quan giữa các tác nhân người dùng với các phân hệ nghiệp vụ chính của ứng dụng MyHCMUT:
 
-\subsection{Phân hệ Quản trị Nhân sự (HRM Module)}
-\begin{itemize}
-    \item \textbf{Hồ sơ Lý lịch:} Tra cứu 11 nhóm thông tin lý lịch chi tiết; gửi đề xuất chỉnh sửa kèm ảnh minh chứng; giao diện so sánh sai khác (Diff Viewer) dành cho người thẩm định.
-    \item \textbf{Đăng ký Nghỉ phép:} Form Wizard 4 bước kết hợp thuật toán kiểm tra ràng buộc thời gian thực 4 tầng (tính số ngày làm việc, kiểm tra trùng lịch, mốc nộp trễ 3 ngày/15 ngày, kiểm tra số dư quỹ phép năm).
-    \item \textbf{Đăng ký Đi công tác:} Nhập mục đích, địa điểm, thời gian, dự toán kinh phí, chọn thành viên đoàn công tác và đính kèm thư mời/kế hoạch PDF.
-    \item \textbf{Phê duyệt Đa cấp \& Hàng loạt:} Hiển thị danh sách chờ duyệt, timeline quy trình luân chuyển; hỗ trợ duyệt nhiều đơn cùng lúc qua thanh tác vụ nhóm (\texttt{AppBatchActionBar}).
-\end{itemize}
-
-\subsection{Phân hệ Văn phòng số (iOffice Module)}
-\begin{itemize}
-    \item Tra cứu, tìm kiếm và phân loại danh mục văn bản đến, văn bản đi.
-    \item Xem trực tiếp tệp PDF văn bản đính kèm qua trình xem tích hợp.
-    \item Lãnh đạo đơn vị thực hiện phân phối, giao việc và bút phê chỉ đạo văn bản đến.
-\end{itemize}
-
-\subsection{Phân hệ Quản lý Nhiệm vụ \& Công việc (Tasks / Missions Module)}
-\begin{itemize}
-    \item Phân loại 3 nhóm nhiệm vụ (Trọng tâm, Được giao, Chung) kết hợp lọc theo 5 trạng thái (Cần xử lý, Nháp, Đang làm, Đã xong, Tất cả).
-    \item Xem chi tiết nhiệm vụ với 4 tab (Tổng quan \% tiến độ, Cây đầu việc \texttt{outlined-tree}, Báo cáo tiến độ đợt, Văn bản liên kết).
-    \item Modal xem chi tiết công việc phân công và gửi báo cáo tiến độ đính kèm minh chứng.
-\end{itemize}
-
-\subsection{Phân hệ Lịch công tác và Điểm danh Cuộc họp (Schedule Module)}
-\begin{itemize}
-    \item Tra cứu lịch tuần trường và lịch tuần đơn vị.
-    \item Kiểm tra ràng buộc khung giờ mở điểm danh (từ trước giờ họp 1 giờ đến hết ngày diễn ra cuộc họp).
-    \item Điểm danh có mặt hoặc báo vắng có lý do (1--200 ký tự); đồng bộ dữ liệu điểm danh thời gian thực qua WebSocket.
-\end{itemize}
-
-\subsection{Phân hệ Trung tâm Thông báo Đẩy (Notification Module)}
-\begin{itemize}
-    \item Tiếp nhận thông báo đẩy từ Firebase FCM; cập nhật số huy hiệu Badge trên icon ứng dụng.
-    \item Phân tích 4 trường Metadata có cấu trúc (\texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval}) để thực hiện điều hướng sâu (Deep Linking) trực tiếp vào màn hình chi tiết.
-\end{itemize}
-
-\section{Yêu cầu Phi chức năng (Non-Functional Requirements)}
-\label{sec:yeucau_phichucnang}
-
-\begin{itemize}
-    \item \textbf{Hiệu năng và Độ mượt mà (Performance):} Tốc độ khung hình duy trì ổn định 58--60 FPS khi cuộn danh sách lớn; thời gian khởi động nguội $< 1.5$ giây; thời gian phản hồi API trung bình $< 150$ms.
-    \item \textbf{Độ trễ Thông báo Đẩy (Latency):} Độ trễ đầu-cuối từ khi sự kiện phát sinh trên Backend đến khi thiết bị nhận Push Notification $< 2.0$ giây.
-    \item \textbf{Bảo mật (Security):} HTTPS/TLS toàn diện; mã hóa Token trong Keychain/Keystore; kiểm tra phân quyền RBAC đa tầng ở cả Client và Server.
-    \item \textbf{Khả năng Chịu lỗi (Fault-Tolerance):} Bắt lỗi mất kết nối mạng và Timeout nhẹ nhàng qua Snackbar, cung cấp nút Thử lại (Retry), tuyệt đối không làm dừng đột ngột ứng dụng (Crash).
-\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{img/uml/system_usecase_diagram.png}
+    \caption{\textit{Sơ đồ Ca sử dụng Tổng thể Hệ thống MyHCMUT}}
+    \label{fig:usecase_overall}
+\end{figure}

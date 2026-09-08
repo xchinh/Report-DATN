@@ -1,56 +1,49 @@
-\section{Entity Relationship Diagram (ERD) và Thiết kế Dữ liệu}
-\label{sec:erd_design}
+\section{Kết quả Hiện thực Giao diện và Logic các Phân hệ}
+\label{sec:ketqua_hienthuc}
 
-\subsection{Lược đồ Thực thể Quan hệ Dữ liệu (Targeted Database ERD)}
-Lược đồ dưới đây thể hiện các thực thể dữ liệu cốt lõi trong cơ sở dữ liệu hiện hữu của Nhà trường mà Ứng dụng Di động MyHCMUT trực tiếp truy vấn và cập nhật:
+\subsection{Cấu trúc Dự án Mã nguồn Modular Monorepo (Melos)}
+Toàn bộ mã nguồn ứng dụng di động MyHCMUT được tổ chức tại \texttt{myhcmut-mobile}:
+\begin{itemize}
+    \item \texttt{apps/myhcmut}: Ứng dụng chính, cấu hình \texttt{GoRouter}, Firebase Messaging.
+    \item \texttt{packages/core/global\_system}: Hệ thống Design System Material 3 Semantic Tokens.
+    \item \texttt{packages/core/network}: Dio Client, \texttt{MultiDomainAuthInterceptor}.
+    \item \texttt{packages/core/auth}: Xử lý phiên đăng nhập và mã hóa Token.
+    \item \texttt{modules/hrm}: Phân hệ Quản trị Nhân sự.
+    \item \texttt{modules/ioffice}: Phân hệ Văn phòng số, Nhiệm vụ (\texttt{mission}) và Lịch (\texttt{schedule}).
+    \item \texttt{modules/notification}: Phân hệ Thông báo đẩy FCM và giải mã Deep Link.
+\end{itemize}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\linewidth]{img/erd/targeted_system_erd.png}
-    \caption{\textit{Lược đồ Thực thể Quan hệ Dữ liệu Phục vụ Ứng dụng Di động MyHCMUT}}
-    \label{fig:targeted_erd}
-\end{figure}
+\subsection{Hiện thực Phân hệ Quản trị Nhân sự (HRM Mobile)}
+\begin{itemize}
+    \item \textbf{Màn hình Tra cứu Lý lịch (\texttt{PersonalProfilePage}):} Sử dụng \texttt{TabBarView} phân chia 11 nhóm danh mục lý lịch, hỗ trợ lưu đệm SQLite.
+    \item \textbf{Màn hình Thẩm định So sánh Sai khác (\texttt{ApproveProfileDetailPage}):} Thẻ \texttt{ReviewDiffCard} hiển thị giá trị cũ (màu đỏ) và giá trị mới (màu xanh lá) giúp chuyên viên TCCB đối chiếu và duyệt đề xuất sửa lý lịch.
+    \item \textbf{Đăng ký Nghỉ phép Form Wizard 4 bước (\texttt{LeaveRequestPage}):} Tích hợp kiểm tra ràng buộc thời gian thực 4 tầng từ API \texttt{/api/tcns-nghi-phep/validate}, tự động cảnh báo nộp trễ và tính toán số ngày nghỉ chính xác.
+    \item \textbf{Đăng ký \& Duyệt Đi công tác (\texttt{BusinessTripEditPage}, \texttt{ApproveBtripListPage}):} Tạo form chuyến đi, đính kèm dự toán/kế hoạch và phê duyệt danh sách cán bộ đi công tác.
+    \item \textbf{Phê duyệt Đơn Hàng loạt (\texttt{ApproveTimeOffListPage}):} Sử dụng thanh tác vụ nhóm \texttt{AppBatchActionBar} duyệt nhiều đơn cùng lúc.
+\end{itemize}
 
-\subsection{Từ điển Dữ liệu các Bảng Phục vụ Phân hệ Mobile}
+\subsection{Hiện thực Phân hệ Văn phòng số (iOffice Mobile)}
+\begin{itemize}
+    \item \textbf{Danh sách Văn bản đến/đi (\texttt{IncomingDocsListPage}, \texttt{OutgoingDocsListPage}):} Phân loại theo độ khẩn cấp, tìm kiếm nhanh và tải cuộn vô tận (Infinite Scroll).
+    \item \textbf{Trình xem PDF Trực tiếp (\texttt{IncomingDocDetailPage}):} Tích hợp trình xem tài liệu PDF trực tiếp trên ứng dụng.
+    \item \textbf{Phân phối \& Chỉ đạo Văn bản (\texttt{AssignmentCard}):} Bút phê chỉ đạo và giao việc cho cán bộ cấp dưới.
+\end{itemize}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{|p{3.5cm}|p{3.2cm}|X|}
-\hline
-\textbf{Tên Bảng Dữ liệu} & \textbf{Khóa chính / Ngoại} & \textbf{Ý nghĩa Nghiệp vụ đối với Mobile App} \\
-\hline
-\texttt{fw\_user} & PK: \texttt{id} & Tài khoản người dùng, tên đăng nhập, email, trạng thái kích hoạt. \\
-\hline
-\texttt{staff\_ly\_lich} & PK: \texttt{shcc}, FK: \texttt{user\_id} & Hồ sơ thông tin cán bộ (11 danh mục: cá nhân, đào tạo, lương, quá trình công tác...). \\
-\hline
-\texttt{staff\_ly\_lich\_request} & PK: \texttt{id}, FK: \texttt{shcc} & Lưu các đề xuất chỉnh sửa thông tin lý lịch (chứa JSON \texttt{old\_value} và \texttt{new\_value}). \\
-\hline
-\texttt{tcns\_nghi\_phep\_dang\_ky}& PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin đơn đăng ký nghỉ phép, khoảng thời gian, lý do và giải trình nộp trễ. \\
-\hline
-\texttt{tcns\_so\_nghi\_phep\_nam} & PK: \texttt{id}, FK: \texttt{shcc} & Quản lý số ngày phép năm tiêu chuẩn, số ngày đã nghỉ, số ngày còn lại của cán bộ. \\
-\hline
-\texttt{tcns\_qua\_trinh\_di\_cong\_tac}& PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin chuyến đi công tác, địa điểm, mục đích, đoàn công tác và dự toán kinh phí. \\
-\hline
-\texttt{van\_ban\_den\_general} & PK: \texttt{id} & Sổ văn bản đến, số hiệu, ngày ban hành, trích yếu và đường dẫn tệp PDF đính kèm. \\
-\hline
-\texttt{van\_ban\_den\_distribution}& PK: \texttt{id}, FK: \texttt{van\_ban\_id} & Phân phối văn bản đến và chỉ đạo xử lý cho cán bộ/đơn vị. \\
-\hline
-\texttt{mission\_general} & PK: \texttt{id}, FK: \texttt{host\_shcc} & Lưu thông tin nhiệm vụ, loại nhiệm vụ (Trọng tâm/Giao/Chung), \% tiến độ, hạn chót. \\
-\hline
-\texttt{mission\_outlined} & PK: \texttt{id}, FK: \texttt{mission\_id} & Cấu trúc cây đầu việc phân cấp nhiều tầng (\texttt{parent\_id}, \texttt{order\_index}). \\
-\hline
-\texttt{mission\_task\_general} & PK: \texttt{id}, FK: \texttt{mission\_id} & Công việc chi tiết phân công cho từng cán bộ, thời hạn và checklist. \\
-\hline
-\texttt{mission\_report\_batch} & PK: \texttt{id}, FK: \texttt{mission\_id} & Các đợt báo cáo tiến độ thực hiện nhiệm vụ kèm tài liệu minh chứng. \\
-\hline
-\texttt{schedule\_general\_item} & PK: \texttt{id} & Sự kiện lịch tuần trường, lịch đơn vị, thời gian bắt đầu, kết thúc, phòng họp. \\
-\hline
-\texttt{schedule\_meeting\_attendance}& PK: \texttt{id}, FK: \texttt{item\_id} & Lưu vết điểm danh có mặt hoặc báo vắng của đại biểu tham dự cuộc họp. \\
-\hline
-\texttt{fw\_user\_device\_token} & PK: \texttt{id}, FK: \texttt{user\_id} & Lưu trữ FCM Device Token của điện thoại cán bộ phục vụ gửi thông báo đẩy. \\
-\hline
-\end{tabularx}
-\caption{\textit{Từ điển Dữ liệu Tóm tắt các Thực thể Phục vụ Mobile App}}
-\label{tab:data_dictionary}
-\end{table}
+\subsection{Hiện thực Phân hệ Quản lý Nhiệm vụ \& Công việc (Tasks / Missions)}
+\begin{itemize}
+    \item \textbf{Danh sách Nhiệm vụ (\texttt{MissionsListPage}):} Phân loại 3 nhóm (Trọng tâm, Được giao, Chung) kết hợp bộ lọc 5 Tab trạng thái.
+    \item \textbf{Chi tiết Nhiệm vụ 4 Tab (\texttt{MissionDetailPage}):} Tab Tổng quan, Tab Phân công với cây đầu việc \texttt{outlined-tree}, Tab Báo cáo tiến độ đợt và Tab Liên kết văn bản.
+    \item \textbf{Modals Chi tiết Công việc (\texttt{TaskDetailBottomSheet}) \& Báo cáo Đợt (\texttt{ReportBatchDetailBottomSheet}).}
+\end{itemize}
+
+\subsection{Hiện thực Phân hệ Lịch công tác \& Điểm danh Cuộc họp Thời gian thực}
+\begin{itemize}
+    \item \textbf{Lịch công tác Tuần (\texttt{ScheduleView}):} Chuyển đổi linh hoạt giữa Lịch tuần trường và Lịch đơn vị.
+    \item \textbf{Điểm danh Cuộc họp Thời gian thực:} Nút điểm danh chỉ sáng trong khung giờ mở trước 1 giờ; xử lý luồng có mặt và báo vắng mặt kèm lý do (1--200 ký tự); phát tán sự kiện \texttt{Socket.IO: scheduleCheckin} đồng bộ tức thời.
+\end{itemize}
+
+\subsection{Hiện thực Trung tâm Thông báo Đẩy FCM \& Tự động hóa CI/CD}
+\begin{itemize}
+    \item \textbf{FCM Push \& Deep Linking:} Đăng ký Token, lắng nghe thông báo nền/foreground, phân tích 4 trường metadata trong \texttt{NotificationRouteParser} để kích hoạt \texttt{GoRouter} điều hướng sâu.
+    \item \textbf{GitLab CI Pipeline:} Tự động hóa quy trình qua \texttt{.gitlab-ci.yml} gồm 3 giai đoạn: \texttt{setup} $\rightarrow$ \texttt{quality} (format check, static analyze, test coverage) $\rightarrow$ \texttt{build} (APK / AAB release).
+\end{itemize}

@@ -49,6 +49,12 @@
 }
 \usepackage{float}
 \usepackage{subcaption}
+\usepackage[section]{placeins}
+\usepackage{ragged2e}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\raggedbottom
+\setlength{\parskip}{5pt plus 1pt minus 1pt}
 
 \usetikzlibrary{arrows,snakes,backgrounds}
 \usepackage{hyperref}
@@ -234,7 +240,7 @@ Cuối cùng, xin gửi lời cảm ơn sâu sắc đến gia đình, bạn bè 
 \textbf{\fontsize{24}{28}\selectfont TÓM TẮT BÁO CÁO}\\ 
 \end{center}
 \vspace{1cm}
-Báo cáo Đồ án Tốt nghiệp đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} trình bày quá trình nghiên cứu, thiết kế, hiện thực hóa và kiểm thử ứng dụng di động \textbf{MyHCMUT} tích hợp với hệ thống dịch vụ Backend hiện hữu của Nhà trường. Báo cáo được cấu trúc thành 8 chương chính như sau:
+Báo cáo Đồ án Tốt nghiệp đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} trình bày quá trình nghiên cứu, thiết kế, hiện thực hóa và kiểm thử ứng dụng di động \textbf{MyHCMUT} tích hợp với hệ thống dịch vụ Backend hiện hữu của Nhà trường. Báo cáo được cấu trúc thành 7 chương chính như sau:
 \begin{itemize}
     \item \textbf{CHƯƠNG I: GIỚI THIỆU} \\
     Giới thiệu chung về đề tài, đặt vấn đề, mục tiêu, phạm vi ranh giới nghiên cứu, chức năng chính và ý nghĩa đề tài.
@@ -242,15 +248,13 @@ Báo cáo Đồ án Tốt nghiệp đề tài \textbf{``Phát triển ứng dụ
     Khảo sát và phân tích các hệ thống quản trị đại học, ứng dụng di động đơn phân hệ và hệ thống Web nội bộ; từ đó đánh giá ưu điểm, hạn chế và đề xuất mô hình Cổng di động tập trung.
     \item \textbf{CHƯƠNG III: CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ} \\
     Trình bày cơ sở lý thuyết kiến trúc, công nghệ Frontend Mobile (Flutter, Riverpod 3, Melos, GoRouter), công nghệ Backend tích hợp (Node.js, Express, Shared JWT Bridge), Cơ sở dữ liệu và công nghệ hỗ trợ (Kafka, FCM, Socket.IO).
-    \item \textbf{CHƯƠNG IV: PHÂN TÍCH YÊU CẦU HỆ THỐNG} \\
-    Xác định người dùng, ma trận phân quyền RBAC, yêu cầu chức năng chi tiết theo 5 phân hệ và các yêu cầu phi chức năng.
-    \item \textbf{CHƯƠNG V: ĐẶC TẢ CHI TIẾT CÁC USE-CASE VÀ BIỂU ĐỒ HOẠT ĐỘNG} \\
-    Sơ đồ Use Case tổng thể, bảng đặc tả chi tiết 5 Use Cases cốt lõi, hệ thống Biểu đồ hoạt động (Activity Diagrams) và Biểu đồ tuần tự (Sequence Diagrams).
-    \item \textbf{CHƯƠNG VI: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG} \\
+    \item \textbf{CHƯƠNG IV: PHÂN TÍCH VÀ ĐẶC TẢ YÊU CẦU HỆ THỐNG} \\
+    Xác định người dùng, ma trận phân quyền RBAC, sơ đồ use case tổng thể; phân tích và đặc tả chi tiết yêu cầu chức năng theo từng phân hệ nghiệp vụ độc lập (Auth, HRM, iOffice, Notification, KHCN) kết hợp use case, biểu đồ hoạt động và biểu đồ tuần tự; cùng các yêu cầu phi chức năng.
+    \item \textbf{CHƯƠNG V: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG} \\
     Thiết kế Cơ sở dữ liệu (Targeted ERD, Data Dictionary), Kiến trúc hệ thống phân tầng Clean Architecture, MultiDomainAuthInterceptor, Notification Metadata và mô hình Vận hành (System Operation E2E).
-    \item \textbf{CHƯƠNG VII: KẾT QUẢ HIỆN THỰC VÀ KIỂM THỬ} \\
+    \item \textbf{CHƯƠNG VI: KẾT QUẢ HIỆN THỰC VÀ KIỂM THỬ} \\
     Hiện thực hóa giao diện và logic các phân hệ, kết quả kiểm thử Đơn vị (Unit Tests \& Coverage), Widget Tests, Integration Tests, kịch bản E2E và đánh giá định lượng hiệu năng thực nghiệm (API Benchmarks, FCM Latency, RAM/FPS).
-    \item \textbf{CHƯƠNG VIII: TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN} \\
+    \item \textbf{CHƯƠNG VII: TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN} \\
     Nhận xét kết quả đạt được, ý nghĩa khoa học và thực tiễn đối với Trường ĐHBK, những hạn chế còn tồn tại và hướng phát triển tiếp theo.
 \end{itemize}
 
@@ -273,25 +277,21 @@ Báo cáo Đồ án Tốt nghiệp đề tài \textbf{``Phát triển ứng dụ
 \newpage
 \input{Chapter3/index}
 
-%%% CHUONG 4: PHAN TICH YEU CAU HE THONG
+%%% CHUONG 4: PHAN TICH VA DAC TA YEU CAU HE THONG
 \newpage
 \input{Chapter4/index}
 
-%%% CHUONG 5: DAC TA CHI TIET USE-CASE VA BIEU DO HOAT DONG
+%%% CHUONG 5: PHAN TICH VA THIET KE HE THONG
 \newpage
 \input{Chapter5/index}
 
-%%% CHUONG 6: PHAN TICH VA THIET KE HE THONG
+%%% CHUONG 6: KET QUA HIEN THUC VA KIEM THU
 \newpage
 \input{Chapter6/index}
 
-%%% CHUONG 7: KET QUA HIEN THUC VA KIEM THU
+%%% CHUONG 7: TONG KET VA HUONG PHAT TRIEN
 \newpage
 \input{Chapter7/index}
-
-%%% CHUONG 8: TONG KET VA HUONG PHAT TRIEN
-\newpage
-\input{Chapter8/index}
 
 %%Reference
 \newpage

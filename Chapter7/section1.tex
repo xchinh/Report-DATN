@@ -1,49 +1,45 @@
-\section{Kết quả Hiện thực Giao diện và Logic các Phân hệ}
-\label{sec:ketqua_hienthuc}
+\section{Nhận xét kết quả đạt được}
+\label{sec:nhanxet_ketqua}
 
-\subsection{Cấu trúc Dự án Mã nguồn Modular Monorepo (Melos)}
-Toàn bộ mã nguồn ứng dụng di động MyHCMUT được tổ chức tại \texttt{myhcmut-mobile}:
+Trải qua quá trình nghiên cứu, thiết kế, hiện thực hóa và kiểm thử thực nghiệm, đồ án đã hoàn thành toàn diện các mục tiêu đề ra:
+\begin{enumerate}
+    \item \textbf{Về mặt Kiến trúc Ứng dụng Di động:} Xây dựng thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} dựa trên kiến trúc Modular Monorepo với công cụ Melos, áp dụng Clean Architecture phân lớp nghiêm ngặt, quản lý trạng thái Compile-safe với Riverpod 3 và hệ thống giao diện Material 3 Semantic Tokens (\texttt{packages/core/global\_system}) hỗ trợ hoàn hảo cả hai chế độ Light/Dark Mode.
+    \item \textbf{Về mặt Tích hợp Đa dịch vụ:} Hiện thực giải pháp \texttt{MultiDomainAuthInterceptor} và cơ chế Shared Secret JWT Bridge, cho phép ứng dụng di động giao tiếp an toàn và đồng bộ với 3 hệ thống Backend độc lập của Nhà trường (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}) mà không làm thay đổi kiến trúc nghiệp vụ gốc.
+    \item \textbf{Về mặt Nghiệp vụ Quản trị:}
+    \begin{itemize}
+        \item \textit{Phân hệ HRM:} Hoàn thiện tra cứu lý lịch 11 danh mục, giao diện so sánh sai khác (Diff Viewer) thẩm định sửa lý lịch, Form Wizard 4 bước đăng ký nghỉ phép kết hợp thuật toán kiểm tra ràng buộc thời gian thực, đăng ký và phê duyệt đi công tác.
+        \item \textit{Phân hệ iOffice:} Hoàn thiện tra cứu văn bản đến/đi, tích hợp trình xem tệp PDF trực tiếp và phân phối chỉ đạo văn bản.
+        \item \textit{Phân hệ Tasks/Missions:} Hoàn thiện quản lý nhiệm vụ đa phân loại (Trọng tâm, Được giao, Chung) với 5 tab lọc, chi tiết 4 tab (Tổng quan, Cây đầu việc, Báo cáo tiến độ, Liên kết văn bản) và modal chi tiết công việc.
+        \item \textit{Phân hệ Lịch \& Điểm danh họp:} Hoàn thiện tra cứu lịch tuần trường/đơn vị, cơ chế điểm danh có mặt trong khung giờ mở trước 1 giờ, chức năng báo vắng và đồng bộ dữ liệu thời gian thực qua WebSocket (\texttt{Socket.IO}).
+        \item \textit{Phân hệ Thông báo:} Hoàn thiện chuỗi tiêu thụ thông điệp từ Kafka đẩy ra Firebase FCM, điều hướng sâu Deep Linking dựa trên Metadata có cấu trúc và cập nhật số huy hiệu Badge.
+    \end{itemize}
+    \item \textbf{Về mặt Đảm bảo Chất lượng \& Kiểm thử:} Thiết lập bộ kiểm thử 4 tầng toàn diện (112 ca kiểm thử với độ phủ 81.4\%), hoàn thành 4 kịch bản E2E thực tế, đo lường định lượng hiệu năng mượt mà (60 FPS, RAM $\approx$ 95--145MB, API $< 150$ms) và tự động hóa quy trình CI/CD trên GitLab CI.
+\end{enumerate}
+
+\section{Ý nghĩa khoa học và Giá trị Thực tiễn}
+\label{sec:giatri_thuctien}
+
 \begin{itemize}
-    \item \texttt{apps/myhcmut}: Ứng dụng chính, cấu hình \texttt{GoRouter}, Firebase Messaging.
-    \item \texttt{packages/core/global\_system}: Hệ thống Design System Material 3 Semantic Tokens.
-    \item \texttt{packages/core/network}: Dio Client, \texttt{MultiDomainAuthInterceptor}.
-    \item \texttt{packages/core/auth}: Xử lý phiên đăng nhập và mã hóa Token.
-    \item \texttt{modules/hrm}: Phân hệ Quản trị Nhân sự.
-    \item \texttt{modules/ioffice}: Phân hệ Văn phòng số, Nhiệm vụ (\texttt{mission}) và Lịch (\texttt{schedule}).
-    \item \texttt{modules/notification}: Phân hệ Thông báo đẩy FCM và giải mã Deep Link.
+    \item \textbf{Đối với Nhà trường:} Đóng góp một giải pháp phần mềm hoàn chỉnh phục vụ trực tiếp chiến lược chuyển đổi số và quản trị đại học thông minh; hiện đại hóa quy trình hành chính, giảm thiểu giấy tờ và rút ngắn thời gian phê duyệt văn bản/nghỉ phép.
+    \item \textbf{Đối với Cán bộ, Giảng viên:} Cung cấp một trợ lý số di động tiện lợi, giúp cán bộ chủ động quản lý hồ sơ cá nhân, theo dõi nhiệm vụ, điểm danh họp và nhận thông báo công việc khẩn cấp mọi lúc, mọi nơi ngay trên điện thoại.
+    \item \textbf{Ý nghĩa Khoa học:} Chứng minh tính khả thi và hiệu quả vượt trội của mô hình Kiến trúc Tích hợp Đa dịch vụ hướng API (API-based Multi-backend Integration Architecture) khi xây dựng ứng dụng di động cho các tổ chức, doanh nghiệp có hạ tầng phân tán sẵn có.
 \end{itemize}
 
-\subsection{Hiện thực Phân hệ Quản trị Nhân sự (HRM Mobile)}
+\section{Những Hạn chế Còn tồn tại}
+\label{sec:hanche}
+
+Mặc dù đã đạt được nhiều kết quả quan trọng, đồ án vẫn còn một số điểm hạn chế do giới hạn về mặt thời gian và hạ tầng thử nghiệm:
 \begin{itemize}
-    \item \textbf{Màn hình Tra cứu Lý lịch (\texttt{PersonalProfilePage}):} Sử dụng \texttt{TabBarView} phân chia 11 nhóm danh mục lý lịch, hỗ trợ lưu đệm SQLite.
-    \item \textbf{Màn hình Thẩm định So sánh Sai khác (\texttt{ApproveProfileDetailPage}):} Thẻ \texttt{ReviewDiffCard} hiển thị giá trị cũ (màu đỏ) và giá trị mới (màu xanh lá) giúp chuyên viên TCCB đối chiếu và duyệt đề xuất sửa lý lịch.
-    \item \textbf{Đăng ký Nghỉ phép Form Wizard 4 bước (\texttt{LeaveRequestPage}):} Tích hợp kiểm tra ràng buộc thời gian thực 4 tầng từ API \texttt{/api/tcns-nghi-phep/validate}, tự động cảnh báo nộp trễ và tính toán số ngày nghỉ chính xác.
-    \item \textbf{Đăng ký \& Duyệt Đi công tác (\texttt{BusinessTripEditPage}, \texttt{ApproveBtripListPage}):} Tạo form chuyến đi, đính kèm dự toán/kế hoạch và phê duyệt danh sách cán bộ đi công tác.
-    \item \textbf{Phê duyệt Đơn Hàng loạt (\texttt{ApproveTimeOffListPage}):} Sử dụng thanh tác vụ nhóm \texttt{AppBatchActionBar} duyệt nhiều đơn cùng lúc.
+    \item Phân hệ Kê khai Khoa học Công nghệ (KHCN) và Phòng họp trực tuyến (Meetings) mới dừng lại ở mức độ thiết kế giao diện sẵn sàng (UI Mock) do Backend API của trường chưa hoàn thiện.
+    \item Chưa tích hợp giải pháp Chữ ký số tập trung (Digital Signature) do tính pháp lý và hạ tầng chứng thư số cần quy trình cấp phép đặc biệt.
+    \item Việc kiểm thử hiệu năng mới được thực hiện trên môi trường Lab với quy mô 100 requests mẫu, chưa đánh giá được tải thực tế khi có hàng nghìn cán bộ truy cập đồng thời trong các đợt cao điểm.
 \end{itemize}
 
-\subsection{Hiện thực Phân hệ Văn phòng số (iOffice Mobile)}
-\begin{itemize}
-    \item \textbf{Danh sách Văn bản đến/đi (\texttt{IncomingDocsListPage}, \texttt{OutgoingDocsListPage}):} Phân loại theo độ khẩn cấp, tìm kiếm nhanh và tải cuộn vô tận (Infinite Scroll).
-    \item \textbf{Trình xem PDF Trực tiếp (\texttt{IncomingDocDetailPage}):} Tích hợp trình xem tài liệu PDF trực tiếp trên ứng dụng.
-    \item \textbf{Phân phối \& Chỉ đạo Văn bản (\texttt{AssignmentCard}):} Bút phê chỉ đạo và giao việc cho cán bộ cấp dưới.
-\end{itemize}
+\section{Hướng Phát triển Đề tài}
+\label{sec:huongphattrien}
 
-\subsection{Hiện thực Phân hệ Quản lý Nhiệm vụ \& Công việc (Tasks / Missions)}
-\begin{itemize}
-    \item \textbf{Danh sách Nhiệm vụ (\texttt{MissionsListPage}):} Phân loại 3 nhóm (Trọng tâm, Được giao, Chung) kết hợp bộ lọc 5 Tab trạng thái.
-    \item \textbf{Chi tiết Nhiệm vụ 4 Tab (\texttt{MissionDetailPage}):} Tab Tổng quan, Tab Phân công với cây đầu việc \texttt{outlined-tree}, Tab Báo cáo tiến độ đợt và Tab Liên kết văn bản.
-    \item \textbf{Modals Chi tiết Công việc (\texttt{TaskDetailBottomSheet}) \& Báo cáo Đợt (\texttt{ReportBatchDetailBottomSheet}).}
-\end{itemize}
-
-\subsection{Hiện thực Phân hệ Lịch công tác \& Điểm danh Cuộc họp Thời gian thực}
-\begin{itemize}
-    \item \textbf{Lịch công tác Tuần (\texttt{ScheduleView}):} Chuyển đổi linh hoạt giữa Lịch tuần trường và Lịch đơn vị.
-    \item \textbf{Điểm danh Cuộc họp Thời gian thực:} Nút điểm danh chỉ sáng trong khung giờ mở trước 1 giờ; xử lý luồng có mặt và báo vắng mặt kèm lý do (1--200 ký tự); phát tán sự kiện \texttt{Socket.IO: scheduleCheckin} đồng bộ tức thời.
-\end{itemize}
-
-\subsection{Hiện thực Trung tâm Thông báo Đẩy FCM \& Tự động hóa CI/CD}
-\begin{itemize}
-    \item \textbf{FCM Push \& Deep Linking:} Đăng ký Token, lắng nghe thông báo nền/foreground, phân tích 4 trường metadata trong \texttt{NotificationRouteParser} để kích hoạt \texttt{GoRouter} điều hướng sâu.
-    \item \textbf{GitLab CI Pipeline:} Tự động hóa quy trình qua \texttt{.gitlab-ci.yml} gồm 3 giai đoạn: \texttt{setup} $\rightarrow$ \texttt{quality} (format check, static analyze, test coverage) $\rightarrow$ \texttt{build} (APK / AAB release).
-\end{itemize}
+\begin{enumerate}
+    \item \textbf{Hoàn thiện Tích hợp Phân hệ Khoa học Công nghệ (KHCN):} Kết nối với Backend API chính thức của Phòng KHCN để cán bộ có thể kê khai danh mục bài báo khoa học, đề tài NCKH và bằng sáng chế ngay trên ứng dụng di động.
+    \item \textbf{Phát triển Tính năng Phòng họp Trực tuyến (Meetings):} Tích hợp giao thức WebRTC / Jitsi Meet phục vụ các cuộc họp trực tuyến nội bộ an toàn.
+    \item \textbf{Nghiên cứu Tích hợp Trợ lý Ảo AI (AI Agent):} Ứng dụng công nghệ xử lý ngôn ngữ tự nhiên (NLP / LLM) hỗ trợ cán bộ tra cứu nhanh quy chế đào tạo, thủ tục hành chính, quy định nghỉ phép và tự động nhắc nhở hạn chót của các nhiệm vụ trọng tâm.
+\end{enumerate}

@@ -1,0 +1,57 @@
+\subsection{Phân hệ Trung tâm Thông báo Đẩy (Notification Module)}
+\label{subsec:module_notification}
+
+\subsubsection{Mô tả Nghiệp vụ và Yêu cầu Chức năng}
+Phân hệ Trung tâm Thông báo Đẩy (tương ứng với gói mã nguồn \texttt{modules/notification}) chịu trách nhiệm duy trì kênh thông tin liên lạc tức thời giữa hệ sinh thái phần mềm Nhà trường và thiết bị cá nhân của cán bộ, giảng viên:
+
+\begin{itemize}
+    \item \textbf{Đăng ký và Quản lý Device Token:} Khi người dùng đăng nhập trên điện thoại, ứng dụng lấy FCM Device Token và tự động gửi lên máy chủ lưu vào bảng \texttt{fw\_user\_device\_token}.
+    \item \textbf{Tiếp nhận Thông báo Đa trạng thái:} Tiếp nhận và xử lý thông báo đẩy từ Firebase Cloud Messaging (FCM HTTP v1 API) ở cả ba trạng thái của ứng dụng: Đang mở (Foreground), Chạy ngầm (Background) và Đã tắt hoàn toàn (Terminated).
+    \item \textbf{Phân tích Metadata có cấu trúc (Structured Routing Metadata):} Thay vì sử dụng URL thô dễ bị gãy liên kết, hệ thống chuẩn hóa payload thông báo gồm 4 trường metadata cốt lõi:
+    \begin{itemize}
+        \item \texttt{source}: Phân hệ phát sinh thông báo (\texttt{'hrm'} hoặc \texttt{'ioffice'}).
+        \item \texttt{entityType}: Loại nghiệp vụ (\texttt{'leave'}, \texttt{'business-trip'}, \texttt{'incoming-doc'}, \texttt{'outgoing-doc'}, \texttt{'task'}).
+        \item \texttt{entityId}: Định danh duy nhất của bản ghi nghiệp vụ.
+        \item \texttt{isApproval}: Cờ đánh dấu màn hình duyệt dành cho cấp quản lý (\texttt{'true'} / \texttt{'false'}).
+    \end{itemize}
+    \item \textbf{Điều hướng sâu (Deep Linking):} Bộ điều phối \texttt{NotificationRouteParser} phân tích 4 trường metadata này để kích hoạt \texttt{GoRouter} mở thẳng đến màn hình chi tiết tương ứng khi người dùng bấm vào thông báo.
+    \item \textbf{Cập nhật Huy hiệu Ứng dụng (App Badge):} Đồng bộ số lượng thông báo chưa đọc hiển thị trực tiếp trên icon ứng dụng ở màn hình chính (\texttt{app\_badge\_plus}).
+\end{itemize}
+
+\subsubsection{Đặc tả Ca sử dụng (Use Cases)}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\small
+\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
+\hline
+\textbf{Mã Ca sử dụng} & \textbf{UC\_NOTI\_01: Tiếp nhận Thông báo Đẩy và Điều hướng sâu (Deep Linking)} \\
+\hline
+\textbf{Tác nhân} & Cán bộ, giảng viên, lãnh đạo nhận thông báo \\
+\hline
+\textbf{Tiền điều kiện} & Ứng dụng MyHCMUT đã được cấp quyền gửi thông báo trên thiết bị di động. \\
+\hline
+\textbf{Hậu điều kiện} & Người dùng nhận được thông báo nổi và được điều hướng chính xác vào màn hình chi tiết nghiệp vụ khi nhấn vào thông báo. \\
+\hline
+\textbf{Luồng sự kiện chính} & 
+1. Một sự kiện nghiệp vụ phát sinh trên Backend (ví dụ: đơn nghỉ phép được duyệt, có văn bản khẩn đến, hoặc được giao nhiệm vụ mới). \newline
+2. Backend phát thông điệp vào Kafka Topic \texttt{SEND\_NOTIFY\_SERVICE}. \newline
+3. Tiến trình ngầm tiêu thụ thông điệp, truy vấn FCM Token và gọi Google FCM Server để đẩy thông báo tới thiết bị. \newline
+4. Thiết bị người dùng nhận thông báo nổi (Heads-up Notification) kèm âm thanh và rung, đồng thời icon ứng dụng cập nhật số huy hiệu Badge. \newline
+5. Người dùng nhấn vào thông báo $\rightarrow$ Lớp \texttt{NotificationRouteParser} trích xuất 4 trường metadata (\texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval}). \newline
+6. \texttt{GoRouter} tự động chuyển hướng người dùng thẳng vào màn hình chi tiết tương ứng mà không làm mất ngăn xếp điều hướng gốc. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC\_NOTI\_01: Tiếp nhận Thông báo và Điều hướng sâu}}
+\label{tab:uc_noti_01}
+\end{table}
+
+\subsubsection{Biểu đồ Tuần tự (Sequence Diagrams)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_kafka_fcm_push.png}
+    \caption{\textit{Biểu đồ Tuần tự Pipeline Thông báo Đẩy Bất đồng bộ (Kafka sang FCM sang Mobile)}}
+    \label{fig:seq_noti_kafka_fcm}
+\end{figure}
