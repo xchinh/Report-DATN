@@ -1,74 +1,189 @@
-\section{Đặt vấn đề}
-\label{sec:datvande}
+\section{Bối cảnh và vấn đề thực tế}
+\label{sec:boicanh_thucte}
 
-Trường Đại học Bách khoa - ĐHQG-HCM hiện có quy mô hơn 1000 cán bộ, giảng viên trong đó có 667 thường xuyên di chuyển giữa 2 cơ sở (268 Lý Thường Kiệt, quận 10 và Thủ Đức) để giảng dạy, nghiên cứu và quản lý. Nhà trường đã đầu tư hệ sinh thái phần mêm quản trị trên nền tảng Web bao gồm hệ thống quản lý nhân sự (HRM), hệ thống quản văn phòng điện tử (iOffice). Các hệ thống này hoạt động hiệu quả trên máy tính văn phòng với đầy đủ chức năng, quy chuẩn nghiệp vu, tuy nhiên khi chuyển sang bối cảnh làm việc di dộng, chúng bộc lộ những hạn chế nghiêm trọng qua khảo sát thực tế. Nhóm đã xác định được 4 vấn đề cốt lõi.
-\begin{itemize}
-    \item \textit{Giao diện Web không tối ưu trên thiết bị di động:} Nhận sự gặp khó khăn khi truy cập vào các hệ thống HRM hoặc iOffice trên điện thoại với chữ nhỏ, menu phức tạp, phải phóng to/cuộn nhiều lần để xem nộ dung văn bản hoặc điền phiếu nghỉ phép, một số trang bị vỡ layout trên màn hình di động,\dots 
-    \item \textit{Thiếu thông báo đẩy thời gian thực:} Cán bộ không nhận được thông báo  tức thời khi có các đơn nghỉ phép/công tác cần duyệt/từ chối, văn bản mới được phân công, hoặc lịch họp đột xuất thay đổi phòng/giờ, mà phải chủ động đăng nhập web để kiểm tra nhiều lần trong ngày gây bất tiện không đáng có.
-    \item \textit{Hạn chế khi thực hiện phê duyệt:} Đối với các lãnh đạo đơn vị (Trưởng/Phó Khoa, Phòng) thường xuyên đi công tác hoặc họp liên tục, khi không có máy tính xách tay bên canh, các đơn từ có thể bị treo, ảnh hướng tới tiến độ công việc và quyền lợi của người lao động.
-    \item \textit{Công tác điểm danh trong các buổi họp toàn trường:} Việc điểm danh thủ công làm giảm tính minh bạch, gặp nhiều hạn chế cho việc thu thập, nhập liệu, tổng hợp
-\end{itemize}
+Chuyển đổi số đang trở thành một định hướng quan trọng trong quá trình phát triển và hiện đại hóa hoạt động quản lý tại các cơ quan, tổ chức và cơ sở giáo dục. Tại Việt Nam, Quyết định số 749/QĐ-TTg ngày 03/6/2020 của Thủ tướng Chính phủ phê duyệt ``Chương trình Chuyển đổi số quốc gia đến năm 2025, định hướng đến năm 2030''~\cite{qd_749_ttg}, trong đó giáo dục được xác định là một trong những lĩnh vực cần ưu tiên chuyển đổi số.
 
-Xuất phát từ những bất cập thực tiễn đó, đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} được thực hiện nhằm xây dựng ứng dụng di động **MyHCMUT** (Flutter Monorepo) đóng vai trò là một Cổng giao tiếp di động tập trung, tích hợp trực tiếp với các dịch vụ Backend hiện hữu của Nhà trường.
+Đối với ngành giáo dục, Quyết định số 131/QĐ-TTg ngày 25/01/2022 tiếp tục phê duyệt Đề án ``Tăng cường ứng dụng công nghệ thông tin và chuyển đổi số trong giáo dục và đào tạo giai đoạn 2022--2025, định hướng đến năm 2030''~\cite{qd_131_ttg}. Đề án đặt ra định hướng tăng cường ứng dụng công nghệ số trong hoạt động quản lý, quản trị cơ sở giáo dục và khai thác dữ liệu phục vụ hoạt động của ngành.
+
+Trong bối cảnh đó, Trường Đại học Bách khoa -- Đại học Quốc gia Thành phố Hồ Chí Minh là cơ sở giáo dục đại học có quy mô hoạt động lớn. Theo thông tin được Nhà trường công bố năm 2026~\cite{hcmut_overview_2026}, Trường có 1.061 viên chức và người lao động, trong đó có 667 giảng viên; quy mô đào tạo khoảng 28.000 học viên và sinh viên. Hoạt động của một tổ chức có quy mô như vậy kéo theo nhiều nghiệp vụ liên quan đến hồ sơ nhân sự, nghỉ phép, công tác, văn bản, nhiệm vụ và lịch làm việc cần được xử lý thường xuyên.
+
+Nhà trường đã triển khai các hệ thống thông tin phục vụ hoạt động quản trị, trong đó có hệ thống quản lý nhân sự HRM và hệ thống văn phòng điện tử iOffice. Các hệ thống này đảm nhiệm dữ liệu và quy trình nghiệp vụ tương ứng. Do đó, bài toán của đề tài không phải xây dựng lại một hệ thống quản lý nhân sự hoặc văn phòng điện tử mới, mà là mở rộng khả năng tiếp cận các nghiệp vụ hiện hữu trên thiết bị di động.
+
+Đối với nhóm nghiệp vụ nhân sự, người dùng không chỉ có nhu cầu tra cứu hồ sơ hoặc đăng ký nghỉ phép mà còn cần lập và theo dõi hồ sơ đi công tác. Quy trình công tác có thể bao gồm chuyến đi trong nước hoặc nước ngoài, cá nhân hoặc đoàn công tác, kèm kế hoạch làm việc, thành viên tham gia, nguồn kinh phí và tài liệu minh chứng. Tùy loại hồ sơ, quá trình xử lý có thể đi qua nhiều cấp thẩm định và phê duyệt khác nhau.
+
+Trong môi trường di động, việc đưa các nghiệp vụ này lên ứng dụng không đơn thuần là xây dựng lại giao diện của hệ thống Web. Ứng dụng phải tương thích với dữ liệu, API, quy trình nghiệp vụ và cơ chế phân quyền hiện hữu. Đối với các nghiệp vụ như nghỉ phép và công tác, các kiểm tra nghiệp vụ và quyết định chuyển trạng thái cuối cùng vẫn cần được thực hiện tại backend, trong khi Mobile đóng vai trò hỗ trợ nhập liệu, theo dõi và tương tác với quy trình.
+
+Ngoài ra, một số chức năng hiện hữu có biểu mẫu tương đối lớn hoặc phụ thuộc nhiều vào hệ thống Web. Việc tái hiện thực toàn bộ những chức năng này trên Mobile có thể làm tăng phạm vi phát triển và tạo thêm chi phí duy trì. Vì vậy, hệ thống cần cho phép kết hợp giữa giao diện Mobile native và việc tái sử dụng có chọn lọc WebApp hiện hữu. Điều này đồng thời đặt ra bài toán chuyển tiếp trạng thái xác thực giữa Mobile và Web.
+
+Bên cạnh các nghiệp vụ HRM, ứng dụng còn tích hợp một số chức năng của iOffice như văn bản, nhiệm vụ và lịch công tác. Đối với lịch họp, môi trường Mobile còn được khai thác để hỗ trợ các thao tác như xem lịch và ghi nhận trạng thái tham dự. Hệ thống cũng cần tiếp nhận thông báo từ nhiều miền nghiệp vụ và điều hướng người dùng đến đúng đối tượng cần xử lý.
+
+Từ những vấn đề trên, đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} được thực hiện nhằm xây dựng \textbf{MyHCMUT Mobile} như một ứng dụng di động đa nền tảng tích hợp và mở rộng các hệ thống nghiệp vụ hiện hữu của Nhà trường, trọng tâm là HRM và iOffice.
+
+\section{Bài toán đặt ra}
+\label{sec:baitoandatra}
+
+Bài toán của đề tài là thiết kế và hiện thực một ứng dụng di động đa nền tảng cho phép cán bộ và các vai trò quản lý tiếp cận, theo dõi và xử lý một số nghiệp vụ của Nhà trường trên thiết bị di động, đồng thời tiếp tục tái sử dụng dữ liệu và quy trình của các hệ thống backend hiện hữu.
+
+Giải pháp cần giải quyết một số nhóm vấn đề chính:
+
+Thứ nhất, ứng dụng cần cung cấp giao diện phù hợp với thiết bị di động cho các nghiệp vụ được lựa chọn thay vì yêu cầu người dùng luôn thao tác trên giao diện Web dành cho trình duyệt máy tính.
+
+Thứ hai, hệ thống cần tích hợp với HRM và iOffice hiện hữu. Việc tích hợp phải hạn chế sao chép không cần thiết nghiệp vụ ở phía backend và duy trì ranh giới trách nhiệm rõ ràng giữa Mobile với các hệ thống nguồn.
+
+Thứ ba, ứng dụng cần hỗ trợ các quy trình nhân sự có nhiều bước xử lý. Đối với \textbf{nghỉ phép}, cán bộ có thể khai báo thông tin nghỉ, kiểm tra điều kiện, gửi yêu cầu và theo dõi quá trình phê duyệt. Đối với \textbf{đi công tác}, cán bộ có thể lập hồ sơ công tác cá nhân hoặc đoàn, khai báo thời gian, kế hoạch, thành viên, kinh phí và tài liệu liên quan, sau đó gửi vào quy trình thẩm định và phê duyệt theo thẩm quyền.
+
+Đặc biệt, quy trình công tác có nhiều biến thể tùy loại chuyến đi. Chuyến công tác trong nước, nước ngoài, công tác của Ban Giám Hiệu hoặc công tác phục vụ khoa học và công nghệ có thể yêu cầu các bước xử lý khác nhau. Trường hợp đoàn công tác có thành viên thuộc nhiều đơn vị còn phát sinh yêu cầu phối hợp phê duyệt giữa các đơn vị liên quan.
+
+Thứ tư, nghỉ phép và công tác có thể cùng tác động đến lịch cá nhân của cán bộ. Vì vậy, hệ thống cần kiểm tra xung đột lịch ở backend nhằm hạn chế trường hợp một cán bộ đồng thời có các khoảng nghỉ phép và công tác chồng lấn nhau. Kiểm tra phía Mobile chỉ đóng vai trò hỗ trợ trải nghiệm; backend vẫn là thành phần có thẩm quyền đối với dữ liệu nghiệp vụ.
+
+Thứ năm, đối với các chức năng chưa được tái hiện thực hoàn toàn bằng giao diện native, ứng dụng cần có cơ chế chuyển người dùng sang WebApp tương ứng thông qua In-App WebView mà không yêu cầu đăng nhập lại một cách không cần thiết. Trong phạm vi đề tài, yêu cầu này được hỗ trợ bằng cơ chế vé xác thực dùng một lần có thời gian tồn tại giới hạn.
+
+Thứ sáu, ứng dụng cần tiếp nhận thông báo phát sinh từ nhiều nghiệp vụ và điều hướng người dùng đến đúng ngữ cảnh xử lý, chẳng hạn một đơn nghỉ phép, một hồ sơ công tác, văn bản hoặc nhiệm vụ.
+
+Từ đó, bài toán trọng tâm của đề tài có thể được phát biểu như sau:
+
+\begin{quote}
+\textit{\textbf{Làm thế nào để xây dựng một ứng dụng di động đa nền tảng giúp cán bộ và các vai trò quản lý tiếp cận, thực hiện và xử lý các nghiệp vụ nhân sự -- điều hành thường xuyên trên thiết bị di động, đồng thời tích hợp với HRM, iOffice và cơ chế xác thực hiện hữu mà không phải xây dựng lại toàn bộ các hệ thống nghiệp vụ của Nhà trường?}}
+\end{quote}
 
 \section{Mục tiêu của đề tài}
 \label{sec:muctieu}
 
 \subsection{Mục tiêu tổng quát}
-Nghiên cứu, thiết kế và phát triển thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} trên nền tảng Flutter, phục vụ công tác quản lý nhân sự, văn phòng điện tử, điều hành nhiệm vụ, lịch họp và thông báo đẩy; đồng thời xây dựng kiến trúc tích hợp hướng API (API-based Integration Architecture) an toàn với hệ thống dịch vụ Backend hiện hữu của Trường Đại học Bách khoa -- ĐHQG-HCM.
+\label{subsec:muctieu_tongquat}
+
+Mục tiêu tổng quát của đề tài là \textbf{thiết kế và hiện thực ứng dụng di động đa nền tảng MyHCMUT Mobile nhằm hỗ trợ cán bộ, giảng viên và các vai trò quản lý tiếp cận một số nghiệp vụ nhân sự -- điều hành của Trường Đại học Bách khoa -- ĐHQG-HCM thông qua việc tích hợp và mở rộng các dịch vụ HRM, iOffice và xác thực hiện hữu.}
+
+Ứng dụng hướng đến việc tạo một điểm truy cập thống nhất trên thiết bị di động cho các chức năng thuộc phạm vi đề tài, đồng thời tái sử dụng dữ liệu, API và quy trình nghiệp vụ đã tồn tại tại các backend của Nhà trường.
 
 \subsection{Mục tiêu cụ thể}
-\begin{itemize}
-    \item Xây dựng ứng dụng di động hỗ trợ tra cứu hồ sơ lý lịch 11 danh mục, giao diện Diff Viewer thẩm định chỉnh sửa thông tin cá nhân trực quan.
-    \item Hiện thực hóa quy trình đăng ký nghỉ phép Form Wizard 4 bước kết hợp thuật toán kiểm tra ràng buộc thời gian thực (Real-time Validation); đăng ký và phê duyệt đi công tác đa cấp.
-    \item Tích hợp phân hệ Văn phòng số (iOffice) hỗ trợ tra cứu văn bản đến/đi, tích hợp trình đọc PDF trực tiếp và phân phối chỉ đạo văn bản.
-    \item Xây dựng phân hệ Quản lý Nhiệm vụ \& Công việc (Tasks/Missions) hỗ trợ phân loại 3 nhóm nhiệm vụ, duyệt cây đầu việc phân cấp (\texttt{outlined-tree}) và nộp báo cáo tiến độ đợt.
-    \item Phát triển phân hệ Lịch công tác và Điểm danh cuộc họp thời gian thực qua WebSocket (\texttt{Socket.IO}) trong khung giờ mở trước 1 giờ.
-    \item Xây dựng Trung tâm Thông báo đẩy (FCM) hỗ trợ điều hướng sâu (Deep Linking) dựa trên 4 trường Metadata có cấu trúc.
-    \item Thiết lập bộ kiểm thử 4 tầng (Testing Pyramid) và cấu hình tự động hóa kiểm thử, đóng gói ứng dụng với GitLab CI Pipeline.
-\end{itemize}
+\label{subsec:muctieu_cuthe}
 
-\section{Phạm vi đề tài}
-\label{sec:phamvi}
+Để đạt được mục tiêu tổng quát, đề tài xác định các mục tiêu cụ thể sau:
 
-Để đảm bảo tính minh bạch học thuật và tính khả thi trong quá trình thực hiện, phạm vi đề tài được phân định rõ ràng như sau:
-\begin{itemize}
-    \item \textbf{Phần Sinh viên trực tiếp phát triển mới (100\%):} Toàn bộ ứng dụng di động MyHCMUT (Flutter Monorepo, Design System Material 3 Semantic Tokens, Riverpod State, Interceptor, UI/UX 5 phân hệ, Bộ Unit/Widget Tests, CI/CD Pipeline) và các thành phần Mobile API Adapters bổ sung trên Backend (\texttt{staff\_ly\_lich\_mobile}, helper validate nghỉ phép 4 tầng trên \texttt{hrm-be}, bổ sung metadata thông báo trên \texttt{ioffice-be}).
-    \item \textbf{Hệ thống Hiện hữu của Nhà trường:} Các dịch vụ nghiệp vụ HRM Core, iOffice Core, Tasks Backend, Hệ thống Cơ sở dữ liệu PostgreSQL và Cụm Kafka/Redis nội bộ của Nhà trường.
-    \item \textbf{Dịch vụ Bên thứ ba tích hợp:} Máy chủ xác thực tập trung HCMUT CAS SSO / LDAP và dịch vụ Google Firebase Cloud Messaging (FCM).
-    \item \textbf{Giới hạn nghiên cứu (Out of Scope / Future Works):} Không xây dựng lại toàn bộ database hay backend có sẵn của trường; Phân hệ Kê khai Khoa học Công nghệ (KHCN) và Phòng họp trực tuyến (Meetings) dừng ở mức UI Mock; Loại bỏ tích hợp Chữ ký số Viettel CA.
-\end{itemize}
-
-\section{Chức năng chính của hệ thống}
-\label{sec:chucnangchinh}
-
-Ứng dụng di động MyHCMUT được thiết kế với 5 nhóm chức năng cốt lõi:
 \begin{enumerate}
-    \item \textbf{Xác thực \& Quản lý Phiên (Auth):} Đăng nhập CAS SSO, Mật khẩu, lưu trữ Token an toàn trong Keychain/Keystore, tự động Silent Refresh Token khi gặp lỗi 401.
-    \item \textbf{Quản lý Nhân sự (HRM):} Tra cứu lý lịch 11 nhóm, Diff Viewer so sánh sửa lý lịch, Wizard đăng ký nghỉ phép 4 bước + Validate 4 tầng, Đăng ký \& duyệt đi công tác, Phê duyệt hàng loạt (\texttt{BatchActionBar}).
-    \item \textbf{Văn phòng số (iOffice):} Tra cứu văn bản đến/đi, trình xem PDF trực tiếp, phân phối chỉ đạo xử lý văn bản.
-    \item \textbf{Quản lý Nhiệm vụ (Tasks/Missions):} Phân loại 3 nhóm nhiệm vụ, lọc 5 tab, chi tiết 4 tab (Tổng quan, Cây đầu việc \texttt{outlined-tree}, Báo cáo đợt, Liên kết) và Modal chi tiết việc.
-    \item \textbf{Lịch công tác \& Điểm danh họp (Schedule):} Lịch tuần trường/đơn vị, Điểm danh có mặt trước giờ họp 1 giờ, Báo vắng mặt có lý do, đồng bộ dữ liệu tức thời qua WebSocket.
+    \item \textbf{Xây dựng nền tảng ứng dụng di động đa nền tảng MyHCMUT Mobile}, tổ chức theo các phân hệ nghiệp vụ và cung cấp các thành phần dùng chung phục vụ tích hợp nhiều hệ thống backend.
+    \item \textbf{Tích hợp chức năng tra cứu và hỗ trợ cập nhật hồ sơ cán bộ}, trong đó dữ liệu hồ sơ được tra cứu trực tiếp trên Mobile; các biểu mẫu cập nhật có phạm vi lớn có thể được tái sử dụng từ HRM Web thông qua In-App WebView.
+    \item \textbf{Tích hợp quy trình quản lý nghỉ phép trên thiết bị di động}, bao gồm khai báo thông tin nghỉ, kiểm tra điều kiện nghiệp vụ, gửi yêu cầu, theo dõi trạng thái và thực hiện các thao tác phê duyệt theo quyền của người dùng.
+    \item \textbf{Tích hợp quy trình đăng ký và phê duyệt đi công tác}, hỗ trợ lập hồ sơ công tác cá nhân hoặc đoàn, khai báo kế hoạch, thành viên, kinh phí và tài liệu minh chứng; lưu nháp hoặc gửi duyệt; theo dõi trạng thái; chỉnh sửa hồ sơ bị trả lại và xử lý phê duyệt theo thẩm quyền.
+    \item \textbf{Tích hợp các chức năng văn phòng và điều hành thuộc iOffice}, bao gồm các nghiệp vụ được lựa chọn liên quan đến văn bản, nhiệm vụ và lịch công tác trên thiết bị di động.
+    \item \textbf{Xây dựng cơ chế tiếp nhận và quản lý thông báo trên Mobile}, hỗ trợ nhận thông báo phát sinh từ các miền nghiệp vụ và điều hướng người dùng đến ngữ cảnh tương ứng.
+    \item \textbf{Xây dựng cơ chế chuyển tiếp xác thực giữa Mobile và Web HRM}, sử dụng vé xác thực dùng một lần kết hợp In-App WebView nhằm hỗ trợ tái sử dụng chức năng Web mà không truyền trực tiếp access token của ứng dụng Mobile qua URL.
+    \item \textbf{Kiểm thử các thành phần được hiện thực và tích hợp}, tập trung vào tính đúng đắn của các luồng nghiệp vụ, tích hợp Mobile--backend và các tình huống lỗi thuộc phạm vi đề tài.
 \end{enumerate}
 
-\section{Ý nghĩa đề tài và Bố cục Báo cáo}
-\label{sec:ynghia_bocuc}
+Các mục tiêu trên tập trung vào khả năng tích hợp và hỗ trợ nghiệp vụ. Các chỉ tiêu định lượng về hiệu năng, độ tin cậy hoặc an toàn chỉ được sử dụng để kết luận khi có phương pháp đo và bằng chứng thực nghiệm tương ứng.
 
-\subsection{Ý nghĩa đề tài}
+\section{Đối tượng sử dụng, phạm vi và ranh giới hệ thống}
+\label{sec:doituong_phamvi_ranhgioi}
+
+\subsection{Đối tượng sử dụng}
+\label{subsec:doituong_sudung}
+
+MyHCMUT Mobile hướng đến các nhóm người dùng tham gia vào những nghiệp vụ được tích hợp trong phạm vi đề tài:
+
+\textbf{Cán bộ, giảng viên và người lao động} có thể tra cứu thông tin cá nhân, đăng ký nghỉ phép, lập hồ sơ đi công tác, tiếp cận các chức năng iOffice theo quyền, xem lịch và tiếp nhận thông báo.
+
+\textbf{Lãnh đạo đơn vị} có thể thực hiện các thao tác thẩm định và phê duyệt đối với những hồ sơ thuộc thẩm quyền, bao gồm nghỉ phép và công tác của cán bộ trong đơn vị, đồng thời sử dụng các chức năng điều hành tương ứng.
+
+Đối với quy trình đi công tác, ngoài cán bộ và lãnh đạo đơn vị còn có thể có \textbf{chuyên viên đơn vị, chuyên viên Phòng Tổ chức Cán bộ, lãnh đạo Phòng Tổ chức Cán bộ và Ban Giám Hiệu} tham gia tùy loại hồ sơ và bước xử lý.
+
+Các vai trò thuộc \textbf{iOffice} tham gia các nghiệp vụ văn bản, nhiệm vụ và lịch công tác theo quyền được hệ thống hiện hữu cấp.
+
+Ma trận phân quyền chi tiết và các ca sử dụng tương ứng được trình bày tại Chương 4.
+
+\subsection{Phạm vi chức năng}
+\label{subsec:phamvi_chucnang}
+
+Phạm vi của MyHCMUT Mobile bao gồm các nhóm chức năng chính:
 \begin{itemize}
-    \item \textbf{Ý nghĩa khoa học:} Đề tài làm rõ mô hình kiến trúc tích hợp đa dịch vụ hướng API (API-based Multi-backend Integration Architecture) trong việc phát triển ứng dụng di động doanh nghiệp trên nền tảng hạ tầng phân tán sẵn có.
-    \item \textbf{Ý nghĩa thực tiễn:} Đóng góp một giải pháp ứng dụng di động hoàn chỉnh cho Trường ĐHBK -- ĐHQG-HCM, giúp nâng cao hiệu quả điều hành, giảm độ trễ phê duyệt văn bản, tối ưu hóa công tác quản lý nhân sự và hiện đại hóa quy trình điểm danh cuộc họp.
+    \item Tra cứu và hỗ trợ cập nhật hồ sơ cán bộ;
+    \item Đăng ký và phê duyệt nghỉ phép;
+    \item Đăng ký và phê duyệt đi công tác;
+    \item Tích hợp các nghiệp vụ văn bản, nhiệm vụ và lịch công tác thuộc iOffice;
+    \item Tiếp nhận, hiển thị và điều hướng thông báo nghiệp vụ;
+    \item Chuyển tiếp xác thực từ Mobile sang Web HRM bằng vé xác thực dùng một lần;
+    \item Các thành phần nền tảng Mobile dùng chung cần thiết để kết nối nhiều miền nghiệp vụ.
 \end{itemize}
 
-\subsection{Bố cục Báo cáo}
-Báo cáo Đồ án Tốt nghiệp được cấu trúc thành 8 chương:
+Đối với phân hệ đi công tác, phạm vi ở mức hệ thống bao gồm hồ sơ công tác cá nhân và đoàn, chuyến đi trong nước và nước ngoài, kế hoạch làm việc, thành viên tham gia, thông tin kinh phí, tệp minh chứng, lưu nháp, gửi duyệt, trả lại, từ chối, phê duyệt và theo dõi trạng thái. Một số hồ sơ còn phải trải qua quy trình phê duyệt nhiều cấp trước khi hoàn thành.
+
+\subsection{Ranh giới hệ thống}
+\label{subsec:ranhgioi_hethong}
+
+Đề tài \textbf{không xây dựng lại toàn bộ HRM hoặc iOffice}. Hai hệ thống này được xem là các hệ thống nghiệp vụ hiện hữu mà MyHCMUT Mobile tích hợp.
+
+Các API, dữ liệu và quy trình nghiệp vụ đã tồn tại được tái sử dụng khi phù hợp. Nhóm chỉ phát triển hoặc điều chỉnh các thành phần backend khi cần thiết để hỗ trợ tích hợp Mobile hoặc giải quyết các yêu cầu kỹ thuật thuộc phạm vi đề tài.
+
+Đối với nghỉ phép và công tác, HRM backend tiếp tục đóng vai trò nguồn dữ liệu và thành phần xử lý nghiệp vụ có thẩm quyền. Ứng dụng Mobile cung cấp giao diện tương tác, quản lý trạng thái phía client và gọi các API tương ứng; không tự quyết định kết quả cuối cùng của quy trình.
+
+Một số chức năng được hiện thực bằng giao diện Mobile native, trong khi một số nghiệp vụ Web được tái sử dụng thông qua In-App WebView. Vì vậy, việc một chức năng có thể được truy cập từ MyHCMUT Mobile không đồng nghĩa toàn bộ nghiệp vụ đó được nhóm xây dựng mới.
+
+Các chức năng hoặc cải tiến chưa được triển khai trong phiên bản đánh giá, chẳng hạn lưu trữ token bằng Android Keystore/iOS Keychain, Transactional Outbox cho pipeline thông báo hoặc các ràng buộc dữ liệu bổ sung nhằm tăng khả năng kiểm soát tương tranh, được xem là \textbf{hướng phát triển} và không được trình bày như chức năng đã hoàn thành.
+
+\subsection{Ranh giới đóng góp của các thành viên}
+\label{subsec:ranhgioi_donggop}
+
+Bên cạnh ranh giới của hệ thống, báo cáo phân biệt rõ phạm vi đóng góp của từng sinh viên nhằm tránh đồng nhất toàn bộ chức năng của MyHCMUT Mobile với đóng góp cá nhân.
+
+\textbf{Sinh viên Vũ Xuân Chính} tập trung vào nền tảng và các thành phần dùng chung của ứng dụng, hồ sơ cán bộ, quản lý nghỉ phép, lịch và điểm danh, trung tâm thông báo, cơ chế tích hợp xác thực Mobile--Web và một số phần mở rộng backend tương ứng. Sinh viên đồng thời tham gia chuẩn hóa giao diện dùng chung tại một số màn hình phê duyệt và nhiệm vụ.
+
+\textbf{Sinh viên Tống Duy Khang} phụ trách chính phân hệ \textbf{đăng ký và phê duyệt đi công tác}, bao gồm mô hình dữ liệu phía Mobile, Form Wizard đăng ký 5 bước và các giao diện xử lý phê duyệt; đồng thời phụ trách chính phân hệ nhiệm vụ thuộc iOffice.
+
+Do đó, phân hệ đi công tác được trình bày trong các chương tổng quan, khảo sát và phân tích yêu cầu ở mức \textbf{phạm vi hệ thống/đồ án nhóm}, nhưng không được xem là đóng góp hiện thực chuyên sâu của sinh viên Vũ Xuân Chính trong những phần báo cáo cá nhân cần phân định trách nhiệm.
+
+\section{Phương pháp thực hiện và đóng góp của nhóm}
+\label{sec:phuongphap_donggop}
+
+\subsection{Phương pháp thực hiện}
+\label{subsec:phuongphap_thuchien}
+
+Đề tài được thực hiện theo hướng khảo sát hệ thống hiện hữu trước khi phát triển giải pháp Mobile. Nhóm phân tích các nghiệp vụ và luồng dữ liệu đang được cung cấp bởi HRM và iOffice, từ đó xác định những chức năng có thể tái sử dụng trực tiếp, những chức năng cần bổ sung API hoặc adapter và những chức năng phù hợp để cung cấp giao diện Mobile riêng.
+
+Quá trình thực hiện gồm các hoạt động chính:
+\begin{enumerate}
+    \item Khảo sát các hệ thống, API và quy trình nghiệp vụ hiện hữu.
+    \item Xác định nhóm người dùng, phạm vi chức năng và ranh giới trách nhiệm.
+    \item Phân tích yêu cầu và thiết kế giải pháp tích hợp Mobile với các backend hiện hữu.
+    \item Hiện thực các phân hệ Mobile và các thành phần backend mở rộng thuộc phạm vi đề tài.
+    \item Tích hợp các phân hệ thành một ứng dụng Mobile thống nhất.
+    \item Kiểm thử các thành phần ở mức phù hợp và thực hiện kiểm thử tích hợp đối với các luồng nghiệp vụ chính.
+    \item Đánh giá kết quả, xác định hạn chế và đề xuất hướng phát triển.
+\end{enumerate}
+
+Cách tiếp cận này nhằm hạn chế việc xây dựng lại những thành phần đã tồn tại, đồng thời tập trung nguồn lực vào những vấn đề phát sinh khi đưa các nghiệp vụ lên môi trường Mobile.
+
+\subsection{Đóng góp của nhóm}
+\label{subsec:donggop_nhom}
+
+Đóng góp chính của đề tài không nằm ở việc xây dựng một hệ thống HRM hoặc iOffice mới, mà ở việc \textbf{thiết kế, hiện thực và tích hợp một lớp ứng dụng di động trên hệ sinh thái nghiệp vụ hiện hữu của Nhà trường}.
+
+Các đóng góp của nhóm bao gồm:
 \begin{itemize}
-    \item \textbf{Chương 1: Giới thiệu} -- Đặt vấn đề, mục tiêu, phạm vi, chức năng chính và ý nghĩa đề tài.
-    \item \textbf{Chương 2: Phân tích các hệ thống có liên quan trên thị trường} -- Khảo sát các hệ thống Web và App hiện hữu, đánh giá và đề xuất giải pháp.
-    \item \textbf{Chương 3: Cơ sở lý thuyết và công nghệ} -- Lý thuyết kiến trúc, công nghệ Frontend Mobile, Backend tích hợp và các công nghệ hỗ trợ.
-    \item \textbf{Chương 4: Phân tích yêu cầu hệ thống} -- Tác nhân, ma trận phân quyền RBAC, yêu cầu chức năng và phi chức năng.
-    \item \textbf{Chương 5: Đặc tả chi tiết các use-case và biểu đồ hoạt động} -- Đặc tả 5 Use Case cốt lõi, 4 Activity Diagrams và 8 Sequence Diagrams.
-    \item \textbf{Chương 6: Phân tích và thiết kế hệ thống} -- Targeted ERD, kiến trúc Clean Architecture, MultiDomainAuthInterceptor và luồng vận hành System Operation.
-    \item \textbf{Chương 7: Kết quả hiện thực và kiểm thử} -- Kết quả hiện thực giao diện các phân hệ, kết quả kiểm thử 4 tầng (Unit, Widget, Integration, E2E) và số liệu Benchmark hiệu năng.
-    \item \textbf{Chương 8: Tổng kết và hướng phát triển} -- Nhận xét kết quả đạt được, hạn chế và hướng mở rộng tương lai.
+    \item Xây dựng nền tảng ứng dụng MyHCMUT Mobile đa nền tảng;
+    \item Xây dựng giao diện Mobile cho các nghiệp vụ được lựa chọn;
+    \item Tích hợp quy trình hồ sơ cán bộ, nghỉ phép và công tác với HRM;
+    \item Tích hợp các nghiệp vụ văn phòng và điều hành thuộc iOffice;
+    \item Xây dựng các thành phần Mobile và backend bổ sung cần thiết cho quá trình tích hợp;
+    \item Xây dựng cơ chế chuyển tiếp xác thực dùng một lần đối với các chức năng Web cần tái sử dụng;
+    \item Xây dựng cơ chế tiếp nhận và điều hướng thông báo nghiệp vụ trên Mobile;
+    \item Chuẩn hóa một số thành phần giao diện dùng chung giữa các phân hệ;
+    \item Kiểm thử và đánh giá các chức năng được hiện thực trong phạm vi đồ án.
+\end{itemize}
+
+Để bảo đảm tính minh bạch, báo cáo phân biệt giữa bốn nhóm thành phần: \textbf{thành phần do sinh viên trực tiếp phát triển, thành phần do sinh viên tích hợp hoặc mở rộng, thành phần hiện hữu của Nhà trường và giải pháp chỉ được đề xuất cho hướng phát triển}.
+
+\section{Bố cục báo cáo}
+\label{sec:bocuc_baocao}
+
+Báo cáo được tổ chức thành bảy chương:
+
+\begin{itemize}
+    \item \textbf{Chương 1 -- Giới thiệu:} trình bày bối cảnh, bài toán, mục tiêu, phạm vi, ranh giới hệ thống và đóng góp của nhóm.
+    \item \textbf{Chương 2 -- Phân tích các hệ thống có liên quan:} khảo sát các hệ thống hiện hữu của Nhà trường và một số giải pháp có liên quan, từ đó xác định khoảng trống và hướng tiếp cận của MyHCMUT Mobile.
+    \item \textbf{Chương 3 -- Cơ sở lý thuyết và công nghệ:} trình bày những nền tảng lý thuyết, công nghệ và quyết định kỹ thuật phục vụ việc xây dựng và tích hợp ứng dụng.
+    \item \textbf{Chương 4 -- Phân tích và đặc tả yêu cầu hệ thống:} xác định tác nhân, phân quyền, yêu cầu chức năng, quy tắc nghiệp vụ và yêu cầu phi chức năng của các phân hệ.
+    \item \textbf{Chương 5 -- Phân tích và thiết kế hệ thống:} trình bày kiến trúc tổng thể, thiết kế dữ liệu và các luồng tương tác kỹ thuật quan trọng.
+    \item \textbf{Chương 6 -- Kết quả hiện thực và kiểm thử:} trình bày các chức năng đã xây dựng, kết quả tích hợp và bằng chứng kiểm thử tương ứng.
+    \item \textbf{Chương 7 -- Tổng kết và hướng phát triển:} đánh giá kết quả đạt được, những hạn chế còn tồn tại và các hướng hoàn thiện hệ thống trong tương lai.
 \end{itemize}

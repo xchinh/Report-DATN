@@ -1,58 +1,303 @@
-\section{Nhóm ứng dụng di động doanh nghiệp và giáo dục đơn phân hệ}
-\label{sec:app_don_phan_he}
+\section{Các hệ thống nghiệp vụ hiện hữu của Nhà trường}
+\label{sec:hethong_hienhuu}
 
-Trên thị trường hiện nay, nhiều giải pháp ứng dụng di động phục vụ quản trị nhân sự và tác vụ hành chính đã được phát triển bởi các doanh nghiệp phần mềm hoặc được một số trường đại học ứng dụng thử nghiệm:
+\subsection{Hệ thống quản lý nhân sự HRM}
+\label{subsec:hrm_hienhuu}
 
+Trước khi MyHCMUT Mobile được phát triển, Nhà trường đã có hệ thống HRM phục vụ các nghiệp vụ quản lý nhân sự. Trong phạm vi đề tài, HRM được xem là \textbf{hệ thống nghiệp vụ hiện hữu}, không phải thành phần được xây dựng mới.
+
+HRM quản lý dữ liệu và các quy trình liên quan đến cán bộ. Những nội dung có liên quan trực tiếp đến MyHCMUT Mobile bao gồm hồ sơ cán bộ, nghỉ phép và đi công tác. Dữ liệu nghiệp vụ, quy tắc phân quyền và các trạng thái xử lý chính tiếp tục thuộc trách nhiệm của HRM backend.
+
+Đối với \textbf{hồ sơ cán bộ}, HRM là nguồn cung cấp dữ liệu lý lịch mà ứng dụng Mobile cần tra cứu. Những biểu mẫu cập nhật có phạm vi lớn tiếp tục có thể được tái sử dụng từ giao diện HRM Web thay vì tái hiện thực toàn bộ trên Mobile.
+
+Đối với \textbf{nghỉ phép}, hệ thống quản lý thông tin phép năm, khoảng thời gian nghỉ, cấu hình nghiệp vụ, hồ sơ đăng ký và quy trình phê duyệt. MyHCMUT Mobile cung cấp giao diện đăng ký và xử lý trên thiết bị di động nhưng các kiểm tra và cập nhật có thẩm quyền tiếp tục được thực hiện tại backend.
+
+Đối với \textbf{đi công tác}, HRM hỗ trợ nhiều loại hồ sơ và luồng xử lý. Cán bộ có thể lập hồ sơ công tác cá nhân hoặc đoàn, khai báo khoảng thời gian, địa điểm, kế hoạch làm việc, thành viên tham gia, nguồn kinh phí và tài liệu minh chứng. Hồ sơ có thể được lưu ở trạng thái nháp hoặc gửi vào quy trình phê duyệt.
+
+Hệ thống phân biệt các nhóm nghiệp vụ như công tác trong nước, công tác nước ngoài, công tác của thành viên Ban Giám Hiệu và công tác phục vụ khoa học -- công nghệ. Tùy loại hồ sơ, luồng duyệt có thể dừng ở cấp đơn vị hoặc tiếp tục qua Phòng Tổ chức Cán bộ và Ban Giám Hiệu. Đối với đoàn có thành viên thuộc nhiều đơn vị, quy trình còn có thể yêu cầu xử lý song song giữa các đơn vị liên quan.
+
+Ngoài các trạng thái hoàn thành hoặc từ chối, hồ sơ công tác có thể được trả lại để cán bộ bổ sung hoặc chỉnh sửa trước khi nộp lại. Sau chuyến đi, quy trình còn hỗ trợ việc nộp báo cáo kết quả công tác theo yêu cầu nghiệp vụ.
+
+Một đặc điểm quan trọng là nghỉ phép và công tác cùng liên quan đến lịch cá nhân của cán bộ. Backend sử dụng cơ chế kiểm tra lịch dùng chung để phát hiện các khoảng thời gian có khả năng xung đột. Vì vậy, hai phân hệ này không hoàn toàn độc lập ở góc độ dữ liệu nghiệp vụ.
+
+Từ đó, MyHCMUT Mobile không xây dựng một mô hình nhân sự riêng để thay thế HRM. Ứng dụng đóng vai trò là một kênh tương tác bổ sung trên thiết bị di động, tái sử dụng dữ liệu, API và quy trình hiện hữu, đồng thời bổ sung những thành phần cần thiết cho môi trường Mobile.
+
+\subsection{Hệ thống văn phòng điện tử iOffice}
+\label{subsec:ioffice_hienhuu}
+
+Bên cạnh HRM, Nhà trường sử dụng hệ thống iOffice cho các nghiệp vụ văn phòng điện tử và điều hành. Trong phạm vi MyHCMUT Mobile, các nhóm nghiệp vụ có liên quan bao gồm văn bản đến, văn bản đi, nhiệm vụ và lịch công tác.
+
+Tương tự HRM, iOffice được xem là \textbf{hệ thống nghiệp vụ hiện hữu}. MyHCMUT Mobile không thay thế backend iOffice mà xây dựng lớp tương tác trên thiết bị di động và kết nối tới các dịch vụ đã có.
+
+Đối với văn bản, ứng dụng hỗ trợ tra cứu các văn bản thuộc quyền truy cập của người dùng và xem tệp tài liệu liên quan ngay trên thiết bị. Đối với nhiệm vụ, ứng dụng cung cấp giao diện theo dõi nhiệm vụ, đầu việc và tiến độ xử lý. Đối với lịch, người dùng có thể theo dõi lịch công tác và thực hiện một số thao tác liên quan đến tham dự cuộc họp theo quy định của hệ thống.
+
+Việc tích hợp HRM và iOffice trong cùng một ứng dụng đặt ra yêu cầu khác với việc phát triển một ứng dụng HRM độc lập. Mobile phải giao tiếp với nhiều miền backend, quản lý điều hướng giữa các phân hệ và duy trì trải nghiệm tương đối thống nhất cho người dùng.
+
+\subsection{Nhu cầu về một lớp tương tác Mobile}
+\label{subsec:nhucau_mobile}
+
+Việc HRM và iOffice đã tồn tại không đồng nghĩa với việc cần xây dựng lại hai hệ thống này trên Mobile. Ngược lại, đây là cơ sở để đề tài tập trung vào bài toán \textbf{tích hợp và mở rộng khả năng tiếp cận}.
+
+Nhiều nghiệp vụ quản trị có lượng dữ liệu lớn và phù hợp với giao diện Web. Tuy nhiên, các thao tác như kiểm tra thông tin, theo dõi trạng thái yêu cầu, phê duyệt, nhận thông báo hoặc xử lý một tác vụ ngắn có thể được hỗ trợ thêm qua thiết bị di động.
+
+Đối với công tác, chẳng hạn, quá trình lập hồ sơ có thể kéo dài nhiều bước, nhưng việc kiểm tra trạng thái, nhận thông báo hồ sơ bị trả lại hoặc thực hiện một bước phê duyệt không nhất thiết phải phụ thuộc vào máy tính cá nhân.
+
+Môi trường Mobile còn cung cấp khả năng tiếp nhận thông báo đẩy (push notification) khi ứng dụng không được mở và điều hướng trực tiếp từ thông báo đến đối tượng nghiệp vụ tương ứng.
+
+Vì vậy, vấn đề không được đặt thành lựa chọn tuyệt đối giữa ``Web'' và ``Mobile'', mà là \textbf{xác định nghiệp vụ nào phù hợp để cung cấp trải nghiệm Mobile trực tiếp và nghiệp vụ nào nên tiếp tục tái sử dụng từ hệ thống Web hiện hữu}.
+
+\section{Một số giải pháp có liên quan}
+\label{sec:giaiphap_lienquan}
+
+Để tham khảo cách các nền tảng hiện có hỗ trợ nghiệp vụ nhân sự trên thiết bị di động, nhóm khảo sát một số giải pháp đang được sử dụng trên thị trường. Việc khảo sát tập trung vào những chức năng có liên hệ trực tiếp với đề tài và chỉ đưa ra kết luận đối với những khả năng có thể xác nhận từ tài liệu chính thức.
+
+\subsection{Base HRM}
+\label{subsec:base_hrm}
+
+Base HRM là một giải pháp quản trị nhân sự thuộc hệ sinh thái Base. Hệ thống cung cấp các nhóm chức năng liên quan đến cơ cấu tổ chức, hồ sơ nhân sự, lịch làm việc, chính sách nghỉ phép và các chính sách nhân sự khác. Tài liệu chính thức của Base~\cite{base_hrm_doc} xác nhận hệ thống có khả năng quản lý hồ sơ nhân sự, lịch làm việc, thiết lập chính sách nghỉ phép và hỗ trợ ứng dụng trên thiết bị di động thông qua phân hệ Base Me / Mobile. Tài liệu sản phẩm cũng ghi nhận khả năng tạo yêu cầu nghỉ phép cá nhân cùng các thao tác phê duyệt, chuyển tiếp hoặc từ chối đề xuất trong quy trình nội bộ.
+
+Đối với đề tài, điểm đáng tham khảo là Base cung cấp các hình thức tương tác trên thiết bị di động trong hệ sinh thái của mình. Người dùng có thể tiếp cận các thông tin cá nhân, lịch làm việc và một số nghiệp vụ self-service mà không hoàn toàn phụ thuộc vào giao diện quản trị trên máy tính.
+
+Đối với nghỉ phép, Base HRM hỗ trợ quản lý chính sách và dữ liệu nghỉ phép. Hệ sinh thái Base cũng cung cấp quy trình đề xuất và phê duyệt phục vụ các nghiệp vụ nội bộ.
+
+Những khả năng trên cho thấy các nghiệp vụ có tần suất sử dụng cao và gắn trực tiếp với từng nhân viên phù hợp để cung cấp một kênh tương tác Mobile.
+
+Tuy nhiên, Base HRM có mô hình dữ liệu, quy trình và cơ chế triển khai riêng. Trong bối cảnh của đề tài, Nhà trường đã có HRM và iOffice cùng dữ liệu và các quy trình nghiệp vụ đang vận hành. Vì vậy, việc sử dụng một sản phẩm HRM khác sẽ đặt ra bài toán chuyển đổi hoặc tích hợp hệ thống có phạm vi khác với mục tiêu của MyHCMUT Mobile.
+
+Đối với quy trình công tác có các đặc thù như phân loại công tác trong nước/nước ngoài, đoàn đa đơn vị, phê duyệt nhiều cấp và báo cáo sau chuyến đi, \textbf{chưa đủ bằng chứng từ tài liệu chính thức được khảo sát để kết luận Base HRM cung cấp một quy trình tương đương hoàn toàn}. Vì vậy, báo cáo không sử dụng tiêu chí này để khẳng định MyHCMUT ``tốt hơn'' Base.
+
+\subsection{Các giải pháp SAP cho quản trị nhân sự và công tác}
+\label{subsec:sap_solutions}
+
+Hệ sinh thái SAP cung cấp nhiều giải pháp cho quản trị nhân sự và nghiệp vụ doanh nghiệp. Trong phạm vi liên quan đến đề tài, tài liệu chính thức từ SAP~\cite{sap_successfactors_mobile} xác nhận giải pháp SAP SuccessFactors hỗ trợ mạnh mẽ các nghiệp vụ employee self-service, quản lý thời gian nghỉ và các tác vụ phê duyệt trực tiếp trên thiết bị di động. Cụ thể, nhân viên có thể yêu cầu nghỉ trên ứng dụng di động thông qua tính năng Mobile Time Off; người quản lý hoặc chuyên viên nhân sự (HR Administrator) có thể tiếp nhận và xử lý yêu cầu nghỉ ngay trên thiết bị di động. Bên cạnh đó, tính năng Mobile To-Do của SAP cũng hỗ trợ người dùng theo dõi và xử lý các quy trình phê duyệt (workflows) cần thực hiện.
+
+Đối với nghiệp vụ đi công tác, SAP còn cung cấp các ứng dụng thuộc nhóm Travel Management~\cite{sap_travel_doc}. Tài liệu chính thức mô tả khả năng tạo travel request, khai báo điểm đến, phân bổ chi phí, chi phí ước tính và đính kèm tài liệu; sau đó gửi yêu cầu đến người quản lý để phê duyệt. Các travel request cũng có thể được xem, chỉnh sửa và gửi lại. Một số ứng dụng trong nhóm này hỗ trợ cả smartphone và tablet.
+
+Các giải pháp SAP cho thấy hai nhóm nghiệp vụ của đề tài -- nghỉ phép và công tác -- đều có thể được đưa vào mô hình self-service kết hợp workflow approval.
+
+Tuy nhiên, điểm khác biệt về bối cảnh vẫn tồn tại. SAP là một nền tảng doanh nghiệp có mô hình triển khai và dữ liệu riêng. Trong khi đó, MyHCMUT Mobile cần tương thích với HRM, iOffice, cơ chế xác thực và quy trình đã tồn tại tại Nhà trường.
+
+Do đó, SAP được sử dụng như một nguồn tham khảo về cách một nền tảng doanh nghiệp hỗ trợ Mobile self-service và travel workflow, không phải là một hệ thống mà MyHCMUT phải vượt trội về số lượng chức năng.
+
+\section{Tiêu chí phân tích và so sánh}
+\label{sec:tieuchi_sosanh}
+
+Các hệ thống được khảo sát có phạm vi và mục tiêu khác nhau. Vì vậy, việc so sánh không nhằm xác định một hệ thống ``tốt nhất'' nói chung mà tập trung vào mức độ liên quan với bài toán của MyHCMUT Mobile.
+
+\subsection{Khả năng sử dụng trên thiết bị di động}
+\label{subsec:tc_mobile}
+
+Tiêu chí này xem xét khả năng người dùng tiếp cận nghiệp vụ trên smartphone hoặc tablet, đặc biệt đối với những tác vụ cần xử lý khi không sử dụng máy tính.
+
+\subsection{Tra cứu và cập nhật thông tin nhân sự}
+\label{subsec:tc_nhansu}
+
+Tiêu chí xem xét khả năng nhân viên tiếp cận dữ liệu cá nhân và thực hiện các nghiệp vụ self-service.
+
+Đối với MyHCMUT, HRM tiếp tục là nguồn dữ liệu nghiệp vụ chính. Mobile không tạo một bản dữ liệu hồ sơ độc lập.
+
+\subsection{Đăng ký và phê duyệt nghỉ phép}
+\label{subsec:tc_nghiphep}
+
+Tiêu chí xem xét khả năng khai báo yêu cầu nghỉ, quản lý thông tin phép, theo dõi trạng thái và xử lý phê duyệt.
+
+Đối với MyHCMUT, quy trình phải tuân theo cấu hình và quy tắc của HRM hiện hữu, do đó việc một sản phẩm khác có chức năng ``Time Off'' không đồng nghĩa hai quy trình hoàn toàn tương đương.
+
+\subsection{Đăng ký và phê duyệt đi công tác}
+\label{subsec:tc_congtac}
+
+Tiêu chí này được xem xét riêng vì nghiệp vụ công tác có mức độ phức tạp cao hơn một yêu cầu đi công tác đơn giản.
+
+Các khía cạnh được quan tâm bao gồm:
 \begin{itemize}
-    \item \textbf{Ứng dụng di động chuyên biệt cho Chấm công \& Nghỉ phép (như Base.vn, 1Office, Tanca):}
-    \begin{itemize}
-        \item \textit{Ưu điểm:} Giao diện di động được trau chuốt, hỗ trợ chấm công định vị GPS/Wi-Fi, tạo đơn xin nghỉ phép nhanh chóng và nhận thông báo đẩy tức thời.
-        \item \textit{Hạn chế:} Đây là các giải pháp đóng gói thương mại (SaaS) được thiết kế cho khối doanh nghiệp tư nhân với quy trình hành chính đơn giản. Chúng không thể đáp ứng được các quy chuẩn quản lý nhân sự phức tạp của cơ quan nhà nước / đại học công lập (như tính toán quỹ phép năm theo thâm niên ngạch bậc, quy trình duyệt đơn 2 cấp có thẩm định số quyết định TCCB, và yêu cầu bảo mật dữ liệu lưu trữ nội bộ theo quy định của ĐHQG-HCM).
-    \end{itemize}
-    \item \textbf{Ứng dụng di động đơn phân hệ nội bộ tại một số trường đại học:}
-    \begin{itemize}
-        \item \textit{Ưu điểm:} Phục vụ nhanh một nhu cầu cấp bách (ví dụ chỉ xem thời khóa biểu, hoặc chỉ xem sổ tay sinh viên).
-        \item \textit{Hạn chế:} Dẫn đến tình trạng phân mảnh ứng dụng (App Fragmentation), mỗi phân hệ là một app riêng biệt khiến cán bộ phải cài đặt nhiều ứng dụng và đăng nhập nhiều lần, trải nghiệm người dùng bị đứt gãy.
-    \end{itemize}
+    \item Hỗ trợ hồ sơ công tác cá nhân và đoàn;
+    \item Khoảng thời gian và địa điểm công tác;
+    \item Kế hoạch làm việc;
+    \item Danh sách người tham gia;
+    \item Nguồn kinh phí và chi phí;
+    \item Tài liệu minh chứng;
+    \item Quy trình gửi và phê duyệt;
+    \item Khả năng trả lại hồ sơ để bổ sung;
+    \item Hỗ trợ nhiều cấp hoặc nhiều đơn vị cùng tham gia xử lý;
+    \item Theo dõi và báo cáo sau chuyến đi.
 \end{itemize}
 
-\section{Nhóm hệ thống quản lý nhân sự và điều hành trên nền tảng Web (Web-based Portals)}
-\label{sec:web_portals}
+Đối với MyHCMUT, các tiêu chí này xuất phát từ quy trình HRM hiện hữu chứ không được xây dựng chỉ để tương đồng với một sản phẩm thương mại.
 
-Tại hầu hết các trường đại học tại Việt Nam, bao gồm cả Trường Đại học Bách khoa -- ĐHQG-HCM, các quy trình nghiệp vụ cốt lõi đều được triển khai trên nền tảng Web Desktop:
-\begin{itemize}
-    \item \textbf{Hệ thống Quản lý Nhân sự (HRM Web):} Quản lý toàn bộ hồ sơ lý lịch cán bộ (11 danh mục), quá trình nâng bậc lương, khen thưởng, kỷ luật, quy trình nộp đơn nghỉ phép và đăng ký đi công tác.
-    \item \textbf{Hệ thống Văn phòng điện tử (iOffice Web):} Quản lý sổ văn bản đến, văn bản đi, phân phối chỉ đạo văn bản, điều hành nhiệm vụ (Tasks) và lịch tuần công tác trường/đơn vị.
-\end{itemize}
+\subsection{Kiểm soát xung đột lịch}
+\label{subsec:tc_xungdotlich}
 
-\noindent \textbf{Đánh giá ưu điểm và hạn chế của nhóm hệ thống Web:}
-\begin{itemize}
-    \item \textit{Ưu điểm:} Đáp ứng đầy đủ, chặt chẽ tất cả các quy chuẩn nghiệp vụ quản trị nhà trường; cơ sở dữ liệu quan hệ PostgreSQL lưu trữ tập trung, an toàn và toàn vẹn giao dịch (ACID).
-    \item \textit{Hạn chế:} Giao diện Web Desktop được thiết kế với nhiều bảng biểu phức tạp, không tối ưu cho màn hình cảm ứng di động; không có cơ chế gửi thông báo đẩy (Push Notifications) về điện thoại cán bộ khi có việc khẩn; không hỗ trợ hoạt động ngoại tuyến và không tận dụng được các tính năng phần cứng của điện thoại (như điểm danh họp thời gian thực qua WebSocket).
-\end{itemize}
+Nghỉ phép, công tác và các hoạt động khác đều gắn với thời gian của cán bộ. Vì vậy, khả năng phát hiện xung đột giữa các hồ sơ là một yêu cầu có ý nghĩa trong bối cảnh của Nhà trường.
 
-\section{Đánh giá chung và Đề xuất giải pháp}
-\label{sec:danhgiachung_dexuat}
+MyHCMUT sử dụng các API của HRM để kiểm tra lịch cá nhân giữa các nghiệp vụ liên quan. Quyết định hợp lệ cuối cùng vẫn được thực hiện tại backend.
 
-\begin{table}[H]
-    \centering
-    \renewcommand{\arraystretch}{1.3}
-    \begin{tabularx}{\textwidth}{|L{3.2cm}|Y|Y|Y|}
-    \hline
-    \textbf{Tiêu chí Đánh giá} & \textbf{App Thương mại (SaaS)} & \textbf{Hệ thống Web Nội bộ} & \textbf{Giải pháp MyHCMUT Đề xuất} \\
-    \hline
-    \textbf{Phù hợp Quy chế ĐHBK} & Thấp, không tùy biến được quy trình duyệt TCCB. & Tuyệt đối (100\% đúng nghiệp vụ nhà trường). & Tuyệt đối (Tích hợp trực tiếp dữ liệu Backend trường). \\
-    \hline
-    \textbf{Trải nghiệm Di động (Mobile UX)} & Cao, giao diện mượt mà trên smartphone. & Kém, giao diện web bị vỡ và chữ nhỏ trên mobile. & Cao (Flutter Native UI, Material 3 Design System). \\
-    \hline
-    \textbf{Tính Tập trung (Unified)} & Phân mảnh, chỉ có tính năng chấm công/nghỉ phép. & Tách rời giữa các trang Web HRM và iOffice riêng. & Tập trung 100\% (HRM, iOffice, Tasks, Schedule trên 1 App). \\
-    \hline
-    \textbf{Bảo mật Dữ liệu Nội bộ} & Rủi ro (dữ liệu lưu trên Cloud bên thứ ba). & Cao (lưu trữ trên cụm máy chủ nội bộ trường). & Tuyệt đối (Giao tiếp bảo mật nội bộ qua Shared JWT). \\
-    \hline
-    \end{tabularx}
-    \caption{\textit{Bảng so sánh tổng hợp các giải pháp hiện có và giải pháp đề xuất}}
-    \label{tab:compare_solutions}
-\end{table}
+\subsection{Thông báo và điều hướng theo ngữ cảnh}
+\label{subsec:tc_thongbao}
 
-\noindent \textbf{$\rightarrow$ Đề xuất Giải pháp:}  
-Từ phân tích trên, giải pháp tối ưu nhất là xây dựng **Ứng dụng Di động Cổng Giao tiếp Tập trung (Unified Mobile Portal) - MyHCMUT**. Ứng dụng này không thay thế Backend hiện hữu mà đóng vai trò là một lớp giao diện di động hiện đại (Integration Layer), kết nối an toàn với các dịch vụ Backend của Nhà trường thông qua REST API, Kafka Event Streaming và WebSocket, mang lại trải nghiệm làm việc số toàn diện cho cán bộ giảng viên.
+Một thông báo nghiệp vụ trên Mobile không chỉ cần thông báo sự kiện mới mà còn cần giúp người dùng tiếp tục xử lý công việc.
+
+Đối với MyHCMUT, thông báo có thể liên quan đến hồ sơ nghỉ phép, công tác, văn bản hoặc nhiệm vụ. Ứng dụng cần ánh xạ dữ liệu của thông báo tới đúng màn hình và đối tượng nghiệp vụ tương ứng.
+
+\subsection{Khả năng tích hợp hệ thống và xác thực hiện hữu}
+\label{subsec:tc_tichhop}
+
+Đây là tiêu chí có ý nghĩa đặc biệt đối với MyHCMUT Mobile.
+
+Các sản phẩm triển khai như một hệ sinh thái hoàn chỉnh có thể quản lý tài khoản và dữ liệu theo kiến trúc riêng. MyHCMUT Mobile phải làm việc với nhiều hệ thống đã tồn tại, trong đó HRM và iOffice chịu trách nhiệm cho các miền nghiệp vụ khác nhau.
+
+Giải pháp vì vậy cần tái sử dụng cơ chế xác thực, phân quyền và API hiện hữu, đồng thời xử lý trường hợp chuyển từ giao diện Mobile sang WebApp.
+
+\subsection{Khả năng đáp ứng quy trình đặc thù của Nhà trường}
+\label{subsec:tc_dacthu}
+
+Tiêu chí cuối cùng không chỉ xem xét một hệ thống có ``chức năng tương tự'' hay không mà còn xem xét mức độ tương thích với quy trình đang vận hành.
+
+Đối với đi công tác, ví dụ, quy trình của Nhà trường phân biệt nhiều loại chuyến đi và nhiều cấp xử lý. Một sản phẩm thương mại có travel request không mặc nhiên được xem là hỗ trợ đầy đủ quy trình này nếu chưa thực hiện cấu hình và tích hợp tương ứng.
+
+\section{So sánh các giải pháp}
+\label{sec:sosanh_giaiphap}
+
+Bảng~\ref{tab:compare_solutions} dưới đây tổng hợp các đặc điểm liên quan trực tiếp đến phạm vi của đề tài. Dấu hiệu ``chưa đủ thông tin'' được sử dụng trong trường hợp tài liệu công khai được khảo sát không đủ để kết luận.
+
+{\small
+\renewcommand{\arraystretch}{1.25}
+\begin{xltabular}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{2.6cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{2.1cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\caption{\textit{Bảng so sánh các hệ thống và giải pháp có liên quan}} \label{tab:compare_solutions} \\
+\hline
+\textbf{Tiêu chí} & \textbf{HRM/iOffice hiện hữu} & \textbf{Base HRM} & \textbf{Giải pháp SAP được khảo sát} & \textbf{MyHCMUT Mobile} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{Tiêu chí} & \textbf{HRM/iOffice hiện hữu} & \textbf{Base HRM} & \textbf{Giải pháp SAP được khảo sát} & \textbf{MyHCMUT Mobile} \\
+\hline
+\endhead
+
+\hline
+\multicolumn{5}{r}{\textit{(Tiếp tục ở trang sau)}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+Dữ liệu/quy trình của Nhà trường & Là hệ thống nguồn & Không & Không & Tái sử dụng hệ thống nguồn \\
+\hline
+Khả năng sử dụng trên Mobile & Các hệ thống nguồn chủ yếu phục vụ nghiệp vụ backend/Web & Có hỗ trợ trong hệ sinh thái & Có & Có \\
+\hline
+Tra cứu thông tin nhân sự & Có tại HRM & Có & Có & Tái sử dụng dữ liệu HRM \\
+\hline
+Nghỉ phép & Có quy trình HRM & Có & Có & Tích hợp quy trình HRM lên Mobile \\
+\hline
+Phê duyệt nghỉ phép trên Mobile & Không phải mục tiêu chính của giao diện Web hiện hữu & Có cơ chế workflow trong hệ sinh thái & Có & Có theo quyền được cấp \\
+\hline
+Đăng ký chuyến công tác & Có tại HRM & Chưa đủ thông tin để kết luận tương đương & Có Travel Request & Có, tích hợp quy trình HRM \\
+\hline
+Phê duyệt chuyến công tác & Có quy trình nhiều cấp tại HRM & Chưa đủ thông tin để kết luận tương đương & Có workflow approval & Có theo thẩm quyền HRM \\
+\hline
+Đoàn công tác nhiều thành viên & Có & Chưa đủ thông tin & Có các khả năng travel management, nhưng không kết luận tương đương quy trình Nhà trường & Có \\
+\hline
+Phê duyệt song song nhiều đơn vị & Có trong một số luồng công tác của HRM & Chưa đủ thông tin & Chưa đủ bằng chứng để khẳng định tương đương & Có theo quy trình HRM \\
+\hline
+Kiểm tra xung đột nghỉ phép -- công tác & HRM có cơ chế kiểm tra lịch dùng chung & Chưa đủ thông tin & Chưa đủ thông tin trong phạm vi khảo sát & Tái sử dụng kiểm tra của HRM \\
+\hline
+Hồ sơ/tài liệu minh chứng công tác & Có & Chưa đủ thông tin & Có attachment trong Travel Request & Có \\
+\hline
+Thông báo/tác vụ trên Mobile & Có nguồn sự kiện nghiệp vụ & Có & Có & Có, kèm điều hướng theo ngữ cảnh \\
+\hline
+Tích hợp trực tiếp HRM/iOffice của Trường & Bản thân là các hệ thống nguồn & Không & Không & Là mục tiêu thiết kế chính \\
+\hline
+Tái sử dụng Web HRM hiện hữu & Không đặt ra cùng bài toán & Không áp dụng & Không áp dụng & Có qua In-App WebView ở chức năng phù hợp \\
+\hline
+Phù hợp trực tiếp quy trình đặc thù hiện hữu & Có & Cần cấu hình/chuyển đổi nếu sử dụng & Cần cấu hình/chuyển đổi nếu sử dụng & Tái sử dụng trực tiếp quy trình hiện hữu \\
+\end{xltabular}
+}
+
+Kết quả khảo sát cho thấy nhiều giải pháp thương mại đã cung cấp các nghiệp vụ employee self-service, nghỉ phép, phê duyệt và thậm chí quản lý yêu cầu công tác trên thiết bị di động. Do đó, các chức năng này không phải là những khả năng mới về mặt loại hình phần mềm.
+
+Tuy nhiên, sự tồn tại của các giải pháp tương tự không loại bỏ bài toán của đề tài. Nếu mục tiêu là xây dựng một hệ thống quản trị nhân sự mới hoàn toàn, lựa chọn triển khai một sản phẩm có sẵn sẽ là phương án cần được cân nhắc. Nhưng MyHCMUT Mobile được phát triển trong bối cảnh Nhà trường đã có HRM, iOffice, dữ liệu và quy trình đang vận hành.
+
+Đặc biệt, quy trình công tác của Nhà trường có nhiều nhánh xử lý phụ thuộc vào loại chuyến đi, thành phần đoàn và cấp phê duyệt. Việc thay thế bằng một sản phẩm khác không chỉ là thay giao diện mà còn kéo theo bài toán ánh xạ quy trình, chuyển đổi dữ liệu, phân quyền và tích hợp với các hệ thống đang tồn tại.
+
+Do đó, khác biệt chính của MyHCMUT Mobile không nằm ở việc sở hữu một chức năng nghỉ phép hoặc công tác mà sản phẩm khác không có. Khác biệt nằm ở \textbf{bối cảnh tích hợp và mức độ tương thích với hệ thống nghiệp vụ hiện hữu của Nhà trường}.
+
+\section{Khoảng trống và hướng giải pháp của MyHCMUT Mobile}
+\label{sec:khoangtrong_giaiphap}
+
+\subsection{Khoảng trống về điểm truy cập Mobile thống nhất}
+\label{subsec:kt_mobile_thongnhat}
+
+HRM và iOffice đảm nhiệm các miền nghiệp vụ khác nhau. Đối với người dùng Mobile, việc phải tiếp cận từng hệ thống theo cách riêng làm tăng sự phân tán ở lớp tương tác.
+
+MyHCMUT Mobile hướng đến cung cấp một \textbf{điểm truy cập Mobile chung} cho các nghiệp vụ được lựa chọn. Ứng dụng không hợp nhất cơ sở dữ liệu của HRM và iOffice mà hợp nhất lớp tương tác của người dùng, trong khi mỗi backend vẫn chịu trách nhiệm đối với miền nghiệp vụ của mình.
+
+\subsection{Khoảng trống giữa giao diện Mobile và quy trình nghiệp vụ hiện hữu}
+\label{subsec:kt_giaodien_nghiepvu}
+
+Một giao diện Mobile mới không nên tự tái định nghĩa các quy tắc nghiệp vụ đã được quản lý tại backend.
+
+Đối với nghỉ phép và công tác, ứng dụng có thể thực hiện các kiểm tra sớm nhằm hỗ trợ người dùng nhập liệu, nhưng backend HRM vẫn phải chịu trách nhiệm đối với kiểm tra nghiệp vụ cuối cùng, trạng thái hồ sơ và quyền phê duyệt.
+
+Hướng tiếp cận của đề tài vì vậy là \textbf{Mobile-first ở lớp tương tác nhưng backend-authoritative ở lớp nghiệp vụ}.
+
+\subsection{Khoảng trống trong Mobile hóa quy trình công tác nhiều bước}
+\label{subsec:kt_mobilehoa_congtac}
+
+Quy trình công tác là ví dụ thể hiện rõ bài toán Mobile hóa nghiệp vụ hiện hữu.
+
+Hồ sơ không chỉ gồm ngày bắt đầu và ngày kết thúc mà còn có loại chuyến đi, hình thức cá nhân hoặc đoàn, địa điểm, kế hoạch làm việc, thành viên, nguồn kinh phí và tài liệu minh chứng. Sau khi nộp, hồ sơ có thể trải qua nhiều cấp xử lý, bị trả lại để chỉnh sửa hoặc bị từ chối.
+
+MyHCMUT Mobile tổ chức quy trình nhập liệu thành Form Wizard nhiều bước nhằm chia nhỏ lượng thông tin cần nhập trên màn hình di động. Dữ liệu sau đó được gửi tới các API HRM hiện hữu để tiếp tục xử lý theo workflow của backend.
+
+Đối với hồ sơ đoàn liên quan nhiều đơn vị, ứng dụng không tự mô phỏng quy trình phê duyệt ở phía client mà hiển thị trạng thái dựa trên tiến trình do HRM backend quản lý.
+
+\subsection{Khoảng trống trong xử lý dữ liệu lịch giữa nhiều nghiệp vụ}
+\label{subsec:kt_xuly_lich}
+
+Nghỉ phép và công tác là hai nghiệp vụ khác nhau nhưng cùng tác động lên lịch cá nhân.
+
+Nếu mỗi phân hệ chỉ kiểm tra dữ liệu riêng của mình, có thể xuất hiện tình huống một cán bộ có các khoảng thời gian chồng lấn giữa nghỉ phép và đi công tác.
+
+Do đó, MyHCMUT Mobile tái sử dụng cơ chế kiểm tra lịch tại HRM backend để kiểm tra giữa các loại nghiệp vụ liên quan. Đây cũng là lý do việc xác thực cuối cùng không được đặt hoàn toàn ở phía client.
+
+\subsection{Khoảng trống trong việc tái sử dụng chức năng Web}
+\label{subsec:kt_taigiosudung_web}
+
+Việc viết lại toàn bộ chức năng HRM Web thành giao diện Mobile sẽ làm tăng đáng kể phạm vi phát triển và tạo hai giao diện phải được duy trì song song.
+
+MyHCMUT Mobile áp dụng cách tiếp cận kết hợp. Những nghiệp vụ phù hợp với Mobile được hiện thực trực tiếp; những chức năng Web có giá trị tái sử dụng được mở bằng In-App WebView.
+
+Để hỗ trợ quá trình chuyển từ Mobile sang HRM Web, hệ thống sử dụng \textbf{vé xác thực dùng một lần có thời gian tồn tại giới hạn}. Cơ chế này cho phép Web thiết lập phiên làm việc tương ứng mà không cần đưa trực tiếp access token của Mobile vào URL.
+
+\subsection{Khoảng trống trong tiếp nhận và xử lý thông báo đa nguồn}
+\label{subsec:kt_thongbao_danguon}
+
+Khi HRM và iOffice cùng phát sinh sự kiện, người dùng Mobile cần biết không chỉ ``có thông báo mới'' mà còn cần được đưa đến đúng nơi để tiếp tục xử lý.
+
+Một hồ sơ công tác bị trả lại, chẳng hạn, chỉ thực sự hữu ích khi người dùng có thể từ thông báo mở lại hồ sơ tương ứng và bổ sung thông tin.
+
+MyHCMUT Mobile vì vậy xây dựng cơ chế tiếp nhận thông báo và điều hướng theo ngữ cảnh, ánh xạ dữ liệu sự kiện tới route và đối tượng nghiệp vụ tương ứng.
+
+\subsection{Định vị giải pháp}
+\label{subsec:dinhvi_giaiphap}
+
+Từ các phân tích trên, MyHCMUT Mobile được định vị là \textbf{ứng dụng di động tích hợp và mở rộng các hệ thống quản lý nghiệp vụ hiện hữu của Nhà trường}, thay vì một hệ thống HRM hoặc iOffice mới.
+
+Hướng giải pháp được xây dựng trên ba nguyên tắc:
+\begin{enumerate}
+    \item \textbf{Tái sử dụng hệ thống hiện hữu:} HRM và iOffice tiếp tục quản lý dữ liệu và nghiệp vụ thuộc miền của mình.
+    \item \textbf{Mobile hóa có chọn lọc:} Ưu tiên các nghiệp vụ phù hợp với tương tác Mobile và tái sử dụng Web khi việc xây dựng lại không mang lại giá trị tương xứng.
+    \item \textbf{Bổ sung lớp tích hợp:} Giải quyết các vấn đề phát sinh khi nhiều hệ thống hiện hữu được đưa lên một ứng dụng Mobile chung, bao gồm xác thực, điều hướng, thông báo và quản lý tương tác giữa các miền nghiệp vụ.
+\end{enumerate}
+
+Như vậy, giá trị của MyHCMUT Mobile không được đánh giá bằng việc có nhiều chức năng hơn các hệ thống thương mại, mà bằng khả năng đưa các nghiệp vụ được lựa chọn của hệ sinh thái hiện hữu lên một kênh Mobile thống nhất trong khi vẫn duy trì ranh giới dữ liệu và trách nhiệm của các backend nguồn.
+
+\section{Kết luận chương}
+\label{sec:ketluan_chuong2}
+
+Chương này đã phân tích các hệ thống HRM và iOffice hiện hữu của Nhà trường cùng một số giải pháp có liên quan trên thị trường.
+
+Kết quả khảo sát cho thấy các nghiệp vụ như employee self-service, nghỉ phép, phê duyệt và quản lý yêu cầu công tác đã được hỗ trợ trong nhiều nền tảng doanh nghiệp hiện đại. Điều này cho thấy nhu cầu đưa các nghiệp vụ nhân sự lên thiết bị di động không phải là một vấn đề riêng của MyHCMUT.
+
+Tuy nhiên, bài toán của đề tài xuất phát từ bối cảnh Nhà trường đã có dữ liệu, hệ thống và quy trình nghiệp vụ đang vận hành. Đặc biệt, các quy trình như nghỉ phép và công tác có các quy tắc, cấp phê duyệt và quan hệ dữ liệu riêng. Vì vậy, đề tài lựa chọn cách tiếp cận tích hợp thay vì thay thế.
+
+MyHCMUT Mobile tập trung xây dựng lớp tương tác Mobile cho các nghiệp vụ phù hợp, tái sử dụng các dịch vụ backend hiện hữu và bổ sung các cơ chế tích hợp cần thiết. Các khoảng trống và yêu cầu được xác định trong chương này là cơ sở để các chương tiếp theo trình bày công nghệ, đặc tả yêu cầu và thiết kế kỹ thuật của hệ thống.

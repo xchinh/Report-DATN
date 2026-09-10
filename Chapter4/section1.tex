@@ -1,39 +1,130 @@
-\section{Xác định Người dùng và Ma trận Phân quyền (RBAC Matrix)}
+\section{Người dùng, phân quyền và Use Case tổng thể}
 \label{sec:nguoidung_rbac}
+\label{sec:nguoidung_rbac_usecase}
 
-Hệ thống ứng dụng MyHCMUT phục vụ đội ngũ cán bộ, giảng viên và nhân viên của Trường Đại học Bách khoa -- ĐHQG-HCM, được phân quyền chặt chẽ theo vai trò (Role-Based Access Control) thông qua bảng mã quyền hệ thống:
+\subsection{Các nhóm người dùng}
+\label{subsec:nhom_nguoidung}
+
+Hệ thống ứng dụng MyHCMUT Mobile phục vụ đội ngũ nhân sự của Trường Đại học Bách khoa -- ĐHQG-HCM, bao gồm nhiều nhóm người dùng có trách nhiệm, thẩm quyền và phạm vi truy cập khác nhau trong hoạt động điều hành và quản trị tác nghiệp:
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{Cán bộ / Giảng viên:} Là nhóm người dùng chính và đông đảo nhất của hệ thống. Người dùng thuộc nhóm này có thể tra cứu thông tin lý lịch cá nhân, thực hiện các nghiệp vụ đăng ký nghỉ phép và đi công tác, tiếp nhận và xem văn bản đến, theo dõi các nhiệm vụ được phân công, tra cứu lịch tuần trường/lịch đơn vị, thực hiện điểm danh hoặc báo vắng khi tham dự cuộc họp, tiếp nhận thông báo đẩy tức thời và sử dụng các tiện ích khác theo phạm vi quyền hạn được cấp.
+    
+    \item \textbf{Lãnh đạo đơn vị:} Bao gồm các vai trò quản lý tại các Khoa, Phòng ban, Trung tâm hoặc Phân viện trực thuộc (Trưởng/Phó Khoa, Trưởng/Phó Phòng). Ngoài đầy đủ các chức năng tác nghiệp của một cán bộ thông thường, người dùng thuộc nhóm này có thẩm quyền xử lý và phê duyệt các yêu cầu hành chính phát sinh thuộc phạm vi quản lý của đơn vị mình, chẳng hạn như phê duyệt đơn nghỉ phép của viên chức/người lao động trong đơn vị, phê duyệt kế hoạch đi công tác, hoặc thực hiện các tác vụ điều hành công việc, chỉ đạo xử lý văn bản theo phân cấp.
+    
+    \item \textbf{Chuyên viên nghiệp vụ:} Là nhóm người dùng chuyên trách tham gia vào quy trình xử lý chuyên môn sâu tại các phòng chức năng. Trong phân hệ Quản lý Nhân sự (HRM), chuyên viên Phòng Tổ chức Cán bộ (TCCB) có thẩm quyền thẩm định các đề xuất thay đổi thông tin hồ sơ lý lịch, tiếp nhận xử lý và hoàn tất thủ tục nghỉ phép bước cuối (cấp số quyết định), cũng như xử lý các nghiệp vụ công tác. Trong phân hệ Văn phòng số (iOffice), các chuyên viên hoặc văn thư cơ quan chịu trách nhiệm tiếp nhận, vào sổ, luân chuyển văn bản, phân loại nhiệm vụ và tổng hợp lịch công tác.
+    
+    \item \textbf{Lãnh đạo cấp Trường:} Bao gồm Ban Giám hiệu (Hiệu trưởng, các Phó Hiệu trưởng) tham gia vào các quy trình điều hành có thẩm quyền cao nhất, chẳng hạn như phê duyệt các hồ sơ đoàn đi công tác nước ngoài/cấp Trường, xem xét các văn bản đi quan trọng hoặc theo dõi, chỉ đạo các nhiệm vụ trọng tâm toàn trường.
+    
+    \item \textbf{Các hệ thống bên ngoài:} Ngoài người dùng tương tác trực tiếp qua giao diện di động, MyHCMUT Mobile còn tích hợp chặt chẽ với các hệ thống và dịch vụ ngoại vi gồm:
+    \begin{itemize}
+        \item Hệ thống Quản trị Nhân sự (HRM Backend) và Văn phòng điện tử (iOffice Backend) hiện hữu của Nhà trường;
+        \item Hệ thống xác thực tập trung của Nhà trường (HCMUT CAS SSO / LDAP);
+        \item Dịch vụ điện toán đám mây Firebase Cloud Messaging (FCM) của Google phục vụ đẩy thông báo theo thời gian thực tới thiết bị di động.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Nguyên tắc phân quyền}
+\label{subsec:nguyentac_phanquyen}
+
+Trong kiến trúc của MyHCMUT Mobile, quyền truy cập của người dùng không được xác định chỉ dựa trên màn hình hoặc thành phần giao diện mà người dùng có thể mở trên ứng dụng. Quyền hạn của người dùng được hệ thống backend xác định chặt chẽ từ thông tin định danh và danh sách quyền nghiệp vụ (permissions) tương ứng được gán cho tài khoản.
+
+Ứng dụng di động có thể sử dụng thông tin quyền hạn để quyết định việc hiển thị danh mục menu, điều hướng màn hình hoặc ẩn/hiện các nút bấm thao tác nhằm tối ưu hóa trải nghiệm người dùng (UX Gate). Tuy nhiên, việc ẩn một chức năng trên giao diện tuyệt đối không được xem là biện pháp kiểm soát truy cập (Access Control) cuối cùng. Mọi yêu cầu gọi API nghiệp vụ đều phải được thẩm định danh tính và kiểm tra quyền hạn độc lập ở phía backend trước khi thực hiện bất kỳ thao tác đọc hoặc làm thay đổi trạng thái dữ liệu.
+
+Bảng~\ref{tab:rbac_matrix} tóm tắt các nhóm quyền và phạm vi chức năng chính theo vai trò người dùng:
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.3}
-    \small
-    \begin{tabularx}{\textwidth}{|L{3cm}|>{\RaggedRight\arraybackslash\ttfamily\footnotesize}p{4cm}|Y|}
+    \begin{tabularx}{\textwidth}{|p{3.8cm}|X|}
     \hline
-    \textrm{\textbf{Tác nhân (Actor)}} & \textrm{\textbf{Quyền hệ thống}} & \textbf{Phạm vi Chức năng trên Mobile App} \\
+    \textbf{Nhóm người dùng} & \textbf{Nhóm chức năng chính trên MyHCMUT Mobile} \\
     \hline
-    \textbf{Cán bộ / Giảng viên} & cn:ly\_lich, cn:nghi\_phep, cn:di\_cong\_tac, iofficeMission:read, scheduleGeneral:read & Tra cứu 11 mục lý lịch; gửi đề xuất sửa hồ sơ; nộp đơn nghỉ phép; đăng ký đi công tác; xem văn bản đến; theo dõi nhiệm vụ; điểm danh họp/báo vắng. \\
+    \textbf{Cán bộ / Giảng viên} & Tra cứu hồ sơ cá nhân; gửi đề xuất cập nhật lý lịch; đăng ký đơn nghỉ phép; lập hồ sơ công tác; xem văn bản đến/đi; theo dõi tiến độ nhiệm vụ; xem lịch tuần và điểm danh cuộc họp; nhận thông báo đẩy. \\
     \hline
-    \textbf{Lãnh đạo Đơn vị} (Trưởng/Phó Khoa, Phòng) & dv:nghi\_phep:\allowbreak read/write, dv:di\_cong\_tac:\allowbreak read/write, eofficeVanBanDen:\allowbreak manage, iofficeMission:\allowbreak manage & Thẩm định \& phê duyệt đơn nghỉ phép đơn vị; duyệt danh sách đi công tác; phân phối chỉ đạo văn bản đến; giám sát tiến độ nhiệm vụ đơn vị; tạo lịch họp đơn vị. \\
+    \textbf{Lãnh đạo đơn vị} & Toàn bộ quyền của Cán bộ; thẩm định và phê duyệt đơn nghỉ phép đơn vị; duyệt danh sách cử đi công tác; bút phê chỉ đạo văn bản đến; theo dõi và đôn đốc tiến độ nhiệm vụ đơn vị. \\
     \hline
-    \textbf{Ban Giám hiệu} (Hiệu trưởng, Phó HT) & tcns:quy\_trinh:\allowbreak manage, eofficeVanBanDi:\allowbreak read, scheduleGeneral:\allowbreak manage & Xem xét văn bản đi cấp trường; chỉ đạo văn bản đến quan trọng; theo dõi nhiệm vụ trọng tâm trường; duyệt lịch tuần trường. \\
+    \textbf{Chuyên viên TCCB} & Thẩm định các yêu cầu thay đổi lý lịch; xử lý nghiệp vụ nghỉ phép bước cuối (chốt duyệt, cập nhật quỹ phép); theo dõi và xử lý hồ sơ công tác theo thẩm quyền. \\
     \hline
-    \textbf{Chuyên viên TCCB} (Mã đơn vị 94) & tcns:ly\_lich:\allowbreak manage, tcns:request\_ly\_lich:\allowbreak read, tcns:nghi\_phep:\allowbreak write & Thẩm định Diff sửa lý lịch cán bộ; duyệt đơn nghỉ phép bước cuối \& cấp số quyết định; quản lý quỹ phép năm. \\
+    \textbf{Lãnh đạo cấp Trường} & Xem xét và phê duyệt các quy trình cần thẩm quyền cấp Trường (công tác nước ngoài, văn bản đi trọng tâm, nhiệm vụ chiến lược toàn trường). \\
     \hline
-    \textbf{Văn thư Trường/ĐV} & eofficeVanBanDen:\allowbreak write, scheduleGeneral:\allowbreak write & Nhập metadata văn bản đến; theo dõi luân chuyển văn bản đi; tổng hợp lịch tuần trường. \\
+    \textbf{Vai trò iOffice (Văn thư/Chuyên viên)} & Xử lý vào sổ văn bản, luân chuyển văn bản đến/đi, tổng hợp lịch tuần trường và điều phối nhiệm vụ theo quyền được cấp. \\
     \hline
     \end{tabularx}
-    \caption{\textit{Ma trận Phân quyền người dùng theo vai trò (RBAC Matrix)}}
+    \caption{\textit{Ma trận tóm tắt phân quyền chức năng theo nhóm người dùng}}
     \label{tab:rbac_matrix}
 \end{table}
 
-\subsection{Sơ đồ Ca sử dụng Tổng thể Toàn hệ thống (Overall Use Case Diagram)}
-\label{subsec:system_usecase_overall}
+\noindent \textit{Ghi chú:} Ma trận trên mô tả ở mức độ nghiệp vụ tổng quát. Danh sách các mã quyền (permissions) chi tiết được đối chiếu với cấu hình bảo mật của hệ thống backend trong quá trình hiện thực.
 
-Sơ đồ hình \ref{fig:usecase_overall} thể hiện mối tương tác tổng quan giữa các tác nhân người dùng với các phân hệ nghiệp vụ chính của ứng dụng MyHCMUT:
+\subsection{Các nhóm Use Case tổng thể}
+\label{subsec:nhom_usecase_tongthe}
+
+Từ phạm vi nghiệp vụ của hệ thống, các ca sử dụng (Use Cases) của MyHCMUT Mobile được tổ chức thành 6 nhóm chức năng chính:
+
+\begin{enumerate}[leftmargin=1.5cm]
+    \item \textbf{Nhóm Xác thực và truy cập hệ thống:}
+    \begin{itemize}
+        \item Đăng nhập vào ứng dụng MyHCMUT Mobile qua cổng xác thực tập trung;
+        \item Duy trì trạng thái phiên đăng nhập an toàn trên thiết bị;
+        \item Đăng xuất khỏi hệ thống và vô hiệu hóa phiên làm việc;
+        \item Chuyển tiếp phiên làm việc từ Mobile sang chức năng HRM Web thông qua vé xác thực dùng một lần (Single-Use SSO Ticket).
+    \end{itemize}
+
+    \item \textbf{Nhóm Hồ sơ cán bộ:}
+    \begin{itemize}
+        \item Tra cứu hồ sơ thông tin lý lịch cán bộ;
+        \item Xem chi tiết 11 nhóm thông tin lý lịch được phân nhóm;
+        \item Mở biểu mẫu cập nhật thông tin lý lịch;
+        \item Gửi yêu cầu đề xuất cập nhật hồ sơ kèm tài liệu minh chứng;
+        \item Thẩm định, so sánh sai khác (Diff) và phê duyệt/từ chối các thay đổi được đề xuất.
+    \end{itemize}
+
+    \item \textbf{Nhóm Nghỉ phép:}
+    \begin{itemize}
+        \item Xem thông tin quỹ phép năm và danh sách các đơn nghỉ phép cá nhân;
+        \item Tạo mới và hoàn thiện đơn nghỉ phép qua quy trình hướng dẫn từng bước (Wizard);
+        \item Lưu đơn ở trạng thái nháp hoặc nộp gửi phê duyệt chính thức;
+        \item Chỉnh sửa, xóa hoặc thu hồi đơn khi trạng thái nghiệp vụ cho phép;
+        \item Thẩm định, phê duyệt hoặc từ chối đơn nghỉ phép theo thẩm quyền;
+        \item Phê duyệt hoặc từ chối nhiều đơn nghỉ phép trong một thao tác xử lý hàng loạt.
+    \end{itemize}
+
+    \item \textbf{Nhóm Đi công tác:}
+    \begin{itemize}
+        \item Lập hồ sơ đăng ký chuyến đi công tác (trong nước / ngoài nước);
+        \item Chỉnh sửa, bổ sung thông tin thành viên đoàn, dự toán kinh phí và gửi hồ sơ;
+        \item Phê duyệt hồ sơ đi công tác theo luồng thẩm quyền quy định;
+        \item Theo dõi trạng thái phê duyệt và nộp báo cáo kết quả sau chuyến công tác.
+    \end{itemize}
+    \textit{(Lưu ý: Nhóm chức năng Đi công tác thuộc phạm vi nghiệp vụ chung của hệ thống, tuy nhiên phần đặc tả chi tiết và hiện thực chính do sinh viên Tống Duy Khang phụ trách).}
+
+    \item \textbf{Nhóm Văn phòng số (iOffice):}
+    \begin{itemize}
+        \item Tra cứu, xem chi tiết và đọc tệp đính kèm văn bản đến và văn bản đi;
+        \item Tiếp nhận, theo dõi và cập nhật tiến độ thực hiện các nhiệm vụ được giao;
+        \item Theo dõi lịch tuần trường và lịch công tác của đơn vị;
+        \item Thực hiện điểm danh có mặt hoặc báo vắng có lý do khi tham dự cuộc họp.
+    \end{itemize}
+    \textit{(Lưu ý: Trong phân hệ iOffice, phần Nhiệm vụ và Văn bản do sinh viên Tống Duy Khang phụ trách chính; phần Lịch công tác và Điểm danh cuộc họp thuộc phạm vi đặc tả và hiện thực của sinh viên Vũ Xuân Chính).}
+
+    \item \textbf{Nhóm Thông báo:}
+    \begin{itemize}
+        \item Tiếp nhận thông báo đẩy tức thời (Push Notification) từ Firebase FCM;
+        \item Xem danh sách các thông báo tại Trung tâm thông báo của ứng dụng;
+        \item Quản lý trạng thái đọc / chưa đọc của từng thông báo;
+        \item Phân tích dữ liệu điều hướng (Metadata Routing) để mở chính xác màn hình chi tiết đối tượng nghiệp vụ (Deep Linking);
+        \item Đăng ký, cập nhật và thu hồi token thiết bị phục vụ tiếp nhận thông báo.
+    \end{itemize}
+\end{enumerate}
+
+Hình~\ref{fig:system_usecase_diagram} mô tả sơ đồ Ca sử dụng (Use Case Diagram) tổng thể của ứng dụng di động MyHCMUT Mobile, thể hiện mối quan hệ giữa các nhóm tác nhân và các phân hệ nghiệp vụ chính thông qua các ranh giới hệ thống (system boundaries).
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\linewidth]{img/uml/system_usecase_diagram.png}
-    \caption{\textit{Sơ đồ Ca sử dụng Tổng thể Hệ thống MyHCMUT}}
-    \label{fig:usecase_overall}
+    \includegraphics[width=0.98\linewidth]{img/uml/system_usecase_diagram.png}
+    \caption{\textit{Sơ đồ Use Case tổng thể của ứng dụng MyHCMUT Mobile}}
+    \label{fig:system_usecase_diagram}
 \end{figure}
+
+Trong sơ đồ Use Case tổng thể trên, các nhóm chức năng được bao bọc trong các gói ranh giới phân định rõ: \texttt{Authentication}, \texttt{HRM}, \texttt{iOffice} và \texttt{Notification}. Các tác nhân tương tác trực tiếp với các Use Case thông qua giao diện Mobile, trong khi các cơ chế kỹ thuật chi tiết như gọi REST API, xử lý Redis, Kafka hay phân phối dữ liệu thời gian thực được đóng gói tại tầng xử lý phía sau.

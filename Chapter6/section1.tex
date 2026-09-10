@@ -2,48 +2,56 @@
 \label{sec:ketqua_hienthuc}
 
 \subsection{Cấu trúc Dự án Mã nguồn Modular Monorepo (Melos)}
-Toàn bộ mã nguồn ứng dụng di động MyHCMUT được tổ chức tại \texttt{myhcmut-mobile}:
+Toàn bộ mã nguồn ứng dụng di động MyHCMUT được tổ chức tại kho lưu trữ \texttt{myhcmut-mobile} theo mô hình Modular Monorepo quản lý bởi Melos:
 \begin{itemize}
-    \item \texttt{apps/myhcmut}: Ứng dụng chính, cấu hình \texttt{GoRouter}, Firebase Messaging.
-    \item \texttt{packages/core/global\_system}: Hệ thống Design System Material 3 Semantic Tokens.
-    \item \texttt{packages/core/network}: Dio Client, \texttt{MultiDomainAuthInterceptor}.
-    \item \texttt{packages/core/auth}: Xử lý phiên đăng nhập và mã hóa Token.
-    \item \texttt{modules/hrm}: Phân hệ Quản trị Nhân sự.
-    \item \texttt{modules/ioffice}: Phân hệ Văn phòng số, Nhiệm vụ (\texttt{mission}) và Lịch (\texttt{schedule}).
-    \item \texttt{modules/notification}: Phân hệ Thông báo đẩy FCM và giải mã Deep Link.
+    \item \texttt{apps/myhcmut}: Ứng dụng chính đóng vai trò tích hợp (Shell Application), cấu hình luồng định tuyến tập trung \texttt{GoRouter}, lắng nghe và khởi tạo Firebase Messaging.
+    \item \texttt{packages/core/global\_system}: Hệ thống Design System chuẩn hóa theo Material 3 Semantic Tokens, quản lý bảng màu thích ứng Light/Dark Mode và các thành phần UI dùng chung.
+    \item \texttt{packages/core/auth}: Xử lý trạng thái phiên đăng nhập, phối hợp cùng \texttt{MultiDomainTokenManager} quản lý token đa miền trên vùng lưu trữ riêng biệt của ứng dụng và giao tiếp với Cổng xác thực CAS SSO.
+    \item \texttt{modules/hrm}: Phân hệ Quản trị Nhân sự di động (Lý lịch cán bộ, Đăng ký nghỉ phép Form Wizard, Phê duyệt đơn, Đi công tác, Cầu nối In-App WebView SSO).
+    \item \texttt{modules/ioffice}: Phân hệ Văn phòng số, Quản lý Nhiệm vụ (\texttt{mission}) với cây đầu việc phân cấp và Lịch công tác tuần kết hợp Điểm danh cuộc họp thời gian thực (\texttt{schedule}).
+    \item \texttt{modules/notification}: Phân hệ Trung tâm Thông báo đẩy FCM, giải mã Deep Link 4 trường metadata và điều khiển số huy hiệu trên icon ứng dụng (\texttt{app\_badge\_plus}).
+    \item \texttt{modules/khcn}: Gói giao diện mẫu sẵn sàng (UI Mock Templates) phục vụ phân hệ Kê khai Khoa học Công nghệ.
 \end{itemize}
 
 \subsection{Hiện thực Phân hệ Quản trị Nhân sự (HRM Mobile)}
+Phân hệ Quản trị Nhân sự (tương ứng với gói \texttt{modules/hrm}) đã hoàn thiện toàn diện các màn hình và logic nghiệp vụ cốt lõi:
 \begin{itemize}
-    \item \textbf{Màn hình Tra cứu Lý lịch (\texttt{PersonalProfilePage}):} Sử dụng \texttt{TabBarView} phân chia 11 nhóm danh mục lý lịch, hỗ trợ lưu đệm SQLite.
-    \item \textbf{Màn hình Thẩm định So sánh Sai khác (\texttt{ApproveProfileDetailPage}):} Thẻ \texttt{ReviewDiffCard} hiển thị giá trị cũ (màu đỏ) và giá trị mới (màu xanh lá) giúp chuyên viên TCCB đối chiếu và duyệt đề xuất sửa lý lịch.
-    \item \textbf{Đăng ký Nghỉ phép Form Wizard 4 bước (\texttt{LeaveRequestPage}):} Tích hợp kiểm tra ràng buộc thời gian thực 4 tầng từ API \texttt{/api/tcns-nghi-phep/validate}, tự động cảnh báo nộp trễ và tính toán số ngày nghỉ chính xác.
-    \item \textbf{Đăng ký \& Duyệt Đi công tác (\texttt{BusinessTripEditPage}, \texttt{ApproveBtripListPage}):} Tạo form chuyến đi, đính kèm dự toán/kế hoạch và phê duyệt danh sách cán bộ đi công tác.
-    \item \textbf{Phê duyệt Đơn Hàng loạt (\texttt{ApproveTimeOffListPage}):} Sử dụng thanh tác vụ nhóm \texttt{AppBatchActionBar} duyệt nhiều đơn cùng lúc.
+    \item \textbf{Màn hình Tra cứu Lý lịch Cán bộ (\texttt{PersonalProfilePage}):} Sử dụng \texttt{TabBarView} phân chia 11 nhóm danh mục lý lịch (Thông tin cá nhân, Địa chỉ, Quá trình đào tạo, Quá trình công tác, Lương \& Phụ cấp, Khen thưởng, Kỷ luật, Gia đình...). Dữ liệu được quản lý qua cơ chế bộ đệm SWR với thời gian sống TTL 12 giờ trên \texttt{SharedPreferences}, giúp kết xuất giao diện tức thì khi mở màn hình và tự động đồng bộ ngầm phiên bản mới nhất từ máy chủ.
+    \item \textbf{Màn hình Thẩm định So sánh Sai khác (\texttt{ApproveProfileDetailPage}):} Xây dựng thành phần giao diện chuyên dụng \texttt{ReviewDiffCard} hiển thị trực quan giá trị cũ (màu đỏ gạch ngang) và giá trị đề xuất mới (màu xanh lá), giúp chuyên viên Phòng TCCB nhanh chóng thẩm định và phê duyệt các đề xuất chỉnh sửa lý lịch từ cán bộ.
+    \item \textbf{Đăng ký Nghỉ phép Form Wizard 4 bước (\texttt{LeaveRequestPage}):}
+    \begin{itemize}
+        \item \textit{Bước 1 (Thông tin chung):} Chọn loại nghỉ, chọn khoảng ngày, nhập lý do. Hệ thống tích hợp kiểm tra ràng buộc thời gian thực 4 tầng từ API \texttt{/api/tcns-nghi-phep/validate}. Nếu cán bộ nộp trễ hạn quy định trong cấu hình cơ sở dữ liệu \texttt{tcns\_setting} (thông báo trước 2 hoặc 3 ngày làm việc), hệ thống hiển thị cảnh báo nộp trễ và tự động gán cờ \texttt{isLate = true}. Trong trường hợp cán bộ cần thực hiện thủ tục giải trình chính thức, ứng dụng cung cấp liên kết chuyển hướng sang giao diện giải trình Web chuyên sâu (\texttt{/hrm/giai-trinh}) thông qua Cầu nối One-Time Ticket SSO.
+        \item \textit{Bước 2 (Minh chứng đính kèm):} Áp dụng kiến trúc tải tệp 2 bước. Hệ thống tạo bản ghi nháp tại \texttt{POST /api/tcns-nghi-phep/dang-ky} để lấy \texttt{phieuId} và đánh dấu cờ \texttt{isNewlyCreated = true}. Sau đó, người dùng chọn tài liệu PDF hoặc hình ảnh (tối đa 5MB) và tải lên qua \texttt{POST /upload/tcns-nghi-phep/file?phieuId=:id}. Nếu người dùng nhấn Hủy hoặc thoát giữa chừng, cờ \texttt{isNewlyCreated} kích hoạt hàm dọn dẹp gửi lệnh \texttt{DELETE} để xóa sạch bản ghi nháp mồ côi.
+        \item \textit{Bước 3 (Xác nhận thông tin):} Cán bộ rà soát toàn bộ dữ liệu, kiểm tra số ngày nghỉ được tính toán tự động (đã loại trừ thứ Bảy, Chủ nhật và ngày lễ theo lịch Nhà nước).
+        \item \textit{Bước 4 (Nộp đơn \& Kích hoạt Khóa Tương tranh):} Nộp đơn chính thức chuyển trạng thái quy trình sang \texttt{CHO\_DUYET}. Backend kích hoạt khóa tương tranh \texttt{pg\_advisory\_xact\_lock} tuần tự hóa thao tác, lưu đồng thời bản ghi đơn và lịch cá nhân, sau đó kích hoạt Post-commit hook đẩy sự kiện vào Kafka để gửi thông báo đẩy tới cấp quản lý.
+    \end{itemize}
+    \item \textbf{Đăng ký \& Duyệt Đi công tác (\texttt{BusinessTripEditPage}, \texttt{ApproveBtripListPage}):} Cho phép cán bộ tạo form đăng ký chuyến đi công tác, đính kèm dự toán kinh phí và kế hoạch làm việc; lãnh đạo đơn vị thực hiện phê duyệt danh sách đoàn công tác trực tiếp trên thiết bị di động.
+    \item \textbf{Phê duyệt Đơn Hàng loạt (\texttt{ApproveTimeOffListPage}):} Sử dụng thanh tác vụ nhóm \texttt{AppBatchActionBar} cho phép Lãnh đạo Đơn vị chọn nhiều đơn nghỉ phép cùng lúc và thực hiện phê duyệt hàng loạt với một lần xác nhận duy nhất.
+    \item \textbf{Cầu nối WebView SSO (\texttt{HrmWebViewPage}):} Tích hợp In-App WebView, tự động gọi API sinh vé ngẫu nhiên 64 ký tự hex (\texttt{POST /api/auth/sso/generate-ticket}), gắn vé vào URL để mở các tính năng Web nội bộ của trường, tự động dọn dẹp URL bằng \texttt{history.replaceState} bảo vệ phiên làm việc.
 \end{itemize}
 
 \subsection{Hiện thực Phân hệ Văn phòng số (iOffice Mobile)}
 \begin{itemize}
-    \item \textbf{Danh sách Văn bản đến/đi (\texttt{IncomingDocsListPage}, \texttt{OutgoingDocsListPage}):} Phân loại theo độ khẩn cấp, tìm kiếm nhanh và tải cuộn vô tận (Infinite Scroll).
-    \item \textbf{Trình xem PDF Trực tiếp (\texttt{IncomingDocDetailPage}):} Tích hợp trình xem tài liệu PDF trực tiếp trên ứng dụng.
-    \item \textbf{Phân phối \& Chỉ đạo Văn bản (\texttt{AssignmentCard}):} Bút phê chỉ đạo và giao việc cho cán bộ cấp dưới.
+    \item \textbf{Danh sách Văn bản đến/đi (\texttt{IncomingDocsListPage}, \texttt{OutgoingDocsListPage}):} Phân loại văn bản theo độ khẩn cấp (Hỏa tốc, Thượng khẩn, Khẩn, Bình thường), tìm kiếm theo số hiệu/trích yếu và phân trang cuộn vô tận (\texttt{InfiniteScrollPagination}).
+    \item \textbf{Trình xem PDF Trực tiếp (\texttt{IncomingDocDetailPage}):} Nhúng trình đọc PDF mượt mà (\texttt{pdfrx}) hỗ trợ phóng to, thu nhỏ, xoay trang và xem ngoại tuyến các văn bản chỉ đạo của Ban Giám hiệu.
+    \item \textbf{Phân phối \& Chỉ đạo Văn bản (\texttt{AssignmentCard}):} Cung cấp giao diện trực quan cho Lãnh đạo Đơn vị nhập bút phê chỉ đạo, phân công cán bộ xử lý chính, cán bộ phối hợp và ấn định hạn chót xử lý văn bản.
 \end{itemize}
 
 \subsection{Hiện thực Phân hệ Quản lý Nhiệm vụ \& Công việc (Tasks / Missions)}
 \begin{itemize}
-    \item \textbf{Danh sách Nhiệm vụ (\texttt{MissionsListPage}):} Phân loại 3 nhóm (Trọng tâm, Được giao, Chung) kết hợp bộ lọc 5 Tab trạng thái.
-    \item \textbf{Chi tiết Nhiệm vụ 4 Tab (\texttt{MissionDetailPage}):} Tab Tổng quan, Tab Phân công với cây đầu việc \texttt{outlined-tree}, Tab Báo cáo tiến độ đợt và Tab Liên kết văn bản.
-    \item \textbf{Modals Chi tiết Công việc (\texttt{TaskDetailBottomSheet}) \& Báo cáo Đợt (\texttt{ReportBatchDetailBottomSheet}).}
+    \item \textbf{Danh sách Nhiệm vụ (\texttt{MissionsListPage}):} Hỗ trợ phân loại 3 nhóm nhiệm vụ (Trọng tâm, Được giao, Chung) kết hợp 5 tab lọc trạng thái (Cần xử lý, Nháp, Đang làm, Đã xong, Tất cả).
+    \item \textbf{Chi tiết Nhiệm vụ 4 Tab (\texttt{MissionDetailPage}):} Tab Tổng quan hiển thị tiến độ \% và thời hạn; Tab Phân công hiển thị cấu trúc cây đầu việc đa tầng (\texttt{outlined-tree}); Tab Báo cáo đợt quản lý tiến độ từng giai đoạn; và Tab Liên kết văn bản tra cứu các quyết định liên quan.
+    \item \textbf{Modals Chi tiết Công việc (\texttt{TaskDetailBottomSheet}) \& Báo cáo Đợt (\texttt{ReportBatchDetailBottomSheet}):} Cho phép cán bộ cập nhật checklist hoàn thành và nộp báo cáo đợt kèm tài liệu minh chứng.
 \end{itemize}
 
 \subsection{Hiện thực Phân hệ Lịch công tác \& Điểm danh Cuộc họp Thời gian thực}
 \begin{itemize}
-    \item \textbf{Lịch công tác Tuần (\texttt{ScheduleView}):} Chuyển đổi linh hoạt giữa Lịch tuần trường và Lịch đơn vị.
-    \item \textbf{Điểm danh Cuộc họp Thời gian thực:} Nút điểm danh chỉ sáng trong khung giờ mở trước 1 giờ; xử lý luồng có mặt và báo vắng mặt kèm lý do (1--200 ký tự); phát tán sự kiện \texttt{Socket.IO: scheduleCheckin} đồng bộ tức thời.
+    \item \textbf{Lịch công tác Tuần (\texttt{ScheduleView}):} Cho phép chuyển đổi linh hoạt giữa Lịch tuần toàn trường và Lịch tuần nội bộ đơn vị, tích hợp bộ lịch \texttt{table\_calendar}.
+    \item \textbf{Điểm danh Cuộc họp Thời gian thực:} Nút điểm danh có mặt chỉ tự động mở trong khung giờ quy định (từ trước giờ họp 1 giờ đến hết ngày diễn ra); cán bộ có thể điểm danh có mặt hoặc chọn Báo vắng mặt có lý do (1--200 ký tự). Dữ liệu điểm danh được phát tán qua kênh WebSocket (\texttt{Socket.IO: scheduleCheckin}) giúp màn hình của Ban tổ chức cập nhật danh sách tức thời ($< 50$ms).
 \end{itemize}
 
 \subsection{Hiện thực Trung tâm Thông báo Đẩy FCM \& Tự động hóa CI/CD}
 \begin{itemize}
-    \item \textbf{FCM Push \& Deep Linking:} Đăng ký Token, lắng nghe thông báo nền/foreground, phân tích 4 trường metadata trong \texttt{NotificationRouteParser} để kích hoạt \texttt{GoRouter} điều hướng sâu.
-    \item \textbf{GitLab CI Pipeline:} Tự động hóa quy trình qua \texttt{.gitlab-ci.yml} gồm 3 giai đoạn: \texttt{setup} $\rightarrow$ \texttt{quality} (format check, static analyze, test coverage) $\rightarrow$ \texttt{build} (APK / AAB release).
+    \item \textbf{Tiếp nhận Thông báo \& Deep Linking:} Tự động đăng ký FCM Device Token khi đăng nhập, lắng nghe thông báo ở cả 3 trạng thái của ứng dụng, giải mã 4 trường metadata trong \texttt{NotificationRouteParser} để kích hoạt \texttt{GoRouter} điều hướng thẳng vào màn hình chi tiết nghiệp vụ.
+    \item \textbf{Quy trình Tự động hóa CI/CD trên GitLab CI:} Thiết lập đường ống tự động hóa \texttt{.gitlab-ci.yml} gồm 3 giai đoạn khép kín: \texttt{setup} (cài đặt Flutter SDK và dependencies) $\rightarrow$ \texttt{quality} (kiểm tra chuẩn định dạng, chạy \texttt{dart analyze}, chạy toàn bộ 335 bài test Flutter) $\rightarrow$ \texttt{build} (đóng gói APK Release phân tách kiến trúc ABI).
 \end{itemize}

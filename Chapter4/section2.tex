@@ -1,42 +1,580 @@
-\section{Thiết kế Kiến trúc Ứng dụng Di động (Mobile Client Architecture)}
-\label{sec:mobile_arch}
+\section{Yêu cầu chức năng theo phân hệ}
+\label{sec:yeucau_chucnang}
 
-Ứng dụng di động MyHCMUT được thiết kế theo mô hình **Kiến trúc Phân lớp Sạch (Clean Architecture)** kết hợp cấu trúc đa gói **Melos Monorepo**:
+\subsection{Phân hệ xác thực và chuyển tiếp phiên Mobile -- Web}
+\label{subsec:req_auth}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\linewidth]{img/architecture/mobile_clean_architecture.png}
-    \caption{\textit{Kiến trúc Phân tầng Clean Architecture của Ứng dụng MyHCMUT}}
-    \label{fig:mobile_clean}
-\end{figure}
+\subsubsection{Mục tiêu}
+Phân hệ xác thực có nhiệm vụ bảo đảm người dùng phải được xác thực danh tính hợp lệ trước khi truy cập các dịch vụ và chức năng nghiệp vụ được bảo vệ của ứng dụng MyHCMUT Mobile.
 
-\begin{itemize}
-    \item \textbf{Tầng Trình diễn (Presentation Layer):} Chứa các Pages, Widgets và Riverpod Notifiers. Tầng này chịu trách nhiệm hiển thị UI, lắng nghe tương tác người dùng và phản ánh trạng thái \texttt{AsyncValue} (loading, data, error).
-    \item \textbf{Tầng Nghiệp vụ (Domain Layer):} Chứa các Entities, Freezed DTOs và quy tắc nghiệp vụ phía client (validation form, parsing dữ liệu).
-    \item \textbf{Tầng Dữ liệu (Data Layer):} Chứa các Repositories, Data Sources, Network Client (Dio) và Local Cache (SQLite / Secure Storage). Tầng này chịu trách nhiệm điều phối dữ liệu từ bộ nhớ đệm cục bộ và gọi API từ xa.
+Ngoài phiên làm việc độc lập của ứng dụng di động, hệ thống còn phải giải quyết bài toán người dùng cần mở các chức năng nghiệp vụ phức tạp của HRM Web ngay bên trong ứng dụng thông qua In-App WebView. Do phiên HTTP của ứng dụng di động (dựa trên JWT Bearer Token) và phiên trình duyệt của WebView (dựa trên Cookie/Session) được quản lý hoàn toàn độc lập, hệ thống cần thiết lập cơ chế chuyển tiếp trạng thái xác thực an toàn thông qua vé xác thực dùng một lần (Single-Use SSO Ticket), tuyệt đối không yêu cầu người dùng phải nhập lại thông tin tài khoản và mật khẩu.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-AUTH-01 -- Xác thực người dùng:} Hệ thống phải cho phép người dùng đăng nhập thông qua cơ chế xác thực tập trung được Nhà trường cung cấp (HCMUT CAS SSO) hoặc xác thực mật khẩu nội bộ. Sau khi xác thực thành công, ứng dụng Mobile phải nhận được thông tin định danh người dùng và chuỗi khóa xác thực (JWT Access Token / Refresh Token) cần thiết để gọi các API thuộc phạm vi quyền hạn được cấp.
+    
+    \item \textbf{FR-AUTH-02 -- Kiểm soát truy cập:} Ứng dụng chỉ được cho phép người dùng truy cập các màn hình và chức năng yêu cầu xác thực khi trạng thái phiên đăng nhập còn hiệu lực. Tất cả các API nghiệp vụ ở tầng backend phải liên tục thẩm định token trong tiêu đề HTTP request và kiểm tra quyền tương ứng trước khi xử lý.
+    
+    \item \textbf{FR-AUTH-03 -- Đăng xuất:} Khi người dùng chọn đăng xuất, ứng dụng phải xóa toàn bộ trạng thái xác thực cục bộ liên quan đến phiên hiện tại, xóa FCM token trên backend và đưa người dùng về màn hình đăng nhập. Toàn bộ dữ liệu bộ nhớ đệm (cache) gắn với danh tính của người dùng cũ không được phép tiếp tục sử dụng cho phiên đăng nhập tiếp theo.
+    
+    \item \textbf{FR-AUTH-04 -- Yêu cầu vé xác thực Web:} Khi người dùng đã đăng nhập hợp lệ trên Mobile và kích hoạt chức năng mở màn hình HRM Web được hỗ trợ, ứng dụng phải có khả năng gửi request yêu cầu backend phát hành một vé xác thực dùng một lần (SSO Ticket) dành riêng cho hệ thống Web đích.
+    
+    \item \textbf{FR-AUTH-05 -- Mở WebView bằng vé xác thực:} Ứng dụng phải sử dụng vé được backend cung cấp để nhúng vào URL mở trang Web tương ứng trong In-App WebView. Chuỗi Access Token dài hạn của Mobile tuyệt đối không được đưa trực tiếp vào URL của WebView nhằm phòng ngừa rủi ro lộ lọt qua lịch sử duyệt web hoặc log hệ thống.
+    
+    \item \textbf{FR-AUTH-06 -- Tiêu thụ vé một lần:} Vé xác thực SSO chỉ được hệ thống backend chấp nhận trong khoảng thời gian tồn tại rất ngắn (Time-To-Live quy định) và sẽ bị vô hiệu hóa ngay lập tức sau khi đã được tiêu thụ thành công một lần duy nhất.
+    
+    \item \textbf{FR-AUTH-07 -- Giao tiếp WebView -- Mobile:} Ứng dụng phải có khả năng lắng nghe và tiếp nhận các sự kiện nghiệp vụ được cho phép từ WebView thông qua JavaScript Bridge (chẳng hạn sự kiện cập nhật hồ sơ thành công hoặc yêu cầu đóng cửa sổ WebView). Sự kiện chỉ được tiếp nhận và xử lý khi nguồn gửi (origin) thuộc danh sách tên miền tin cậy được hệ thống định sẵn.
 \end{itemize}
 
-\subsection{Thiết kế Hệ thống Giao diện Material 3 Semantic Tokens (\texttt{global\_system})}
-Toàn bộ màu sắc, khoảng cách (spacing), kiểu chữ (typography) và thành phần giao diện (Cards, Badges, InputFields, Buttons) được chuẩn hóa thành gói \texttt{packages/core/global\_system}. Các màu sắc được định nghĩa theo ngữ nghĩa (Semantic Tokens: \texttt{primary}, \texttt{surface}, \texttt{statusPending}, \texttt{statusApproved}, \texttt{statusRejected}) giúp ứng dụng tự động tương thích hoàn hảo giữa hai chế độ giao diện Sáng (Light Mode) và Tối (Dark Mode).
+\subsubsection{Đặc tả Ca sử dụng UC-AUTH-01: Đăng nhập hệ thống}
 
-\section{Thiết kế Tích hợp API và Thông báo Đẩy}
-\label{sec:api_notification_design}
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Cán bộ / Giảng viên \\
+\hline
+\textbf{Mục tiêu} & Xác thực danh tính và truy cập vào các chức năng của MyHCMUT Mobile. \\
+\hline
+\textbf{Tiền điều kiện} & Người dùng có tài khoản hợp lệ do Nhà trường cấp và thiết bị có kết nối mạng Internet. \\
+\hline
+\textbf{Kích hoạt} & Người dùng mở ứng dụng và chọn thao tác đăng nhập. \\
+\hline
+\textbf{Luồng chính} & 
+1. Người dùng chọn phương thức đăng nhập (HCMUT CAS SSO hoặc Mật khẩu). \newline
+2. Hệ thống chuyển yêu cầu xác thực đến dịch vụ xác thực tập trung. \newline
+3. Dịch vụ xác thực thẩm định thông tin tài khoản và trả kết quả xác thực. \newline
+4. Ứng dụng di động nhận JWT Token, lưu trữ an toàn và gửi yêu cầu tải thông tin cá nhân cùng quyền hạn người dùng. \newline
+5. Hệ thống điều hướng người dùng vào màn hình chính của ứng dụng. \\
+\hline
+\textbf{Luồng thay thế} & 
+- \textit{Xác thực thất bại (sai mật khẩu / tài khoản bị khóa):} Hệ thống hiển thị thông báo lỗi chi tiết và giữ người dùng ở lại màn hình đăng nhập. \newline
+- \textit{Mất kết nối mạng:} Ứng dụng hiển thị thông báo lỗi mạng và cho phép thử lại. \\
+\hline
+\textbf{Hậu điều kiện} & Phiên làm việc trên ứng dụng Mobile được thiết lập ở trạng thái đã xác thực thành công. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-AUTH-01: Đăng nhập hệ thống}}
+\label{tab:uc_auth_01}
+\end{table}
 
-\subsection{Thiết kế Bộ điều phối Token Đa miền (\texttt{MultiDomainAuthInterceptor})}
-Do ứng dụng di động kết nối đồng thời với 3 dịch vụ Backend độc lập có base URL khác nhau, nhóm thiết kế một Interceptor duy nhất tại \texttt{packages/core/network}:
-\begin{itemize}
-    \item Tự động trích xuất chuỗi JWT \texttt{token\_auth} từ \texttt{flutter\_secure\_storage}.
-    \item Tự động gắn tiêu đề \texttt{Authorization: Bearer <token>} vào mọi request gửi ra ngoài.
-    \item Lắng nghe phản hồi HTTP 401 Unauthorized: Nếu phát hiện Token hết hạn, Interceptor tự động kích hoạt luồng làm mới Token ngầm (Silent Refresh) và phát lại request gốc mà không làm gián đoạn trải nghiệm của người dùng.
+\subsubsection{Đặc tả Ca sử dụng UC-AUTH-02: Chuyển sang HRM Web bằng vé dùng một lần}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Người dùng đã đăng nhập hợp lệ trên ứng dụng di động. \\
+\hline
+\textbf{Mục tiêu} & Mở một trang chức năng HRM Web trong In-App WebView mà không phải đăng nhập lại. \\
+\hline
+\textbf{Tiền điều kiện} & Phiên làm việc Mobile đang hợp lệ; chức năng đích nằm trong danh mục được hỗ trợ chuyển tiếp. \\
+\hline
+\textbf{Kích hoạt} & Người dùng chọn chức năng yêu cầu xử lý trên HRM Web (ví dụ cập nhật lý lịch nâng cao). \\
+\hline
+\textbf{Luồng chính} & 
+1. Mobile gửi request lên backend yêu cầu cấp vé xác thực SSO dùng một lần cho URL đích. \newline
+2. Backend kiểm tra phiên Mobile, sinh mã vé ngẫu nhiên có chữ ký số (kèm TTL ngắn) và trả về cho client. \newline
+3. Mobile mở In-App WebView với URL chứa tham số vé xác thực. \newline
+4. HRM Web nhận vé, gửi yêu cầu xác thực vé về backend dịch vụ. \newline
+5. Backend thẩm định vé, thực hiện tiêu thụ vé (hủy hiệu lực vé) và thiết lập phiên phiên Web cho người dùng. \newline
+6. WebView hiển thị đúng chức năng nghiệp vụ mà người dùng yêu cầu. \\
+\hline
+\textbf{Luồng thay thế} & Vé không tồn tại, đã hết hạn TTL hoặc đã bị tiêu thụ trước đó $\rightarrow$ Backend từ chối thiết lập phiên Web; WebView hiển thị thông báo lỗi phiên và yêu cầu người dùng thao tác lại từ Mobile. \\
+\hline
+\textbf{Hậu điều kiện} & Cửa sổ WebView được thiết lập phiên làm việc hợp lệ tương ứng với tài khoản người dùng hiện tại. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-AUTH-02: Chuyển sang HRM Web bằng vé dùng một lần}}
+\label{tab:uc_auth_02}
+\end{table}
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-AUTH-01:} Chỉ những người dùng sở hữu phiên làm việc Mobile đang hoạt động và hợp lệ mới có quyền yêu cầu hệ thống phát hành vé chuyển tiếp SSO.
+    \item \textbf{BR-AUTH-02:} Vé SSO chỉ được chấp nhận khi chuyển tiếp đến đúng hệ thống Web đích đã được cấu hình chấp nhận trước tại backend.
+    \item \textbf{BR-AUTH-03:} Vé SSO có thời gian tồn tại (TTL) giới hạn; baseline thiết kế hiện tại quy định thời gian hiệu lực tối đa là 60 giây kể từ thời điểm phát hành.
+    \item \textbf{BR-AUTH-04:} Vé SSO đã được tiêu thụ thành công một lần sẽ bị xóa hoặc gắn cờ vô hiệu hóa ngay lập tức, tuyệt đối không cho phép sử dụng lại lần thứ hai.
+    \item \textbf{BR-AUTH-05:} Chuỗi Access Token dài hạn của phiên Mobile tuyệt đối không được truyền trực tiếp như một tham số URL công khai để thiết lập phiên WebView.
+    \item \textbf{BR-AUTH-06:} Cầu nối JavaScript Bridge chỉ lắng nghe và thực thi các thông điệp gửi từ nguồn (origin) nằm trong danh sách tên miền hợp lệ của Nhà trường.
+    \item \textbf{BR-AUTH-07:} Cơ chế vé dùng một lần không ngăn ngừa được trường hợp vé bị chặn bắt và tiêu thụ bởi kẻ tấn công trước khi người dùng hợp lệ sử dụng; đây là giới hạn bảo mật cần được xem xét và bổ sung biện pháp ràng buộc địa chỉ IP/User-Agent trong tương lai.
 \end{itemize}
 
-\subsection{Thiết kế Dữ liệu Thông báo Đẩy có Cấu trúc (Structured Metadata)}
-Để loại bỏ sự phụ thuộc vào việc bóc tách chuỗi URL web (\texttt{targetLink}) không ổn định, nhóm thiết kế cấu trúc payload thông báo chuẩn hóa từ Backend tới Mobile gồm 4 trường Metadata có cấu trúc:
-\begin{itemize}
-    \item \texttt{source}: Định danh phân hệ phát sinh thông báo (\texttt{'hrm'} hoặc \texttt{'ioffice'}).
-    \item \texttt{entityType}: Loại đối tượng nghiệp vụ (\texttt{'leave'}, \texttt{'business-trip'}, \texttt{'incoming-doc'}, \texttt{'outgoing-doc'}, \texttt{'task'}).
-    \item \texttt{entityId}: Khóa chính định danh bản ghi cụ thể (ví dụ ID đơn nghỉ phép hoặc ID nhiệm vụ).
-    \item \texttt{isApproval}: Cờ đánh dấu màn hình duyệt dành cho cấp quản lý (\texttt{'true'} / \texttt{'false'}).
+\subsection{Phân hệ hồ sơ cán bộ}
+\label{subsec:req_profile}
+
+\subsubsection{Mục tiêu}
+Phân hệ Hồ sơ cán bộ cho phép viên chức, giảng viên tra cứu toàn diện các thông tin lý lịch cá nhân trên thiết bị di động, đồng thời hỗ trợ quy trình đề xuất cập nhật dữ liệu khi có thay đổi.
+
+Toàn bộ dữ liệu hồ sơ lý lịch có thẩm quyền pháp lý tiếp tục được lưu trữ và quản lý tập trung tại hệ thống HRM Nhà trường. Ứng dụng Mobile chỉ đóng vai trò giao diện hiển thị và cổng tiếp nhận đề xuất, không tạo ra một cơ sở dữ liệu hồ sơ độc lập thay thế HRM.
+
+\subsubsection{Nhóm thông tin hồ sơ}
+Dữ liệu hồ sơ lý lịch của cán bộ bao gồm khối lượng thông tin rất lớn và phức tạp. Để người dùng có thể tra cứu thuận tiện trên màn hình thiết bị di động, hệ thống tổ chức dữ liệu thành 11 nhóm danh mục chi tiết, được phân bố trên ba nhóm giao diện hiển thị chính:
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{4.2cm}|X|}
+\hline
+\textbf{Nhóm giao diện} & \textbf{Các danh mục thông tin thành phần} \\
+\hline
+\textbf{Cá nhân và gia đình} & Thông tin cá nhân cơ bản; Địa chỉ cư trú (thường trú, tạm trú); Quan hệ gia đình (thân nhân, người phụ thuộc). \\
+\hline
+\textbf{Công tác và đào tạo} & Quá trình công tác / vị trí việc làm hiện tại; Trình độ học vấn, văn bằng chứng chỉ và quá trình đào tạo, bồi dưỡng chuyên môn. \\
+\hline
+\textbf{Chế độ và thông tin khác} & Quá trình lương và phụ cấp; Khen thưởng; Kỷ luật; Thông tin sức khỏe và thông tin khác; Kê khai tài sản / thu nhập. \\
+\hline
+\end{tabularx}
+\caption{\textit{Phân nhóm các danh mục thông tin hồ sơ lý lịch cán bộ}}
+\label{tab:profile_groups}
+\end{table}
+
+Cách thức phân nhóm này giúp giảm tải áp lực hiển thị dữ liệu trên màn hình nhỏ mà vẫn giữ nguyên mô hình dữ liệu quan hệ có thẩm quyền của hệ thống HRM gốc.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-PRO-01 -- Tra cứu hồ sơ:} Cán bộ/giảng viên phải có khả năng tra cứu hồ sơ lý lịch của chính mình trên ứng dụng di động một cách nhanh chóng và an toàn.
+    
+    \item \textbf{FR-PRO-02 -- Xem chi tiết theo nhóm:} Hệ thống phải tổ chức dữ liệu thành các thẻ/nhóm tab khoa học để người dùng có thể chuyển đổi linh hoạt giữa các nhóm thông tin mà không phải tải toàn bộ dữ liệu cồng kềnh trong một lần.
+    
+    \item \textbf{FR-PRO-03 -- Hiển thị dữ liệu danh mục:} Các mã danh mục (dân tộc, tôn giáo, học hàm, học vị, ngạch công chức...) do backend trả về phải được ứng dụng ánh xạ chuẩn xác thành tên gọi có ý nghĩa đối với người dùng thông qua bộ từ điển danh mục cục bộ.
+    
+    \item \textbf{FR-PRO-04 -- Hỗ trợ cập nhật hồ sơ:} Đối với các trường thông tin chưa hỗ trợ biểu mẫu nhập liệu native trên Mobile, hệ thống phải cho phép người dùng mở biểu mẫu cập nhật của HRM Web ngay trong ứng dụng qua cơ chế vé SSO một lần.
+    
+    \item \textbf{FR-PRO-05 -- Đồng bộ dữ liệu sau cập nhật:} Sau khi nhận được tín hiệu hoàn tất cập nhật từ WebView qua JavaScript Bridge, ứng dụng Mobile phải tự động kích hoạt tải lại dữ liệu hồ sơ mới nhất từ backend để làm mới giao diện.
+    
+    \item \textbf{FR-PRO-06 -- Thẩm định yêu cầu cập nhật:} Người dùng có thẩm quyền (chuyên viên Phòng TCCB) phải có khả năng xem danh sách các yêu cầu đề xuất cập nhật hồ sơ, so sánh trực quan giá trị hiện tại với giá trị mới đề xuất và thực hiện phê duyệt hoặc từ chối từng phần.
 \end{itemize}
 
-\noindent Khi người dùng nhấn vào thông báo trên điện thoại, lớp \texttt{NotificationRouteParser} phân tích trực tiếp 4 trường này để kích hoạt \texttt{GoRouter} điều hướng thẳng đến đúng màn hình chi tiết tương ứng (Deep Linking).
+\subsubsection{Đặc tả Ca sử dụng UC-PRO-01: Tra cứu hồ sơ cán bộ}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Cán bộ / Giảng viên \\
+\hline
+\textbf{Tiền điều kiện} & Cán bộ đã đăng nhập thành công vào ứng dụng MyHCMUT Mobile. \\
+\hline
+\textbf{Kích hoạt} & Người dùng nhấn chọn mục \textit{``Hồ sơ''} trên thanh điều hướng chính. \\
+\hline
+\textbf{Luồng chính} & 
+1. Mobile kiểm tra và tải dữ liệu lý lịch từ bộ nhớ đệm hoặc gửi API request lên backend. \newline
+2. Hệ thống hiển thị tổng quan thông tin cá nhân (ảnh đại diện, họ tên, mã cán bộ, chức vụ, đơn vị). \newline
+3. Người dùng chuyển đổi giữa các nhóm thông tin (Cá nhân, Đào tạo, Lương, Phụ cấp...). \newline
+4. Hệ thống thực hiện ánh xạ mã danh mục và hiển thị chi tiết các trường thông tin tương ứng. \\
+\hline
+\textbf{Luồng thay thế} & Không có dữ liệu trong cache và kết nối API thất bại $\rightarrow$ Hệ thống hiển thị trạng thái lỗi mạng kèm nút \textit{``Thử lại''} để người dùng tải lại dữ liệu. \\
+\hline
+\textbf{Hậu điều kiện} & Người dùng nắm bắt được đầy đủ thông tin hồ sơ; dữ liệu gốc trên hệ thống không bị thay đổi. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-PRO-01: Tra cứu hồ sơ cán bộ}}
+\label{tab:uc_pro_01}
+\end{table}
+
+\subsubsection{Đặc tả Ca sử dụng UC-PRO-02: Đề xuất cập nhật hồ sơ}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Cán bộ / Giảng viên \\
+\hline
+\textbf{Tiền điều kiện} & Người dùng đã đăng nhập và đang ở màn hình xem chi tiết hồ sơ. \\
+\hline
+\textbf{Kích hoạt} & Người dùng nhấn nút \textit{``Chỉnh sửa thông tin''} tại một nhóm danh mục. \\
+\hline
+\textbf{Luồng chính} & 
+1. Mobile gửi yêu cầu cấp vé SSO dùng một lần lên backend. \newline
+2. Backend cấp vé; Mobile mở In-App WebView chuyển đến biểu mẫu chỉnh sửa của HRM Web. \newline
+3. Người dùng nhập các thông tin cần thay đổi và tải lên tệp/ảnh minh chứng hợp lệ. \newline
+4. Người dùng nhấn nút gửi đề xuất $\rightarrow$ Hệ thống HRM ghi nhận yêu cầu vào hàng đợi chờ thẩm định. \newline
+5. Web phát thông điệp thành công qua JavaScript Bridge tới ứng dụng Mobile. \newline
+6. Mobile đóng WebView và tự động tải lại dữ liệu hồ sơ mới nhất từ máy chủ. \\
+\hline
+\textbf{Luồng thay thế} & Vé hết hạn, WebView không tải được hoặc gửi yêu cầu thất bại $\rightarrow$ Hệ thống hiển thị thông báo lỗi; dữ liệu hồ sơ chính thức giữ nguyên không đổi. \\
+\hline
+\textbf{Hậu điều kiện} & Bản ghi đề xuất cập nhật được tạo thành công ở trạng thái chờ thẩm định (\texttt{PENDING}). \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-PRO-02: Đề xuất cập nhật hồ sơ}}
+\label{tab:uc_pro_02}
+\end{table}
+
+\subsubsection{Đặc tả Ca sử dụng UC-PRO-03: Thẩm định thay đổi hồ sơ}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Chuyên viên Phòng Tổ chức Cán bộ có thẩm quyền. \\
+\hline
+\textbf{Mục tiêu} & Thẩm định, phê duyệt hoặc từ chối các thông tin lý lịch do cán bộ gửi đề xuất thay đổi. \\
+\hline
+\textbf{Tiền điều kiện} & Chuyên viên đã đăng nhập và tài khoản được cấp quyền thẩm định hồ sơ. \\
+\hline
+\textbf{Luồng chính} & 
+1. Chuyên viên mở danh sách các yêu cầu cập nhật hồ sơ đang chờ xử lý. \newline
+2. Chọn một yêu cầu cụ thể để xem chi tiết. \newline
+3. Hệ thống hiển thị giao diện so sánh trực quan (Diff Viewer): làm nổi bật giá trị hiện tại và giá trị mới đề xuất kèm tài liệu minh chứng đính kèm. \newline
+4. Chuyên viên kiểm tra tính pháp lý của minh chứng và chọn \textit{``Phê duyệt''} hoặc \textit{``Từ chối''}. \newline
+5. Backend ghi nhận kết quả thẩm định, cập nhật hồ sơ chính thức (nếu duyệt) và gửi thông báo phản hồi cho cán bộ. \\
+\hline
+\textbf{Hậu điều kiện} & Trạng thái yêu cầu đề xuất chuyển thành \texttt{APPROVED} hoặc \texttt{REJECTED}; cơ sở dữ liệu nhân sự cập nhật tương ứng. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-PRO-03: Thẩm định thay đổi hồ sơ}}
+\label{tab:uc_pro_03}
+\end{table}
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-PRO-01:} Cơ sở dữ liệu của hệ thống HRM backend là nguồn dữ liệu duy nhất có thẩm quyền pháp lý đối với thông tin hồ sơ cán bộ; dữ liệu lưu tạm (cache) trên Mobile chỉ đóng vai trò hiển thị nhanh, không được xem là nguồn chính thức.
+    \item \textbf{BR-PRO-02:} Bảng danh mục cục bộ lưu trữ trên Mobile chỉ phục vụ giải mã hiển thị tên gọi, không được phép can thiệp hoặc ghi đè dữ liệu danh mục gốc.
+    \item \textbf{BR-PRO-03:} Dữ liệu bộ nhớ đệm hồ sơ phải được phân tách triệt để theo mã định danh tài khoản (\texttt{user\_id}); tuyệt đối không hiển thị dữ liệu đệm của phiên trước sau khi đã thay đổi tài khoản đăng nhập.
+    \item \textbf{BR-PRO-04:} Ngay sau khi nhận được sự kiện hoàn tất cập nhật từ WebView, Mobile phải gửi request đồng bộ lại toàn bộ dữ liệu từ backend để đảm bảo tính nhất quán.
+    \item \textbf{BR-PRO-05:} Các thông tin do cán bộ đề xuất thay đổi tuyệt đối không được tự động cập nhật vào hồ sơ chính thức khi chưa trải qua quy trình thẩm định và phê duyệt của chuyên viên TCCB có thẩm quyền.
+\end{itemize}
+
+\subsection{Phân hệ quản lý nghỉ phép}
+\label{subsec:req_leave}
+
+\subsubsection{Mục tiêu}
+Phân hệ Quản lý nghỉ phép hỗ trợ cán bộ/giảng viên thực hiện toàn diện quy trình nghỉ phép trên thiết bị di động: từ việc tra cứu số ngày phép còn lại, lập đơn nghỉ qua quy trình từng bước, đính kèm minh chứng, nộp đơn vào luồng phê duyệt, đến việc theo dõi tiến độ xử lý của lãnh đạo.
+
+Các cơ chế kiểm tra (validation) tức thời trên giao diện Mobile nhằm hỗ trợ người dùng phát hiện lỗi nhập liệu từ sớm; tuy nhiên, backend HRM luôn là thành phần thẩm quyền duy nhất ra quyết định một lá đơn có hợp lệ và được chuyển tiếp vào quy trình phê duyệt hay không.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-LEV-01 -- Xem danh sách và quỹ phép:} Cán bộ phải xem được danh sách toàn bộ các đơn nghỉ phép cá nhân theo từng trạng thái và thông tin số ngày phép năm (tổng quỹ phép, số ngày đã nghỉ, số ngày còn lại) do backend cung cấp.
+    
+    \item \textbf{FR-LEV-02 -- Khởi tạo đơn:} Hệ thống phải cho phép cán bộ khởi tạo một đơn nghỉ phép mới và tự động lưu trạng thái nháp (\texttt{DRAFT}) ngay từ bước đầu để tránh mất dữ liệu khi gián đoạn nhập liệu.
+    
+    \item \textbf{FR-LEV-03 -- Nhập thông tin nghỉ phép:} Người dùng phải khai báo được đầy đủ các thông tin: khoảng thời gian nghỉ (từ ngày đến ngày), buổi bắt đầu/kết thúc (sáng, chiều, cả ngày), loại hình nghỉ phép, địa điểm nghỉ, số điện thoại liên hệ và lý do chi tiết.
+    
+    \item \textbf{FR-LEV-04 -- Kiểm tra điều kiện trước khi gửi (Pre-validation):} Ứng dụng phải hỗ trợ kiểm tra nhanh các điều kiện nghiệp vụ ngay trên giao diện nhập liệu: tính toán số ngày làm việc thực tế, kiểm tra trùng lặp với các đơn đã nộp, cảnh báo mốc nộp trễ theo quy định và kiểm tra số dư quỹ phép. Kết quả tiền kiểm tra này chỉ mang tính định hướng UX và không thay thế bước kiểm tra bắt buộc của backend khi nộp đơn.
+    
+    \item \textbf{FR-LEV-05 -- Quản lý minh chứng:} Người dùng phải có khả năng chọn và tải lên các tệp tài liệu/ảnh minh chứng hợp lệ (đơn xin nghỉ thai sản, giấy xuất viện, đơn xin việc riêng...) trước khi gửi đơn.
+    
+    \item \textbf{FR-LEV-06 -- Lưu nháp hoặc gửi duyệt:} Sau khi hoàn thiện các bước của biểu mẫu, người dùng có thể lựa chọn lưu lại đơn ở trạng thái nháp để tiếp tục chỉnh sửa sau hoặc chính thức nộp gửi đơn vào quy trình phê duyệt.
+    
+    \item \textbf{FR-LEV-07 -- Chỉnh sửa, xóa và thu hồi đơn:} Người dùng chỉ được phép chỉnh sửa hoặc xóa đơn khi đơn đang ở trạng thái Nháp; hoặc thu hồi đơn khi đơn đang Chờ duyệt và chưa có cấp quản lý nào thực hiện thao tác xử lý.
+    
+    \item \textbf{FR-LEV-08 -- Xử lý đơn bị trả lại:} Trong trường hợp đơn bị cấp quản lý trả lại để bổ sung thông tin, người tạo đơn phải có khả năng chỉnh sửa các nội dung theo yêu cầu và nộp lại vào quy trình luân chuyển.
+    
+    \item \textbf{FR-LEV-09 -- Phê duyệt đơn:} Người dùng có thẩm quyền quản lý (Lãnh đạo đơn vị, Ban Giám hiệu, Chuyên viên TCCB) phải xem được danh sách đơn chờ duyệt và thực hiện các hành động: Phê duyệt, Từ chối kèm lý do hoặc Trả lại yêu cầu bổ sung.
+    
+    \item \textbf{FR-LEV-10 -- Xử lý nhiều đơn (Batch Approval):} Hệ thống phải hỗ trợ cấp quản lý chọn đồng thời nhiều đơn nghỉ phép trong danh sách chờ để thực hiện phê duyệt hàng loạt trong một thao tác. Sau khi xử lý, Mobile phải tự động đồng bộ lại trạng thái thực tế của từng đơn từ backend.
+\end{itemize}
+
+\subsubsection{Đặc tả Ca sử dụng UC-LEV-01: Đăng ký nghỉ phép}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Cán bộ / Giảng viên \\
+\hline
+\textbf{Tiền điều kiện} & Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn nghỉ phép. \\
+\hline
+\textbf{Kích hoạt} & Người dùng chọn biểu tượng tạo mới đơn nghỉ phép trên ứng dụng. \\
+\hline
+\textbf{Luồng chính} & 
+1. Hệ thống khởi tạo đơn ở trạng thái nháp (\texttt{DRAFT}). \newline
+2. Người dùng nhập thông tin qua biểu mẫu từng bước (Wizard): chọn loại phép, khoảng thời gian, buổi bắt đầu/kết thúc, địa điểm và lý do. \newline
+3. Hệ thống hỗ trợ tính toán số ngày làm việc thực tế và kiểm tra các ràng buộc cơ bản. \newline
+4. Người dùng tải lên tài liệu minh chứng đính kèm (nếu loại phép yêu cầu). \newline
+5. Người dùng kiểm tra lại thông tin tổng hợp tại bước xem lại (Review) và nhấn nút \textit{``Gửi duyệt''}. \newline
+6. Backend kiểm tra tính toàn vẹn nghiệp vụ lần cuối, cập nhật trạng thái đơn thành \texttt{PENDING} và chuyển vào quy trình luân chuyển phê duyệt. \\
+\hline
+\textbf{Luồng thay thế} & 
+- \textit{Điều kiện không hợp lệ (trùng lịch nghỉ, vượt quỹ phép):} Hệ thống từ chối gửi đơn và hiển thị thông báo lỗi cụ thể. \newline
+- \textit{Đăng ký trễ hạn:} Hệ thống yêu cầu người dùng nhập bổ sung nội dung giải trình lý do nộp trễ trước khi cho phép nộp đơn. \\
+\hline
+\textbf{Hậu điều kiện} & Đơn nghỉ phép được ghi nhận vào hệ thống ở trạng thái Chờ duyệt (\texttt{PENDING}). \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-LEV-01: Đăng ký nghỉ phép}}
+\label{tab:uc_lev_01}
+\end{table}
+
+\subsubsection{Đặc tả Ca sử dụng UC-LEV-02: Phê duyệt đơn nghỉ phép}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Lãnh đạo đơn vị / Chuyên viên TCCB có thẩm quyền. \\
+\hline
+\textbf{Tiền điều kiện} & Đơn nghỉ phép đang ở bước duyệt thuộc thẩm quyền của tác nhân hiện tại. \\
+\hline
+\textbf{Luồng chính} & 
+1. Người duyệt mở danh sách đơn chờ duyệt và chọn một đơn cụ thể. \newline
+2. Xem chi tiết thông tin đơn, lịch sử các bước duyệt trước đó và tài liệu minh chứng. \newline
+3. Chọn hành động xử lý: \textit{``Phê duyệt''}, \textit{``Từ chối''} hoặc \textit{``Trả lại''}. \newline
+4. Backend kiểm tra quyền hạn và trạng thái đơn tại thời điểm xử lý; thực hiện chuyển đơn sang bước tiếp theo hoặc kết thúc quy trình; gửi thông báo kết quả cho người tạo đơn. \\
+\hline
+\textbf{Luồng thay thế} & Đơn đã bị thu hồi hoặc đã được xử lý bởi một người duyệt khác có cùng thẩm quyền $\rightarrow$ Backend từ chối cập nhật và Mobile tải lại dữ liệu mới nhất. \\
+\hline
+\textbf{Hậu điều kiện} & Đơn nghỉ phép được cập nhật trạng thái mới trên hệ thống backend. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-LEV-02: Phê duyệt đơn nghỉ phép}}
+\label{tab:uc_lev_02}
+\end{table}
+
+\subsubsection{Đặc tả Ca sử dụng UC-LEV-03: Phê duyệt nhiều đơn nghỉ phép (Batch Approval)}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Cấp quản lý có thẩm quyền phê duyệt. \\
+\hline
+\textbf{Kích hoạt} & Người dùng chọn chế độ chọn nhiều (chọn checkbox) và nhấn nút duyệt hàng loạt. \\
+\hline
+\textbf{Luồng chính} & 
+1. Mobile gửi danh sách ID các đơn cần duyệt cùng hành động xử lý lên backend. \newline
+2. Backend xử lý từng đơn một cách tuần tự hoặc theo nhóm, cập nhật trạng thái cho từng đơn hợp lệ. \newline
+3. Backend trả về kết quả chi tiết: số đơn duyệt thành công và danh sách các đơn bị lỗi (kèm nguyên nhân). \newline
+4. Mobile hiển thị thông báo kết quả tổng hợp và tự động tải lại danh sách đơn để phản ánh đúng thực tế. \\
+\hline
+\textbf{Luồng lỗi} & Một đơn bị lỗi giữa chừng (do trạng thái bị thay đổi) không làm ảnh hưởng đến các đơn đã được duyệt thành công trước đó; không mặc định toàn bộ đợt duyệt bị hủy bỏ. \\
+\hline
+\textbf{Hậu điều kiện} & Trạng thái thực tế của toàn bộ các đơn được cập nhật và hiển thị đồng bộ trên Mobile. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-LEV-03: Phê duyệt nhiều đơn nghỉ phép}}
+\label{tab:uc_lev_03}
+\end{table}
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-LEV-01:} Ngày bắt đầu nghỉ không được diễn ra sau ngày kết thúc; khoảng thời gian kết hợp giữa ngày và buổi bắt đầu/kết thúc phải tạo thành một khoảng thời gian có độ dài dương hợp lệ.
+    \item \textbf{BR-LEV-02:} Số ngày nghỉ phép thực tế phải được tính toán dựa trên ngày làm việc tiêu chuẩn của Nhà trường, tự động loại trừ các ngày thứ Bảy, Chủ nhật, ngày nghỉ Lễ/Tết theo quy định và tính toán bổ sung ngày làm việc bù theo cấu hình của backend.
+    \item \textbf{BR-LEV-03:} Thời hạn tối thiểu phải nộp đơn trước ngày nghỉ phụ thuộc vào cấu hình nghiệp vụ hiện hành của Nhà trường tại phân hệ HRM (ví dụ nghỉ ngắn hạn nộp trước tối thiểu 3 ngày làm việc; nghỉ dài hạn nộp trước 15 ngày).
+    \item \textbf{BR-LEV-04:} Trường hợp người dùng nộp đơn muộn hơn thời hạn quy định, hệ thống bắt buộc người dùng phải cung cấp nội dung giải trình lý do nộp trễ trước khi kích hoạt nộp đơn chính thức.
+    \item \textbf{BR-LEV-05:} Trước khi chấp nhận một đơn nghỉ phép vào quy trình duyệt, hệ thống backend bắt buộc phải kiểm tra xung đột thời gian với các khoảng lịch nghỉ phép và lịch đi công tác đã tồn tại trước đó của cán bộ.
+    \item \textbf{BR-LEV-06:} Đối với các loại hình nghỉ phép đặc thù (nghỉ thai sản, nghỉ ốm đau dài ngày, nghỉ việc riêng có hưởng lương...), hệ thống yêu cầu bắt buộc phải đính kèm ít nhất một tệp tài liệu minh chứng hợp lệ.
+    \item \textbf{BR-LEV-07:} Toàn bộ các bước kiểm tra ràng buộc được Mobile thực hiện trong quá trình nhập liệu chỉ nhằm phản hồi sớm để tối ưu trải nghiệm (UX); backend bắt buộc phải thẩm định lại toàn bộ điều kiện tại thời điểm nhận request chính thức.
+    \item \textbf{BR-LEV-08:} Chỉ người tạo đơn hoặc những vai trò được phân quyền tương ứng mới có quyền chỉnh sửa, xóa, thu hồi hoặc luân chuyển đơn.
+    \item \textbf{BR-LEV-09:} Thông tin quỹ phép hiển thị trên màn hình chỉ là số liệu tham khảo tại thời điểm truy vấn; việc trừ số ngày vào quỹ phép chính thức chỉ xảy ra khi đơn đạt trạng thái phê duyệt bước cuối cùng tại backend.
+    \item \textbf{BR-LEV-10:} Một yêu cầu phê duyệt sẽ bị hệ thống từ chối cập nhật nếu trạng thái hiện tại của đơn trong cơ sở dữ liệu không còn phù hợp với bước xử lý mà người duyệt yêu cầu.
+    \item \textbf{BR-LEV-11:} Trong thao tác phê duyệt hàng loạt, kết quả của từng đơn phải được xử lý độc lập; ứng dụng Mobile phải tự động đồng bộ lại danh sách sau khi thao tác kết thúc để tránh sai lệch thông tin.
+\end{itemize}
+
+\subsection{Phân hệ Lịch và Điểm danh}
+\label{subsec:req_schedule}
+
+\subsubsection{Mục tiêu}
+Phân hệ Lịch giúp viên chức, giảng viên chủ động theo dõi các sự kiện lịch công tác tuần của Nhà trường và lịch công tác của đơn vị thuộc phạm vi được phân quyền trên thiết bị di động.
+
+Đối với các cuộc họp có cấu hình điểm danh, ứng dụng hỗ trợ tính năng điểm danh có mặt hoặc báo vắng kèm lý do. Mọi điều kiện hợp lệ về thẩm quyền và khung thời gian điểm danh phải được backend kiểm soát độc lập, không phụ thuộc vào đồng hồ thời gian hoặc trạng thái do thiết bị di động tự thiết lập.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-SCH-01 -- Xem lịch:} Người dùng có quyền phải có khả năng tra cứu danh sách các sự kiện lịch tuần trường, lịch đơn vị và xem thông tin chi tiết: chủ trì, thời gian bắt đầu/kết thúc, địa điểm, thành phần tham dự và nội dung cuộc họp.
+    
+    \item \textbf{FR-SCH-02 -- Hiển thị thao tác điểm danh:} Đối với các cuộc họp có cấu hình điểm danh, ứng dụng phải tự động hiển thị nút bấm thao tác điểm danh/báo vắng khi sự kiện nằm trong khoảng thời gian cho phép.
+    
+    \item \textbf{FR-SCH-03 -- Điểm danh có mặt:} Người dùng phải có khả năng gửi yêu cầu ghi nhận có mặt đối với cuộc họp mà mình có tên trong danh sách đại biểu được mời tham dự.
+    
+    \item \textbf{FR-SCH-04 -- Báo vắng:} Người dùng có thể khai báo vắng mặt và bắt buộc phải cung cấp lý do vắng hợp lệ (độ dài quy định) khi chức năng này được sự kiện cho phép.
+    
+    \item \textbf{FR-SCH-05 -- Kiểm tra tại backend:} Backend phải thẩm định lại danh tính người dùng, quyền tham dự cuộc họp và điều kiện khung giờ hợp lệ trước khi ghi nhận trạng thái điểm danh vào cơ sở dữ liệu.
+    
+    \item \textbf{FR-SCH-06 -- Đồng bộ thay đổi:} Khi trạng thái điểm danh của cuộc họp thay đổi, ứng dụng phải cập nhật ngay giao diện hiển thị; các thay đổi phát sinh từ người dùng khác có thể được cập nhật theo thời gian thực qua kênh kết nối mạng của hệ thống.
+\end{itemize}
+
+\subsubsection{Đặc tả Ca sử dụng UC-SCH-01: Điểm danh cuộc họp}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Cán bộ / Giảng viên có tên trong danh sách tham dự cuộc họp. \\
+\hline
+\textbf{Tiền điều kiện} & Người dùng đã đăng nhập; cuộc họp được cấu hình hỗ trợ ghi nhận tham dự. \\
+\hline
+\textbf{Kích hoạt} & Người dùng mở xem chi tiết cuộc họp trên ứng dụng. \\
+\hline
+\textbf{Luồng chính} & 
+1. Mobile kiểm tra sơ bộ khung giờ diễn ra cuộc họp và hiển thị các tùy chọn điểm danh. \newline
+2. Người dùng nhấn nút \textit{``Điểm danh có mặt''} (hoặc \textit{``Báo vắng''} kèm nhập lý do). \newline
+3. Mobile gửi request lên backend dịch vụ. \newline
+4. Backend kiểm tra tính hợp lệ của phiên, quyền tham dự của cán bộ và thời gian hiện tại trên máy chủ. \newline
+5. Backend ghi nhận trạng thái tham dự vào cơ sở dữ liệu và phát sự kiện đồng bộ. \newline
+6. Mobile nhận phản hồi thành công và cập nhật trạng thái hiển thị trên giao diện sang \textit{``Đã điểm danh''}. \\
+\hline
+\textbf{Luồng thay thế} & Cuộc họp chưa đến giờ mở điểm danh, đã kết thúc hoặc cán bộ không thuộc danh sách tham dự $\rightarrow$ Backend từ chối ghi nhận; ứng dụng hiển thị thông báo lỗi tương ứng. \\
+\hline
+\textbf{Hậu điều kiện} & Bản ghi tham dự cuộc họp của cán bộ được lưu trữ chính thức tại hệ thống iOffice. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-SCH-01: Điểm danh cuộc họp}}
+\label{tab:uc_sch_01}
+\end{table}
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-SCH-01:} Chỉ các sự kiện lịch họp được nhà trường cấu hình bật tính năng ghi nhận tham dự mới cho phép người dùng thực hiện điểm danh hoặc báo vắng.
+    \item \textbf{BR-SCH-02:} Điều kiện thời gian kiểm tra trên thiết bị di động chỉ đóng vai trò hỗ trợ giao diện (UX Gate); thời gian trên máy chủ backend (Server Time) là căn cứ thẩm quyền duy nhất để quyết định tính hợp lệ của thao tác điểm danh.
+    \item \textbf{BR-SCH-03:} Người dùng chỉ được phép điểm danh cho các cuộc họp mà tài khoản của họ được phân công tham dự hoặc được mời với tư cách đại biểu hợp lệ.
+    \item \textbf{BR-SCH-04:} Khi thực hiện báo vắng, nội dung lý do báo vắng bắt buộc phải thỏa mãn yêu cầu về độ dài và định dạng do backend quy định (ví dụ tối thiểu từ 1 đến 200 ký tự).
+    \item \textbf{BR-SCH-05:} Ứng dụng di động không được xem dữ liệu nhận được từ kênh thời gian thực (real-time stream) là nguồn dữ liệu có thẩm quyền thay thế cho trạng thái lưu trữ chính thức trong cơ sở dữ liệu backend.
+\end{itemize}
+
+\subsection{Phân hệ Thông báo}
+\label{subsec:req_notification}
+
+\subsubsection{Mục tiêu}
+Phân hệ Thông báo cung cấp một điểm tiếp nhận thông tin và sự kiện nghiệp vụ tập trung trên ứng dụng di động cho toàn bộ các dịch vụ HRM và iOffice.
+
+Mục tiêu của phân hệ không chỉ dừng lại ở việc hiển thị các biểu ngữ (banner) thông báo đẩy tức thời, mà còn hỗ trợ người dùng nhận diện ngữ cảnh nghiệp vụ và kích hoạt cơ chế điều hướng sâu (Deep Linking) trực tiếp đến đúng màn hình đối tượng cần xử lý trên ứng dụng.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-NOT-01 -- Đăng ký thiết bị nhận thông báo:} Sau khi người dùng đăng nhập thành công và thiết bị được cấp FCM Device Token từ dịch vụ Firebase, ứng dụng Mobile phải tự động gửi token này lên backend để liên kết với tài khoản người dùng hiện tại.
+    
+    \item \textbf{FR-NOT-02 -- Cập nhật token:} Khi dịch vụ FCM làm mới hoặc cấp lại token cho thiết bị, ứng dụng phải tự động phát hiện và gửi token mới lên backend để cập nhật thông tin tiếp nhận.
+    
+    \item \textbf{FR-NOT-03 -- Nhận thông báo:} Ứng dụng phải hỗ trợ tiếp nhận thông báo đẩy trong mọi trạng thái hoạt động của thiết bị (Foreground, Background, Terminated) phù hợp với cơ chế của hệ điều hành Android và iOS.
+    
+    \item \textbf{FR-NOT-04 -- Xem trung tâm thông báo:} Người dùng có thể mở Trung tâm thông báo trên ứng dụng để xem danh sách toàn bộ các thông báo đã nhận, phân biệt rõ ràng giữa thông báo đã đọc và chưa đọc.
+    
+    \item \textbf{FR-NOT-05 -- Cập nhật trạng thái đọc:} Khi người dùng mở xem thông báo hoặc thực hiện thao tác đánh dấu đã đọc, hệ thống phải cập nhật trạng thái tương ứng trên giao diện và gửi request đồng bộ về backend.
+    
+    \item \textbf{FR-NOT-06 -- Điều hướng theo ngữ cảnh (Deep Linking):} Khi người dùng chạm vào một thông báo có dữ liệu định tuyến hợp lệ, ứng dụng phải trích xuất các trường thông tin chuẩn hóa để xác định chính xác màn hình cần mở:
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|}
+\hline
+\textbf{Trường Metadata} & \textbf{Ý nghĩa nghiệp vụ phục vụ định tuyến} \\
+\hline
+\texttt{source} & Miền dịch vụ phát sinh thông báo (ví dụ \texttt{'hrm'} hoặc \texttt{'ioffice'}). \\
+\hline
+\texttt{entityType} & Loại đối tượng nghiệp vụ (\texttt{'leave'}, \texttt{'business-trip'}, \texttt{'incoming-doc'}, \texttt{'outgoing-doc'}, \texttt{'task'}). \\
+\hline
+\texttt{entityId} & Khóa chính định danh duy nhất của bản ghi đối tượng cần mở (ID đơn nghỉ phép, ID nhiệm vụ...). \\
+\hline
+\texttt{isApproval} & Cờ đánh dấu ngữ cảnh: \texttt{true} nếu cần mở giao diện phê duyệt của cấp quản lý, \texttt{false} nếu mở giao diện xem chi tiết thông thường. \\
+\hline
+\end{tabularx}
+\caption{\textit{Chuẩn hóa các trường Metadata định tuyến thông báo}}
+\label{tab:notification_metadata}
+\end{table}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-NOT-07 -- Xử lý thông báo không còn hợp lệ:} Trường hợp đối tượng được thông báo tham chiếu đã bị xóa, người dùng không còn quyền truy cập hoặc route điều hướng không xác định được, ứng dụng tuyệt đối không được điều hướng tới một màn hình sai hoặc làm dừng đột ngột ứng dụng; hệ thống phải hiển thị thông báo giải thích nhẹ nhàng và giữ người dùng ở trạng thái an toàn.
+    
+    \item \textbf{FR-NOT-08 -- Đăng xuất thiết bị:} Khi người dùng đăng xuất, ứng dụng phải gửi request yêu cầu backend hủy liên kết giữa FCM token của thiết bị và tài khoản người dùng, nhằm ngăn chặn triệt để nguy cơ gửi thông báo nghiệp vụ của người dùng cũ đến thiết bị.
+\end{itemize}
+
+\subsubsection{Đặc tả Ca sử dụng UC-NOT-01: Xem và mở thông báo}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Người dùng ứng dụng MyHCMUT Mobile. \\
+\hline
+\textbf{Tiền điều kiện} & Người dùng đã đăng nhập vào ứng dụng. \\
+\hline
+\textbf{Kích hoạt} & Người dùng mở Trung tâm thông báo hoặc chạm vào thông báo đẩy xuất hiện trên màn hình khóa / thanh trạng thái. \\
+\hline
+\textbf{Luồng chính} & 
+1. Hệ thống lấy danh sách thông báo và hiển thị trạng thái đã đọc/chưa đọc. \newline
+2. Người dùng chọn một mục thông báo cụ thể. \newline
+3. Ứng dụng đánh dấu thông báo là đã đọc và phân tích 4 trường metadata (\texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval}). \newline
+4. Hệ thống xác định đường dẫn điều hướng (Route) tương ứng và kích hoạt chuyển màn hình trực tiếp đến đúng đối tượng nghiệp vụ. \\
+\hline
+\textbf{Luồng thay thế} & Metadata không hợp lệ hoặc bản ghi đối tượng đã bị xóa $\rightarrow$ Hệ thống hiển thị thông báo đối tượng không khả dụng và không thực hiện điều hướng sai. \\
+\hline
+\textbf{Hậu điều kiện} & Người dùng được đưa tới đúng ngữ cảnh cần thao tác; trạng thái thông báo được cập nhật là Đã đọc. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-NOT-01: Xem và mở thông báo}}
+\label{tab:uc_not_01}
+\end{table}
+
+\subsubsection{Đặc tả Ca sử dụng UC-NOT-02: Quản lý token thiết bị}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|}
+\hline
+\textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+\hline
+\textbf{Tác nhân} & Ứng dụng Mobile (thực thi tự động dưới nền). \\
+\hline
+\textbf{Kích hoạt} & Người dùng đăng nhập thành công, FCM token được làm mới, hoặc người dùng đăng xuất. \\
+\hline
+\textbf{Luồng chính} & 
+1. Ứng dụng nhận FCM Device Token từ dịch vụ Google Firebase. \newline
+2. Gửi request kèm token và định danh người dùng lên backend dịch vụ thông báo. \newline
+3. Backend kiểm tra và cập nhật bản ghi ánh xạ giữa \texttt{user\_id} và \texttt{device\_token} trong bảng dữ liệu thiết bị. \newline
+4. Khi người dùng đăng xuất, ứng dụng gửi lệnh thu hồi để backend hủy kích hoạt token tương ứng. \\
+\hline
+\textbf{Hậu điều kiện} & Cơ sở dữ liệu backend duy trì danh sách các token thiết bị đang hoạt động hợp lệ cho người dùng. \\
+\hline
+\end{tabularx}
+\caption{\textit{Đặc tả Ca sử dụng UC-NOT-02: Quản lý token thiết bị}}
+\label{tab:uc_not_02}
+\end{table}
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-NOT-01:} Người dùng chỉ được phép truy xuất và thao tác trên danh sách các thông báo thuộc quyền sở hữu của chính tài khoản mình.
+    \item \textbf{BR-NOT-02:} Toàn bộ dữ liệu metadata điều hướng gửi kèm thông báo phải được kiểm tra và chuẩn hóa trước khi tạo lệnh điều hướng; ứng dụng không được tin cậy hoàn toàn dữ liệu push như một lệnh điều hướng tự do.
+    \item \textbf{BR-NOT-03:} Các tham số \texttt{source}, \texttt{entityType}, \texttt{entityId} và ngữ cảnh \texttt{isApproval} bắt buộc phải được ánh xạ sang các route nội bộ đã được định nghĩa tĩnh trong bộ định tuyến của ứng dụng.
+    \item \textbf{BR-NOT-04:} Quyền truy cập vào đối tượng nghiệp vụ sau khi điều hướng sâu (Deep Link) vẫn phải được backend kiểm tra độc lập; việc nhận được thông báo không đồng nghĩa với việc tự động được cấp quyền thao tác.
+    \item \textbf{BR-NOT-05:} FCM Device Token có thể thay đổi trong suốt vòng đời của ứng dụng; Mobile phải cài đặt cơ chế lắng nghe sự kiện làm mới token để kịp thời cập nhật lên máy chủ.
+    \item \textbf{BR-NOT-06:} Khi dịch vụ Firebase FCM phản hồi thông báo về một token không còn hợp lệ (Unregistered / Invalid Token), backend phải tự động xóa hoặc gắn cờ vô hiệu hóa token đó trong cơ sở dữ liệu.
+    \item \textbf{BR-NOT-07:} Tính năng hiển thị số đếm huy hiệu (Badge Counter) phụ thuộc hoàn toàn vào hệ điều hành và giao diện trình khởi chạy (Launcher) của từng dòng máy; hệ thống không cam kết mọi thiết bị đều hiển thị số badge đồng nhất.
+    \item \textbf{BR-NOT-08:} Hệ thống không giả định rằng mọi sự kiện thông báo đẩy đều được phân phối tới thiết bị chính xác một lần (không bảo đảm Exactly-Once). Phân hệ thông báo chỉ đóng vai trò kênh hỗ trợ thông tin nhanh; trạng thái nghiệp vụ chuẩn mực cuối cùng luôn phải được truy vấn từ backend.
+\end{itemize}

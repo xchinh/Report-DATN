@@ -5,14 +5,14 @@
 Phân hệ Quản trị Nhân sự là một trong hai trụ cột nghiệp vụ lớn nhất của ứng dụng di động MyHCMUT, kết nối trực tiếp với dịch vụ nghiệp vụ nhân sự \texttt{hrm-be} và cơ sở dữ liệu \texttt{tcns-dev} của Nhà trường:
 
 \begin{itemize}
-    \item \textbf{Quản lý Hồ sơ Lý lịch 11 Danh mục:} Tra cứu toàn diện thông tin cá nhân, đào tạo, ngạch bậc lương, hợp đồng, khen thưởng, kỷ luật, quá trình công tác...; hỗ trợ lưu đệm ngoại tuyến qua SQLite.
+    \item \textbf{Quản lý Hồ sơ Lý lịch 11 Danh mục:} Tra cứu toàn diện thông tin cá nhân, đào tạo, ngạch bậc lương, hợp đồng, khen thưởng, kỷ luật, quá trình công tác...; hỗ trợ lưu đệm tạm thời qua cơ chế SWR (SharedPreferences), kết hợp cơ sở dữ liệu SQLite lưu trữ 47 bảng danh mục tham chiếu hành chính dùng chung (Master Data), bảo đảm tuyệt đối không lưu dữ liệu lý lịch cá nhân nhạy cảm trong CSDL cục bộ.
     \item \textbf{Đề xuất \& Thẩm định Sửa Lý lịch (Diff Viewer):} Cán bộ gửi đề xuất cập nhật kèm ảnh minh chứng; Chuyên viên Phòng TCCB thẩm định qua giao diện so sánh trực quan sai khác giữa giá trị cũ và giá trị mới trước khi duyệt ghi đè vào hồ sơ chính thức.
-    \item \textbf{Đăng ký Nghỉ phép Wizard 4 bước:} Thiết kế Form Wizard 4 bước kết hợp thuật toán kiểm tra ràng buộc thời gian thực 4 tầng từ API \texttt{POST /api/tcns-nghi-phep/validate}:
+    \item \textbf{Đăng ký Nghỉ phép Tích hợp Pre-validation, Tải Minh chứng Độc lập và Chuyển hướng Giải trình:}
     \begin{enumerate}
-        \item Tính toán chính xác số ngày làm việc thực tế (tự động loại trừ Thứ 7, Chủ nhật và ngày Lễ theo quy định).
-        \item Kiểm tra phát hiện trùng lặp lịch nghỉ phép hoặc lịch công tác cá nhân.
-        \item Kiểm tra mốc nộp trễ hạn (cảnh báo bắt buộc nhập lý do giải trình nếu nộp trễ quá 3 ngày hoặc 15 ngày tùy loại phép).
-        \item Kiểm tra đối soát số dư quỹ phép năm trong bảng \texttt{tcns\_so\_nghi\_phep\_nam}.
+        \item \textit{Tiền kiểm tra (Pre-validation):} Thuật toán phía client phối hợp cùng API \texttt{POST /api/tcns-nghi-phep/validate} tính toán chính xác số ngày làm việc thực tế (tự động loại trừ Thứ 7, Chủ nhật và ngày Lễ theo quy định), kiểm tra đối soát số dư quỹ phép năm và phát hiện lịch trùng.
+        \item \textit{Kiểm tra hạn nộp và Chuyển hướng Giải trình:} Hệ thống đối chiếu thời điểm nộp với các mốc cấu hình trong bảng \texttt{tcns\_setting}. Nếu phát hiện nộp trễ hạn (\texttt{isTooLate = true}), hệ thống chủ động vô hiệu hóa nút gửi duyệt và hiển thị nút điều hướng cán bộ sang phân hệ giải trình chuyên biệt (\texttt{/hrm/giai-trinh}).
+        \item \textit{Tải minh chứng 2 bước độc lập (2-step Upload):} Sau khi kiểm tra hợp lệ, hệ thống tạo bản ghi nháp sơ bộ để lấy mã \texttt{phieuId}. Bước tiếp theo thực hiện tải tệp tài liệu trực tiếp qua endpoint \texttt{POST /api/upload/tcns-nghi-phep/file?phieuId=...}, tách biệt tải tệp nhị phân khỏi payload JSON gửi duyệt.
+        \item \textit{Dọn dẹp nháp mồ côi (Orphan Cleanup):} Khi người dùng hủy bỏ biểu mẫu nộp đơn ở bước nhập liệu, cờ \texttt{isNewlyCreated} tự động kích hoạt lệnh xóa bản ghi nháp sơ bộ để giải phóng lịch cá nhân, không để lại dữ liệu rác gây nghẽn lịch.
     \end{enumerate}
     \item \textbf{Đăng ký \& Phê duyệt Đi công tác (Business Trip):} Cán bộ lập kế hoạch chuyến đi, chọn thành viên đoàn công tác, nhập địa điểm, thời gian, dự toán kinh phí và đính kèm thư mời/kế hoạch PDF; Lãnh đạo Đơn vị và BGH thẩm định phê duyệt đa cấp.
     \item \textbf{Phê duyệt Đơn Hàng loạt (\texttt{AppBatchActionBar}):} Cho phép Lãnh đạo Đơn vị chọn nhiều đơn nghỉ phép hoặc công tác cùng lúc để duyệt hàng loạt chỉ bằng một thao tác, tối ưu hóa thời gian xử lý hành chính.
@@ -54,26 +54,29 @@ Phân hệ Quản trị Nhân sự là một trong hai trụ cột nghiệp vụ
 \small
 \begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
 \hline
-\textbf{Mã Ca sử dụng} & \textbf{UC\_HRM\_02: Đăng ký Nghỉ phép Form Wizard 4 bước \& Validate Thời gian thực} \\
+\textbf{Mã Ca sử dụng} & \textbf{UC\_HRM\_02: Đăng ký Nghỉ phép Tích hợp Pre-validation, Tải Minh chứng và Gửi duyệt} \\
 \hline
 \textbf{Tác nhân} & Cán bộ / Giảng viên \\
 \hline
-\textbf{Tiền điều kiện} & Cán bộ đã đăng nhập; còn tài khoản hoạt động trong hệ thống. \\
+\textbf{Tiền điều kiện} & Cán bộ đã đăng nhập; tài khoản đang ở trạng thái hoạt động trong hệ thống. \\
 \hline
-\textbf{Hậu điều kiện} & Đơn nghỉ phép được khởi tạo thành công ở trạng thái \texttt{CHO\_DUYET} và kích hoạt quy trình phê duyệt. \\
+\textbf{Hậu điều kiện} & Đơn nghỉ phép được khởi tạo và gửi duyệt thành công ở trạng thái \texttt{CHO\_DUYET}, lịch cá nhân được ghi nhận và kích hoạt quy trình phê duyệt. \\
 \hline
 \textbf{Luồng sự kiện chính} & 
-1. Cán bộ mở màn hình \texttt{LeaveRequestPage}, bắt đầu Bước 1: Chọn loại nghỉ và lý do nghỉ. \newline
-2. Bước 2: Chọn khoảng thời gian (Từ ngày $\rightarrow$ Đến ngày). \newline
-3. Hệ thống tự động gọi API \texttt{POST /api/tcns-nghi-phep/validate} để thực thi 4 tầng kiểm tra: (a) Tính số ngày làm việc thực tế, (b) Kiểm tra trùng lịch cá nhân, (c) Kiểm tra mốc nộp trễ hạn, (d) Kiểm tra số dư quỹ phép năm. \newline
-4. Nếu vi phạm mốc nộp trễ hạn $\rightarrow$ Bước 3 hiển thị trường bắt buộc nhập lý do giải trình nộp trễ. \newline
-5. Bước 4: Cán bộ xác nhận cam kết bàn giao công việc và nhấn nút \textit{``Gửi duyệt''}. \newline
-6. Hệ thống lưu bản ghi vào \texttt{tcns\_nghi\_phep\_dang\_ky} và đẩy thông báo tới Lãnh đạo Đơn vị. \\
+1. Cán bộ mở biểu mẫu \texttt{CreateTimeDialog}, chọn loại nghỉ và khoảng thời gian (Từ ngày $\rightarrow$ Đến ngày, buổi). \newline
+2. Hệ thống tự động thực hiện tiền kiểm tra: tính số ngày làm việc thực tế, đối soát số dư phép năm và kiểm tra trùng lịch qua API \texttt{POST /api/tcns-nghi-phep/validate}. \newline
+3. Nếu phát hiện vi phạm mốc nộp trễ hạn (\texttt{isTooLate = true}) $\rightarrow$ Hệ thống khóa nút nộp và hiển thị nút điều hướng giải trình sang \texttt{/hrm/giai-trinh}. \newline
+4. Khi thông tin hợp lệ, cán bộ nhấn tiếp tục $\rightarrow$ Hệ thống khởi tạo bản ghi nháp sơ bộ (\texttt{isNewlyCreated = true}) để cấp mã \texttt{phieuId} và chuyển sang Bước 2. \newline
+5. Tại Bước 2, cán bộ chọn tệp đính kèm và tải lên độc lập qua API \texttt{POST /api/upload/tcns-nghi-phep/file?phieuId=...}. \newline
+6. Cán bộ chuyển sang Bước 3, rà soát lại thông tin và nhấn nút \textit{``Gửi duyệt''} $\rightarrow$ Hệ thống thực thi lệnh \texttt{PUT /api/upload/tcns-nghi-phep/dang-ky} được bọc kín trong giao dịch có khóa PostgreSQL Advisory Lock và Atomic State Guard (\texttt{WHERE ma\_quy\_trinh = 'NHAP'}). \newline
+7. Giao dịch cam kết thành công $\rightarrow$ Bản ghi chuyển sang trạng thái \texttt{CHO\_DUYET} và kích hoạt sự kiện Kafka gửi thông báo đẩy tới Lãnh đạo Đơn vị. \\
 \hline
-\textbf{Luồng ngoại lệ} & Nếu số ngày nghỉ vượt quá số ngày phép còn lại hoặc trùng với lịch công tác đã duyệt $\rightarrow$ Hệ thống cảnh báo đỏ và khóa không cho phép chuyển bước. \\
+\textbf{Luồng ngoại lệ} & 
+- Nếu cán bộ hủy bỏ thao tác ở Bước 1 hoặc Bước 2 $\rightarrow$ Ứng dụng tự động kích hoạt lệnh \texttt{DELETE} xóa bản ghi nháp sơ bộ để giải phóng lịch cá nhân (dọn dẹp nháp mồ côi). \newline
+- Nếu phát hiện trùng lịch hoặc đơn đã bị thay đổi trạng thái đồng thời $\rightarrow$ Hệ thống rollback giao dịch an toàn và hiển thị thông báo lỗi chi tiết cho cán bộ. \\
 \hline
 \end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC\_HRM\_02: Đăng ký Nghỉ phép 4 bước}}
+\caption{\textit{Đặc tả Ca sử dụng UC\_HRM\_02: Đăng ký Nghỉ phép Tích hợp}}
 \label{tab:uc_hrm_02}
 \end{table}
 

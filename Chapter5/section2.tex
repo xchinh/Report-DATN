@@ -1,8 +1,8 @@
 \section{Kiến trúc Hệ thống Tổng thể}
 \label{sec:kientruc_tongthe}
 
-\subsection{Cấu trúc Phân tầng Clean Architecture Phía Client}
-Ứng dụng di động MyHCMUT được thiết kế theo mô hình Clean Architecture phân tách rõ rệt 3 tầng:
+\subsection{Cấu trúc Phân tầng Clean Architecture và Mô hình Modular Monorepo}
+Nhằm đảm bảo khả năng mở rộng lâu dài, tính độc lập giữa các phân hệ nghiệp vụ và sự thuận tiện trong kiểm thử tự động, ứng dụng di động MyHCMUT được thiết kế theo mô hình Kiến trúc Phân tầng Sạch (Clean Architecture) kết hợp cấu trúc Đa gói Modular Monorepo quản lý bởi công cụ Melos:
 
 \begin{figure}[H]
     \centering
@@ -11,28 +11,91 @@
     \label{fig:mobile_clean}
 \end{figure}
 
-\begin{itemize}
-    \item \textbf{Tầng Trình diễn (Presentation Layer):} Pages, Widgets và Riverpod Notifiers quản lý trạng thái phản ứng giao diện (\texttt{AsyncValue}).
-    \item \textbf{Tầng Nghiệp vụ (Domain Layer):} Entities, Freezed DTOs và quy tắc nghiệp vụ client (Form Wizard State, Validation).
-    \item \textbf{Tầng Dữ liệu (Data Layer):} Repositories, Dio Data Sources, SQLite Local Cache và Secure Storage.
-\end{itemize}
+Hệ thống mã nguồn được phân chia thành 3 tầng chức năng riêng biệt:
+\begin{enumerate}
+    \item \textbf{Tầng Trình diễn (Presentation Layer):} Bao gồm các Pages, Widgets và các lớp quản lý trạng thái phản ứng giao diện xây dựng trên nền tảng Flutter Riverpod (\texttt{Notifier}, \texttt{AsyncNotifier}). Tầng này chịu trách nhiệm hiển thị giao diện, tiếp nhận tương tác của cán bộ và phản ánh trực tiếp trạng thái dữ liệu đa chiều (\texttt{AsyncValue.loading}, \texttt{AsyncValue.data}, \texttt{AsyncValue.error}) mà không chứa bất kỳ logic nghiệp vụ tính toán hay gọi mạng trực tiếp nào.
+    
+    \item \textbf{Tầng Nghiệp vụ (Domain Layer):} Chứa các Thực thể nghiệp vụ thuần túy (Domain Entities), các đối tượng truyền tải dữ liệu bất biến (Freezed DTOs) và các quy tắc kiểm tra tính hợp lệ dữ liệu phía máy khách (Form Wizard Validation, tính toán ngày nghỉ loại trừ thứ Bảy, Chủ nhật và ngày lễ). Tầng này hoàn toàn độc lập với Flutter UI framework và các thư viện giao tiếp mạng, giúp mã nguồn dễ dàng kiểm thử đơn vị độc lập.
+    
+    \item \textbf{Tầng Dữ liệu (Data Layer):} Đảm nhận việc cung cấp dữ liệu cho tầng Domain thông qua mô hình Repository Pattern. Tầng này bao gồm:
+    \begin{itemize}
+        \item \textit{Remote Data Sources:} Sử dụng HTTP client \texttt{Dio} kết hợp bộ điều phối xác thực \texttt{MultiDomainAuthInterceptor} để giao tiếp với các máy chủ RESTful API.
+        \item \textit{Local Data Sources:} Sử dụng thư viện \texttt{sqflite} để lưu trữ và lập chỉ mục 47 danh mục master data hành chính phục vụ tra cứu ngoại tuyến tốc độ cao; \texttt{SharedPreferences} lưu bộ đệm SWR hồ sơ cán bộ; và lớp \texttt{MultiDomainTokenManager} quản lý việc lưu trữ cặp khóa xác thực Access Token và Refresh Token trong vùng nhớ riêng của ứng dụng trên \texttt{SharedPreferences} kết hợp bộ đệm In-Memory truy xuất tức thời.
+    \end{itemize}
+\end{enumerate}
 
 \subsection{Hệ thống Giao diện Material 3 Semantic Tokens (\texttt{global\_system})}
-Chuẩn hóa bảng màu, kiểu chữ, khoảng cách và các widget tái sử dụng (\texttt{AppBatchActionBar}, thẻ Card, Badges trạng thái) theo Semantic Tokens, đảm bảo tương thích 100\% giữa Light Mode và Dark Mode.
+Toàn bộ màu sắc, khoảng cách (spacing), kiểu chữ (typography), hình dạng góc bo và các thành phần giao diện dùng chung được chuẩn hóa thành gói \texttt{packages/core/global\_system}. 
+
+Thay vì định nghĩa trực tiếp các mã màu thô (hardcoded hex colors), hệ thống sử dụng các Semantic Tokens thể hiện rõ ngữ nghĩa nghiệp vụ: \texttt{primary}, \texttt{onPrimary}, \texttt{surface}, \texttt{surfaceVariant}, \texttt{statusPending} (màu vàng cảnh báo cho trạng thái Chờ duyệt), \texttt{statusApproved} (màu xanh lá thể hiện Đã duyệt) và \texttt{statusRejected} (màu đỏ thể hiện Từ chối). Thiết kế này đảm bảo 100\% các widget trong toàn bộ ứng dụng tự động chuyển đổi tương thích, thẩm mỹ và nhất quán giữa hai chế độ Sáng (Light Mode) và Tối (Dark Mode). Bên cạnh đó, gói cung cấp sẵn các khối giao diện chuẩn hóa: thanh tác vụ phê duyệt hàng loạt \texttt{AppBatchActionBar}, thẻ so sánh sai khác lý lịch \texttt{ReviewDiffCard}, trạng thái rỗng \texttt{AppEmptyState} và khối thông báo lỗi kèm nút thử lại \texttt{AppErrorRetry}.
+
+\subsection{Thiết kế Kiến trúc Kiểm soát Tương tranh (Concurrency Control Architecture)}
+\label{subsec:concurrency_arch}
+
+Một trong những thách thức cốt lõi của bài toán số hóa quy trình hành chính đại học là việc kiểm soát tương tranh khi cán bộ gửi yêu cầu đăng ký nghỉ phép hoặc sửa đổi lịch cá nhân từ nhiều thiết bị cùng lúc (hoặc do độ trễ mạng khiến người dùng bấm đúp liên tiếp).
+
+\subsubsection{Phân tích Lựa chọn Giải pháp Khóa Tương tranh}
+Nhóm nghiên cứu đã phân tích và so sánh 4 giải pháp kiểm soát tương tranh kinh điển:
+\begin{itemize}
+    \item \textit{Khóa dòng mức bi quan (\texttt{SELECT ... FOR UPDATE}):} Không thể áp dụng hiệu quả cho thao tác tạo mới đơn đăng ký (\texttt{INSERT}), bởi vì bản ghi dữ liệu mới chưa hề tồn tại trong bảng để thiết lập khóa dòng.
+    \item \textit{Mức cô lập tuần tự (\texttt{SERIALIZABLE}):} Gây tỷ lệ hủy giao dịch (Transaction Abort Rate do lỗi \texttt{40001 serialization\_failure}) rất cao khi có nhiều cán bộ thuộc cùng đơn vị truy cập đồng thời, đòi hỏi logic thử lại (retry) phức tạp ở tầng ứng dụng và gây hao tổn tài nguyên máy chủ cơ sở dữ liệu.
+    \item \textit{Ràng buộc loại trừ (\texttt{EXCLUDE USING gist}):} Đây là giải pháp khai báo rất mạnh của PostgreSQL, nhưng đòi hỏi phải kích hoạt extension \texttt{btree\_gist} và can thiệp thay đổi cấu trúc bảng cơ sở dữ liệu (DDL migration). Điều này vi phạm ràng buộc an toàn của đồ án đối với cơ sở dữ liệu production hiện hữu của Nhà trường.
+    \item \textit{Khóa Cố vấn Cấp Giao dịch (\texttt{pg\_advisory\_xact\_lock}):} Giải pháp được lựa chọn. Đây là cơ chế khóa cố vấn cấp ứng dụng được quản lý trực tiếp trong bộ nhớ RAM bởi PostgreSQL Lock Manager. 
+\end{itemize}
+
+\subsubsection{Cơ chế Hoạt động của PostgreSQL Advisory Lock}
+\begin{enumerate}
+    \item \textbf{Định danh Khóa theo Cá nhân:} Khóa được sinh ra dựa trên hàm băm chuỗi văn bản của mã số cán bộ: \texttt{hashtext('tcns\_lich\_ca\_nhan:' || :shcc)}. Điều này đảm bảo cơ chế khóa được phân vùng hẹp theo từng cá nhân: các thao tác của hai cán bộ khác nhau hoàn toàn diễn ra song song không gây nghẽn tài nguyên (non-blocking).
+    \item \textbf{Vòng đời Tự động:} Nhóm sử dụng biến thể \texttt{\_xact\_} (\texttt{pg\_advisory\_xact\_lock}). Khóa được cấp phát ngay khi câu lệnh được thực thi và tự động giải phóng tức thời khi giao dịch kết thúc bằng \texttt{COMMIT} hoặc \texttt{ROLLBACK}. Cơ chế này loại bỏ triệt để nguy cơ rò rỉ khóa (lock leak) kể cả khi ứng dụng backend gặp sự cố đột ngột.
+    \item \textbf{Lan truyền Giao dịch Toàn vẹn (Transaction Propagation):} Ranh giới giao dịch $t$ được bọc kín từ lúc xin cấp khóa cố vấn, gọi hàm \texttt{checkTrungLich(..., \{ transaction: t \})}, ghi bản ghi \texttt{tcns\_nghi\_phep\_dang\_ky}, ghi bản ghi \texttt{tcns\_lich\_ca\_nhan} và cập nhật lịch sử quy trình \texttt{tcns\_quy\_trinh\_history}. Mọi câu truy vấn đều dùng chung một transaction connection $t$.
+    \item \textbf{Phòng chống Deadlock:} Trong trường hợp nghiệp vụ tương lai cần khóa đồng thời nhiều cán bộ (ví dụ phân công đoàn công tác), hệ thống áp dụng nguyên lý sắp xếp mảng các mã số cán bộ \texttt{shcc} theo thứ tự từ điển trước khi lần lượt lấy khóa, loại bỏ hoàn toàn khả năng hình thành chu trình phụ thuộc vòng (circular wait).
+\end{enumerate}
+
+\subsection{Thiết kế Luồng Tải tệp Đính kèm Hai bước (Two-Step Attachment Architecture)}
+\label{subsec:upload_two_step}
+
+Trong nghiệp vụ đăng ký nghỉ phép có minh chứng (giấy nghỉ ốm, chỉ định bác sĩ, giấy triệu tập), tệp đính kèm cần được liên kết chính xác với ID của phiếu đăng ký. Để đảm bảo tính toàn vẹn dữ liệu, nhóm thiết kế quy trình 2 bước kết hợp dọn dẹp nháp mồ côi:
+
+\begin{enumerate}
+    \item \textbf{Bước 1 (Khởi tạo Phiếu nháp):} Khi người dùng hoàn thành bước 1 của Form Wizard (chọn loại nghỉ, khoảng thời gian, lý do), ứng dụng gửi yêu cầu tạo phiếu nháp với trạng thái quy trình \texttt{NHAP} và đánh dấu cờ \texttt{isNewlyCreated = true} trên client. Backend trả về định danh \texttt{phieuId} vừa được sinh ra.
+    \item \textbf{Bước 2 (Tải tệp Đính kèm vào Phiếu):} Tại bước 2 của Form Wizard, ứng dụng mở bộ chọn tệp (\texttt{file\_picker}) cho phép chọn tài liệu PDF hoặc hình ảnh (tối đa 5MB). Khi chọn xong, ứng dụng lập tức gọi API \texttt{POST /upload/tcns-nghi-phep/file?phieuId=:id} dưới dạng \texttt{multipart/form-data}. Backend lưu tệp vào thư mục vật lý an toàn và cập nhật đường dẫn tệp vào trường \texttt{fileDinhKem} của bản ghi phiếu.
+    \item \textbf{Cơ chế Dọn dẹp Nháp Mồ côi (Orphan Draft Cleanup):} Nếu người dùng nhấn nút Hủy hoặc đóng màn hình trước khi hoàn tất bước 4 (bước nộp đơn chính thức chuyển trạng thái sang \texttt{CHO\_DUYET}), cờ \texttt{isNewlyCreated = true} sẽ kích hoạt hàm dọn dẹp: ứng dụng tự động gửi yêu cầu \texttt{DELETE /api/tcns-nghi-phep/dang-ky/:phieuId} lên Backend. Backend thực thi giao dịch xóa an toàn bản ghi phiếu, bản ghi lịch cá nhân liên kết và tệp đính kèm đã tải lên, ngăn chặn triệt để tình trạng tích tụ các bản ghi nháp rác không hợp lệ trong cơ sở dữ liệu.
+\end{enumerate}
 
 \subsection{Thiết kế Bộ điều phối Token Đa miền (\texttt{MultiDomainAuthInterceptor})}
+\label{subsec:interceptor_design}
+
+Do ứng dụng di động MyHCMUT kết nối đồng thời với 3 máy chủ backend độc lập (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}) có tên miền khác nhau, nhóm thiết kế một Interceptor duy nhất tại \texttt{packages/core/network}:
 \begin{itemize}
-    \item Tự động trích xuất chuỗi JWT \texttt{token\_auth} từ \texttt{flutter\_secure\_storage}.
-    \item Tự động gắn tiêu đề \texttt{Authorization: Bearer <token>} vào mọi request gửi tới các Backend (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}).
-    \item Lắng nghe phản hồi HTTP 401: Tự động kích hoạt luồng Silent Refresh Token ở tầng nền và phát lại request gốc mà không làm gián đoạn trải nghiệm người dùng.
+    \item \textbf{Tự động gắn Bearer Token:} Trích xuất chuỗi JWT \texttt{token\_auth} từ bộ nhớ đệm in-memory (hoặc nạp từ \texttt{MultiDomainTokenManager} trên \texttt{SharedPreferences} khi khởi động) và tự động gắn tiêu đề \texttt{Authorization: Bearer <token>} vào mọi request gửi đi.
+    \item \textbf{Xếp hàng Yêu cầu Đồng thời khi Làm mới Token (Concurrent Request Queueing):} Khi Access Token hết hạn, nếu có 5 API request được gửi đi đồng thời, cả 5 request sẽ đồng loạt nhận mã phản hồi HTTP 401 Unauthorized. Nếu không có cơ chế điều phối, ứng dụng sẽ phát 5 request làm mới token liên tiếp gây nghẽn mạng và xung đột phiên làm việc.
+    
+    Để giải quyết vấn đề này, \texttt{MultiDomainAuthInterceptor} áp dụng mô hình khóa hàng đợi (Completer Lock Queue):
+    \begin{itemize}
+        \item Request đầu tiên nhận mã lỗi 401 sẽ kích hoạt cờ \texttt{isRefreshing = true} và trực tiếp thực thi lời gọi API làm mới phiên \texttt{POST /api/auth/refresh-token}.
+        \item 4 request tiếp theo nhận lỗi 401 được tạm giữ lại và đưa vào hàng đợi chờ (\texttt{Request Queue}).
+        \item Khi luồng làm mới phiên thành công, chuỗi Access Token mới được cập nhật vào bộ nhớ an toàn; Interceptor kích hoạt phát lại (Replay) toàn bộ các request trong hàng đợi với Access Token mới. Trải nghiệm của người dùng hoàn toàn liền mạch mà không hề xuất hiện thông báo lỗi gián đoạn.
+        \item Nếu luồng làm mới phiên thất bại (do Refresh Token cũng đã hết hạn hoặc bị thu hồi), toàn bộ hàng đợi bị hủy bỏ và ứng dụng điều hướng người dùng về màn hình đăng nhập.
+    \end{itemize}
 \end{itemize}
 
-\subsection{Thiết kế Dữ liệu Thông báo Đẩy có Cấu trúc (Structured Metadata Routing)}
-Loại bỏ việc bóc tách chuỗi URL không ổn định, thiết kế cấu trúc payload gồm 4 trường Metadata có cấu trúc:
-\begin{itemize}
-    \item \texttt{source}: Phân hệ phát sinh thông báo (\texttt{'hrm'} / \texttt{'ioffice'}).
-    \item \texttt{entityType}: Loại đối tượng (\texttt{'leave'}, \texttt{'business-trip'}, \texttt{'incoming-doc'}, \texttt{'outgoing-doc'}, \texttt{'task'}).
-    \item \texttt{entityId}: ID bản ghi nghiệp vụ cụ thể.
-    \item \texttt{isApproval}: Cờ đánh dấu màn hình duyệt dành cho cấp quản lý (\texttt{'true'} / \texttt{'false'}).
-\end{itemize}
-Lớp \texttt{NotificationRouteParser} phân tích trực tiếp 4 trường này để kích hoạt \texttt{GoRouter} điều hướng sâu (Deep Linking) chính xác vào màn hình chi tiết.
+\subsection{Thiết kế Cầu nối An toàn One-Time Ticket SSO (SSO Bridge)}
+\label{subsec:sso_bridge_design}
+
+Để cho phép cán bộ truy cập liền mạch các tính năng chuyên sâu của Web HRM (như xem báo cáo nhân sự chi tiết hoặc giải trình nộp trễ hạn) từ ứng dụng di động mà không cần nhập lại mật khẩu, nhóm thiết kế giải pháp Cầu nối An toàn One-Time Ticket SSO:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{img/uml/seq_login_token.png}
+    \caption{\textit{Quy trình Cấp phát Token và Cầu nối One-Time Ticket SSO}}
+    \label{fig:seq_sso_bridge}
+\end{figure}
+
+Giao thức gồm 5 giai đoạn chặt chẽ:
+\begin{enumerate}
+    \item \textbf{Khởi tạo Yêu cầu Vé:} Ứng dụng Mobile gửi request có kèm Bearer Token tới \texttt{POST /api/auth/sso/generate-ticket} chỉ định đích đến (\texttt{targetApp: 'hrm-fe'}).
+    \item \textbf{Sinh Vé Ngẫu nhiên An toàn:} Backend sử dụng bộ sinh số ngẫu nhiên mật mã học (\texttt{crypto.randomBytes(32)}) tạo ra chuỗi 64 ký tự hex có độ hỗn loạn (entropy) 256-bit, lưu vào Redis với khóa \texttt{sso:ticket:<ticket>} và thời gian sống ngắn TTL = 60 giây (\texttt{SET EX 60}).
+    \item \textbf{Mở In-App WebView:} Mobile khởi tạo màn hình WebView nhúng, nạp URL đích có gắn tham số vé: \texttt{https://hrm.hcmut.edu.vn/.../?ticket=<hex64>}.
+    \item \textbf{Tiêu thụ Vé Nguyên tử (Atomic Consumption):} Web Frontend phát hiện tham số vé trong URL, ngay lập tức gửi request \texttt{POST /api/auth/sso/consume-ticket}. Backend thực thi lệnh nguyên tử Redis \texttt{GETDEL}: vừa đọc thông tin phiên vừa xóa sạch vé khỏi Redis trong cùng một thao tác duy nhất. Nếu vé đã bị dùng trước đó hoặc quá hạn 60s, lệnh trả về rỗng và request bị từ chối với mã HTTP 401.
+    \item \textbf{Thiết lập Phiên \& Làm sạch URL:} Khi xác thực vé thành công, máy chủ cấp Session Cookie (\texttt{connect.sid}) với các cờ bảo mật cao cấp nhất: \texttt{HttpOnly} (ngăn JavaScript độc hại đọc trộm cookie), \texttt{SameSite=Lax} (chống tấn công CSRF) và \texttt{Secure} (bắt buộc truyền qua HTTPS). Đồng thời, Web Frontend lập tức thực thi hàm \texttt{window.history.replaceState} để loại bỏ hoàn toàn chuỗi \texttt{ticket} khỏi thanh địa chỉ và lịch sử trình duyệt, ngăn chặn việc lộ lọt vé qua header Referer.
+\end{enumerate}

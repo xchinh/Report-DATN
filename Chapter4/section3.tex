@@ -1,37 +1,99 @@
-\section{Yêu cầu Phi chức năng và Ràng buộc Kỹ thuật}
+\section{Yêu cầu phi chức năng}
 \label{sec:yeucau_phichucnang}
 
-Để đảm bảo trải nghiệm sử dụng tin cậy, an toàn và mượt mà cho đội ngũ cán bộ, giảng viên, ứng dụng MyHCMUT phải đáp ứng các tiêu chuẩn yêu cầu phi chức năng nghiêm ngặt:
+Các yêu cầu phi chức năng của hệ thống MyHCMUT Mobile được xác định dựa trên các đặc thù kỹ thuật của một ứng dụng di động đa nền tảng tích hợp đồng thời với nhiều hệ thống backend hiện hữu. Những chỉ tiêu định lượng chưa được đo kiểm thực nghiệm trong phiên bản phát triển hiện tại được xác định là \textbf{mục tiêu thiết kế (Design Goals)}, không được xem là kết quả đã đạt được của hệ thống khi chưa có dữ liệu đo lường đối chứng.
 
-\begin{itemize}
-    \item \textbf{Hiệu năng và Độ mượt mà (Rendering Performance):}
-    \begin{itemize}
-        \item Tốc độ khung hình (Frame Rate) duy trì ổn định trong khoảng **58--60 FPS** khi cuộn các danh sách dữ liệu lớn (danh sách văn bản, danh sách công việc).
-        \item Thời gian khởi động ứng dụng ở trạng thái nguội (Cold Start) $< 1.5$ giây; khởi động nóng (Warm Start) $< 0.5$ giây.
-        \item Thời gian phản hồi trung bình của các API Endpoints cốt lõi $< 150$ms.
-    \end{itemize}
-    
-    \item \textbf{Độ trễ Thông báo Đẩy (Notification Latency):}
-    \begin{itemize}
-        \item Tổng độ trễ truyền phát thông điệp đầu-cuối từ khi sự kiện nghiệp vụ phát sinh trên Backend, luân chuyển qua Kafka broker, chuyển tiếp tới Google FCM Server và hiển thị lên thiết bị di động của người dùng đạt mức $\approx 1.0$ giây (luôn duy trì dưới $2.0$ giây).
-    \end{itemize}
+\subsection{Khả năng sử dụng (Usability)}
+\label{subsec:nfr_usability}
 
-    \item \textbf{Bảo mật và Quyền riêng tư (Security \& Privacy):}
-    \begin{itemize}
-        \item Toàn bộ các kết nối giao tiếp mạng giữa ứng dụng di động và máy chủ đều bắt buộc mã hóa qua giao thức an toàn HTTPS/TLS.
-        \item Mã hóa cặp khóa xác thực Access Token và Refresh Token trong không gian lưu trữ an toàn của hệ điều hành.
-        \item Kiểm soát phân quyền đa tầng (RBAC) nghiêm ngặt tại cả tầng giao diện (Route Guards trên Mobile) và tầng dịch vụ (Middleware trên Backend).
-    \end{itemize}
-
-    \item \textbf{Độ tin cậy và Khả năng Chịu lỗi (Reliability \& Fault-Tolerance):}
-    \begin{itemize}
-        \item Khi xảy ra sự cố mất kết nối mạng hoặc lỗi máy chủ (Timeout), ứng dụng bắt lỗi tập trung và thông báo nhẹ nhàng qua giao diện thông báo (Snackbar / Toast), cung cấp nút Thử lại (Retry), tuyệt đối không làm ứng dụng bị dừng đột ngột (Crash).
-        \item Tự động làm mới phiên làm việc ngầm (Silent Refresh) khi Access Token hết hạn, đảm bảo trải nghiệm liền mạch cho người dùng.
-    \end{itemize}
-
-    \item \textbf{Tối ưu hóa Tài nguyên Phần cứng (Resource Consumption):}
-    \begin{itemize}
-        \item Mức tiêu thụ bộ nhớ RAM ở trạng thái tĩnh duy trì dưới 100 MB; khi tải dữ liệu tối đa và xem tài liệu PDF lớn không vượt quá 150 MB.
-        \item Kích thước tệp cài đặt ứng dụng (APK Release) tối ưu dưới 30 MB nhờ cơ chế nén tài nguyên và phân tách kiến trúc ABI.
-    \end{itemize}
+\begin{itemize}[leftmargin=1.5cm]
+    \item Giao diện người dùng phải được thiết kế tối ưu cho kích thước và thao tác chạm trên màn hình thiết bị di động (Touch-friendly), bảo đảm toàn bộ các nghiệp vụ thường xuyên của cán bộ có thể được thực hiện trọn vẹn mà không bắt buộc người dùng phải truy cập vào phiên bản Web Desktop.
+    \item Đối với các biểu mẫu nhập liệu có nhiều trường thông tin phức tạp (như đăng ký nghỉ phép hoặc hồ sơ lý lịch), ứng dụng phải tổ chức phân chia thành các nhóm thẻ hoặc quy trình hướng dẫn từng bước (Step-by-step Wizard) nhằm hạn chế quá tải nhận thức của người dùng trên một màn hình đơn lẻ.
+    \item Trạng thái tải dữ liệu (Loading shimmer/indicator), các phản hồi thông báo lỗi và kết quả xử lý thao tác phải được phản hồi tức thời, trực quan và rõ ràng qua các thành phần giao diện chuyên biệt (Dialog, BottomSheet, Snackbar).
 \end{itemize}
+
+\subsection{Khả năng tương thích (Compatibility)}
+\label{subsec:nfr_compatibility}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Ứng dụng được xây dựng trên nền tảng Flutter nhằm mục tiêu hỗ trợ đồng thời hai hệ điều hành di động phổ biến là Android (từ Android 8.0 Oreo / API level 26 trở lên) và iOS (từ iOS 13.0 trở lên) từ một cơ sở mã nguồn (codebase) duy nhất.
+    \item Các tính năng phụ thuộc trực tiếp vào phần cứng và API cấp hệ điều hành (như dịch vụ nhận thông báo đẩy nền, In-App WebView, bộ đếm số huy hiệu Badge trên biểu tượng ứng dụng, hoặc quyền truy cập tệp/ảnh) phải được kiểm thử độc lập và toàn diện trên các thiết bị vật lý đại diện cho cả hai nền tảng trước khi đưa ra kết luận về mức độ tương thích.
+\end{itemize}
+
+\subsection{An toàn xác thực và phân quyền (Security \& Access Control)}
+\label{subsec:nfr_security}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Toàn bộ các API nghiệp vụ được bảo vệ phía backend bắt buộc phải yêu cầu thông tin xác thực hợp lệ (JWT Bearer Token) và kiểm tra danh sách quyền (permissions) độc lập tại thời điểm tiếp nhận yêu cầu.
+    \item Thông tin xác thực phiên dài hạn của Mobile (Access Token / Refresh Token) tuyệt đối không được sử dụng trực tiếp dưới dạng tham số URL công khai để thiết lập phiên WebView.
+    \item Vé chuyển tiếp phiên Mobile -- Web (SSO Ticket) bắt buộc phải có thời gian sống ngắn (TTL không quá 60 giây) và chỉ được backend chấp nhận một lần tiêu thụ thành công duy nhất.
+    \item Cầu nối liên lạc hai chiều JavaScript Bridge giữa In-App WebView và ứng dụng Mobile chỉ được phép tiếp nhận và thực thi thông điệp từ các nguồn tên miền (origin) nằm trong danh sách tin cậy được cấu hình trước.
+    \item Mọi luồng dữ liệu trao đổi giữa ứng dụng di động và các hệ thống máy chủ trong môi trường vận hành thực tế bắt buộc phải được mã hóa qua kênh truyền bảo mật HTTPS/TLS.
+    \item \textit{Rà soát hạn chế an toàn:} Việc lưu trữ tạm thời token tại một số module bằng giải pháp lưu trữ thông thường (như SharedPreferences) được xem là một hạn chế về mặt bảo mật; hệ thống yêu cầu chuyển đổi đồng bộ sang các cơ chế mã hóa cấp hệ điều hành chuyên dụng (như Android Keystore và iOS Keychain thông qua thư viện bảo mật chuyên trách) trong giai đoạn hoàn thiện tiếp theo.
+\end{itemize}
+
+\subsection{Tính đúng đắn và nhất quán nghiệp vụ (Data Integrity \& Consistency)}
+\label{subsec:nfr_integrity}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Toàn bộ các kiểm tra nghiệp vụ cốt lõi đối với quy trình nghỉ phép, công tác, điểm danh cuộc họp hoặc thẩm định phê duyệt tuyệt đối không được phụ thuộc hoàn toàn vào kết quả kiểm tra sơ bộ ở phía client.
+    \item Hệ thống backend phải luôn luôn kiểm tra lại điều kiện nghiệp vụ và trạng thái thực tế hiện tại của bản ghi dữ liệu trước khi thực hiện bất kỳ thao tác ghi đè hoặc thay đổi trạng thái.
+    \item Trong trường hợp request thất bại hoặc có khả năng xảy ra thay đổi trạng thái đồng thời (concurrency updates), ứng dụng Mobile phải chủ động gửi request truy vấn lại dữ liệu mới nhất từ backend thay vì duy trì trạng thái suy đoán lạc quan tại client.
+\end{itemize}
+
+\subsection{Khả năng hoạt động khi mạng không ổn định (Network Fault-Tolerance)}
+\label{subsec:nfr_resilience}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Ứng dụng phải có cơ chế nhận biết tức thời và xử lý nhẹ nhàng các sự cố mạng phổ biến như: mất kết nối Internet, kết nối quá thời gian chờ (Timeout), hoặc máy chủ backend tạm thời không khả dụng. Khi phát sinh lỗi, ứng dụng hiển thị thông báo qua thanh thông báo (Snackbar) và cung cấp nút \textit{``Thử lại''} (Retry), tuyệt đối không để xảy ra hiện tượng dừng đột ngột (Crash).
+    \item Đối với các thao tác làm thay đổi trạng thái dữ liệu (gửi đơn, phê duyệt, điểm danh), ứng dụng không được phép hiển thị trạng thái hoàn tất thành công nếu chưa nhận được mã phản hồi xác nhận hợp lệ từ máy chủ.
+    \item Các màn hình có cơ chế bộ nhớ đệm cục bộ (Cache) có thể hiển thị dữ liệu đã lưu gần nhất để tối ưu tốc độ và hỗ trợ người dùng xem thông tin ngoại tuyến, tuy nhiên giao diện phải phân biệt rõ ràng giữa dữ liệu lưu tạm và dữ liệu mới nhất từ máy chủ.
+\end{itemize}
+
+\subsection{Khả năng bảo trì và mở rộng (Maintainability \& Extensibility)}
+\label{subsec:nfr_maintainability}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Các phân hệ nghiệp vụ trên ứng dụng di động phải được tổ chức theo kiến trúc mô-đun hóa, cho phép tái sử dụng tối đa các thành phần nền tảng cốt lõi như mạng truyền thông (network client, interceptors), cơ chế xác thực, bộ định tuyến điều hướng (routing) và hệ thống thành phần giao diện chung (Design System) mà không đòi hỏi sao chép mã nguồn riêng lẻ cho từng phân hệ.
+    \item Tuy nhiên, việc hệ thống được phân chia theo cấu trúc mô-đun chỉ được xem là một giải pháp kỹ thuật hỗ trợ quá trình bảo trì và phát triển; báo cáo không tự động xem đây là bằng chứng khẳng định hệ thống đã đạt mức độ ``dễ bảo trì tuyệt đối'' hay ``có khả năng mở rộng không giới hạn'' khi chưa qua kiểm chứng vận hành thực tế.
+\end{itemize}
+
+\subsection{Yêu cầu đối với hệ thống thông báo (Notification Requirements)}
+\label{subsec:nfr_notification}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item Việc thực thi các quy trình nghiệp vụ tác nghiệp chính trên hệ thống tuyệt đối không được phụ thuộc mang tính sống còn vào việc thiết bị có nhận được thông báo đẩy (Push Notification) hay không.
+    \item Người dùng luôn có quyền chủ động mở ứng dụng và truy vấn lại danh sách sự kiện, trạng thái đơn từ backend ngay cả khi thông báo đẩy bị trì hoãn hoặc thất lạc trên đường truyền mạng.
+    \item Hệ thống backend phải có khả năng xử lý linh hoạt khi phát hiện FCM Device Token không hợp lệ hoặc khi token bị thay đổi theo vòng đời của thiết bị.
+    \item Kiến trúc thông báo hiện tại không cung cấp bảo đảm phân phối chính xác một lần (Exactly-Once Delivery); thông báo đẩy phải được đối xử như một kênh truyền hỗ trợ thông tin nhanh, và mọi quyết định nghiệp vụ cuối cùng đều căn cứ trên dữ liệu truy vấn trực tiếp từ cơ sở dữ liệu.
+\end{itemize}
+
+\subsection{Mục tiêu hiệu năng (Performance Goals)}
+\label{subsec:nfr_performance}
+
+Đối với các chỉ tiêu định lượng liên quan đến hiệu năng hệ thống như: thời gian khởi động ứng dụng (Cold Start), thời gian phản hồi trung bình của API, độ trễ truyền phát thông báo đẩy, hoặc tốc độ khung hình (FPS), báo cáo chỉ đưa ra các giá trị cụ thể khi thỏa mãn đầy đủ 4 điều kiện khoa học:
+\begin{enumerate}
+    \item Chỉ tiêu đó đã được xác định trước như một mục tiêu yêu cầu trong tài liệu thiết kế;
+    \item Phương pháp đo lường được mô tả minh bạch và khoa học;
+    \item Môi trường kiểm thử (cấu hình phần cứng thiết bị di động, môi trường mạng, cấu hình máy chủ) được xác định rõ ràng;
+    \item Có số liệu đo lường thực nghiệm cụ thể được đối chiếu và phân tích tại Chương 7 (hoặc chương đánh giá thực nghiệm).
+\end{enumerate}
+
+Khi chưa hội đủ 4 điều kiện trên, các yêu cầu hiệu năng của hệ thống được xác định dưới dạng các mục tiêu định tính như sau:
+\begin{itemize}[leftmargin=1.5cm]
+    \item Thao tác cuộn danh sách và tương tác giao diện không được gây giật lag hoặc gián đoạn đáng kể cho người dùng trong điều kiện sử dụng thông thường;
+    \item Các API nghiệp vụ phải phản hồi kết quả trong khoảng thời gian phù hợp với tương tác trực tiếp của người dùng trên thiết bị di động;
+    \item Quá trình tiếp nhận và phân tích thông báo đẩy dưới nền không được làm ảnh hưởng đến các giao dịch nghiệp vụ chính của ứng dụng;
+    \item Các danh sách dữ liệu lớn (danh sách văn bản, danh sách đơn nghỉ phép, danh mục lịch) phải hỗ trợ cơ chế phân trang (Pagination) hoặc kỹ thuật tải dữ liệu lười (Lazy Loading) thích hợp để tối ưu hóa việc sử dụng bộ nhớ RAM và băng thông mạng.
+\end{itemize}
+
+Báo cáo kiên quyết không tự ý gán ghép các con số định lượng lý tưởng như ``API $<$ 150 ms'', ``FCM Latency $<$ 2.0 giây'', ``Khởi động nguội $<$ 1.5 giây'' hoặc ``Duy trì 60 FPS'' thành kết quả đã đạt được của hệ thống nếu chưa có báo cáo trích xuất log thực nghiệm tương ứng làm bằng chứng đối chứng.
+
+\section{Kết luận chương}
+\label{sec:ketluan_chuong4}
+
+Chương 4 đã xác định toàn diện các nhóm tác nhân sử dụng, ranh giới và nguyên tắc phân quyền RBAC, cùng hệ thống các yêu cầu chức năng và phi chức năng của ứng dụng MyHCMUT Mobile. Hệ thống phục vụ đa dạng các đối tượng người dùng từ Cán bộ/Giảng viên, Lãnh đạo đơn vị, Chuyên viên nghiệp vụ đến Ban Giám hiệu, đồng thời tích hợp chặt chẽ với các miền nghiệp vụ thuộc phân hệ HRM, iOffice và dịch vụ thông báo đẩy thời gian thực.
+
+Đối với các phân hệ thuộc phạm vi đóng góp và hiện thực chính của sinh viên Vũ Xuân Chính, chương đã tiến hành đặc tả chi tiết các yêu cầu chức năng, bảng ca sử dụng (Use Cases) và các quy tắc nghiệp vụ (Business Rules) chi phối: phân hệ Xác thực và chuyển tiếp phiên Mobile -- Web bằng vé dùng một lần, phân hệ Hồ sơ lý lịch cán bộ (11 danh mục), phân hệ Quản lý nghỉ phép (Wizard 4 bước và tiền kiểm tra ràng buộc), phân hệ Lịch công tác và Điểm danh cuộc họp, cùng Trung tâm Thông báo đẩy có cấu trúc phục vụ điều hướng sâu (Deep Linking).
+
+Một nguyên tắc mang tính nền tảng chi phối xuyên suốt toàn bộ các yêu cầu của hệ thống là: \textbf{ứng dụng Mobile đóng vai trò lớp tương tác giao diện và cổng tích hợp tập trung, trong khi toàn bộ dữ liệu có thẩm quyền pháp lý và các quyết định nghiệp vụ cốt lõi tiếp tục được kiểm soát chặt chẽ tại các hệ thống backend hiện hữu của Nhà trường}. Nguyên tắc này là kim chỉ nam cho các quyết định thiết kế kiến trúc phần mềm, xây dựng cơ sở dữ liệu mục tiêu và thiết kế các biểu đồ tương tác chi tiết được trình bày trong Chương 5 và Chương 6 tiếp theo.

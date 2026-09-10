@@ -1,58 +1,79 @@
 \section{Kiểm thử Hệ thống và Đánh giá Kết quả Thực nghiệm}
 \label{sec:kiemthu_danhgia}
 
-\subsection{Chiến lược Kiểm thử Mô hình Kim tự tháp (Testing Pyramid)}
-Áp dụng mô hình kiểm thử 4 tầng: Unit Tests (45\%), Widget Tests (20\%), Integration Tests (25\%), E2E Tests (10\%).
+\subsection{Chiến lược Kiểm thử Toàn diện và Mô hình Kim tự tháp (Testing Pyramid)}
+Để đảm bảo ứng dụng vận hành ổn định trong môi trường thực tế của Nhà trường, nhóm xây dựng chiến lược kiểm thử đa tầng theo mô hình Kim tự tháp (Testing Pyramid) bao gồm: Kiểm thử Đơn vị (Unit Tests), Kiểm thử Giao diện (Widget Tests), Kiểm thử Tích hợp (Integration Tests) và Kiểm thử Đầu-cuối (End-to-End Tests).
 
-\subsection{Kiểm thử Đơn vị và Độ phủ Mã nguồn (Unit Testing \& Coverage)}
-Nhóm đã xây dựng và thực thi 112 ca kiểm thử đơn vị tự động:
-\begin{itemize}
-    \item \texttt{calculate\_day\_test.dart}: Tính chính xác số ngày làm việc (trừ thứ 7, CN, ngày lễ).
-    \item \texttt{check\_overlap\_test.dart}: Phát hiện trùng lịch nghỉ phép hoặc đi công tác.
-    \item \texttt{leave\_balance\_and\_late\_test.dart}: Kiểm tra quỹ phép năm và cờ nộp trễ hạn.
-    \item \texttt{schedule\_attendance\_model\_test.dart}: Kiểm tra ràng buộc khung giờ điểm danh họp.
-    \item \texttt{notification\_route\_parser\_test.dart}: Kiểm tra bộ giải mã Deep Link từ 4 trường metadata.
-\end{itemize}
+\subsection{Kết quả Thực thi Bộ Kiểm thử Tự động (Automated Test Suite)}
+\label{subsec:automated_test_results}
+
+Toàn bộ hệ thống được bảo vệ bởi bộ kiểm thử tự động gồm \textbf{392 ca kiểm thử} độc lập, bao gồm 335 ca kiểm thử phía Mobile Client (thực thi qua \texttt{flutter test}) và 57 ca kiểm thử phía Backend (thực thi qua \texttt{vitest}). 100\% các ca kiểm thử đều vượt qua thành công trong môi trường tích hợp liên tục (CI).
+
+Bảng \ref{tab:test_suite_breakdown} trình bày chi tiết phân bổ các ca kiểm thử theo từng phân hệ và module chức năng:
 
 \begin{table}[H]
 \centering
 \small
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\ttfamily\small}p{4.6cm}|L{2.6cm}|L{2.6cm}|Y|}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\ttfamily\small}p{5.0cm}|>{\RaggedRight\arraybackslash\small}p{3.8cm}|c|Y|}
 \hline
-\textrm{\textbf{Module / Package}} & \textbf{Số lượng Tests} & \textbf{Độ phủ (Coverage)} & \textbf{Kết quả Đánh giá} \\
+\textrm{\textbf{Phân hệ / Gói Mã nguồn}} & \textbf{Công cụ Thử nghiệm} & \textbf{Số lượng Tests} & \textbf{Tỷ lệ Vượt qua (Pass Rate)} \\
 \hline
-packages/core/network & 18 ca kiểm thử & 84.5\% & Đạt (Pass 100\%) \\
+packages/core (network, auth, system) & Flutter Test / Mockito & 56 ca kiểm thử & 100\% (56/56 Pass) \\
 \hline
-packages/core/auth & 14 ca kiểm thử & 82.0\% & Đạt (Pass 100\%) \\
+modules/hrm (leave, profile, btrip) & Flutter Test / Riverpod Test & 232 ca kiểm thử & 100\% (232/232 Pass) \\
 \hline
-modules/hrm & 36 ca kiểm thử & 78.6\% & Đạt (Pass 100\%) \\
+modules/ioffice \& notification & Flutter Test / Fake Async & 47 ca kiểm thử & 100\% (47/47 Pass) \\
 \hline
-modules/ioffice & 28 ca kiểm thử & 76.2\% & Đạt (Pass 100\%) \\
+\textbf{Tổng Phân hệ Mobile Client} & \textbf{Flutter SDK Test Runner} & \textbf{335 ca kiểm thử} & \textbf{100\% (335/335 Pass)} \\
 \hline
-modules/notification & 16 ca kiểm thử & 88.0\% & Đạt (Pass 100\%) \\
+hrm-be (sso\_bridge, fw\_auth) & Vitest / Node.js & 46 ca kiểm thử & 100\% (46/46 Pass) \\
 \hline
-\textbf{Toàn bộ Dự án Mobile} & \textbf{112 ca kiểm thử} & \textbf{81.4\%} & \textbf{Đạt chuẩn Xuất sắc} \\
+hrm-be (concurrency\_race\_condition) & Vitest / Sequelize Mock/Tx & 11 ca kiểm thử & 100\% (11/11 Pass) \\
+\hline
+\textbf{Tổng Phân hệ Backend Integration} & \textbf{Vitest Test Framework} & \textbf{57 ca kiểm thử} & \textbf{100\% (57/57 Pass)} \\
+\hline
+\textbf{TOÀN BỘ HỆ THỐNG ĐỒ ÁN} & \textbf{CI/CD Automated Suite} & \textbf{392 ca kiểm thử} & \textbf{100\% (392/392 Pass)} \\
 \hline
 \end{tabularx}
-\caption{\textit{Bảng tổng hợp Thống kê Kết quả Kiểm thử Đơn vị và Độ phủ Mã nguồn}}
-\label{tab:unit_test_summary}
+\caption{\textit{Bảng Tổng hợp Kết quả Thực thi Bộ Kiểm thử Tự động Toàn hệ thống}}
+\label{tab:test_suite_breakdown}
 \end{table}
 
-\subsection{Kiểm thử Giao diện (Widget Tests) \& Kiểm thử Tích hợp (Integration Tests)}
+\subsection{Minh bạch Học thuật: Tỷ lệ Vượt qua (Pass Rate) và Độ bao phủ Mã nguồn (Code Coverage)}
+\label{subsec:transparency_coverage}
+
+Một nguyên tắc quan trọng trong nghiên cứu khoa học và kỹ nghệ phần mềm là sự phân định rạch ròi giữa \textbf{Tỷ lệ Vượt qua Kiểm thử (Test Pass Rate)} và \textbf{Độ bao phủ Mã nguồn (Code Coverage)}:
 \begin{itemize}
-    \item \textbf{Widget Tests:} Kiểm thử hành vi form wizard 4 bước nghỉ phép, thẻ so sánh sai khác \texttt{ReviewDiffCard} và nút bấm điểm danh theo giờ.
-    \item \textbf{Silent Token Refresh:} Giả lập mã lỗi 401 $\rightarrow$ Interceptor tự động làm mới Token và gửi lại request gốc thành công.
-    \item \textbf{Xử lý Mất kết nối Mạng:} Bắt ngoại lệ Timeout mạng qua Snackbar và cung cấp nút Thử lại (Retry), tuyệt đối không làm crash ứng dụng.
+    \item \textbf{Tỷ lệ Vượt qua Kiểm thử (Pass Rate = 100\%):} Chỉ số 392/392 ca kiểm thử đạt kết quả Pass phản ánh rằng hệ thống thỏa mãn 100\% các kịch bản kiểm thử đã được nhóm nghiên cứu thiết kế và dự liệu trước. Tuy nhiên, theo nguyên lý Dijkstra, \textit{``Kiểm thử phần mềm chỉ có thể chứng minh sự hiện diện của lỗi chứ không thể chứng minh sự vắng mặt của lỗi''}. Do đó, con số 100\% Pass Rate không đồng nghĩa với việc hệ thống hoàn toàn không có lỗi (bug-free) trong mọi tình huống sử dụng thực tế.
+    
+    \item \textbf{Độ bao phủ Mã nguồn (Code Coverage):}
+    \begin{itemize}
+        \item Phía Mobile Client: Độ bao phủ dòng lệnh của các module nghiệp vụ lõi (HRM, Auth, Network, Notification) đạt xấp xỉ \textbf{70\%}. Nhóm chủ động tập trung viết kiểm thử cho toàn bộ logic nghiệp vụ, bộ chuyển đổi dữ liệu (Mappers), bộ giải mã đường dẫn (Parsers) và các State Notifiers, trong khi giảm tải kiểm thử tự động trên các widget giao diện tĩnh thuần túy.
+        \item Phía Backend (\texttt{hrm-be}): Độ bao phủ mã nguồn toàn repository đạt xấp xỉ \textbf{28.75\%}. Con số này phản ánh trung thực bối cảnh kỹ thuật thực tế: mã nguồn backend của Nhà trường là một hệ thống nguyên khối lớn (Monolith) tích lũy qua nhiều năm, chứa hàng trăm nghìn dòng mã của các phân hệ quản lý sinh viên, khảo thí, đào tạo đại học, quản lý tài chính cũ không thuộc phạm vi đề tài. Nhóm nghiên cứu tập trung bao phủ kiểm thử chuyên sâu cho 100\% các module trực tiếp phục vụ đề tài di động (module SSO Auth với 46 tests và module Concurrency Hardening với 11 tests).
+    \end{itemize}
 \end{itemize}
 
-\subsection{Kiểm thử Luồng Nghiệp vụ Đầu-Cuối (End-to-End System Tests)}
-Thực hiện thành công 4 kịch bản E2E liên thông toàn diện:
+\subsection{Kiểm thử Thực nghiệm Kiểm soát Tương tranh (Concurrency Hardening Verification)}
+\label{subsec:concurrency_test_cases}
+
+Để chứng minh tính hiệu quả của giải pháp PostgreSQL Advisory Lock (\texttt{pg\_advisory\_xact\_lock}) kết hợp lan truyền transaction, nhóm đã thiết kế bộ kiểm thử tương tranh chuyên sâu gồm 11 bài test mô phỏng 7 tình huống xung đột điển hình:
 \begin{enumerate}
-    \item Đăng ký \& Phê duyệt Nghỉ phép 2 cấp (Cán bộ $\rightarrow$ Lãnh đạo Đơn vị $\rightarrow$ Phòng TCCB).
-    \item Đăng ký \& Phê duyệt Chuyến Đi công tác.
-    \item Quản lý Nhiệm vụ, Cây Đầu việc \& Nộp Báo cáo Tiến độ Đợt.
-    \item Điểm danh Cuộc họp Thời gian thực qua WebSocket \texttt{Socket.IO}.
+    \item \textbf{Tình huống 1 (Concurrent Overlapping Requests -- Same SHCC):} Hai yêu cầu đăng ký nghỉ phép có khoảng ngày trùng lặp của cùng một cán bộ được gửi tới máy chủ gần như đồng thời ($t_1 \approx t_2$). Khóa \texttt{pg\_advisory\_xact\_lock} đã tuần tự hóa quá trình xử lý: yêu cầu $R_1$ hoàn thành ghi bản ghi vào cơ sở dữ liệu, yêu cầu $R_2$ sau khi chờ giải phóng khóa đã gọi \texttt{checkTrungLich} trong cùng transaction, phát hiện lịch trùng và trả về mã lỗi \texttt{TRUNG\_LICH} an toàn. Hiện tượng đặt trùng lịch (Double-Booking Anomaly) được ngăn chặn hoàn toàn.
+    \item \textbf{Tình huống 2 (Concurrent Requests -- Different SHCC):} Hai yêu cầu của hai cán bộ khác nhau gửi tới đồng thời. Nhờ định danh khóa được băm theo \texttt{shcc}, cả hai giao dịch được cấp khóa độc lập và thực thi song song, không gây bất kỳ hiện tượng nghẽn tài nguyên chéo nào.
+    \item \textbf{Tình huống 3 (Atomic State Guard trên \texttt{PUT /dang-ky}):} Mô phỏng trường hợp cán bộ cố tình sửa đổi đơn khi đơn đã được nộp hoặc đang trong quá trình duyệt. Câu lệnh cập nhật với điều kiện \texttt{WHERE id = :id AND maQuyTrinh = 'NHAP'} từ chối cập nhật khi trạng thái không còn là \texttt{NHAP}.
+    \item \textbf{Tình huống 4 (Transaction Propagation \& Rollback Integrity):} Giả lập sự cố xảy ra ở bước ghi lịch cá nhân \texttt{tcns\_lich\_ca\_nhan}. Nhờ toàn bộ chuỗi ghi được bọc kín trong cùng một transaction $t$, toàn bộ bản ghi phiếu đăng ký \texttt{tcns\_nghi\_phep\_dang\_ky} trước đó được rollback sạch sẽ, không để lại bất kỳ bản ghi rác nào.
+    \item \textbf{Tình huống 5 (Atomic Cascade Delete):} Kiểm thử lệnh \texttt{DELETE /dang-ky/:id} với giao dịch bọc kín 5 bảng dữ liệu liên quan, xác nhận xóa sạch phiếu, lịch cá nhân và lịch sử quy trình một cách nguyên tử.
+    \item \textbf{Tình huống 6 \& 7 (Partial and Subset Interval Overlap):} Kiểm tra thuật toán phát hiện trùng lịch với các trường hợp khoảng ngày xin nghỉ giao nhau một phần hoặc nằm hoàn toàn bên trong một khoảng lịch công tác/nghỉ phép đã có sẵn.
+\end{enumerate}
+
+\subsection{Kiểm thử Luồng Nghiệp vụ Đầu-Cuối (End-to-End System Tests trên Staging)}
+Nhóm nghiên cứu đã thực hiện kiểm thử liên thông toàn diện trên môi trường Staging kết nối hai thiết bị thử nghiệm thực tế: \textbf{Google Pixel 6} (chạy Android 14) và \textbf{iPhone 13} (chạy iOS 17), hoàn thành 4 kịch bản E2E lớn:
+\begin{enumerate}
+    \item \textbf{Kịch bản 1 -- Đăng ký \& Phê duyệt Nghỉ phép 2 cấp liên thông:} Cán bộ nộp đơn trên Mobile $\rightarrow$ Nhận cảnh báo nộp trễ và tải giấy khám bệnh $\rightarrow$ Backend phát sự kiện Kafka sau commit $\rightarrow$ Lãnh đạo Đơn vị nhận push notification trên điện thoại, bấm vào thông báo mở thẳng màn hình duyệt $\rightarrow$ Duyệt đơn $\rightarrow$ Chuyên viên TCCB nhận thông báo tiếp theo và phê duyệt cấp trường $\rightarrow$ Cán bộ nhận thông báo kết quả cuối cùng.
+    \item \textbf{Kịch bản 2 -- Đăng ký \& Phê duyệt Đi công tác:} Khởi tạo chuyến đi, đính kèm dự toán kinh phí và kế hoạch $\rightarrow$ Lãnh đạo Đơn vị thẩm định danh sách cán bộ và ký duyệt trên thiết bị di động.
+    \item \textbf{Kịch bản 3 -- Phân phối Văn bản đến, Chỉ đạo Xử lý \& Cập nhật Tiến độ Nhiệm vụ:} Tiếp nhận văn bản khẩn $\rightarrow$ Lãnh đạo nhập bút phê chỉ đạo và giao việc $\rightarrow$ Cán bộ phụ trách nhận thông báo, mở cây đầu việc \texttt{outlined-tree} nộp báo cáo đợt kèm tài liệu minh chứng.
+    \item \textbf{Kịch bản 4 -- Điểm danh Cuộc họp Thời gian thực qua WebSocket:} Đúng khung giờ mở điểm danh, cán bộ nhấn nút Điểm danh $\rightarrow$ Phát sự kiện qua \texttt{Socket.IO} $\rightarrow$ Màn hình Ban tổ chức cập nhật danh sách có mặt tức thời với độ trễ dưới 50ms.
 \end{enumerate}
 
 \subsection{Đo lường Định lượng Hiệu năng Thực nghiệm (Performance Benchmarks)}
@@ -92,7 +113,7 @@ Thực hiện thành công 4 kịch bản E2E liên thông toàn diện:
 \hline
 \textbf{Giai đoạn trong Pipeline} & \textbf{Cơ chế Kỹ thuật} & \textbf{Độ trễ (ms)} & \textbf{Tỷ trọng} \\
 \hline
-1. Backend Trigger \& Publish Event & Gửi tin vào Kafka topic \texttt{SEND\_NOTIFY\_SERVICE} & \textbf{25 ms} & 2.5\% \\
+1. Backend Trigger \& Post-Commit Publish & Gửi tin vào Kafka topic \texttt{SEND\_NOTIFY\_SERVICE} & \textbf{25 ms} & 2.5\% \\
 \hline
 2. Kafka Broker Queue & Hàng đợi cụm Kafka KRaft & \textbf{15 ms} & 1.5\% \\
 \hline

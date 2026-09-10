@@ -30,17 +30,24 @@ Phân hệ Trung tâm Thông báo Đẩy (tương ứng với gói mã nguồn \
 \hline
 \textbf{Tác nhân} & Cán bộ, giảng viên, lãnh đạo nhận thông báo \\
 \hline
-\textbf{Tiền điều kiện} & Ứng dụng MyHCMUT đã được cấp quyền gửi thông báo trên thiết bị di động. \\
+\textbf{Tiền điều kiện} & Ứng dụng MyHCMUT đã được cấp quyền gửi thông báo trên thiết bị di động, đã đăng ký FCM Token thành công lên máy chủ. \\
 \hline
 \textbf{Hậu điều kiện} & Người dùng nhận được thông báo nổi và được điều hướng chính xác vào màn hình chi tiết nghiệp vụ khi nhấn vào thông báo. \\
 \hline
 \textbf{Luồng sự kiện chính} & 
 1. Một sự kiện nghiệp vụ phát sinh trên Backend (ví dụ: đơn nghỉ phép được duyệt, có văn bản khẩn đến, hoặc được giao nhiệm vụ mới). \newline
-2. Backend phát thông điệp vào Kafka Topic \texttt{SEND\_NOTIFY\_SERVICE}. \newline
-3. Tiến trình ngầm tiêu thụ thông điệp, truy vấn FCM Token và gọi Google FCM Server để đẩy thông báo tới thiết bị. \newline
-4. Thiết bị người dùng nhận thông báo nổi (Heads-up Notification) kèm âm thanh và rung, đồng thời icon ứng dụng cập nhật số huy hiệu Badge. \newline
-5. Người dùng nhấn vào thông báo $\rightarrow$ Lớp \texttt{NotificationRouteParser} trích xuất 4 trường metadata (\texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval}). \newline
-6. \texttt{GoRouter} tự động chuyển hướng người dùng thẳng vào màn hình chi tiết tương ứng mà không làm mất ngăn xếp điều hướng gốc. \\
+2. Backend bọc thao tác nghiệp vụ trong Transaction cơ sở dữ liệu. Sau khi giao dịch commit thành công (Post-commit Hook), sự kiện mới được đẩy vào Kafka Topic \texttt{SEND\_NOTIFY\_SERVICE} nhằm triệt tiêu nguy cơ phát tán ``thông báo ma'' khi transaction bị rollback. \newline
+3. Tiến trình Consumer tiêu thụ thông điệp từ Kafka, ghi nhận lịch sử vào bảng \texttt{fw\_notification}, truy vấn danh sách FCM Token của người nhận từ bảng \texttt{fw\_user\_device\_token}. \newline
+4. Consumer đóng gói payload HTTP v1 gửi tới Google FCM Server. \newline
+5. Google FCM chuyển tiếp thông báo tới thiết bị di động. Ứng dụng tiếp nhận và hiển thị thông báo theo 3 trạng thái vòng đời:
+   \begin{itemize}[leftmargin=*]
+       \item \textit{Foreground (Đang mở):} Lắng nghe qua \texttt{FirebaseMessaging.onMessage}, hiển thị Banner nội bộ hoặc Flushbar mà không gây gián đoạn công việc hiện tại.
+       \item \textit{Background (Chạy ngầm):} Hệ điều hành hiển thị Notification trên thanh trạng thái; khi người dùng chạm vào, sự kiện được bắt qua \texttt{FirebaseMessaging.onMessageOpenedApp}.
+       \item \textit{Terminated (Đã đóng hẳn):} Người dùng bấm vào thông báo để đánh thức ứng dụng; ứng dụng trích xuất payload khởi tạo từ \texttt{FirebaseMessaging.getInitialMessage}.
+   \end{itemize}
+6. Lớp \texttt{NotificationRouteParser} phân tích 4 trường metadata cốt lõi (\texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval}) và kích hoạt \texttt{GoRouter} điều hướng thẳng vào màn hình chi tiết, đồng thời cập nhật huy hiệu (\texttt{app\_badge\_plus}). \\
+\hline
+\textbf{Luồng ngoại lệ} & Nếu token FCM của thiết bị bị hết hạn hoặc không hợp lệ (lỗi \texttt{UNREGISTERED}) $\rightarrow$ Consumer tự động đánh dấu và dọn dẹp token khỏi bảng \texttt{fw\_user\_device\_token}. \\
 \hline
 \end{tabularx}
 \caption{\textit{Đặc tả Ca sử dụng UC\_NOTI\_01: Tiếp nhận Thông báo và Điều hướng sâu}}
@@ -55,3 +62,5 @@ Phân hệ Trung tâm Thông báo Đẩy (tương ứng với gói mã nguồn \
     \caption{\textit{Biểu đồ Tuần tự Pipeline Thông báo Đẩy Bất đồng bộ (Kafka sang FCM sang Mobile)}}
     \label{fig:seq_noti_kafka_fcm}
 \end{figure}
+
+Biểu đồ hình \ref{fig:seq_noti_kafka_fcm} thể hiện toàn bộ quy trình phát tán thông báo bất đồng bộ. Điểm mấu chốt trong thiết kế là việc tách biệt ranh giới giao dịch cơ sở dữ liệu với việc phát thông điệp vào Kafka: hàm phát tán chỉ được gọi sau khi lệnh \texttt{transaction.commit()} đã hoàn tất thành công. Nhờ đó, hệ thống ngăn chặn hoàn toàn hiện tượng người dùng nhận thông báo về một đơn từ hoặc quyết định đã bị hủy bỏ do lỗi giao dịch ở tầng cơ sở dữ liệu. Toàn bộ logic giải mã metadata và điều hướng sâu đã được kiểm thử tự động với 47 ca kiểm thử chuyên biệt cho module thông báo.

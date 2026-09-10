@@ -27,9 +27,11 @@ staff\_ly\_lich & PK: \texttt{shcc}, FK: \texttt{user\_id} & Hồ sơ thông tin
 \hline
 staff\_ly\_lich\_request & PK: \texttt{id}, FK: \texttt{shcc} & Lưu các đề xuất chỉnh sửa thông tin lý lịch (chứa JSON \texttt{old\_value} và \texttt{new\_value}). \\
 \hline
-tcns\_nghi\_phep\_dang\_ky & PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin đơn đăng ký nghỉ phép, khoảng thời gian, lý do và giải trình nộp trễ. \\
+tcns\_nghi\_phep\_dang\_ky & PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin đơn đăng ký nghỉ phép, khoảng thời gian (\texttt{tuNgay}, \texttt{denNgay}), số ngày nghỉ, lý do, trạng thái quy trình (\texttt{NHAP}, \texttt{CHO\_DUYET}, \texttt{DA\_DUYET}), tệp đính kèm và cờ giải trình nộp trễ. \\
 \hline
-tcns\_so\_nghi\_phep\_nam & PK: \texttt{id}, FK: \texttt{shcc} & Quản lý số ngày phép năm tiêu chuẩn, số ngày đã nghỉ, số ngày còn lại của cán bộ. \\
+tcns\_lich\_ca\_nhan & PK: \texttt{id}, FK: \texttt{shcc} & Quản lý lịch trình làm việc cá nhân của cán bộ (nghỉ phép, công tác, họp, giảng dạy); thực thể mục tiêu của hàm \texttt{checkTrungLich} và cơ chế khóa tương tranh \texttt{pg\_advisory\_xact\_lock}. \\
+\hline
+tcns\_so\_nghi\_phep\_nam & PK: \texttt{id}, FK: \texttt{shcc} & Quản lý số ngày phép năm tiêu chuẩn, số ngày đã nghỉ, số ngày còn lại của cán bộ theo từng năm công tác. \\
 \hline
 tcns\_qua\_trinh\_di\_cong\_tac & PK: \texttt{id}, FK: \texttt{shcc} & Lưu thông tin chuyến đi công tác, địa điểm, mục đích, đoàn công tác và dự toán kinh phí. \\
 \hline

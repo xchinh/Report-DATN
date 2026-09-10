@@ -1,21 +1,95 @@
-\section{Công nghệ backend, cơ sở dữ liệu và tích hợp}
+\section{Công nghệ Backend, Quản lý Tương tranh và Tích hợp Đa dịch vụ}
 \label{sec:backend_tech}
 
-\subsection{Công nghệ backend hiện hữu của Nhà trường}
+Mục này trình bày cơ sở công nghệ của hệ thống Backend hiện hữu phục vụ tích hợp đa dịch vụ, phân tích chuyên sâu các bài toán kỹ thuật cốt lõi mà nhóm sinh viên trực tiếp can thiệp giải quyết: quản trị giao dịch và kiểm soát tương tranh trong cơ sở dữ liệu, đường ống phân phối thông báo bất đồng bộ qua Apache Kafka, cùng cơ chế chuyển tiếp xác thực an toàn qua Single Sign-On (SSO) Bridge.
+
+\subsection{Tổng quan Kiến trúc Backend Kế thừa của Nhà trường}
+\label{subsec:legacy_backend_overview}
+
+Hệ thống dịch vụ quản trị của Trường Đại học Bách khoa -- ĐHQG-HCM vận hành theo mô hình kiến trúc phân tầng (Layered Architecture):
 \begin{itemize}
     \item \textbf{Môi trường thực thi Node.js \& TypeScript:} Xử lý I/O bất đồng bộ (Non-blocking I/O) theo mô hình Event Loop đơn luồng, kết hợp cùng TypeScript đảm bảo an toàn kiểu dữ liệu.
-    \item \textbf{Web Framework Express.js:} Cung cấp cơ chế định tuyến RESTful API linh hoạt và chuỗi Middleware kiểm soát bảo mật, xác thực người dùng.
+    \item \textbf{Web Framework Express.js:} Cung cấp cơ chế định tuyến RESTful API và chuỗi Middleware kiểm soát phiên, giải mã token và phân quyền RBAC.
+    \item \textbf{Hệ quản trị Cơ sở dữ liệu PostgreSQL \& Sequelize ORM:} Lưu trữ toàn bộ dữ liệu viên chức, lịch cá nhân và quy trình duyệt. Sequelize ORM quản lý mô hình ánh xạ đối tượng và điều khiển giao dịch CSDL (\texttt{Sequelize.Transaction}).
 \end{itemize}
 
-\subsection{Hệ quản trị cơ sở dữ liệu (Database)}
+\subsection{Bài toán Kiểm soát Tương tranh và Lập luận Lựa chọn Giải pháp Khóa (Concurrency Control)}
+\label{subsec:concurrency_reasoning}
+
+\subsubsection{Hiện tượng Cạnh tranh Đăng ký Trùng lịch (Double-Booking Anomaly)}
+Trong phân hệ đăng ký nghỉ phép và lịch công tác, một yêu cầu nộp đơn hợp lệ phải thỏa mãn điều kiện không trùng khoảng thời gian với các lịch đã tồn tại của cùng một nhân sự (\texttt{shcc}). Quá trình này bao gồm hai bước logic:
+\begin{enumerate}
+    \item \textit{Đọc và kiểm tra (Check):} Truy vấn bảng \texttt{tcns\_lich\_ca\_nhan} để kiểm tra xem nhân sự \texttt{shcc} đã có lịch nào giao thoa với khoảng thời gian $[t_{start}, t_{end}]$ hay chưa.
+    \item \textit{Ghi nhận (Act):} Nếu không trùng, chèn bản ghi mới vào bảng \texttt{tcns\_nghi\_phep\_dang\_ky} và các dòng lịch tương ứng vào \texttt{tcns\_lich\_ca\_nhan}.
+\end{enumerate}
+
+Dưới cấp độ cô lập mặc định \texttt{Read Committed} của PostgreSQL, nếu hai yêu cầu gửi đơn có cùng khoảng thời gian của cùng một cán bộ đến máy chủ gần như đồng thời (ví dụ người dùng nhấn gửi đúp trên điện thoại do mạng chậm, hoặc gửi đồng thời từ cả Web và Mobile), cả hai giao dịch đều đọc thấy trạng thái "chưa có lịch", cùng vượt qua bước kiểm tra và cùng thực hiện lệnh chèn dữ liệu. Hậu quả là hai bản ghi lịch bị ghi nhận đè lên nhau (Double-Booking Anomaly).
+
+\subsubsection{Phân tích So sánh và Lựa chọn Giải pháp Khóa Tương tranh}
+Để giải quyết triệt để hiện tượng trên, nhóm đã phân tích và so sánh 4 giải pháp kỹ thuật theo Bảng~\ref{tab:concurrency_lock_comparison}:
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{|p{2.6cm}|p{3.8cm}|p{4.2cm}|p{3.8cm}|}
+    \hline
+    \textbf{Giải pháp} & \textbf{Cơ chế Hoạt động} & \textbf{Ưu điểm \& Hạn chế} & \textbf{Đánh giá Tính khả thi với MyHCMUT} \\
+    \hline
+    \textbf{Pessimistic Row Lock (\texttt{SELECT FOR UPDATE})} & Khóa độc quyền các dòng dữ liệu thỏa mãn điều kiện truy vấn. & Không thể khóa được các dòng dữ liệu \textbf{chưa tồn tại} (Insert Predicate); chỉ khóa được dữ liệu lịch cũ. & \textbf{Không khả thi} đối với thao tác tạo mới lịch; chỉ dùng phù hợp khi trừ số dư quỹ phép năm. \\
+    \hline
+    \textbf{Ràng buộc Loại trừ (\texttt{EXCLUDE USING gist})} & Định nghĩa ràng buộc giao thoa khoảng thời gian cấp bảng CSDL. & Bảo vệ tuyệt đối ở tầng lưu trữ; tuy nhiên đòi hỏi cài đặt extension \texttt{btree\_gist} và sửa đổi DDL cấu trúc bảng. & \textbf{Không an toàn cho hệ thống đang chạy}: Việc sửa đổi schema CSDL dùng chung của trường tiềm ẩn rủi ro cao làm gián đoạn các ứng dụng Web khác. \\
+    \hline
+    \textbf{Cấp độ Cô lập Serializable} & CSDL tự động phát hiện xung đột đọc--ghi và rollback giao dịch thứ hai. & Đảm bảo tính tuần tự tuyệt đối mà không cần dùng khóa tường minh; nhưng sinh ra tỷ lệ lỗi Serialization Failure (40001) rất cao. & \textbf{Không tối ưu}: Buộc ứng dụng phải xây dựng cơ chế Retry Loop phức tạp, gây lãng phí tài nguyên CPU và tăng độ trễ mạng. \\
+    \hline
+    \textbf{PostgreSQL Advisory Lock (\texttt{pg\_advisory\_xact\_lock})} & Khóa logic cấp ứng dụng được quản lý bởi PostgreSQL trong Shared Memory, phân vùng theo mã băm \texttt{hashtext('tcns\_lich\_ca\_nhan:' || shcc)}. & - Không can thiệp sửa đổi schema CSDL. \newline - Tự động giải phóng khi giao dịch COMMIT hoặc ROLLBACK. \newline - Tuần tự hóa chính xác theo từng cán bộ, không gây nghẽn giữa các cán bộ khác nhau. & \textbf{Được lựa chọn.} Giải pháp này hoàn toàn tương thích với hệ thống kế thừa, không đòi hỏi migration CSDL, bảo đảm an toàn giao dịch tối đa trong phạm vi mã nguồn ứng dụng. \\
+    \hline
+    \end{tabular}
+    \caption{So sánh các kỹ thuật kiểm soát tương tranh cho bài toán đăng ký lịch}
+    \label{tab:concurrency_lock_comparison}
+\end{table}
+
+\noindent \textbf{Cơ chế phòng chống bế tắc (Deadlock Avoidance):} Khi một nghiệp vụ đòi hỏi khóa nhiều mã nhân sự cùng lúc (ví dụ trường hợp tạo lịch công tác cho đoàn cán bộ gồm nhiều người), nguy cơ bế tắc chu trình (Cyclic Deadlock) có thể phát sinh nếu hai tiến trình xin khóa theo thứ tự ngược nhau. Để triệt tiêu nguy cơ này, hàm tiện ích \texttt{acquireLeaveLock} do nhóm phát triển luôn thực hiện chuẩn hóa mảng \texttt{shcc}, loại bỏ phần tử trùng lặp thông qua cấu trúc \texttt{Set} và thực hiện sắp xếp tăng dần (\texttt{sort()}) trước khi tuần tự gọi câu lệnh \texttt{pg\_advisory\_xact\_lock}.
+
+\subsection{Đường ống Phân phối Thông báo Đa kênh qua Apache Kafka và Firebase FCM}
+\label{subsec:kafka_fcm_pipeline}
+
+\subsubsection{Kiến trúc Đường ống Sự kiện}
+Quá trình gửi thông báo đẩy đến thiết bị di động được tổ chức theo mô hình xử lý bất đồng bộ định hướng sự kiện (Event-Driven Architecture):
+\begin{enumerate}
+    \item \textbf{Khởi phát sự kiện từ Giao dịch Nghiệp vụ:} Khi một thao tác nghiệp vụ hoàn tất (ví dụ Lãnh đạo duyệt đơn nghỉ phép), hệ thống backend kích hoạt phát thông điệp.
+    \item \textbf{Nguyên tắc Cam kết trước, Phát tin sau (Post-commit Dispatch):} Để ngăn chặn hiện tượng \textit{Thông báo Ma (Ghost Notifications)} -- trường hợp cán bộ nhận được thông báo về một quyết định duyệt đơn nhưng thực chất giao dịch CSDL đã bị rollback do lỗi ở bước sau, nhóm áp dụng hook \texttt{transaction.afterCommit}. Thông điệp chỉ được gửi vào hàng đợi Apache Kafka khi và chỉ khi giao dịch CSDL đã cam kết thành công 100\% vào đĩa cứng.
+    \item \textbf{Đệm thông điệp phân tán với Apache Kafka:} Thông điệp được đưa vào topic \texttt{SEND\_NOTIFY\_SERVICE} với partition key là \texttt{shcc} của người nhận, bảo đảm thứ tự tuần tự của các thông báo gửi đến cùng một người dùng.
+    \item \textbf{Đẩy thông báo qua Firebase Cloud Messaging (FCM HTTP v1 API):} Tiến trình Notification Worker tiêu thụ thông điệp từ Kafka, giải mã danh sách thiết bị mục tiêu từ bảng lưu trữ token và gọi FCM API để chuyển phát thông báo tới Apple Push Notification service (APNs) cho thiết bị iOS hoặc Google Play Services cho thiết bị Android.
+\end{enumerate}
+
+\subsubsection{Phân tích Độ tin cậy và Đánh đổi Kỹ thuật (Trade-off Analysis)}
+Về mặt lý thuyết truyền thông phân tán, mô hình Post-commit Hook loại trừ được hoàn toàn nguy cơ sinh thông báo sai lệch khi rollback CSDL. Tuy nhiên, nhóm thẳng thắn nhìn nhận một tình huống biên (Edge Case): nếu máy chủ ứng dụng bị sập nguồn đột ngột ngay sau khi CSDL vừa \texttt{COMMIT} nhưng trước khi câu lệnh đẩy tin vào Kafka kịp thực thi qua socket mạng, thông báo đó có thể bị thất lạc. 
+
+Giải pháp lý tưởng để đạt mức độ tin cậy tuyệt đối (Guaranteed Delivery) là kiến trúc \textit{Transactional Outbox Pattern} (lưu bản ghi sự kiện vào một bảng outbox trong cùng giao dịch CSDL, sau đó tiến trình Debezium/CDC quét log để đẩy sang Kafka). Tuy nhiên, do ràng buộc về quyền can thiệp schema trên CSDL dùng chung của Nhà trường, nhóm đã lựa chọn giải pháp Post-commit Hook kết hợp cơ chế ghi log ngoại lệ và cơ chế tự động đồng bộ lại danh sách thông báo khi ứng dụng mở lại. Đây là sự đánh đổi kỹ thuật thực tế, cân bằng giữa độ an toàn hệ thống và tính khả thi trong bối cảnh triển khai.
+
+\subsection{Kiến trúc Xác thực Đa tầng và Cầu nối An toàn SSO (SSO Ticket Bridge)}
+\label{subsec:sso_bridge_security}
+
+\subsubsection{Thách thức Bảo mật khi Tích hợp Web nhúng trong Ứng dụng Di động}
+Ứng dụng MyHCMUT Mobile cần nhúng một số màn hình quản trị chi tiết từ hệ thống Web HRM (ví dụ các biểu mẫu cập nhật lý lịch 11 danh mục phức tạp) thông qua thành phần Web nhúng trong ứng dụng (In-App WebView). Bài toán đặt ra là làm thế nào để người dùng đã đăng nhập trên ứng dụng di động gốc (Native) có thể truy cập các trang Web này một cách thông suốt (Single Sign-On) mà không phải nhập lại mật khẩu, đồng thời không gây nguy cơ rò rỉ token xác thực.
+
+\subsubsection{Cơ chế Vé Dùng Một Lần (One-Time Ticket SSO Bridge)}
+Nhóm đã thiết kế và triển khai quy trình xác thực cầu nối qua vé dùng một lần dựa trên bộ nhớ đệm Redis:
+\begin{enumerate}
+    \item \textbf{Tạo vé (Ticket Generation):} Ứng dụng di động gửi Access Token hiện hành lên endpoint backend \texttt{POST /api/auth/sso/ticket}. Backend xác thực token và sinh ra một chuỗi vé ngẫu nhiên có độ dài 64 ký tự hex (\texttt{crypto.randomBytes(32)}). Vé này được lưu vào Redis với khóa mang tiền tố \texttt{sso:ticket:<hash>}, liên kết với thông tin người dùng và thiết lập thời gian sống ngắn (TTL = 60 giây).
+    \item \textbf{Chuyển tiếp và Tiêu thụ Nguyên tử (Atomic Consumption):} WebView mở đường dẫn chuyển tiếp kèm tham số vé: \texttt{https://hrm.hcmut.edu.vn/sso-consume?ticket=...}. Máy chủ Web HRM tiếp nhận và gọi lệnh nguyên tử \texttt{GETDEL} trên Redis để lấy thông tin phiên và xóa vé ngay lập tức trong cùng một thao tác.
+    \item \textbf{Thiết lập Phiên và Làm sạch URL:} Khi vé hợp lệ, máy chủ thiết lập cookie phiên chuẩn (\texttt{connect.sid}) với đầy đủ các thuộc tính bảo vệ: \texttt{HttpOnly} (chống tấn công XSS đọc cắp cookie), \texttt{SameSite=Lax} (ngăn ngừa tấn công CSRF) và \texttt{Secure} (chỉ truyền qua kênh HTTPS). Ngay sau đó, mã JavaScript trên trang thực hiện gọi \texttt{window.history.replaceState} để xóa bỏ hoàn toàn tham số ticket khỏi thanh địa chỉ của trình duyệt, ngăn ngừa nguy cơ vé bị lưu vào lịch sử duyệt web hoặc rò rỉ qua header Referer.
+\end{enumerate}
+
+\subsubsection{Đánh giá Mô hình Đe dọa (Threat Model) theo Chuẩn STRIDE}
+Cơ chế cầu nối SSO được nhóm kiểm soát an toàn theo 6 khía cạnh của mô hình STRIDE:
 \begin{itemize}
-    \item \textbf{PostgreSQL:} Hệ quản trị cơ sở dữ liệu quan hệ mạnh mẽ, đảm bảo tính toàn vẹn giao dịch (ACID) tuyệt đối trong việc luân chuyển trạng thái duyệt đơn và trừ số dư quỹ phép năm; hỗ trợ lưu trữ JSONB linh hoạt cho các trường dữ liệu tùy biến.
-    \item \textbf{Sequelize ORM:} Ánh xạ dữ liệu quan hệ đối tượng (Object-Relational Mapping), cung cấp cơ chế Transactions an toàn và quản lý quan hệ bảng chặt chẽ.
+    \item \textbf{Giả mạo danh tính (Spoofing):} Vé ngẫu nhiên với không gian mẫu $2^{256}$ loại trừ khả năng tấn công vét cạn (Brute-force) để đoán vé trong cửa sổ 60 giây.
+    \item \textbf{Can thiệp dữ liệu (Tampering):} Dữ liệu phiên được lưu hoàn toàn trên bộ nhớ máy chủ Redis, tham số truyền qua URL chỉ là con trỏ tham chiếu ngẫu nhiên không mang payload nghiệp vụ.
+    \item \textbf{Chối bỏ trách nhiệm (Repudiation):} Mọi hành động phát sinh sau khi thiết lập phiên đều được ghi vết kiểm toán (Audit Log) liên kết với \texttt{shcc} của cán bộ.
+    \item \textbf{Tiết lộ thông tin (Information Disclosure):} Việc không truyền Access Token JWT qua URL loại bỏ triệt để rủi ro lộ token dài hạn qua nhật ký proxy mạng hoặc màn hình người dùng.
+    \item \textbf{Từ chối dịch vụ (Denial of Service):} TTL 60 giây và lệnh \texttt{GETDEL} đảm bảo vé rác tự hủy, không gây phình to bộ nhớ RAM trên cụm Redis.
+    \item \textbf{Nâng đặc quyền (Elevation of Privilege):} Phiên WebView chỉ được cấp đúng các quyền hạn mà token gốc của người dùng sở hữu trong hệ thống RBAC.
 \end{itemize}
 
-\subsection{Công nghệ hỗ trợ và tích hợp đa dịch vụ}
-\begin{itemize}
-    \item \textbf{Hàng đợi Thông điệp Apache Kafka (KRaft Mode):} Đóng vai trò là xương sống truyền thông điệp bất đồng bộ (Event Streaming Broker). Khi một sự kiện nghiệp vụ xảy ra (duyệt đơn nghỉ phép, phân công nhiệm vụ), backend phát một event vào topic \texttt{SEND\_NOTIFY\_SERVICE} và phản hồi HTTP 200 ngay lập tức, trong khi tiến trình ngầm tiêu thụ thông điệp từ Kafka để gọi Firebase FCM gửi thông báo tới điện thoại.
-    \item \textbf{Firebase Cloud Messaging (FCM HTTP v1 API):} Dịch vụ gửi thông báo đẩy đa nền tảng của Google, hỗ trợ đẩy thông báo ngay cả khi ứng dụng đang chạy ngầm hoặc đã tắt hoàn toàn.
-    \item \textbf{WebSocket với Socket.IO Engine:} Cung cấp kết nối 2 chiều liên tục với độ trễ cực thấp, phục vụ nghiệp vụ Điểm danh cuộc họp thời gian thực và đồng bộ trạng thái đại biểu tức thời.
-\end{itemize}

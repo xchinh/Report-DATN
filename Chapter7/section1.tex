@@ -1,45 +1,77 @@
 \section{Nhận xét kết quả đạt được}
 \label{sec:nhanxet_ketqua}
 
-Trải qua quá trình nghiên cứu, thiết kế, hiện thực hóa và kiểm thử thực nghiệm, đồ án đã hoàn thành toàn diện các mục tiêu đề ra:
+Trải qua quá trình nghiên cứu lý thuyết, phân tích nghiệp vụ, thiết kế kiến trúc, hiện thực hóa và kiểm thử thực nghiệm, đồ án tốt nghiệp đã hoàn thành toàn diện các mục tiêu nghiên cứu đề ra:
 \begin{enumerate}
-    \item \textbf{Về mặt Kiến trúc Ứng dụng Di động:} Xây dựng thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} dựa trên kiến trúc Modular Monorepo với công cụ Melos, áp dụng Clean Architecture phân lớp nghiêm ngặt, quản lý trạng thái Compile-safe với Riverpod 3 và hệ thống giao diện Material 3 Semantic Tokens (\texttt{packages/core/global\_system}) hỗ trợ hoàn hảo cả hai chế độ Light/Dark Mode.
-    \item \textbf{Về mặt Tích hợp Đa dịch vụ:} Hiện thực giải pháp \texttt{MultiDomainAuthInterceptor} và cơ chế Shared Secret JWT Bridge, cho phép ứng dụng di động giao tiếp an toàn và đồng bộ với 3 hệ thống Backend độc lập của Nhà trường (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}) mà không làm thay đổi kiến trúc nghiệp vụ gốc.
-    \item \textbf{Về mặt Nghiệp vụ Quản trị:}
+    \item \textbf{Về mặt Kiến trúc Ứng dụng Di động:} Xây dựng thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} dựa trên kiến trúc Modular Monorepo với công cụ quản trị Melos, áp dụng Clean Architecture phân lớp nghiêm ngặt, quản lý trạng thái phản ứng giao diện với Flutter Riverpod và hệ thống Material 3 Semantic Tokens (\texttt{packages/core/global\_system}) hỗ trợ thẩm mỹ cả hai chế độ giao diện Light/Dark Mode.
+    
+    \item \textbf{Về mặt Tích hợp Đa dịch vụ và An toàn Thông tin:} 
     \begin{itemize}
-        \item \textit{Phân hệ HRM:} Hoàn thiện tra cứu lý lịch 11 danh mục, giao diện so sánh sai khác (Diff Viewer) thẩm định sửa lý lịch, Form Wizard 4 bước đăng ký nghỉ phép kết hợp thuật toán kiểm tra ràng buộc thời gian thực, đăng ký và phê duyệt đi công tác.
-        \item \textit{Phân hệ iOffice:} Hoàn thiện tra cứu văn bản đến/đi, tích hợp trình xem tệp PDF trực tiếp và phân phối chỉ đạo văn bản.
-        \item \textit{Phân hệ Tasks/Missions:} Hoàn thiện quản lý nhiệm vụ đa phân loại (Trọng tâm, Được giao, Chung) với 5 tab lọc, chi tiết 4 tab (Tổng quan, Cây đầu việc, Báo cáo tiến độ, Liên kết văn bản) và modal chi tiết công việc.
-        \item \textit{Phân hệ Lịch \& Điểm danh họp:} Hoàn thiện tra cứu lịch tuần trường/đơn vị, cơ chế điểm danh có mặt trong khung giờ mở trước 1 giờ, chức năng báo vắng và đồng bộ dữ liệu thời gian thực qua WebSocket (\texttt{Socket.IO}).
-        \item \textit{Phân hệ Thông báo:} Hoàn thiện chuỗi tiêu thụ thông điệp từ Kafka đẩy ra Firebase FCM, điều hướng sâu Deep Linking dựa trên Metadata có cấu trúc và cập nhật số huy hiệu Badge.
+        \item Hiện thực thành công bộ điều phối \texttt{MultiDomainAuthInterceptor} xử lý phân phối chuỗi JWT dùng chung (\texttt{Shared JWT}) và hàng đợi làm mới phiên ngầm (Completer Lock Queue) khi Access Token hết hạn, kết nối liền mạch với 3 hệ thống Backend độc lập của Nhà trường (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}).
+        \item Thiết kế và hiện thực Cầu nối An toàn One-Time Ticket SSO Native-to-Web: sinh vé mật mã học 64 ký tự hex với TTL 60 giây, tiêu thụ nguyên tử qua Redis \texttt{GETDEL}, cấp Session Cookie bảo vệ (\texttt{HttpOnly; SameSite=Lax; Secure}) và làm sạch URL tức thời qua \texttt{history.replaceState}, cho phép cán bộ truy cập tính năng Web chuyên sâu từ ứng dụng di động mà không cần đăng nhập lại.
     \end{itemize}
-    \item \textbf{Về mặt Đảm bảo Chất lượng \& Kiểm thử:} Thiết lập bộ kiểm thử 4 tầng toàn diện (112 ca kiểm thử với độ phủ 81.4\%), hoàn thành 4 kịch bản E2E thực tế, đo lường định lượng hiệu năng mượt mà (60 FPS, RAM $\approx$ 95--145MB, API $< 150$ms) và tự động hóa quy trình CI/CD trên GitLab CI.
+    
+    \item \textbf{Về mặt Giải quyết Vấn đề Kỹ thuật Cốt lõi (Concurrency Hardening):} 
+    Giải quyết triệt để bài toán xung đột tương tranh và nguy cơ đặt trùng lịch (Double-Booking Anomaly) trong đăng ký nghỉ phép bằng giải pháp PostgreSQL Application-Level Advisory Locking (\texttt{pg\_advisory\_xact\_lock}) với khóa băm theo mã số cán bộ \texttt{shcc}, kết hợp ranh giới giao dịch bọc kín (\texttt{Transaction Propagation}) và thuật toán sắp xếp định danh phòng chống Deadlock. Giải pháp đạt hiệu quả bảo vệ dữ liệu cao mà hoàn toàn không xâm lấn cấu trúc bảng CSDL hiện hữu của Nhà trường.
+    
+    \item \textbf{Về mặt Nghiệp vụ Quản trị Đại học:}
+    \begin{itemize}
+        \item \textit{Phân hệ HRM:} Hoàn thiện tra cứu lý lịch 11 danh mục với bộ đệm SWR TTL 12 giờ; màn hình thẩm định sai khác lý lịch trực quan (\texttt{ReviewDiffCard}); Form Wizard 4 bước đăng ký nghỉ phép kết hợp kiến trúc tải tệp 2 bước, cảnh báo nộp trễ hạn từ cấu hình \texttt{tcns\_setting}, tùy chọn giải trình và dọn dẹp nháp mồ côi (\texttt{isNewlyCreated}); đăng ký và phê duyệt đi công tác; cùng thanh tác vụ duyệt đơn hàng loạt \texttt{AppBatchActionBar}.
+        \item \textit{Phân hệ iOffice:} Hoàn thiện tra cứu sổ văn bản đến/đi, tích hợp trình đọc PDF trực tiếp (\texttt{pdfrx}) và bút phê phân phối chỉ đạo văn bản.
+        \item \textit{Phân hệ Tasks/Missions:} Hoàn thiện quản lý nhiệm vụ đa phân loại với bộ lọc 5 trạng thái, màn hình chi tiết 4 tab kết hợp cây đầu việc phân cấp (\texttt{outlined-tree}) và nộp báo cáo đợt đính kèm minh chứng.
+        \item \textit{Phân hệ Lịch \& Điểm danh họp:} Hoàn thiện tra cứu lịch tuần trường/đơn vị, cơ chế kiểm soát khung giờ mở điểm danh nghiêm ngặt, báo vắng mặt có lý do và phát tán sự kiện thời gian thực qua WebSocket (\texttt{Socket.IO}) với độ trễ dưới 50ms.
+        \item \textit{Phân hệ Thông báo:} Hoàn thiện đường ống thông báo bất đồng bộ kết hợp Post-Commit Hook trước khi bắn sự kiện vào Kafka, đẩy qua Google FCM Server (HTTP v1) và phân tích 4 trường metadata điều hướng sâu (Deep Linking) tại 3 trạng thái của ứng dụng.
+    \end{itemize}
+    
+    \item \textbf{Về mặt Đảm bảo Chất lượng \& Kiểm thử:} 
+    Thiết lập và thực thi thành công bộ kiểm thử tự động gồm \textbf{392 ca kiểm thử} (335 kiểm thử Mobile Flutter và 57 kiểm thử Backend Vitest) đạt tỷ lệ vượt qua 100\% (Pass Rate 100\%); hoàn thành 4 kịch bản E2E thực tế trên Google Pixel 6 và iPhone 13; đo lường định lượng hiệu năng mượt mà (58--60 FPS, RAM $\approx$ 95--145MB, API phản hồi trung bình $< 150$ms); và tự động hóa toàn bộ quy trình tích hợp liên tục CI/CD trên GitLab CI.
 \end{enumerate}
 
 \section{Ý nghĩa khoa học và Giá trị Thực tiễn}
 \label{sec:giatri_thuctien}
 
 \begin{itemize}
-    \item \textbf{Đối với Nhà trường:} Đóng góp một giải pháp phần mềm hoàn chỉnh phục vụ trực tiếp chiến lược chuyển đổi số và quản trị đại học thông minh; hiện đại hóa quy trình hành chính, giảm thiểu giấy tờ và rút ngắn thời gian phê duyệt văn bản/nghỉ phép.
-    \item \textbf{Đối với Cán bộ, Giảng viên:} Cung cấp một trợ lý số di động tiện lợi, giúp cán bộ chủ động quản lý hồ sơ cá nhân, theo dõi nhiệm vụ, điểm danh họp và nhận thông báo công việc khẩn cấp mọi lúc, mọi nơi ngay trên điện thoại.
-    \item \textbf{Ý nghĩa Khoa học:} Chứng minh tính khả thi và hiệu quả vượt trội của mô hình Kiến trúc Tích hợp Đa dịch vụ hướng API (API-based Multi-backend Integration Architecture) khi xây dựng ứng dụng di động cho các tổ chức, doanh nghiệp có hạ tầng phân tán sẵn có.
+    \item \textbf{Đối với Trường Đại học Bách khoa -- ĐHQG-HCM:} Đóng góp một giải pháp phần mềm di động hoàn chỉnh phục vụ trực tiếp chiến lược chuyển đổi số và quản trị đại học thông minh; hiện đại hóa quy trình hành chính, giảm thiểu giấy tờ, rút ngắn thời gian xử lý văn bản và phê duyệt nghỉ phép từ vài ngày xuống còn vài phút.
+    
+    \item \textbf{Đối với Cán bộ, Giảng viên và Lãnh đạo:} Cung cấp một trợ lý số di động tiện lợi, giúp cán bộ chủ động theo dõi hồ sơ cá nhân, tra cứu nhiệm vụ, điểm danh họp một chạm và nhận thông báo công việc khẩn cấp mọi lúc, mọi nơi ngay trên thiết bị cầm tay.
+    
+    \item \textbf{Ý nghĩa Khoa học và Kỹ thuật:} Chứng minh tính khả thi, độ tin cậy và hiệu quả vượt trội của mô hình Kiến trúc Tích hợp Đa dịch vụ hướng API (API-based Multi-backend Integration Architecture) kết hợp Cầu nối Xác thực Đa tầng khi xây dựng ứng dụng di động cho các tổ chức quy mô lớn có sẵn hạ tầng phân tán nguyên khối mà không đòi hỏi phải đập đi xây lại toàn bộ hệ thống cũ.
 \end{itemize}
 
 \section{Những Hạn chế Còn tồn tại}
 \label{sec:hanche}
 
-Mặc dù đã đạt được nhiều kết quả quan trọng, đồ án vẫn còn một số điểm hạn chế do giới hạn về mặt thời gian và hạ tầng thử nghiệm:
-\begin{itemize}
-    \item Phân hệ Kê khai Khoa học Công nghệ (KHCN) và Phòng họp trực tuyến (Meetings) mới dừng lại ở mức độ thiết kế giao diện sẵn sàng (UI Mock) do Backend API của trường chưa hoàn thiện.
-    \item Chưa tích hợp giải pháp Chữ ký số tập trung (Digital Signature) do tính pháp lý và hạ tầng chứng thư số cần quy trình cấp phép đặc biệt.
-    \item Việc kiểm thử hiệu năng mới được thực hiện trên môi trường Lab với quy mô 100 requests mẫu, chưa đánh giá được tải thực tế khi có hàng nghìn cán bộ truy cập đồng thời trong các đợt cao điểm.
-\end{itemize}
+Mặc dù đã đạt được nhiều kết quả quan trọng và vượt qua toàn bộ các bài kiểm thử kỹ thuật, đề tài vẫn còn một số hạn chế mang tính học thuật và thực tiễn do ranh giới hạ tầng hiện hữu:
+\begin{enumerate}
+    \item \textbf{Giới hạn của Khóa Tương tranh Cấp Ứng dụng so với Cấp Cơ sở Dữ liệu:} Giải pháp \texttt{pg\_advisory\_xact\_lock} hoạt động hiệu quả khi toàn bộ các thao tác ghi đều đi qua tầng ứng dụng được cài đặt cơ chế khóa. Tuy nhiên, do ràng buộc không xâm lấn cấu trúc bảng trên CSDL production của Nhà trường, hệ thống chưa thiết lập ràng buộc loại trừ cấp cơ sở dữ liệu (\texttt{EXCLUDE USING gist}). Nếu trong tương lai có các tiến trình backend độc lập bên ngoài hoặc các câu lệnh SQL trực tiếp từ quản trị viên can thiệp vào bảng \texttt{tcns\_lich\_ca\_nhan} mà không gọi advisory lock theo \texttt{shcc}, nguy cơ trùng lặp ở tầng CSDL vẫn có thể phát sinh.
+    
+    \item \textbf{Rủi ro Dual-Write trong Đường ống Thông báo Post-Commit:} Cơ chế gắn hook \texttt{transaction.afterCommit} đã giải quyết triệt để nguy cơ phát tán thông báo ma khi giao dịch rollback. Tuy nhiên, nếu xảy ra sự cố máy chủ backend bị tắt đột ngột (crash/kill) đúng vào khoảnh khắc ngay sau khi cơ sở dữ liệu đã commit nhưng trước khi thư viện Kafka kịp gửi gói tin qua mạng, thông báo nghiệp vụ có thể bị thất lạc mà không được phát lại tự động (thiếu Transactional Outbox Pattern).
+    
+    \item \textbf{Rủi ro An ninh đối với Vé SSO trên Thiết bị Bị Xâm nhập (Compromised Device):} Cơ chế One-Time Ticket 64 ký tự hex có TTL 60 giây và xóa nguyên tử qua Redis \texttt{GETDEL} bảo vệ an toàn trước các cuộc tấn công nghe lén mạng, CSRF và Replay Attack. Tuy nhiên, nếu thiết bị di động của người dùng đã bị chiếm quyền điều khiển (root/jailbreak) hoặc bị cài phần mềm độc hại đọc trộm bộ nhớ ứng dụng trong khoảng thời gian 60 giây trước khi vé được tiêu thụ, kẻ tấn công trên thiết bị vẫn có thể trích xuất vé (do hệ thống chưa áp dụng cơ chế ký số Proof-of-Possession liên kết vé với cặp khóa phần cứng của thiết bị).
+    
+    \item \textbf{Phạm vi Hiện thực Phân hệ Kê khai Khoa học Công nghệ:} Phân hệ KHCN mới dừng lại ở mức độ hoàn thiện giao diện người dùng mẫu (UI Mock Templates) và cấu hình điều hướng sẵn sàng, do phía đối tác quản trị Backend API của Phòng KHCN Nhà trường đang trong quá trình nâng cấp và chuẩn hóa cấu trúc dữ liệu.
+    
+    \item \textbf{Cơ chế Lưu trữ Khóa Xác thực trên Thiết bị Di động:} Trong phiên bản tạo mẫu hiện tại của đồ án, cặp khóa xác thực Access Token và Refresh Token được quản lý qua \texttt{MultiDomainTokenManager} lưu trữ trên \texttt{SharedPreferences} trong không gian bộ nhớ cô lập (Sandboxed App Storage) của ứng dụng kết hợp In-Memory Cache và xóa sạch khi đăng xuất. Mặc dù cơ chế bảo vệ ứng dụng của hệ điều hành ngăn chặn các ứng dụng khác đọc trộm dữ liệu, nhưng trên các thiết bị đã bị can thiệp sâu hệ thống (Rooted Android hoặc Jailbroken iOS), kẻ tấn công có quyền root vẫn có thể truy cập tệp dữ liệu ứng dụng. Hệ thống chưa tích hợp thư viện \texttt{flutter\_secure\_storage} để mã hóa phần cứng qua Android Keystore và iOS Keychain trong phiên bản thử nghiệm này.
+\end{enumerate}
 
 \section{Hướng Phát triển Đề tài}
 \label{sec:huongphattrien}
 
+Từ những kết quả và hạn chế đã được nhận diện, nhóm nghiên cứu đề xuất các định hướng phát triển cụ thể tiếp theo:
 \begin{enumerate}
-    \item \textbf{Hoàn thiện Tích hợp Phân hệ Khoa học Công nghệ (KHCN):} Kết nối với Backend API chính thức của Phòng KHCN để cán bộ có thể kê khai danh mục bài báo khoa học, đề tài NCKH và bằng sáng chế ngay trên ứng dụng di động.
-    \item \textbf{Phát triển Tính năng Phòng họp Trực tuyến (Meetings):} Tích hợp giao thức WebRTC / Jitsi Meet phục vụ các cuộc họp trực tuyến nội bộ an toàn.
-    \item \textbf{Nghiên cứu Tích hợp Trợ lý Ảo AI (AI Agent):} Ứng dụng công nghệ xử lý ngôn ngữ tự nhiên (NLP / LLM) hỗ trợ cán bộ tra cứu nhanh quy chế đào tạo, thủ tục hành chính, quy định nghỉ phép và tự động nhắc nhở hạn chót của các nhiệm vụ trọng tâm.
+    \item \textbf{Nâng cấp Ràng buộc Loại trừ PostgreSQL cấp CSDL (\texttt{EXCLUDE USING gist}):} Khi Nhà trường tiến hành chu kỳ nâng cấp và cấp quyền thay đổi DDL trên cơ sở dữ liệu production, hệ thống sẽ kích hoạt extension \texttt{btree\_gist} và áp dụng ràng buộc loại trừ trực tiếp trên bảng dữ liệu lịch cá nhân:
+    \begin{center}
+    \texttt{ALTER TABLE tcns\_lich\_ca\_nhan ADD CONSTRAINT no\_overlap EXCLUDE USING gist (shcc WITH =, daterange(tu\_ngay, den\_ngay, '[]') WITH \&\&);}
+    \end{center}
+    Điều này chuyển giao việc bảo vệ toàn vẹn dữ liệu tương tranh từ tầng ứng dụng xuống trực tiếp hạt nhân của hệ quản trị CSDL PostgreSQL.
+    
+    \item \textbf{Triển khai Mẫu hình Transactional Outbox Pattern kết hợp Change Data Capture (CDC):} Thay vì phát trực tiếp thông điệp vào Kafka sau commit, backend sẽ ghi thông điệp sự kiện vào một bảng cơ sở dữ liệu trung gian (\texttt{outbox\_table}) trong cùng transaction nghiệp vụ. Sau đó, một công cụ bắt dữ liệu thay đổi như Debezium sẽ đọc nhật ký Write-Ahead Log (WAL) của PostgreSQL và đẩy tin cậy vào Kafka. Giải pháp này triệt tiêu hoàn toàn rủi ro mất mát thông điệp trong mọi tình huống máy chủ gặp sự cố.
+    
+    \item \textbf{Tăng cường An ninh Cầu nối SSO với Cơ chế Proof-of-Possession (DPoP):} Áp dụng chuẩn DPoP (Demonstrating Proof-of-Possession at the Application Layer -- RFC 9449) kết hợp PKCE, sinh cặp khóa bất đối xứng trong bộ vi xử lý bảo mật an toàn của thiết bị (Secure Enclave / Android StrongBox) để ký xác nhận mỗi khi yêu cầu cấp và sử dụng vé SSO, ngăn chặn triệt để việc vé bị đánh cắp và sử dụng trái phép từ một môi trường khác.
+    
+    \item \textbf{Nâng cấp Lưu trữ Khóa Xác thực qua \texttt{flutter\_secure\_storage}:} Chuyển đổi backend lưu trữ của \texttt{MultiDomainTokenManager} từ \texttt{SharedPreferences} sang thư viện \texttt{flutter\_secure\_storage}. Giải pháp này sử dụng Android Keystore (với thuật toán mã hóa AES-GCM 256-bit trong môi trường thực thi tin cậy TEE) và iOS Keychain Services, bảo vệ toàn diện các token xác thực trước các cuộc tấn công khai thác trên thiết bị đã bị bẻ khóa (Root/Jailbreak).
+    
+    \item \textbf{Hoàn thiện Tích hợp Chính thức Phân hệ KHCN và Họp Trực tuyến:} Kết nối hệ thống với Backend chính thức của Phòng KHCN để cán bộ kê khai đề tài NCKH, bằng sáng chế; tích hợp giao thức WebRTC phục vụ các cuộc họp trực tuyến nội bộ an toàn.
+    
+    \item \textbf{Thực hiện Kiểm thử Tải cao Phân tán (Distributed Load Testing):} Thiết lập kịch bản kiểm thử tải với công cụ k6 hoặc Locust, mô phỏng tải tương tranh của 1.000 đến 5.000 cán bộ đồng thời đăng ký phép và điểm danh họp vào đầu giờ sáng, nhằm đo lường chính xác dung lượng hàng đợi kết nối của PostgreSQL và thời gian phản hồi ở mức chịu tải cao nhất.
 \end{enumerate}

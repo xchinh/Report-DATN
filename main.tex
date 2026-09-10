@@ -11,8 +11,9 @@
 \usepackage{color}
 \usepackage{colortbl}
 \usepackage{listings}
+\usepackage{textcomp}
 \usepackage{gensymb}
-\usepackage{tabularx, caption}
+\usepackage{tabularx, caption, xltabular}
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage{geometry}
@@ -59,6 +60,7 @@
 \usetikzlibrary{arrows,snakes,backgrounds}
 \usepackage{hyperref}
 \hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+\usepackage{bookmark} 
 
 \newtheorem{theorem}{{\bf Theorem}}
 \newtheorem{property}{{\bf Property}}
@@ -106,7 +108,7 @@
 \renewcommand{\footrulewidth}{0.3pt}
 
 \setcounter{secnumdepth}{4}
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{2}
 \makeatletter
 \newcounter {subsubsubsection}[subsubsection]
 \renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
@@ -115,8 +117,36 @@
                                      {1.5ex \@plus .2ex}%
                                      {\normalfont\normalsize\bfseries}}
 \newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
-\newcommand*{\subsubsubsectionmark}[1]{}
+
+% Định dạng tiêu đề chương hiển thị dạng: X. Tên Chương
+\def\@makechapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+        \huge\bfseries \thechapter.\space #1\par\nobreak
+    \else
+        \huge\bfseries #1\par\nobreak
+    \fi
+    \vskip 15\p@
+  }}
+\def\@makeschapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \interlinepenalty\@M
+    \huge\bfseries #1\par\nobreak
+    \vskip 15\p@
+  }}
 \makeatother
+
+% Định nghĩa lời dẫn đầu mỗi chương: căn giữa, chữ nghiêng, thu hẹp 2 bên lề
+\newcommand{\chapterintro}[1]{%
+    \begin{center}%
+    \begin{minipage}{0.88\textwidth}%
+        \centering\itshape #1%
+    \end{minipage}%
+    \end{center}%
+    \vspace{0.4cm}%
+}
 
 \begin{document}
 
@@ -237,26 +267,16 @@ Cuối cùng, xin gửi lời cảm ơn sâu sắc đến gia đình, bạn bè 
 %%tóm tắt
 \newpage
 \begin{center}
-\textbf{\fontsize{24}{28}\selectfont TÓM TẮT BÁO CÁO}\\ 
+\textbf{\fontsize{24}{28}\selectfont TÓM TẮT}\\ 
 \end{center}
 \vspace{1cm}
-Báo cáo Đồ án Tốt nghiệp đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} trình bày quá trình nghiên cứu, thiết kế, hiện thực hóa và kiểm thử ứng dụng di động \textbf{MyHCMUT} tích hợp với hệ thống dịch vụ Backend hiện hữu của Nhà trường. Báo cáo được cấu trúc thành 7 chương chính như sau:
-\begin{itemize}
-    \item \textbf{CHƯƠNG I: GIỚI THIỆU} \\
-    Giới thiệu chung về đề tài, đặt vấn đề, mục tiêu, phạm vi ranh giới nghiên cứu, chức năng chính và ý nghĩa đề tài.
-    \item \textbf{CHƯƠNG II: PHÂN TÍCH CÁC HỆ THỐNG CÓ LIÊN QUAN TRÊN THỊ TRƯỜNG} \\
-    Khảo sát và phân tích các hệ thống quản trị đại học, ứng dụng di động đơn phân hệ và hệ thống Web nội bộ; từ đó đánh giá ưu điểm, hạn chế và đề xuất mô hình Cổng di động tập trung.
-    \item \textbf{CHƯƠNG III: CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ} \\
-    Trình bày cơ sở lý thuyết kiến trúc, công nghệ Frontend Mobile (Flutter, Riverpod 3, Melos, GoRouter), công nghệ Backend tích hợp (Node.js, Express, Shared JWT Bridge), Cơ sở dữ liệu và công nghệ hỗ trợ (Kafka, FCM, Socket.IO).
-    \item \textbf{CHƯƠNG IV: PHÂN TÍCH VÀ ĐẶC TẢ YÊU CẦU HỆ THỐNG} \\
-    Xác định người dùng, ma trận phân quyền RBAC, sơ đồ use case tổng thể; phân tích và đặc tả chi tiết yêu cầu chức năng theo từng phân hệ nghiệp vụ độc lập (Auth, HRM, iOffice, Notification, KHCN) kết hợp use case, biểu đồ hoạt động và biểu đồ tuần tự; cùng các yêu cầu phi chức năng.
-    \item \textbf{CHƯƠNG V: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG} \\
-    Thiết kế Cơ sở dữ liệu (Targeted ERD, Data Dictionary), Kiến trúc hệ thống phân tầng Clean Architecture, MultiDomainAuthInterceptor, Notification Metadata và mô hình Vận hành (System Operation E2E).
-    \item \textbf{CHƯƠNG VI: KẾT QUẢ HIỆN THỰC VÀ KIỂM THỬ} \\
-    Hiện thực hóa giao diện và logic các phân hệ, kết quả kiểm thử Đơn vị (Unit Tests \& Coverage), Widget Tests, Integration Tests, kịch bản E2E và đánh giá định lượng hiệu năng thực nghiệm (API Benchmarks, FCM Latency, RAM/FPS).
-    \item \textbf{CHƯƠNG VII: TỔNG KẾT VÀ HƯỚNG PHÁT TRIỂN} \\
-    Nhận xét kết quả đạt được, ý nghĩa khoa học và thực tiễn đối với Trường ĐHBK, những hạn chế còn tồn tại và hướng phát triển tiếp theo.
-\end{itemize}
+Đề tài ``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học'' hướng đến việc phát triển một ứng dụng di động hỗ trợ cán bộ, viên chức tiếp cận và xử lý các nghiệp vụ quản lý, điều hành tại Trường Đại học Bách khoa -- ĐHQG-HCM. Hệ thống được xây dựng theo hướng tích hợp và mở rộng các hệ thống hiện hữu của Nhà trường, qua đó cho phép người dùng thực hiện các nghiệp vụ cần thiết trên thiết bị di động thay vì phụ thuộc hoàn toàn vào giao diện Web.
+
+Trong quá trình triển khai, nhóm tập trung hiện thực hóa các nhóm chức năng chính phục vụ công tác cán bộ và điều hành, bao gồm quản lý thông tin hồ sơ, đăng ký và xử lý nghỉ phép, tiếp nhận thông báo, cùng các chức năng tích hợp với hệ thống Văn phòng điện tử và các nghiệp vụ Web hiện hữu. Ứng dụng đồng thời hỗ trợ điều hướng người dùng đến đúng ngữ cảnh xử lý và tái sử dụng một số chức năng Web phù hợp nhằm hạn chế việc phát triển trùng lặp với các hệ thống đã được Nhà trường vận hành.
+
+Trong phạm vi báo cáo này, nhóm trình bày quá trình phân tích, thiết kế, xây dựng và tích hợp ứng dụng di động với các dịch vụ backend hiện hữu của Nhà trường. Ứng dụng được phát triển trên nền tảng Flutter, tổ chức theo hướng module hóa và kết nối với các hệ thống nghiệp vụ thông qua các giao diện tích hợp phù hợp. Bên cạnh đó, nhóm tiến hành kiểm thử các chức năng chính, các luồng tích hợp và một số tình huống nghiệp vụ quan trọng nhằm đánh giá tính đúng đắn và khả năng hoạt động của hệ thống.
+
+Kết quả đạt được là ứng dụng MyHCMUT Mobile với các nhóm chức năng thuộc phạm vi đồ án được tích hợp với hạ tầng hiện hữu của Nhà trường. Hệ thống góp phần mở rộng khả năng tiếp cận các nghiệp vụ quản lý và điều hành trên thiết bị di động, đồng thời cho thấy tính khả thi của hướng phát triển ứng dụng di động dựa trên việc tích hợp và tái sử dụng các hệ thống nghiệp vụ đã có.
 
 \newpage
 \tableofcontents
