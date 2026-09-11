@@ -22,6 +22,7 @@
 \usepackage{enumitem}
 \usepackage{tocloft}
 \usepackage{etoolbox}
+\usepackage{keyval}
 \usepackage{indentfirst}
 \setlength{\parindent}{0.5cm}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -56,6 +57,61 @@
 \newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
 \raggedbottom
 \setlength{\parskip}{5pt plus 1pt minus 1pt}
+
+% --- CẤU HÌNH MACRO ĐẶC TẢ USE CASE DÙNG KEYVAL & ETOOLBOX ---
+\makeatletter
+\define@key{usecase}{id}{\def\uc@id{#1}}
+\define@key{usecase}{name}{\def\uc@name{#1}}
+\define@key{usecase}{actor}{\def\uc@actor{#1}}
+\define@key{usecase}{goal}{\def\uc@goal{#1}}
+\define@key{usecase}{pre}{\def\uc@pre{#1}}
+\define@key{usecase}{post}{\def\uc@post{#1}}
+\define@key{usecase}{trigger}{\def\uc@trigger{#1}}
+\define@key{usecase}{mainflow}{\def\uc@mainflow{#1}}
+\define@key{usecase}{altflow}{\def\uc@altflow{#1}}
+\define@key{usecase}{label}{\def\uc@label{#1}}
+
+\newcommand{\uc@addrow}[2]{%
+  \ifcsvoid{uc@#1}{}{%
+    \gappto\uc@rows{\textbf{#2} & \csname uc@#1\endcsname \tabularnewline \hline}%
+  }%
+}
+
+\newcommand{\usecasespec}[1]{%
+  \def\uc@id{}%
+  \def\uc@name{}%
+  \def\uc@actor{}%
+  \def\uc@goal{}%
+  \def\uc@pre{}%
+  \def\uc@post{}%
+  \def\uc@trigger{}%
+  \def\uc@mainflow{}%
+  \def\uc@altflow{}%
+  \def\uc@label{}%
+  \setkeys{usecase}{#1}%
+  \gdef\uc@rows{}%
+  \uc@addrow{actor}{Tác nhân}%
+  \uc@addrow{goal}{Mục tiêu}%
+  \uc@addrow{pre}{Tiền điều kiện}%
+  \uc@addrow{post}{Hậu điều kiện}%
+  \uc@addrow{trigger}{Kích hoạt}%
+  \uc@addrow{mainflow}{Luồng chính}%
+  \uc@addrow{altflow}{Luồng thay thế}%
+  \begin{table}[H]
+  \centering
+  \renewcommand{\arraystretch}{1.25}
+  \small
+  \begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
+  \hline
+  \textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+  \hline
+  \uc@rows
+  \end{tabularx}
+  \caption{\textit{Đặc tả Ca sử dụng \uc@id: \uc@name}}
+  \ifcsvoid{uc@label}{}{\label{\uc@label}}
+  \end{table}
+}
+\makeatother
 
 \usetikzlibrary{arrows,snakes,backgrounds}
 \usepackage{hyperref}

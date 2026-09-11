@@ -1,58 +1,102 @@
-\subsection{Phân hệ Trung tâm Thông báo Đẩy (Notification Module)}
+\subsection{Phân hệ Thông báo}
+\label{subsec:req_notification}
 \label{subsec:module_notification}
 
-\subsubsection{Mô tả Nghiệp vụ và Yêu cầu Chức năng}
-Phân hệ Trung tâm Thông báo Đẩy (tương ứng với gói mã nguồn \texttt{modules/notification}) chịu trách nhiệm duy trì kênh thông tin liên lạc tức thời giữa hệ sinh thái phần mềm Nhà trường và thiết bị cá nhân của cán bộ, giảng viên:
+\subsubsection{Mục tiêu}
+Phân hệ Thông báo cung cấp một điểm tiếp nhận thông tin và sự kiện nghiệp vụ tập trung trên ứng dụng di động cho toàn bộ các dịch vụ HRM và iOffice.
 
-\begin{itemize}
-    \item \textbf{Đăng ký và Quản lý Device Token:} Khi người dùng đăng nhập trên điện thoại, ứng dụng lấy FCM Device Token và tự động gửi lên máy chủ lưu vào bảng \texttt{fw\_user\_device\_token}.
-    \item \textbf{Tiếp nhận Thông báo Đa trạng thái:} Tiếp nhận và xử lý thông báo đẩy từ Firebase Cloud Messaging (FCM HTTP v1 API) ở cả ba trạng thái của ứng dụng: Đang mở (Foreground), Chạy ngầm (Background) và Đã tắt hoàn toàn (Terminated).
-    \item \textbf{Phân tích Metadata có cấu trúc (Structured Routing Metadata):} Thay vì sử dụng URL thô dễ bị gãy liên kết, hệ thống chuẩn hóa payload thông báo gồm 4 trường metadata cốt lõi:
-    \begin{itemize}
-        \item \texttt{source}: Phân hệ phát sinh thông báo (\texttt{'hrm'} hoặc \texttt{'ioffice'}).
-        \item \texttt{entityType}: Loại nghiệp vụ (\texttt{'leave'}, \texttt{'business-trip'}, \texttt{'incoming-doc'}, \texttt{'outgoing-doc'}, \texttt{'task'}).
-        \item \texttt{entityId}: Định danh duy nhất của bản ghi nghiệp vụ.
-        \item \texttt{isApproval}: Cờ đánh dấu màn hình duyệt dành cho cấp quản lý (\texttt{'true'} / \texttt{'false'}).
-    \end{itemize}
-    \item \textbf{Điều hướng sâu (Deep Linking):} Bộ điều phối \texttt{NotificationRouteParser} phân tích 4 trường metadata này để kích hoạt \texttt{GoRouter} mở thẳng đến màn hình chi tiết tương ứng khi người dùng bấm vào thông báo.
-    \item \textbf{Cập nhật Huy hiệu Ứng dụng (App Badge):} Đồng bộ số lượng thông báo chưa đọc hiển thị trực tiếp trên icon ứng dụng ở màn hình chính (\texttt{app\_badge\_plus}).
+Mục tiêu của phân hệ không chỉ dừng lại ở việc hiển thị các biểu ngữ (banner) thông báo đẩy tức thời, mà còn hỗ trợ người dùng nhận diện ngữ cảnh nghiệp vụ và kích hoạt cơ chế điều hướng sâu (Deep Linking) trực tiếp đến đúng màn hình đối tượng cần xử lý trên ứng dụng.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-NOT-01 -- Đăng ký thiết bị nhận thông báo:} Sau khi người dùng đăng nhập thành công và thiết bị được cấp FCM Device Token từ dịch vụ Firebase, ứng dụng Mobile phải tự động gửi token này lên backend để liên kết với tài khoản người dùng hiện tại.
+    
+    \item \textbf{FR-NOT-02 -- Cập nhật token:} Khi dịch vụ FCM làm mới hoặc cấp lại token cho thiết bị, ứng dụng phải tự động phát hiện và gửi token mới lên backend để cập nhật thông tin tiếp nhận.
+    
+    \item \textbf{FR-NOT-03 -- Nhận thông báo:} Ứng dụng phải hỗ trợ tiếp nhận thông báo đẩy trong mọi trạng thái hoạt động của thiết bị (Foreground, Background, Terminated) phù hợp với cơ chế của hệ điều hành Android và iOS.
+    
+    \item \textbf{FR-NOT-04 -- Xem trung tâm thông báo:} Người dùng có thể mở Trung tâm thông báo trên ứng dụng để xem danh sách toàn bộ các thông báo đã nhận, phân biệt rõ ràng giữa thông báo đã đọc và chưa đọc.
+    
+    \item \textbf{FR-NOT-05 -- Cập nhật trạng thái đọc:} Khi người dùng mở xem thông báo hoặc thực hiện thao tác đánh dấu đã đọc, hệ thống phải cập nhật trạng thái tương ứng trên giao diện và gửi request đồng bộ về backend.
+    
+    \item \textbf{FR-NOT-06 -- Điều hướng theo ngữ cảnh (Deep Linking):} Khi người dùng chạm vào một thông báo có dữ liệu định tuyến hợp lệ, ứng dụng phải trích xuất các trường thông tin chuẩn hóa để xác định chính xác màn hình cần mở:
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|}
+\hline
+\textbf{Trường Metadata} & \textbf{Ý nghĩa nghiệp vụ phục vụ định tuyến} \\
+\hline
+\texttt{source} & Miền dịch vụ phát sinh thông báo (ví dụ \texttt{'hrm'} hoặc \texttt{'ioffice'}). \\
+\hline
+\texttt{entityType} & Loại đối tượng nghiệp vụ (\texttt{'leave'}, \texttt{'business-trip'}, \texttt{'incoming-doc'}, \texttt{'outgoing-doc'}, \texttt{'task'}). \\
+\hline
+\texttt{entityId} & Khóa chính định danh duy nhất của bản ghi đối tượng cần mở (ID đơn nghỉ phép, ID nhiệm vụ...). \\
+\hline
+\texttt{isApproval} & Cờ đánh dấu ngữ cảnh: \texttt{true} nếu cần mở giao diện phê duyệt của cấp quản lý, \texttt{false} nếu mở giao diện xem chi tiết thông thường. \\
+\hline
+\end{tabularx}
+\caption{\textit{Chuẩn hóa các trường Metadata định tuyến thông báo}}
+\label{tab:notification_metadata}
+\end{table}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-NOT-07 -- Xử lý thông báo không còn hợp lệ:} Trường hợp đối tượng được thông báo tham chiếu đã bị xóa, người dùng không còn quyền truy cập hoặc route điều hướng không xác định được, ứng dụng tuyệt đối không được điều hướng tới một màn hình sai hoặc làm dừng đột ngột ứng dụng; hệ thống phải hiển thị thông báo giải thích nhẹ nhàng và giữ người dùng ở trạng thái an toàn.
+    
+    \item \textbf{FR-NOT-08 -- Đăng xuất thiết bị:} Khi người dùng đăng xuất, ứng dụng phải gửi request yêu cầu backend hủy liên kết giữa FCM token của thiết bị và tài khoản người dùng, nhằm ngăn chặn triệt để nguy cơ gửi thông báo nghiệp vụ của người dùng cũ đến thiết bị.
 \end{itemize}
 
 \subsubsection{Đặc tả Ca sử dụng (Use Cases)}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\small
-\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
-\hline
-\textbf{Mã Ca sử dụng} & \textbf{UC\_NOTI\_01: Tiếp nhận Thông báo Đẩy và Điều hướng sâu (Deep Linking)} \\
-\hline
-\textbf{Tác nhân} & Cán bộ, giảng viên, lãnh đạo nhận thông báo \\
-\hline
-\textbf{Tiền điều kiện} & Ứng dụng MyHCMUT đã được cấp quyền gửi thông báo trên thiết bị di động, đã đăng ký FCM Token thành công lên máy chủ. \\
-\hline
-\textbf{Hậu điều kiện} & Người dùng nhận được thông báo nổi và được điều hướng chính xác vào màn hình chi tiết nghiệp vụ khi nhấn vào thông báo. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Một sự kiện nghiệp vụ phát sinh trên Backend (ví dụ: đơn nghỉ phép được duyệt, có văn bản khẩn đến, hoặc được giao nhiệm vụ mới). \newline
-2. Backend bọc thao tác nghiệp vụ trong Transaction cơ sở dữ liệu. Sau khi giao dịch commit thành công (Post-commit Hook), sự kiện mới được đẩy vào Kafka Topic \texttt{SEND\_NOTIFY\_SERVICE} nhằm triệt tiêu nguy cơ phát tán ``thông báo ma'' khi transaction bị rollback. \newline
-3. Tiến trình Consumer tiêu thụ thông điệp từ Kafka, ghi nhận lịch sử vào bảng \texttt{fw\_notification}, truy vấn danh sách FCM Token của người nhận từ bảng \texttt{fw\_user\_device\_token}. \newline
-4. Consumer đóng gói payload HTTP v1 gửi tới Google FCM Server. \newline
-5. Google FCM chuyển tiếp thông báo tới thiết bị di động. Ứng dụng tiếp nhận và hiển thị thông báo theo 3 trạng thái vòng đời:
-   \begin{itemize}[leftmargin=*]
-       \item \textit{Foreground (Đang mở):} Lắng nghe qua \texttt{FirebaseMessaging.onMessage}, hiển thị Banner nội bộ hoặc Flushbar mà không gây gián đoạn công việc hiện tại.
-       \item \textit{Background (Chạy ngầm):} Hệ điều hành hiển thị Notification trên thanh trạng thái; khi người dùng chạm vào, sự kiện được bắt qua \texttt{FirebaseMessaging.onMessageOpenedApp}.
-       \item \textit{Terminated (Đã đóng hẳn):} Người dùng bấm vào thông báo để đánh thức ứng dụng; ứng dụng trích xuất payload khởi tạo từ \texttt{FirebaseMessaging.getInitialMessage}.
-   \end{itemize}
-6. Lớp \texttt{NotificationRouteParser} phân tích 4 trường metadata cốt lõi (\texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval}) và kích hoạt \texttt{GoRouter} điều hướng thẳng vào màn hình chi tiết, đồng thời cập nhật huy hiệu (\texttt{app\_badge\_plus}). \\
-\hline
-\textbf{Luồng ngoại lệ} & Nếu token FCM của thiết bị bị hết hạn hoặc không hợp lệ (lỗi \texttt{UNREGISTERED}) $\rightarrow$ Consumer tự động đánh dấu và dọn dẹp token khỏi bảng \texttt{fw\_user\_device\_token}. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC\_NOTI\_01: Tiếp nhận Thông báo và Điều hướng sâu}}
-\label{tab:uc_noti_01}
-\end{table}
+\usecasespec{
+  id={UC-NOT-01},
+  name={Xem và mở thông báo},
+  actor={Người dùng ứng dụng MyHCMUT Mobile.},
+  pre={Người dùng đã đăng nhập vào ứng dụng.},
+  trigger={Người dùng mở Trung tâm thông báo hoặc chạm vào thông báo đẩy xuất hiện trên màn hình khóa / thanh trạng thái.},
+  mainflow={
+    1. Hệ thống lấy danh sách thông báo và hiển thị trạng thái đã đọc/chưa đọc. \newline
+    2. Người dùng chọn một mục thông báo cụ thể. \newline
+    3. Ứng dụng đánh dấu thông báo là đã đọc và phân tích 4 trường metadata (\texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval}). \newline
+    4. Hệ thống xác định đường dẫn điều hướng (Route) tương ứng và kích hoạt chuyển màn hình trực tiếp đến đúng đối tượng nghiệp vụ.
+  },
+  altflow={
+    Metadata không hợp lệ hoặc bản ghi đối tượng đã bị xóa $\rightarrow$ Hệ thống hiển thị thông báo đối tượng không khả dụng và không thực hiện điều hướng sai.
+  },
+  post={Người dùng được đưa tới đúng ngữ cảnh cần thao tác; trạng thái thông báo được cập nhật là Đã đọc.},
+  label={tab:uc_not_01}
+}
+
+\usecasespec{
+  id={UC-NOT-02},
+  name={Quản lý token thiết bị},
+  actor={Ứng dụng Mobile (thực thi tự động dưới nền).},
+  trigger={Người dùng đăng nhập thành công, FCM token được làm mới, hoặc người dùng đăng xuất.},
+  mainflow={
+    1. Ứng dụng nhận FCM Device Token từ dịch vụ Google Firebase. \newline
+    2. Gửi request kèm token và định danh người dùng lên backend dịch vụ thông báo. \newline
+    3. Backend kiểm tra và cập nhật bản ghi ánh xạ giữa \texttt{user\_id} và \texttt{device\_token} trong bảng dữ liệu thiết bị. \newline
+    4. Khi người dùng đăng xuất, ứng dụng gửi lệnh thu hồi để backend hủy kích hoạt token tương ứng.
+  },
+  post={Cơ sở dữ liệu backend duy trì danh sách các token thiết bị đang hoạt động hợp lệ cho người dùng.},
+  label={tab:uc_not_02}
+}
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-NOT-01:} Người dùng chỉ được phép truy xuất và thao tác trên danh sách các thông báo thuộc quyền sở hữu của chính tài khoản mình.
+    \item \textbf{BR-NOT-02:} Toàn bộ dữ liệu metadata điều hướng gửi kèm thông báo phải được kiểm tra và chuẩn hóa trước khi tạo lệnh điều hướng; ứng dụng không được tin cậy hoàn toàn dữ liệu push như một lệnh điều hướng tự do.
+    \item \textbf{BR-NOT-03:} Các tham số \texttt{source}, \texttt{entityType}, \texttt{entityId} và ngữ cảnh \texttt{isApproval} bắt buộc phải được ánh xạ sang các route nội bộ đã được định nghĩa tĩnh trong bộ định tuyến của ứng dụng.
+    \item \textbf{BR-NOT-04:} Quyền truy cập vào đối tượng nghiệp vụ sau khi điều hướng sâu (Deep Link) vẫn phải được backend kiểm tra độc lập; việc nhận được thông báo không đồng nghĩa với việc tự động được cấp quyền thao tác.
+    \item \textbf{BR-NOT-05:} FCM Device Token có thể thay đổi trong suốt vòng đời của ứng dụng; Mobile phải cài đặt cơ chế lắng nghe sự kiện làm mới token để kịp thời cập nhật lên máy chủ.
+    \item \textbf{BR-NOT-06:} Khi dịch vụ Firebase FCM phản hồi thông báo về một token không còn hợp lệ (Unregistered / Invalid Token), backend phải tự động xóa hoặc gắn cờ vô hiệu hóa token đó trong cơ sở dữ liệu.
+    \item \textbf{BR-NOT-07:} Tính năng hiển thị số đếm huy hiệu (Badge Counter) phụ thuộc hoàn toàn vào hệ điều hành và giao diện trình khởi chạy (Launcher) của từng dòng máy; hệ thống không cam kết mọi thiết bị đều hiển thị số badge đồng nhất.
+    \item \textbf{BR-NOT-08:} Hệ thống không giả định rằng mọi sự kiện thông báo đẩy đều được phân phối tới thiết bị chính xác một lần (không bảo đảm Exactly-Once). Phân hệ thông báo chỉ đóng vai trò kênh hỗ trợ thông tin nhanh; trạng thái nghiệp vụ chuẩn mực cuối cùng luôn phải được truy vấn từ backend.
+\end{itemize}
 
 \subsubsection{Biểu đồ Tuần tự (Sequence Diagrams)}
 

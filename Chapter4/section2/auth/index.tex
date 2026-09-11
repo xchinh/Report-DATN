@@ -1,74 +1,75 @@
-\subsection{Phân hệ Xác thực và Quản lý Phiên (Auth Module)}
+\subsection{Phân hệ xác thực và chuyển tiếp phiên Mobile -- Web}
+\label{subsec:req_auth}
 \label{subsec:module_auth}
 
-\subsubsection{Mô tả Nghiệp vụ và Yêu cầu Chức năng}
-Phân hệ Xác thực và Quản lý Phiên đóng vai trò là cửa ngõ an ninh cho toàn bộ ứng dụng di động MyHCMUT, chịu trách nhiệm xác thực danh tính người dùng qua máy chủ xác thực tập trung của Nhà trường (HCMUT CAS SSO) hoặc tài khoản nội bộ, quản lý phiên làm việc đa miền qua cơ chế Dual-Token, tự động làm mới phiên ngầm (Silent Refresh) và cung cấp giải pháp One-Time Ticket SSO cho phép người dùng mở các phân hệ Web chuyên sâu mà không cần đăng nhập lại:
+\subsubsection{Mục tiêu}
+Phân hệ xác thực có nhiệm vụ bảo đảm người dùng phải được xác thực danh tính hợp lệ trước khi truy cập các dịch vụ và chức năng nghiệp vụ được bảo vệ của ứng dụng MyHCMUT Mobile.
 
-\begin{itemize}
-    \item \textbf{Quản lý Phiên làm việc Đa miền:} Lưu trữ chuỗi Access Token và Refresh Token qua \texttt{MultiDomainTokenManager} sử dụng vùng nhớ riêng biệt của ứng dụng trên \texttt{SharedPreferences} kết hợp bộ đệm In-Memory truy xuất tức thì $O(1)$, hỗ trợ xóa sạch dữ liệu khi đăng xuất.
-    \item \textbf{Làm mới phiên làm việc ngầm (Silent Refresh):} Tự động bắt lỗi HTTP 401 Unauthorized tại \texttt{MultiDomainAuthInterceptor} để kích hoạt luồng làm mới token ngầm mà không làm gián đoạn trải nghiệm người dùng.
-    \item \textbf{Cơ chế One-Time Ticket SSO cho Web App:} Cung cấp cơ chế cấp vé dùng một lần (TTL 60s, Single-use trên Redis) cho phép ứng dụng di động mở các phân hệ Web mở rộng qua WebView/InAppBrowser an toàn, không truyền JWT trực tiếp trên URL.
+Ngoài phiên làm việc độc lập của ứng dụng di động, hệ thống còn phải giải quyết bài toán người dùng cần mở các chức năng nghiệp vụ phức tạp của HRM Web ngay bên trong ứng dụng thông qua In-App WebView. Do phiên HTTP của ứng dụng di động (dựa trên JWT Bearer Token) và phiên trình duyệt của WebView (dựa trên Cookie/Session) được quản lý hoàn toàn độc lập, hệ thống cần thiết lập cơ chế chuyển tiếp trạng thái xác thực an toàn thông qua vé xác thực dùng một lần (Single-Use SSO Ticket), tuyệt đối không yêu cầu người dùng phải nhập lại thông tin tài khoản và mật khẩu.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-AUTH-01 -- Xác thực người dùng:} Hệ thống phải cho phép người dùng đăng nhập thông qua cơ chế xác thực tập trung được Nhà trường cung cấp (HCMUT CAS SSO) hoặc xác thực mật khẩu nội bộ. Sau khi xác thực thành công, ứng dụng Mobile phải nhận được thông tin định danh người dùng và chuỗi khóa xác thực (JWT Access Token / Refresh Token) cần thiết để gọi các API thuộc phạm vi quyền hạn được cấp.
+    
+    \item \textbf{FR-AUTH-02 -- Kiểm soát truy cập:} Ứng dụng chỉ được cho phép người dùng truy cập các màn hình và chức năng yêu cầu xác thực khi trạng thái phiên đăng nhập còn hiệu lực. Tất cả các API nghiệp vụ ở tầng backend phải liên tục thẩm định token trong tiêu đề HTTP request và kiểm tra quyền tương ứng trước khi xử lý.
+    
+    \item \textbf{FR-AUTH-03 -- Đăng xuất:} Khi người dùng chọn đăng xuất, ứng dụng phải xóa toàn bộ trạng thái xác thực cục bộ liên quan đến phiên hiện tại, xóa FCM token trên backend và đưa người dùng về màn hình đăng nhập. Toàn bộ dữ liệu bộ nhớ đệm (cache) gắn với danh tính của người dùng cũ không được phép tiếp tục sử dụng cho phiên đăng nhập tiếp theo.
+    
+    \item \textbf{FR-AUTH-04 -- Yêu cầu vé xác thực Web:} Khi người dùng đã đăng nhập hợp lệ trên Mobile và kích hoạt chức năng mở màn hình HRM Web được hỗ trợ, ứng dụng phải có khả năng gửi request yêu cầu backend phát hành một vé xác thực dùng một lần (SSO Ticket) dành riêng cho hệ thống Web đích.
+    
+    \item \textbf{FR-AUTH-05 -- Mở WebView bằng vé xác thực:} Ứng dụng phải sử dụng vé được backend cung cấp để nhúng vào URL mở trang Web tương ứng trong In-App WebView. Chuỗi Access Token dài hạn của Mobile tuyệt đối không được đưa trực tiếp vào URL của WebView nhằm phòng ngừa rủi ro lộ lọt qua lịch sử duyệt web hoặc log hệ thống.
+    
+    \item \textbf{FR-AUTH-06 -- Tiêu thụ vé một lần:} Vé xác thực SSO chỉ được hệ thống backend chấp nhận trong khoảng thời gian tồn tại rất ngắn (Time-To-Live quy định) và sẽ bị vô hiệu hóa ngay lập tức sau khi đã được tiêu thụ thành công một lần duy nhất.
+    
+    \item \textbf{FR-AUTH-07 -- Giao tiếp WebView -- Mobile:} Ứng dụng phải có khả năng lắng nghe và tiếp nhận các sự kiện nghiệp vụ được cho phép từ WebView thông qua JavaScript Bridge (chẳng hạn sự kiện cập nhật hồ sơ thành công hoặc yêu cầu đóng cửa sổ WebView). Sự kiện chỉ được tiếp nhận và xử lý khi nguồn gửi (origin) thuộc danh sách tên miền tin cậy được hệ thống định sẵn.
 \end{itemize}
 
 \subsubsection{Đặc tả Ca sử dụng (Use Cases)}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\small
-\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
-\hline
-\textbf{Mã Ca sử dụng} & \textbf{UC\_AUTH\_01: Đăng nhập Hệ thống và Quản lý Phiên Đa miền} \\
-\hline
-\textbf{Tác nhân} & Toàn bộ cán bộ, giảng viên, nhân viên Nhà trường \\
-\hline
-\textbf{Tiền điều kiện} & Cán bộ có tài khoản HCMUT SSO hoặc tài khoản nội bộ còn hoạt động. \\
-\hline
-\textbf{Hậu điều kiện} & Cán bộ được cấp Access Token dùng chung (Shared JWT), lưu trữ an toàn và nạp hồ sơ người dùng. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Người dùng mở ứng dụng MyHCMUT, chọn phương thức đăng nhập (CAS SSO hoặc Mật khẩu). \newline
-2. Người dùng nhập thông tin xác thực và nhấn \textit{``Đăng nhập''}. \newline
-3. Ứng dụng gửi yêu cầu tới máy chủ xác thực \texttt{myhcmut-be} qua endpoint \texttt{POST /api/auth/login}. \newline
-4. Máy chủ xác thực thông tin, cấp cặp token (\texttt{accessToken}, \texttt{refreshToken}) chứa các thông tin định danh (\texttt{shcc}, \texttt{maDonVi}, \texttt{roles}, \texttt{permissions}). \newline
-5. Ứng dụng lưu trữ token vào \texttt{MultiDomainTokenManager}, kích hoạt \texttt{authStateProvider} và điều hướng vào màn hình chính Dashboard. \\
-\hline
-\textbf{Luồng ngoại lệ} & Nếu thông tin xác thực không chính xác $\rightarrow$ Hệ thống hiển thị thông báo lỗi và yêu cầu nhập lại; nếu tài khoản bị khóa $\rightarrow$ từ chối đăng nhập. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC\_AUTH\_01: Đăng nhập Hệ thống và Quản lý Phiên}}
-\label{tab:uc_auth_01}
-\end{table}
+\usecasespec{
+  id={UC-AUTH-01},
+  name={Đăng nhập hệ thống},
+  actor={Cán bộ / Giảng viên},
+  goal={Xác thực danh tính và truy cập vào các chức năng của MyHCMUT Mobile.},
+  pre={Người dùng có tài khoản hợp lệ do Nhà trường cấp và thiết bị có kết nối mạng Internet.},
+  trigger={Người dùng mở ứng dụng và chọn thao tác đăng nhập.},
+  mainflow={
+    1. Người dùng chọn phương thức đăng nhập (HCMUT CAS SSO hoặc Mật khẩu). \newline
+    2. Hệ thống chuyển yêu cầu xác thực đến dịch vụ xác thực tập trung. \newline
+    3. Dịch vụ xác thực thẩm định thông tin tài khoản và trả kết quả xác thực. \newline
+    4. Ứng dụng di động nhận JWT Token, lưu trữ an toàn và gửi yêu cầu tải thông tin cá nhân cùng quyền hạn người dùng. \newline
+    5. Hệ thống điều hướng người dùng vào màn hình chính của ứng dụng.
+  },
+  altflow={
+    - \textit{Xác thực thất bại (sai mật khẩu / tài khoản bị khóa):} Hệ thống hiển thị thông báo lỗi chi tiết và giữ người dùng ở lại màn hình đăng nhập. \newline
+    - \textit{Mất kết nối mạng:} Ứng dụng hiển thị thông báo lỗi mạng và cho phép thử lại.
+  },
+  post={Phiên làm việc trên ứng dụng Mobile được thiết lập ở trạng thái đã xác thực thành công.},
+  label={tab:uc_auth_01}
+}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\small
-\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
-\hline
-\textbf{Mã Ca sử dụng} & \textbf{UC\_AUTH\_02: One-Time Ticket SSO Chuyển tiếp sang Web App} \\
-\hline
-\textbf{Tác nhân} & Cán bộ, giảng viên có nhu cầu mở phân hệ Web phụ trợ từ Mobile \\
-\hline
-\textbf{Tiền điều kiện} & Cán bộ đã đăng nhập hợp lệ trên ứng dụng di động MyHCMUT, có chuỗi \texttt{accessToken} hợp lệ. \\
-\hline
-\textbf{Hậu điều kiện} & Ứng dụng Web mở ra trên In-App WebView với phiên làm việc đã được xác thực tự động (không cần nhập lại mật khẩu). \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Cán bộ nhấn chọn một tính năng chuyên sâu cần mở giao diện Web trên ứng dụng Mobile (ví dụ: giải trình trễ hạn, thẩm định danh mục lý lịch chuyên sâu). \newline
-2. Ứng dụng Mobile gọi API \texttt{POST /api/auth/sso/generate-ticket} gửi kèm thông tin định danh và đích đến (\texttt{targetApp: 'hrm-fe'}). \newline
-3. Backend sinh vé ngẫu nhiên an toàn bằng bộ tạo số ngẫu nhiên mật mã học gồm 32 bytes ngẫu nhiên mã hóa hex (chuỗi 64 ký tự hex), lưu vào Redis dưới khóa \texttt{sso:ticket:<ticket>} với TTL 60 giây (\texttt{SET EX 60}) và trả về cho Mobile. \newline
-4. Mobile mở In-App WebView tải URL đích đính kèm vé: \texttt{https://domain/feature?ticket=<hex64>}. \newline
-5. Web Frontend phát hiện tham số \texttt{ticket} trong URL query, lập tức trích xuất và gọi \texttt{POST /api/auth/sso/consume-ticket}. \newline
-6. Backend thực hiện đọc và xóa vé nguyên tử trên Redis bằng lệnh \texttt{GETDEL} (hoặc Lua script tương đương), cấp Session Cookie (\texttt{connect.sid}) với các cờ bảo vệ \texttt{HttpOnly; SameSite=Lax; Secure} cho Web Frontend. \newline
-7. Web Frontend làm sạch tham số vé trên thanh địa chỉ thông qua \texttt{window.history.replaceState} để chống lộ lọt vé qua lịch sử duyệt web hoặc header Referer, sau đó kết xuất trực tiếp màn hình chức năng. \\
-\hline
-\textbf{Luồng ngoại lệ} & Nếu vé quá hạn 60 giây hoặc đã bị tiêu thụ trước đó $\rightarrow$ Lệnh \texttt{GETDEL} trả về rỗng $\rightarrow$ Backend trả về HTTP 401 Unauthorized $\rightarrow$ Web App chuyển hướng an toàn về màn hình đăng nhập chuẩn. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC\_AUTH\_02: One-Time Ticket SSO sang Web App}}
-\label{tab:uc_auth_02}
-\end{table}
+\usecasespec{
+  id={UC-AUTH-02},
+  name={Chuyển sang HRM Web bằng vé dùng một lần},
+  actor={Người dùng đã đăng nhập hợp lệ trên ứng dụng di động.},
+  goal={Mở một trang chức năng HRM Web trong In-App WebView mà không phải đăng nhập lại.},
+  pre={Phiên làm việc Mobile đang hợp lệ; chức năng đích nằm trong danh mục được hỗ trợ chuyển tiếp.},
+  trigger={Người dùng chọn chức năng yêu cầu xử lý trên HRM Web (ví dụ cập nhật lý lịch nâng cao).},
+  mainflow={
+    1. Mobile gửi request lên backend yêu cầu cấp vé xác thực SSO dùng một lần cho URL đích. \newline
+    2. Backend kiểm tra phiên Mobile, sinh mã vé ngẫu nhiên có chữ ký số (kèm TTL ngắn) và trả về cho client. \newline
+    3. Mobile mở In-App WebView với URL chứa tham số vé xác thực. \newline
+    4. HRM Web nhận vé, gửi yêu cầu xác thực vé về backend dịch vụ. \newline
+    5. Backend thẩm định vé, thực hiện tiêu thụ vé (hủy hiệu lực vé) và thiết lập phiên Web cho người dùng. \newline
+    6. WebView hiển thị đúng chức năng nghiệp vụ mà người dùng yêu cầu.
+  },
+  altflow={
+    Vé không tồn tại, đã hết hạn TTL hoặc đã bị tiêu thụ trước đó $\rightarrow$ Backend từ chối thiết lập phiên Web; WebView hiển thị thông báo lỗi phiên và yêu cầu người dùng thao tác lại từ Mobile.
+  },
+  post={Cửa sổ WebView được thiết lập phiên làm việc hợp lệ tương ứng với tài khoản người dùng hiện tại.},
+  label={tab:uc_auth_02}
+}
 
 \subsubsection{Phân tích An toàn Mô hình Đe dọa STRIDE cho Cầu nối SSO (SSO Bridge)}
 
@@ -105,3 +106,15 @@ Cơ chế cầu nối SSO giữa ứng dụng Native Mobile và In-App WebView �
 \end{figure}
 
 Biểu đồ hình \ref{fig:seq_auth_login} mô tả chi tiết quy trình người dùng xác thực với máy chủ đăng nhập tập trung, cơ chế phân phối chuỗi JWT dùng chung (\texttt{Shared JWT}) được ký bởi khóa bí mật \texttt{AUTH\_JWT\_SECRET}, cho phép các backend \texttt{hrm-be} và \texttt{ioffice-be} xác thực cục bộ độc lập với độ trễ dưới 5ms. Bên cạnh đó, toàn bộ logic sinh vé, tiêu thụ vé nguyên tử và xử lý lỗi đã được bảo vệ bởi bộ 46 ca kiểm thử tự động (\texttt{sso\_*.unit.test.ts}) đạt tỷ lệ vượt qua 100\%.
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-AUTH-01:} Chỉ những người dùng sở hữu phiên làm việc Mobile đang hoạt động và hợp lệ mới có quyền yêu cầu hệ thống phát hành vé chuyển tiếp SSO.
+    \item \textbf{BR-AUTH-02:} Vé SSO chỉ được chấp nhận khi chuyển tiếp đến đúng hệ thống Web đích đã được cấu hình chấp nhận trước tại backend.
+    \item \textbf{BR-AUTH-03:} Vé SSO có thời gian tồn tại (TTL) giới hạn; baseline thiết kế hiện tại quy định thời gian hiệu lực tối đa là 60 giây kể từ thời điểm phát hành.
+    \item \textbf{BR-AUTH-04:} Vé SSO đã được tiêu thụ thành công một lần sẽ bị xóa hoặc gắn cờ vô hiệu hóa ngay lập tức, tuyệt đối không cho phép sử dụng lại lần thứ hai.
+    \item \textbf{BR-AUTH-05:} Chuỗi Access Token dài hạn của phiên Mobile tuyệt đối không được truyền trực tiếp như một tham số URL công khai để thiết lập phiên WebView.
+    \item \textbf{BR-AUTH-06:} Cầu nối JavaScript Bridge chỉ lắng nghe và thực thi các thông điệp gửi từ nguồn (origin) nằm trong danh sách tên miền hợp lệ của Nhà trường.
+    \item \textbf{BR-AUTH-07:} Cơ chế vé dùng một lần không ngăn ngừa được trường hợp vé bị chặn bắt và tiêu thụ bởi kẻ tấn công trước khi người dùng hợp lệ sử dụng; đây là giới hạn bảo mật cần được xem xét và bổ sung biện pháp ràng buộc địa chỉ IP/User-Agent trong tương lai.
+\end{itemize}

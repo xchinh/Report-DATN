@@ -1,111 +1,92 @@
-\subsection{Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác (iOffice Module)}
+\subsection{Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác (iOffice)}
 \label{subsec:module_ioffice}
+\label{subsec:req_schedule}
 
-\subsubsection{Mô tả Nghiệp vụ và Yêu cầu Chức năng}
-Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác (tương ứng với gói mã nguồn \texttt{modules/ioffice}) là trung tâm điều hành số tích hợp của Nhà trường, kết nối trực tiếp với backend \texttt{ioffice-be} và cơ sở dữ liệu \texttt{hcmut\_hanh\_chinh\_dev}. Phân hệ bao gồm 3 nhóm nghiệp vụ cốt lõi:
+\subsubsection{Mục tiêu}
+Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác kết nối trực tiếp với dịch vụ \texttt{ioffice-be} của Nhà trường, cung cấp cho viên chức, giảng viên khả năng tra cứu văn bản đến/đi, theo dõi tiến độ công việc và chủ động theo dõi các sự kiện lịch công tác tuần của Nhà trường và đơn vị trên thiết bị di động.
 
-\begin{enumerate}
-    \item \textbf{Văn phòng số (Văn bản đến / đi):}
-    \begin{itemize}
-        \item Tra cứu danh mục sổ văn bản đến, văn bản đi; lọc theo mức độ khẩn cấp, thời gian ban hành và đơn vị phát hành.
-        \item Tích hợp trình đọc tài liệu PDF trực tiếp (\texttt{pdfrx}) trên ứng dụng, hỗ trợ phóng to/thu nhỏ và mở tệp ngoại tuyến.
-        \item Lãnh đạo Đơn vị thực hiện bút phê chỉ đạo, giao việc trực tiếp từ văn bản đến cho các cán bộ phụ trách.
-    \end{itemize}
-    \item \textbf{Quản lý Nhiệm vụ \& Công việc (Tasks / Missions):}
-    \begin{itemize}
-        \item Phân loại 3 nhóm nhiệm vụ: Nhiệm vụ trọng tâm, Nhiệm vụ được giao và Nhiệm vụ chung; kết hợp 5 tab lọc trạng thái (Cần xử lý, Nháp, Đang làm, Đã xong, Tất cả).
-        \item Màn hình chi tiết 4 tab: Tab Tổng quan (\% tiến độ, hạn chót), Tab Phân công cây đầu việc phân cấp (\texttt{outlined-tree}), Tab Báo cáo tiến độ các đợt và Tab Văn bản liên kết.
-        \item Hỗ trợ Modal xem chi tiết công việc (\texttt{TaskDetailBottomSheet}) và Modal nộp báo cáo tiến độ đợt (\texttt{ReportBatchDetailBottomSheet}) đính kèm minh chứng.
-    \end{itemize}
-    \item \textbf{Lịch công tác Tuần \& Điểm danh Cuộc họp Thời gian thực:}
-    \begin{itemize}
-        \item Tra cứu lịch tuần cấp trường và lịch tuần cấp đơn vị với giao diện \texttt{table\_calendar}.
-        \item Điểm danh cuộc họp thông minh: Ràng buộc khung giờ mở điểm danh nghiêm ngặt (từ trước giờ họp 1 giờ đến hết ngày diễn ra cuộc họp).
-        \item Điểm danh có mặt một chạm hoặc báo vắng mặt có lý do giải trình (1--200 ký tự).
-        \item Đồng bộ danh sách đại biểu có mặt tức thời qua kết nối WebSocket (\texttt{Socket.IO: scheduleCheckin}) với độ trễ dưới 50ms.
-    \end{itemize}
-\end{enumerate}
+Đối với các cuộc họp có cấu hình điểm danh, ứng dụng hỗ trợ tính năng điểm danh có mặt hoặc báo vắng kèm lý do giải trình. Mọi điều kiện hợp lệ về thẩm quyền và khung thời gian điểm danh phải được backend kiểm soát độc lập, không phụ thuộc vào đồng hồ thời gian hoặc trạng thái do thiết bị di động tự thiết lập.
+
+\subsubsection{Yêu cầu chức năng}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{FR-SCH-01 -- Xem lịch công tác:} Người dùng có quyền phải có khả năng tra cứu danh sách các sự kiện lịch tuần trường, lịch đơn vị và xem thông tin chi tiết: chủ trì, thời gian bắt đầu/kết thúc, địa điểm, thành phần tham dự và nội dung cuộc họp.
+    
+    \item \textbf{FR-SCH-02 -- Hiển thị thao tác điểm danh:} Đối với các cuộc họp có cấu hình điểm danh, ứng dụng phải tự động hiển thị nút bấm thao tác điểm danh/báo vắng khi sự kiện nằm trong khoảng thời gian cho phép.
+    
+    \item \textbf{FR-SCH-03 -- Điểm danh có mặt:} Người dùng phải có khả năng gửi yêu cầu ghi nhận có mặt đối với cuộc họp mà mình có tên trong danh sách đại biểu được mời tham dự.
+    
+    \item \textbf{FR-SCH-04 -- Báo vắng:} Người dùng có thể khai báo vắng mặt và bắt buộc phải cung cấp lý do vắng hợp lệ (độ dài quy định) khi chức năng này được sự kiện cho phép.
+    
+    \item \textbf{FR-SCH-05 -- Kiểm tra tại backend:} Backend phải thẩm định lại danh tính người dùng, quyền tham dự cuộc họp và điều kiện khung giờ hợp lệ trước khi ghi nhận trạng thái điểm danh vào cơ sở dữ liệu.
+    
+    \item \textbf{FR-SCH-06 -- Đồng bộ thay đổi:} Khi trạng thái điểm danh của cuộc họp thay đổi, ứng dụng phải cập nhật ngay giao diện hiển thị; các thay đổi phát sinh từ người dùng khác có thể được cập nhật theo thời gian thực qua kênh kết nối mạng của hệ thống.
+\end{itemize}
 
 \subsubsection{Đặc tả Ca sử dụng (Use Cases)}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\small
-\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
-\hline
-\textbf{Mã Ca sử dụng} & \textbf{UC\_IOFFICE\_01: Tra cứu Văn bản Đến/Đi và Bút phê Phân phối Chỉ đạo} \\
-\hline
-\textbf{Tác nhân} & Cán bộ xem văn bản, Lãnh đạo Đơn vị (Người chỉ đạo) \\
-\hline
-\textbf{Tiền điều kiện} & Cán bộ đã đăng nhập; có quyền truy cập văn phòng điện tử. \\
-\hline
-\textbf{Hậu điều kiện} & Cán bộ đọc được nội dung văn bản; văn bản được phân phối kèm chỉ đạo xử lý. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Cán bộ mở màn hình \texttt{IncomingDocsListPage} hoặc \texttt{OutgoingDocsListPage}. \newline
-2. Hệ thống tải danh sách văn bản phân trang cuộn vô tận (\texttt{InfiniteScrollPagination}). \newline
-3. Nhấn vào một văn bản cụ thể $\rightarrow$ Mở màn hình \texttt{IncomingDocDetailPage}, tích hợp trình đọc PDF hiển thị nội dung toàn văn. \newline
-4. Lãnh đạo Đơn vị nhấn nút \textit{``Phân phối văn bản''}, chọn cán bộ xử lý chính, cán bộ phối hợp, hạn chót và nhập bút phê chỉ đạo. \newline
-5. Nhấn \textit{``Lưu chỉ đạo''} $\rightarrow$ Hệ thống ghi nhận vào \texttt{van\_ban\_den\_distribution} và phát thông báo đẩy tới các cán bộ được giao việc. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC\_IOFFICE\_01: Tra cứu và Phân phối Văn bản}}
-\label{tab:uc_ioffice_01}
-\end{table}
+\usecasespec{
+  id={UC-SCH-01},
+  name={Điểm danh cuộc họp},
+  actor={Cán bộ / Giảng viên có tên trong danh sách tham dự cuộc họp.},
+  pre={Người dùng đã đăng nhập; cuộc họp được cấu hình hỗ trợ ghi nhận tham dự.},
+  trigger={Người dùng mở xem chi tiết cuộc họp trên ứng dụng.},
+  mainflow={
+    1. Mobile kiểm tra sơ bộ khung giờ diễn ra cuộc họp và hiển thị các tùy chọn điểm danh. \newline
+    2. Người dùng nhấn nút \textit{``Điểm danh có mặt''} (hoặc \textit{``Báo vắng''} kèm nhập lý do). \newline
+    3. Mobile gửi request lên backend dịch vụ. \newline
+    4. Backend kiểm tra tính hợp lệ của phiên, quyền tham dự của cán bộ và thời gian hiện tại trên máy chủ. \newline
+    5. Backend ghi nhận trạng thái tham dự vào cơ sở dữ liệu và phát sự kiện đồng bộ. \newline
+    6. Mobile nhận phản hồi thành công và cập nhật trạng thái hiển thị trên giao diện sang \textit{``Đã điểm danh''}.
+  },
+  altflow={
+    Cuộc họp chưa đến giờ mở điểm danh, đã kết thúc hoặc cán bộ không thuộc danh sách tham dự $\rightarrow$ Backend từ chối ghi nhận; ứng dụng hiển thị thông báo lỗi tương ứng.
+  },
+  post={Bản ghi tham dự cuộc họp của cán bộ được lưu trữ chính thức tại hệ thống iOffice.},
+  label={tab:uc_sch_01}
+}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\small
-\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
-\hline
-\textbf{Mã Ca sử dụng} & \textbf{UC\_IOFFICE\_02: Quản lý \& Giám sát Tiến độ Nhiệm vụ (Tasks/Missions)} \\
-\hline
-\textbf{Tác nhân} & Cán bộ thực hiện, Lãnh đạo Đơn vị, Ban Giám hiệu \\
-\hline
-\textbf{Tiền điều kiện} & Nhiệm vụ đã được khởi tạo trong hệ thống điều hành của Nhà trường. \\
-\hline
-\textbf{Hậu điều kiện} & Cán bộ cập nhật tiến độ công việc và gửi báo cáo đợt thành công. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Người dùng mở \texttt{MissionsListPage}, lọc theo loại nhiệm vụ (Trọng tâm/Được giao/Chung) và 5 trạng thái. \newline
-2. Chọn một nhiệm vụ cụ thể $\rightarrow$ Mở \texttt{MissionDetailPage} với 4 tab (Tổng quan, Cây đầu việc \texttt{outlined-tree}, Báo cáo đợt, Văn bản liên kết). \newline
-3. Nhấn vào một công việc trong cây đầu việc $\rightarrow$ Mở \texttt{TaskDetailBottomSheet} để xem người phụ trách và checklist. \newline
-4. Cán bộ nhấn \textit{``Nộp báo cáo đợt''}, nhập nội dung, \% tiến độ hoàn thành và đính kèm tài liệu minh chứng $\rightarrow$ Nhấn gửi. \newline
-5. Hệ thống lưu vào bảng \texttt{mission\_report\_batch} và cập nhật lại tiến độ tổng thể của nhiệm vụ. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC\_IOFFICE\_02: Quản lý và Giám sát Nhiệm vụ}}
-\label{tab:uc_ioffice_02}
-\end{table}
+\usecasespec{
+  id={UC-IOFFICE-01},
+  name={Tra cứu Văn bản Đến/Đi và Bút phê Phân phối Chỉ đạo},
+  actor={Cán bộ xem văn bản, Lãnh đạo Đơn vị (Người chỉ đạo)},
+  pre={Cán bộ đã đăng nhập; có quyền truy cập văn phòng điện tử.},
+  mainflow={
+    1. Cán bộ mở màn hình \texttt{IncomingDocsListPage} hoặc \texttt{OutgoingDocsListPage}. \newline
+    2. Hệ thống tải danh sách văn bản phân trang cuộn vô tận (\texttt{InfiniteScrollPagination}). \newline
+    3. Nhấn vào một văn bản cụ thể $\rightarrow$ Mở màn hình \texttt{IncomingDocDetailPage}, tích hợp trình đọc PDF (\texttt{pdfrx}) hiển thị nội dung toàn văn. \newline
+    4. Lãnh đạo Đơn vị nhấn nút \textit{``Phân phối văn bản''}, chọn cán bộ xử lý chính, cán bộ phối hợp, hạn chót và nhập bút phê chỉ đạo. \newline
+    5. Nhấn \textit{``Lưu chỉ đạo''} $\rightarrow$ Hệ thống ghi nhận vào \texttt{van\_ban\_den\_distribution} và phát thông báo đẩy tới các cán bộ được giao việc.
+  },
+  post={Cán bộ đọc được nội dung văn bản; văn bản được phân phối kèm chỉ đạo xử lý.},
+  label={tab:uc_ioffice_01}
+}
 
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\small
-\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
-\hline
-\textbf{Mã Ca sử dụng} & \textbf{UC\_IOFFICE\_03: Điểm danh Cuộc họp Thời gian thực và Báo vắng} \\
-\hline
-\textbf{Tác nhân} & Cán bộ tham dự cuộc họp, Ban Tổ chức cuộc họp \\
-\hline
-\textbf{Tiền điều kiện} & Cuộc họp đã được ban hành trong Lịch tuần trường hoặc Lịch đơn vị. \\
-\hline
-\textbf{Hậu điều kiện} & Trạng thái có mặt hoặc báo vắng của đại biểu được đồng bộ thời gian thực tới toàn bộ hệ thống. \\
-\hline
-\textbf{Luồng sự kiện chính} & 
-1. Cán bộ mở màn hình \texttt{ScheduleView}, chọn cuộc họp trong ngày. \newline
-2. Hệ thống kiểm tra ràng buộc khung giờ mở điểm danh: từ trước giờ họp 1 giờ đến hết ngày diễn ra cuộc họp. \newline
-3. Nút \textit{``Điểm danh có mặt''} sáng lên $\rightarrow$ Cán bộ nhấn nút. \newline
-4. Hệ thống gửi request tới \texttt{POST /api/schedule/general-item/:id/checkin}, ghi nhận vào CSDL và phát sự kiện WebSocket (\texttt{Socket.IO: scheduleCheckin}). \newline
-5. Màn hình của Ban tổ chức và các đại biểu khác tự động cập nhật danh sách có mặt tức thời ($< 50$ms). \newline
-6. Nếu không thể tham dự, cán bộ nhấn \textit{``Báo vắng''} và nhập lý do giải trình (1--200 ký tự) $\rightarrow$ Hệ thống cập nhật trạng thái vắng có lý do. \\
-\hline
-\end{tabularx}
-\caption{\textit{Đặc tả Ca sử dụng UC\_IOFFICE\_03: Điểm danh Cuộc họp Thời gian thực}}
-\label{tab:uc_ioffice_03}
-\end{table}
+\usecasespec{
+  id={UC-IOFFICE-02},
+  name={Quản lý \& Giám sát Tiến độ Nhiệm vụ (Tasks/Missions)},
+  actor={Cán bộ thực hiện, Lãnh đạo Đơn vị, Ban Giám hiệu},
+  pre={Nhiệm vụ đã được khởi tạo trong hệ thống điều hành của Nhà trường.},
+  mainflow={
+    1. Người dùng mở \texttt{MissionsListPage}, lọc theo loại nhiệm vụ (Trọng tâm/Được giao/Chung) và 5 trạng thái. \newline
+    2. Chọn một nhiệm vụ cụ thể $\rightarrow$ Mở \texttt{MissionDetailPage} với 4 tab (Tổng quan, Cây đầu việc \texttt{outlined-tree}, Báo cáo đợt, Văn bản liên kết). \newline
+    3. Nhấn vào một công việc trong cây đầu việc $\rightarrow$ Mở \texttt{TaskDetailBottomSheet} để xem người phụ trách và checklist. \newline
+    4. Cán bộ nhấn \textit{``Nộp báo cáo đợt''}, nhập nội dung, \% tiến độ hoàn thành và đính kèm tài liệu minh chứng $\rightarrow$ Nhấn gửi. \newline
+    5. Hệ thống lưu vào bảng \texttt{mission\_report\_batch} và cập nhật lại tiến độ tổng thể của nhiệm vụ.
+  },
+  post={Cán bộ cập nhật tiến độ công việc và gửi báo cáo đợt thành công.},
+  label={tab:uc_ioffice_02}
+}
+
+\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+
+\begin{itemize}[leftmargin=1.5cm]
+    \item \textbf{BR-SCH-01:} Chỉ các sự kiện lịch họp được nhà trường cấu hình bật tính năng ghi nhận tham dự mới cho phép người dùng thực hiện điểm danh hoặc báo vắng.
+    \item \textbf{BR-SCH-02:} Điều kiện thời gian kiểm tra trên thiết bị di động chỉ đóng vai trò hỗ trợ giao diện (UX Gate); thời gian trên máy chủ backend (Server Time) là căn cứ thẩm quyền duy nhất để quyết định tính hợp lệ của thao tác điểm danh.
+    \item \textbf{BR-SCH-03:} Người dùng chỉ được phép điểm danh cho các cuộc họp mà tài khoản của họ được phân công tham dự hoặc được mời với tư cách đại biểu hợp lệ.
+    \item \textbf{BR-SCH-04:} Khi thực hiện báo vắng, nội dung lý do báo vắng bắt buộc phải thỏa mãn yêu cầu về độ dài và định dạng do backend quy định (ví dụ tối thiểu từ 1 đến 200 ký tự).
+    \item \textbf{BR-SCH-05:} Ứng dụng di động không được xem dữ liệu nhận được từ kênh thời gian thực (real-time stream) là nguồn dữ liệu có thẩm quyền thay thế cho trạng thái lưu trữ chính thức trong cơ sở dữ liệu backend.
+\end{itemize}
 
 \subsubsection{Biểu đồ Hoạt động (Activity Diagrams)}
 
