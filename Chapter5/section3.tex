@@ -1,52 +1,88 @@
-\section{Sơ lược Cấu trúc Backend Hiện hữu và Cơ chế Hoạt động Luồng Dữ liệu}
-\label{sec:backend_operation}
+\section{Các Hệ thống Ngầm và Giải pháp Tích hợp Hạ tầng}
+\label{sec:hethong_ngam_tichhop}
 
-\subsection{Sơ lược Cấu trúc Hệ thống Backend Hiện hữu của Nhà trường}
-Hệ thống Backend của Nhà trường được tổ chức theo kiến trúc phân lớp hướng dịch vụ gồm 4 tầng:
-\begin{enumerate}
-    \item \textbf{Tầng Định tuyến \& Middleware (Routing \& Security Middleware):} Tiếp nhận request HTTPS từ Mobile Gateway, giải mã Shared Secret JWT (\texttt{session.ts}), kiểm tra tính hợp lệ của token và phân quyền RBAC (\texttt{authorize.ts}) dựa trên quyền hạn của cán bộ.
-    \item \textbf{Tầng Điều khiển (Controller Layer / Mobile API Adapters):} Tiếp nhận request, kiểm tra định dạng tham số đầu vào (validation) và chuyển tiếp dữ liệu xuống Service. Tầng này bao gồm các controller chuyên biệt cho di động như \texttt{staff\_ly\_lich\_mobile.controller.ts}, \texttt{tcns\_nghi\_phep/controller.ts}, \texttt{eofficeVanBanDenMobile.controller.js}.
-    \item \textbf{Tầng Nghiệp vụ \& Event Streaming (Business Service \& Event Pipeline):} Thực thi các quy tắc nghiệp vụ, tính toán ngày phép, kiểm tra trùng lịch với PostgreSQL Advisory Lock, và phát tán sự kiện bất đồng bộ vào Kafka topic \texttt{SEND\_NOTIFY\_SERVICE} hoặc phát WebSocket qua \texttt{Socket.IO}.
-    \item \textbf{Tầng Truy xuất Dữ liệu (ORM Data Access Layer):} Sử dụng Sequelize ORM ánh xạ tới các cơ sở dữ liệu PostgreSQL của Nhà trường (\texttt{tcns-dev}, \texttt{hcmut\_hrm\_release}, \texttt{hcmut\_hanh\_chinh\_dev}).
-\end{enumerate}
+Bên cạnh các tầng dịch vụ chính, sự vận hành trơn tru và liền mạch của hệ sinh thái MyHCMUT phụ thuộc mật thiết vào các giải pháp hạ tầng ngầm. Các thành phần này đóng vai trò là hàng đợi xử lý sự kiện bất đồng bộ, bộ nhớ đệm tốc độ cao và cầu nối tích hợp dữ liệu đa hệ thống.
 
-\subsection{Thiết kế Đường ống Thông báo Đẩy Bất đồng bộ và Cơ chế Post-Commit Hook}
-\label{subsec:kafka_post_commit}
+\subsection{Hàng đợi Sự kiện Apache Kafka trong Xử lý Tác vụ Nền Bất đồng bộ}
+\label{subsec:kafka_background_task}
 
-Một rủi ro kiến trúc phổ biến trong các hệ thống phân tán là hiện tượng ``thông báo ma'' (Phantom Notification) do sự bất tương thích giữa ranh giới giao dịch cơ sở dữ liệu và cơ chế phát thông điệp vào hàng đợi tin nhắn (Dual-Write Anomaly):
+Trong quản trị đại học, các sự kiện nghiệp vụ diễn ra thường xuyên: Lãnh đạo ký duyệt đơn nghỉ phép, văn thư phát hành văn bản khẩn, hoặc Trưởng đơn vị giao nhiệm vụ mới. Những hành động này đòi hỏi hệ thống phải phát thông báo đẩy (Push Notification) tức thời tới điện thoại của cán bộ liên quan.
+
+\subsubsection{Bài toán Trì hoãn Luồng Xử lý (Request Blocking)}
+Nếu dịch vụ backend gọi trực tiếp API của Google Firebase Cloud Messaging (FCM HTTP v1) ngay trong luồng xử lý chính:
 \begin{itemize}
-    \item \textbf{Vấn đề:} Nếu backend phát sự kiện vào Kafka Topic ngay khi câu lệnh SQL vừa thực thi xong nhưng giao dịch cơ sở dữ liệu chưa \texttt{COMMIT}, nếu sau đó giao dịch bị lỗi (do vi phạm ràng buộc khóa ngoại, deadlock, hoặc mất kết nối mạng) và phải thực hiện \texttt{ROLLBACK}, thông điệp trong Kafka đã bị gửi đi và không thể thu hồi. Tiến trình Consumer sẽ nhận thông điệp, đẩy thông báo tới điện thoại cán bộ báo tin đơn nghỉ phép đã được duyệt, trong khi thực tế bản ghi trong cơ sở dữ liệu đã bị hủy bỏ.
-    \item \textbf{Giải pháp Post-Commit Hook:} Nhóm nghiên cứu thiết kế giải pháp gắn hàm phát tán sự kiện vào móc sự kiện sau commit: \texttt{transaction.afterCommit(() => \{ kafkaProducer.send(...); \})}. Toàn bộ việc đóng gói và đẩy thông điệp vào Kafka chỉ được kích hoạt một khi và chỉ khi PostgreSQL đã xác nhận lưu trữ bền vững (Durable Commit) dữ liệu xuống đĩa. Giải pháp này loại bỏ hoàn toàn nguy cơ phát tán thông báo sai lệch khi giao dịch thất bại.
+    \item Độ trễ mạng từ dịch vụ bên thứ ba (thường dao động từ 500ms đến 2.000ms) sẽ làm gián đoạn luồng xử lý của máy chủ, khiến người dùng trên ứng dụng di động phải chờ đợi lâu sau khi bấm thao tác.
+    \item Trong trường hợp kết nối mạng giữa máy chủ backend và dịch vụ Firebase gặp sự cố tạm thời, toàn bộ yêu cầu của người dùng có nguy cơ bị báo lỗi dù dữ liệu nghiệp vụ thực tế đã được lưu thành công vào cơ sở dữ liệu.
 \end{itemize}
 
-\subsection{Chiến lược Lưu trữ Bộ đệm Hai tầng Phía Client (Two-Tier Caching Architecture)}
-\label{subsec:client_caching}
-
-Để đạt được tốc độ hiển thị tức thì và hỗ trợ cán bộ tra cứu khi mạng chập chờn, ứng dụng MyHCMUT thiết kế kiến trúc bộ đệm hai tầng:
+\subsubsection{Cơ chế Vận hành qua Apache Kafka}
+Để giải quyết bài toán này, hệ thống áp dụng cơ chế xử lý tác vụ nền bất đồng bộ thông qua hàng đợi Apache Kafka (chế độ KRaft):
 \begin{enumerate}
-    \item \textbf{Tầng 1 -- Bộ đệm SWR (Stale-While-Revalidate Cache) cho Hồ sơ Cá nhân:} 
-    Thông tin lý lịch cán bộ (11 danh mục) được lưu đệm trên \texttt{SharedPreferences} với thời gian sống TTL = 12 giờ. Khi người dùng mở màn hình lý lịch, ứng dụng kết xuất ngay dữ liệu cũ từ bộ đệm (độ trễ hiển thị $\approx 0$ms), đồng thời âm thầm gửi request ngầm lên máy chủ để lấy dữ liệu mới nhất cập nhật vào bộ nhớ và giao diện.
-    \item \textbf{Tầng 2 -- Cơ sở dữ liệu SQLite Cục bộ cho Danh mục Hành chính (Master Data):} 
-    Toàn bộ 47 bảng danh mục hành chính dùng chung (danh mục dân tộc, tôn giáo, quốc gia, ngạch công chức, chức vụ, phòng ban...) được đồng bộ về cơ sở dữ liệu SQLite cục bộ (\texttt{sqflite}) trên thiết bị. Các form nhập liệu (đăng ký nghỉ phép, khai báo công tác) truy vấn trực tiếp từ SQLite cục bộ với các câu truy vấn SQL có lập chỉ mục, giúp việc mở các danh sách chọn (dropdown / autocomplete) diễn ra tức thì mà không cần gọi API mạng.
-    \item \textbf{Ranh giới Bảo mật Dữ liệu Riêng tư:}
-    Nhằm tuân thủ tuyệt đối quy định an toàn thông tin, toàn bộ thông tin nhạy cảm của cán bộ (CMND/CCCD, lương, quá trình kỷ luật, lịch sử gia đình) tuyệt đối không lưu trong SQLite; SQLite chỉ lưu danh mục dùng chung của toàn trường.
+    \item \textbf{Phát tán Sự kiện Nhanh:} Ngay sau khi hoàn tất việc ghi nhận dữ liệu vào cơ sở dữ liệu PostgreSQL trong transaction, Backend chỉ cần bắn một thông điệp sự kiện nhẹ nhàng (JSON chứa \texttt{type}, \texttt{targetId}, \texttt{receiverShcc}, \texttt{action}) vào Kafka Topic \texttt{SEND\_NOTIFY\_SERVICE}. Thao tác đẩy thông điệp vào Kafka diễn ra trong vòng dưới 10ms, giúp Backend phản hồi mã thành công HTTP 200 ngay lập tức cho ứng dụng di động.
+    \item \textbf{Tiêu thụ và Phát thông báo Bất đồng bộ:} Một tiến trình Worker chạy độc lập ở chế độ ngầm (Background Worker) liên tục lắng nghe và tiêu thụ các thông điệp từ Kafka Topic. Khi nhận được thông điệp, Worker trích xuất mã cán bộ người nhận, tra cứu mã định danh thiết bị tương ứng và gọi Firebase Admin SDK để đẩy thông báo tới điện thoại của cán bộ.
+    \item \textbf{Đảm bảo Thứ tự Thông báo:} Kafka Producer sử dụng mã số cán bộ \texttt{shcc} của người nhận làm khóa phân vùng (Partition Key). Nhờ cơ chế băm nhất quán, toàn bộ thông báo gửi cho cùng một cá nhân luôn được chuyển vào một phân vùng duy nhất theo thứ tự thời gian, bảo đảm trình tự thông báo không bao giờ bị đảo lộn.
 \end{enumerate}
 
-\subsection{Mô hình Vận hành và Luồng Dữ liệu Tổng thể (System Operation Overview)}
-Mô hình hình \ref{fig:sys_op} mô tả chi tiết luồng vận hành đầu-cuối của một chu trình tương tác hoàn chỉnh:
+\subsection{Hệ thống Lưu trữ Đệm In-Memory Redis và Cầu nối Xác thực Vé SSO}
+\label{subsec:redis_caching_sso}
+
+Máy chủ lưu trữ bộ nhớ trong Redis đóng hai vai trò trọng yếu trong hệ thống: vừa là bộ nhớ đệm truy xuất tốc độ cao, vừa là kho lưu trữ vé xác thực an toàn phục vụ cầu nối đăng nhập một lần (Single Sign-On -- SSO).
+
+\subsubsection{Cơ chế Lưu trữ Bộ đệm Tốc độ cao (In-Memory Caching)}
+Để giảm tải các truy vấn lặp đi lặp lại xuống cơ sở dữ liệu PostgreSQL, các thông tin tra cứu thường xuyên như trạng thái phiên đăng nhập, cấu hình quyền hạn được lưu trực tiếp trên bộ nhớ RAM của Redis. Khi nhận request từ client:
+\begin{itemize}
+    \item Backend kiểm tra sự tồn tại của dữ liệu trong Redis trước (Cache Hit). Nếu có sẵn, dữ liệu được trả về ngay lập tức với độ trễ chỉ từ 2ms đến 5ms.
+    \item Trường hợp dữ liệu chưa có trong bộ đệm (Cache Miss), Backend mới truy vấn xuống PostgreSQL, sau đó lưu kết quả vào Redis với thời gian sống hợp lý (TTL) để phục vụ cho các yêu cầu tiếp theo.
+\end{itemize}
+
+\subsubsection{Cầu nối Xác thực One-Time Ticket SSO qua In-App WebView}
+Nhằm cho phép cán bộ truy cập liền mạch các biểu mẫu hoặc báo cáo nghiệp vụ chuyên sâu trên nền tảng Web HRM mà không phải đăng nhập lại từ đầu, hệ thống thiết kế giải pháp cầu nối vé xác thực sử dụng Redis:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\linewidth]{img/architecture/overall_system_operation.png}
-    \caption{\textit{Mô hình Vận hành và Luồng dữ liệu Tổng thể Hệ thống MyHCMUT}}
-    \label{fig:sys_op}
+    \includegraphics[width=0.85\linewidth]{image/uml/seq_login_token.png}
+    \caption[\textit{Quy trình cầu nối vé SSO qua Redis}]{\textit{Quy trình Cấp phát Token và Cầu nối One-Time Ticket SSO qua Redis}}
+    \label{fig:seq_sso_bridge}
 \end{figure}
 
+Quy trình diễn ra theo 4 giai đoạn đơn giản và an toàn:
 \begin{enumerate}
-    \item \textbf{Tương tác Người dùng:} Cán bộ thực hiện thao tác trên màn hình điện thoại (điền form nghỉ phép, nhấn điểm danh họp, xem nhiệm vụ).
-    \item \textbf{Điều phối Trạng thái Client:} Widget gọi phương thức tương ứng trong Riverpod \texttt{AsyncNotifier}.
-    \item \textbf{Truy xuất Dữ liệu \& Gửi Request:} Notifier gọi Repository $\rightarrow$ Dio Client sử dụng \texttt{MultiDomainAuthInterceptor} tự động gắn Bearer Token và gửi request HTTPS tới Backend đích.
-    \item \textbf{Xác thực \& Xử lý tại Backend:} Middleware giải mã Token bằng Shared Secret, Controller chuyển dữ liệu cho Service thực thi quy tắc nghiệp vụ trong Transaction bọc kín, lấy khóa \texttt{pg\_advisory\_xact\_lock}, kiểm tra trùng lịch và ghi nhận dữ liệu vào PostgreSQL.
-    \item \textbf{Xử lý Sự kiện Bất đồng bộ Post-Commit:} Sau khi Transaction commit thành công, Backend bắn Event vào Kafka Topic $\rightarrow$ Consumer tiêu thụ và đẩy Push Notification qua Firebase FCM HTTP v1 tới điện thoại người liên quan.
-    \item \textbf{Phản hồi \& Render Giao diện:} Backend trả về HTTP 200 kèm JSON $\rightarrow$ Client deserialize sang Freezed DTO $\rightarrow$ Cập nhật State trong Riverpod $\rightarrow$ Giao diện tự động cập nhật dữ liệu mới tức thì.
+    \item \textbf{Yêu cầu Cấp vé:} Khi người dùng bấm vào liên kết biểu mẫu nghiệp vụ trên ứng dụng di động, app gửi request có kèm Bearer Token lên endpoint \texttt{POST /api/auth/sso/generate-ticket}.
+    \item \textbf{Sinh Vé Ngẫu nhiên có Thời hạn Ngắn:} Backend sử dụng bộ sinh số ngẫu nhiên mật mã học tạo ra một chuỗi vé 64 ký tự hex an toàn, lưu vào Redis kèm thông tin định danh cán bộ với thời gian sống ngắn chỉ 60 giây (\texttt{TTL = 60s}).
+    \item \textbf{Mở In-App WebView:} Ứng dụng di động mở trình duyệt nhúng In-App WebView trỏ tới địa chỉ Web đích kèm tham số vé trong URL: \nolinkurl{https://hrm.hcmut.edu.vn/.../?ticket=<hex64>}.
+    \item \textbf{Tiêu thụ Vé Nguyên tử:} Trang Web tiếp nhận tham số vé, lập tức gửi lên máy chủ để đổi lấy phiên đăng nhập hợp lệ. Máy chủ thực hiện thao tác đọc và xóa vé ngay lập tức khỏi Redis bằng lệnh nguyên tử \texttt{GETDEL}. Vé bị tiêu hủy ngay sau lần sử dụng đầu tiên, bảo đảm an toàn tuyệt đối và ngăn chặn việc tái sử dụng trái phép. Cán bộ vào thẳng trang nghiệp vụ mà không cần gõ lại mật khẩu.
+\end{enumerate}
+
+\subsection{Giải pháp Tích hợp Lịch làm việc Tổng hợp (Unified Calendar)}
+\label{subsec:unified_calendar}
+
+Tính năng \textbf{Lịch làm việc Tổng hợp (Unified Calendar)} trên ứng dụng MyHCMUT Mobile cho phép cán bộ theo dõi toàn bộ lịch trình công tác trong tuần trên một màn hình duy nhất, bao gồm cả lịch họp từ hệ thống Văn phòng điện tử (\texttt{ioffice-be}) và lịch nghỉ phép, đi công tác từ hệ thống Nhân sự (\texttt{hrm-be}).
+
+\subsubsection{Ngăn ngừa Xung đột Định danh qua Quy tắc Khóa Âm}
+Do hai hệ thống backend sở hữu hai cơ sở dữ liệu hoàn toàn độc lập, các sự kiện có thể phát sinh mã số định danh trùng nhau (ví dụ: cuộc họp số 15 của iOffice và đơn nghỉ phép số 15 của HRM). Nếu nạp chung vào một danh sách hiển thị, ứng dụng sẽ nhận diện sai lệch và gây lỗi giao diện.
+
+Để giải quyết vấn đề này một cách đơn giản và hiệu quả, ứng dụng di động áp dụng \textbf{Quy tắc Phân vùng Khóa Âm}:
+\begin{itemize}
+    \item Sự kiện họp từ iOffice: Giữ nguyên mã số gốc nguyên dương ($id > 0$).
+    \item Sự kiện nghỉ phép từ HRM: Được ánh xạ thành số âm trực tiếp theo mã phiếu: $id = -\text{phieuId}$ ($< 0$).
+    \item Sự kiện đi công tác từ HRM: Được ánh xạ thành số âm phân vùng riêng biệt: $id = -(1000000 + \text{id})$ ($< -1000000$).
+\end{itemize}
+Quy tắc này bảo đảm tập mã định danh của các nguồn dữ liệu là hoàn toàn rời nhau, loại bỏ nguy cơ trùng khóa mà không đòi hỏi bất kỳ sự thay đổi nào ở cơ sở dữ liệu máy chủ.
+
+\subsubsection{Chuẩn hóa Dữ liệu qua Adapter Pattern}
+Ứng dụng sử dụng mẫu thiết kế Adapter để hợp nhất hai luồng dữ liệu:
+\begin{itemize}
+    \item Định nghĩa cấu trúc thực thể thống nhất \texttt{ScheduleItemModel} chứa các thuộc tính chung: tiêu đề sự kiện, thời gian bắt đầu, thời gian kết thúc, địa điểm và cờ phân loại nguồn dữ liệu.
+    \item Các bộ chuyển đổi chuyên biệt (\texttt{HrmLeaveScheduleMapper}, \texttt{HrmBusinessTripScheduleMapper}) tiếp nhận dữ liệu từ HRM, tính toán mã ID âm tương ứng, gán màu sắc nhận diện đặc trưng (màu cam cho nghỉ phép, màu xanh cho công tác) và chuyển đổi thành đối tượng \texttt{ScheduleItemModel}.
+    \item Bộ điều phối Riverpod trên ứng dụng di động kích hoạt đồng thời các cuộc gọi API tới cả hai máy chủ, gộp danh sách sự kiện và hiển thị trực quan trên thành phần lịch tuần tùy biến \texttt{CustomTableCalendar}.
+\end{itemize}
+
+\subsection{Luồng Tải tệp Đính kèm Hai bước (Two-Step Attachment)}
+\label{subsec:two_step_upload}
+
+Trong quy trình nộp đơn xin nghỉ phép có minh chứng (giấy nghỉ ốm của bệnh viện, quyết định triệu tập), tệp đính kèm cần được liên kết chính xác với phiếu đăng ký của cán bộ. Hệ thống thiết kế quy trình tải tệp 2 bước rõ ràng:
+\begin{enumerate}
+    \item \textbf{Bước 1 (Khởi tạo Phiếu nháp):} Khi người dùng điền xong thông tin ở bước đầu tiên của Form Wizard (chọn loại nghỉ, số ngày, lý do), ứng dụng gửi yêu cầu tạo phiếu nháp lên máy chủ và nhận về mã định danh \texttt{phieuId} vừa được sinh ra trong cơ sở dữ liệu.
+    \item \textbf{Bước 2 (Tải tệp kèm Mã phiếu):} Tại bước tiếp theo, người dùng chọn tệp minh chứng từ điện thoại. Ứng dụng gửi tệp lên endpoint tải tệp kèm theo mã \texttt{phieuId}. Máy chủ lưu tệp vào kho lưu trữ an toàn và cập nhật trực tiếp đường dẫn vào trường \texttt{attachment\_url} của phiếu tương ứng.
+    \item \textbf{Dọn dẹp Nháp Mồ côi:} Nếu người dùng hủy bỏ thao tác trước khi bấm nộp chính thức, ứng dụng tự động gửi lệnh xóa phiếu nháp, bảo đảm cơ sở dữ liệu luôn gọn gàng và không bị tồn đọng các bản ghi rác.
 \end{enumerate}

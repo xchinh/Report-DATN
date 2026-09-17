@@ -284,7 +284,7 @@ Toàn bộ các endpoint của phân hệ được khai báo tại `hrm-be` tuâ
 
 ## 6. MA TRẬN TRUY VẾT & CHỈ SỐ KIỂM THỬ (TRACEABILITY & TEST SUITE)
 
-Hệ thống kiểm thử phân hệ Hồ sơ Cán bộ được tích hợp sâu trong bộ kiểm thử tổng thể của dự án (392/392 PASS), tập trung chứng minh tính toàn vẹn của mô hình dữ liệu, cơ chế gộp bất biến và hành vi giao diện người dùng:
+Hệ thống kiểm thử phân hệ Hồ sơ Cán bộ được tích hợp sâu trong bộ kiểm thử tổng thể của dự án (427/427 PASS), tập trung chứng minh tính toàn vẹn của mô hình dữ liệu, cơ chế gộp bất biến và hành vi giao diện người dùng:
 
 | Mã Use Case | Tên Use Case / Nghiệp vụ | Tệp Giao diện & Xử lý (Mobile/BE) | Tệp Kiểm thử Tự động Đối chuẩn | Số Test Cases | Kết quả Kiểm thử |
 | :--- | :--- | :--- | :--- | :---: | :---: |

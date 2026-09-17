@@ -3,11 +3,11 @@
 
 Trải qua quá trình nghiên cứu lý thuyết, phân tích nghiệp vụ, thiết kế kiến trúc, hiện thực hóa và kiểm thử thực nghiệm, đồ án tốt nghiệp đã hoàn thành toàn diện các mục tiêu nghiên cứu đề ra:
 \begin{enumerate}
-    \item \textbf{Về mặt Kiến trúc Ứng dụng Di động:} Xây dựng thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} dựa trên kiến trúc Modular Monorepo với công cụ quản trị Melos, áp dụng Clean Architecture phân lớp nghiêm ngặt, quản lý trạng thái phản ứng giao diện với Flutter Riverpod và hệ thống Material 3 Semantic Tokens (\texttt{packages/core/global\_system}) hỗ trợ thẩm mỹ cả hai chế độ giao diện Light/Dark Mode.
+    \item \textbf{Về mặt Kiến trúc Ứng dụng Di động:} Xây dựng thành công ứng dụng di động đa nền tảng \textbf{MyHCMUT} dựa trên kiến trúc Modular Monorepo với công cụ quản trị Melos, áp dụng Kiến trúc Phân tầng Hướng Phân hệ (Feature-First Layered Architecture) phân lớp nghiêm ngặt, quản lý trạng thái phản ứng giao diện với Flutter Riverpod và hệ thống Material 3 Semantic Tokens (\texttt{packages/core/global\_system}) hỗ trợ thẩm mỹ cả hai chế độ giao diện Light/Dark Mode.
     
     \item \textbf{Về mặt Tích hợp Đa dịch vụ và An toàn Thông tin:} 
     \begin{itemize}
-        \item Hiện thực thành công bộ điều phối \texttt{MultiDomainAuthInterceptor} xử lý phân phối chuỗi JWT dùng chung (\texttt{Shared JWT}) và hàng đợi làm mới phiên ngầm (Completer Lock Queue) khi Access Token hết hạn, kết nối liền mạch với 3 hệ thống Backend độc lập của Nhà trường (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}).
+        \item Hiện thực thành công bộ điều phối \texttt{MultiDomain\allowbreak AuthInterceptor} xử lý phân phối chuỗi JWT dùng chung (\texttt{Shared JWT}) và hàng đợi làm mới phiên ngầm (Completer Lock Queue) khi Access Token hết hạn, kết nối liền mạch với 3 hệ thống Backend độc lập của Nhà trường (\texttt{myhcmut-be}, \texttt{hrm-be}, \texttt{ioffice-be}).
         \item Thiết kế và hiện thực Cầu nối An toàn One-Time Ticket SSO Native-to-Web: sinh vé mật mã học 64 ký tự hex với TTL 60 giây, tiêu thụ nguyên tử qua Redis \texttt{GETDEL}, cấp Session Cookie bảo vệ (\texttt{HttpOnly; SameSite=Lax; Secure}) và làm sạch URL tức thời qua \texttt{history.replaceState}, cho phép cán bộ truy cập tính năng Web chuyên sâu từ ứng dụng di động mà không cần đăng nhập lại.
     \end{itemize}
     
@@ -16,7 +16,7 @@ Trải qua quá trình nghiên cứu lý thuyết, phân tích nghiệp vụ, th
     
     \item \textbf{Về mặt Nghiệp vụ Quản trị Đại học:}
     \begin{itemize}
-        \item \textit{Phân hệ HRM:} Hoàn thiện tra cứu lý lịch 11 danh mục với bộ đệm SWR TTL 12 giờ; màn hình thẩm định sai khác lý lịch trực quan (\texttt{ReviewDiffCard}); Form Wizard 4 bước đăng ký nghỉ phép kết hợp kiến trúc tải tệp 2 bước, cảnh báo nộp trễ hạn từ cấu hình \texttt{tcns\_setting}, tùy chọn giải trình và dọn dẹp nháp mồ côi (\texttt{isNewlyCreated}); đăng ký và phê duyệt đi công tác; cùng thanh tác vụ duyệt đơn hàng loạt \texttt{AppBatchActionBar}.
+        \item \textit{Phân hệ HRM:} Hoàn thiện tra cứu lý lịch 11 danh mục với bộ đệm SWR TTL 12 giờ; màn hình thẩm định sai khác lý lịch trực quan (\texttt{ReviewDiffCard}); Form Wizard 3 bước đăng ký nghỉ phép kết hợp kiến trúc tải tệp 2 bước, cảnh báo nộp trễ hạn từ cấu hình \texttt{tcns\_setting}, tùy chọn giải trình và dọn dẹp nháp mồ côi (\texttt{isNewlyCreated}); đăng ký và phê duyệt đi công tác; cùng thanh tác vụ duyệt đơn hàng loạt \texttt{AppBatchActionBar}.
         \item \textit{Phân hệ iOffice:} Hoàn thiện tra cứu sổ văn bản đến/đi, tích hợp trình đọc PDF trực tiếp (\texttt{pdfrx}) và bút phê phân phối chỉ đạo văn bản.
         \item \textit{Phân hệ Tasks/Missions:} Hoàn thiện quản lý nhiệm vụ đa phân loại với bộ lọc 5 trạng thái, màn hình chi tiết 4 tab kết hợp cây đầu việc phân cấp (\texttt{outlined-tree}) và nộp báo cáo đợt đính kèm minh chứng.
         \item \textit{Phân hệ Lịch \& Điểm danh họp:} Hoàn thiện tra cứu lịch tuần trường/đơn vị, cơ chế kiểm soát khung giờ mở điểm danh nghiêm ngặt, báo vắng mặt có lý do và phát tán sự kiện thời gian thực qua WebSocket (\texttt{Socket.IO}) với độ trễ dưới 50ms.
@@ -24,7 +24,7 @@ Trải qua quá trình nghiên cứu lý thuyết, phân tích nghiệp vụ, th
     \end{itemize}
     
     \item \textbf{Về mặt Đảm bảo Chất lượng \& Kiểm thử:} 
-    Thiết lập và thực thi thành công bộ kiểm thử tự động gồm \textbf{392 ca kiểm thử} (335 kiểm thử Mobile Flutter và 57 kiểm thử Backend Vitest) đạt tỷ lệ vượt qua 100\% (Pass Rate 100\%); hoàn thành 4 kịch bản E2E thực tế trên Google Pixel 6 và iPhone 13; đo lường định lượng hiệu năng mượt mà (58--60 FPS, RAM $\approx$ 95--145MB, API phản hồi trung bình $< 150$ms); và tự động hóa toàn bộ quy trình tích hợp liên tục CI/CD trên GitLab CI.
+    Thiết lập và thực thi thành công bộ kiểm thử tự động gồm \textbf{427 ca kiểm thử} (370 kiểm thử Mobile Flutter và 57 kiểm thử Backend Vitest) đạt tỷ lệ vượt qua 100\% (Pass Rate 100\%); hoàn thành 4 kịch bản E2E thực tế trên Google Pixel 6 và iPhone 13; đo lường định lượng hiệu năng mượt mà (58--60 FPS, RAM $\approx$ 95--145MB, API phản hồi trung bình $< 150$ms); và tự động hóa toàn bộ quy trình tích hợp liên tục CI/CD trên GitLab CI.
 \end{enumerate}
 
 \section{Ý nghĩa khoa học và Giá trị Thực tiễn}

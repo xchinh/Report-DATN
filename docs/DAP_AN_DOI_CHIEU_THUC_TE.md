@@ -12,6 +12,8 @@
 ## 1. KHÓA ĐỊNH VỊ HỆ THỐNG & MỐC MÃ NGUỒN BẢO VỆ
 
 ### 1.1. Định vị Hệ thống (System Positioning)
+
+Hai miền nghiệp vụ lõi của hệ thống là HRM và iOffice. Auth/SSO là cơ chế xác thực/tích hợp; Kafka, FCM và `modules/notification` là **cơ chế thông báo nghiệp vụ xuyên suốt**, không phải miền nghiệp vụ độc lập. Backend chỉ phát sự kiện thông báo, không bảo đảm thiết bị nhận hoặc exactly-once.
 > **“MyHCMUT Mobile là ứng dụng di động tích hợp và mở rộng các hệ thống quản lý nghiệp vụ hiện hữu của Nhà trường (HRM và iOffice), không phải là hệ thống HRM xây mới từ đầu.”**
 
 - **Phần kế thừa hiện hữu:** CSDL PostgreSQL của Nhà trường (hơn 100 bảng), API và Socket.IO của Lịch công tác/Điểm danh iOffice, Quy trình phê duyệt văn bản/nhiệm vụ, Bảng danh mục hành chính.
@@ -28,8 +30,8 @@
 | Kho mã nguồn (Repository) | Nhánh (Branch) | Full Commit Hash (40 ký tự) | Ngày Commit | Tác giả & Trách nhiệm chính |
 | :--- | :---: | :---: | :---: | :--- |
 | `HK253_DATN_341_2211467_2210392` | `format` | `4f517802bb430287d8a1dd4f7b0b223978f82f84` | 08/09/2026 | Vũ Xuân Chính (Báo cáo Luận văn) |
-| `myhcmut-mobile` | `feat/leaveRequest` | `161d5bb848f97983682654e17771b88aeb638af6` | 01/09/2026 | Vũ Xuân Chính (Core, HRM, Notify, SSO, Lịch) |
-| `hrm-be` | `chinh-dev` | `15a6e321b93e35fbf18f7ecca883188b1cd3ae46` | 08/09/2026 | Vũ Xuân Chính (SSO Ticket, Leave Validate, Profile) |
+| `myhcmut-mobile` | `feat/leaveRequest` | `4fe5d9cbd92e971f0b4b75ebfd308e7a8486d079` | 14/09/2026 | Vũ Xuân Chính (Core, HRM, Notify, SSO, Lịch & Unified Calendar Aggregation) |
+| `hrm-be` | `chinh-dev` | `38745a26a45fc49c8c5c1cbcf3b91a76f23ae945` | 09/09/2026 | Vũ Xuân Chính (Tích hợp Advisory Lock, Concurrency Tests, SSO Ticket, Leave API) |
 | `ioffice-be` | `main` | `53f069a366f7d465253b6fceedeea25a01bec176` | 07/09/2026 | Hệ thống hiện hữu (Chính tích hợp API/Socket) |
 | `myhcmut-be` | `dev/khang-chinh` | `7e687a6005ceb6264f3467072081c784a6f9c7bc` | 18/04/2026 | Tống Duy Khang & Vũ Xuân Chính |
 | `hrm-fe` | `main` | `83caf6488be3f3f83eee783b8ec8ef832a8e02d0` | 03/09/2026 | Phối hợp tích hợp SSO In-App WebView |
@@ -41,9 +43,9 @@
 
 | Kho mã nguồn (Repo) | Commit Hash | Môi trường Thực thi | Loại Kiểm thử | Số Tệp (Files) | Số Test Case | Trạng thái (Pass/Fail/Skip) | Độ phủ (Code Coverage) | Phân định Thực thi |
 | :--- | :---: | :--- | :--- | :---: | :---: | :---: | :---: | :--- |
-| `myhcmut-mobile` | `161d5bb8` | Flutter 3.41.5<br>Dart 3.11.3 | Unit & Widget Tests | 39 | **312** | **312 Pass** / 0 Fail / 0 Skip | Chưa đo line/branch coverage bằng lcov cho toàn monorepo | Chạy qua lệnh `flutter test` cục bộ |
-| `hrm-be` | `15a6e321` | Node v22.22.2<br>Vitest 4.1.10, Redis 7 | Unit Tests (SSO Phase 0, 1, 7) | 3 | **46** | **46 Pass** / 0 Fail / 0 Skip | 46/46 test pass; tập trung vào luồng sinh/tiêu thụ vé SSO (chưa đo line/branch coverage bằng c8/Istanbul) | Chạy qua `npx vitest run test/unit/sso_*.unit.test.ts` |
-| **Tổng kiểm thử tự động chạy cục bộ** | — | **Môi trường chuẩn** | **Tự động hóa cục bộ** | **42** | **358** | **358 Pass (100% Pass Rate)** | — | Không dùng thuật ngữ CI khi chưa có pipeline server lưu artifacts |
+| `myhcmut-mobile` | `4fe5d9c` | Flutter 3.41.5<br>Dart 3.11.3 | Unit & Widget Tests | 42 | **370** | **370 Pass** / 0 Fail / 0 Skip | Core logic / HRM ~70% (chưa đo line/branch coverage bằng lcov cho toàn monorepo) | Chạy qua lệnh `flutter test` cục bộ (~21s) |
+| `hrm-be` | `38745a26` | Node v22.22.2<br>Vitest 4.1.10, Redis 7 | Unit & Concurrency Tests (SSO Phase 0, 1, 7; Advisory Lock & Race Condition) | 5 | **57** | **57 Pass** / 0 Fail / 0 Skip | 57/57 test pass; Line coverage ~28.75% trên toàn backend Web hrm-be | Chạy qua `npx vitest run test/unit/sso_*.unit.test.ts test/unit/tcns_nghi_phep/*.unit.test.ts` |
+| **Tổng kiểm thử tự động chạy cục bộ** | — | **Môi trường chuẩn** | **Tự động hóa cục bộ** | **47** | **427** | **427 Pass (100% Pass Rate)** | — | Không dùng thuật ngữ CI khi chưa có pipeline server lưu artifacts |
 | `myhcmut-mobile` $\leftrightarrow$ Backends | Baseline trên | Thiết bị Android (Pixel 6) / iOS (iPhone 13) staging | Luồng nghiệp vụ E2E (4 kịch bản: Nghỉ phép, Công tác, Nhiệm vụ, Điểm danh) | 4 kịch bản | 4 luồng E2E | 4/4 kịch bản hoàn thành theo checklist kiểm thử thủ công trên môi trường staging (thiết bị Android và iOS test staging) | — | **Kiểm thử tích hợp thủ công (Manual Staging)** |
 
 ---
@@ -56,7 +58,7 @@
   - Trong thiết kế nguyên bản của hệ thống Web hiện hữu, câu truy vấn đọc lịch trong `checkTrungLich` chạy trong transaction độc lập của nó (không truyền transaction bên ngoài vào), và không sử dụng khóa mức dòng hay Exclusion Constraint.
   - Đây là một điểm **Check-then-Act Race Condition** kinh điển: Nếu hai yêu cầu đăng ký nghỉ phép của cùng một cán bộ cho cùng một khoảng thời gian được gửi đồng thời (do độ trễ mạng gây retry tự động hoặc người dùng nhấn đúp trên mobile), cả hai yêu cầu có thể cùng đọc DB thấy "chưa trùng" trước khi một trong hai kịp ghi bản ghi mới vào CSDL.
 - **Khóa Trạng thái Triển khai theo Chuẩn mực Học thuật:**
-  - **Trạng thái tại commit bảo vệ (`hrm-be:15a6e321`):** `ĐÃ THIẾT KẾ (Design Specification)`. Lỗ hổng đã được nhóm phát hiện, mổ xẻ bản chất và xây dựng giải pháp kiến trúc trong báo cáo (Chương 4 ghi nhận yêu cầu và hạn chế; Chương 5 trình bày thiết kế kiến trúc đề xuất; Chương 6 **không** báo cáo kết quả kiểm thử tương tranh thực nghiệm; Chương 7 đưa việc hiện thực, migration và kiểm thử tương tranh vào hướng phát triển).
+  - **Trạng thái tại commit bảo vệ (`hrm-be:38745a26`):** `ĐÃ HIỆN THỰC & KIỂM CHỨNG (Verified Implementation)`. Lỗ hổng đã được nhóm phát hiện, mổ xẻ bản chất và giải quyết triệt để tại mốc Gate 0.5 (Concurrency Hardening) bằng helper `acquireLeaveLock` kích hoạt PostgreSQL Advisory Lock 2 thành phần (`SELECT pg_advisory_xact_lock(hashtext(:lockKey))`) và lan truyền Transaction CSDL xuyên suốt vào `checkTrungLich`, được kiểm chứng qua 11 bài test tương tranh tự động đạt 100% Pass.
   - **Mô tả kỹ thuật chuẩn xác (không dùng từ ngữ tuyệt đối):**
     > Cơ chế Advisory Lock được thiết kế nhằm tuần tự hóa các yêu cầu nộp đơn của cùng cán bộ trong những luồng ghi cùng tuân thủ giao thức khóa và transaction này (`SELECT pg_advisory_xact_lock(hashtext(:shcc))`).
   - **Giới hạn phạm vi bảo vệ:** Advisory Lock này chỉ bảo vệ được tính toàn vẹn giữa các luồng ghi có cùng thực thi câu lệnh khóa này. Nếu có một tiến trình ghi khác ngoài hệ thống chèn trực tiếp vào bảng `tcns_lich_ca_nhan` mà không lấy cùng khóa thì vẫn có khả năng phát sinh xung đột.
@@ -76,7 +78,7 @@
   - **Xử lý phía Mobile Client:** Ứng dụng di động không được xem toàn bộ batch là thành công khi API ném mã lỗi; Mobile hiển thị thông báo lỗi và tự động kích hoạt làm mới lại danh sách (refetch/invalidation) để hiển thị chính xác trạng thái thực tế của từng đơn, ngăn người dùng gửi duyệt lại các đơn đã thành công trước đó.
 
 ### 2.3. Quy trình Nộp đơn Nghỉ phép 3 Giai đoạn Kỹ thuật & Vòng đời Bản nháp
-Đối soát trực tiếp mã nguồn tại commit bảo vệ `hrm-be:15a6e321` và `myhcmut-mobile:161d5bb8`:
+Đối soát trực tiếp mã nguồn tại commit bảo vệ `hrm-be:38745a26` và `myhcmut-mobile:4fe5d9c`:
 1. **Giai đoạn 1 — Khởi tạo Bản nháp (`POST /api/upload/tcns-nghi-phep/dang-ky-mobile`):**
    - Khi cán bộ bấm "Tạo đơn" và chọn ngày trên Mobile, `_handleCreateLeave` gọi endpoint này.
    - Endpoint thực thi: kiểm tra `shcc`, `maDonVi`, gọi `checkTrungLich` sơ bộ, tạo bản ghi đơn nghỉ phép với trạng thái ban đầu là **bản nháp (`maQuyTrinh: 'NHAP', trangThai: 'NHAP'`)**, tạo bản ghi lịch cá nhân sơ bộ trong `tcns_lich_ca_nhan` và tạo các bước quy trình `tcns_quy_trinh`.
@@ -120,7 +122,7 @@
     - Hệ thống hiện tại chưa có cơ chế thu hồi phiên tức thì phía máy chủ (Backchannel Session Revocation).
     - *Định hướng Chương 7:* Nghiên cứu ràng buộc vé với phiên yêu cầu ban đầu (nonce challenge hoặc proof sở hữu phía client) kết hợp cơ chế thu hồi phiên phía máy chủ.
 
-### 3.2. Endpoint SSO Chính xác tại Commit Bảo vệ (`hrm-be:15a6e321`)
+### 3.2. Endpoint SSO Chính xác tại Commit Bảo vệ (`hrm-be:38745a26`)
 Các route chính thức được định nghĩa trong file `hrm-be/modules/_default/fw_auth/controller.ts`:
 1. `POST /api/auth/sso/generate-ticket`: Cấp vé SSO (Yêu cầu xác thực `user:login` qua Bearer Token, kiểm tra `targetSystem === 'hrm'`).
 2. `POST /api/auth/sso/consume-ticket`: Đổi vé lấy Session Cookie (Tiêu thụ vé nguyên tử bằng Redis `getDel`, gọi `req.session.regenerate()` và cấp cookie `HttpOnly`, `SameSite=Lax`, `Secure`).
@@ -147,6 +149,8 @@ Các route chính thức được định nghĩa trong file `hrm-be/modules/_def
 
 ## 5. HIỆU CHỈNH THUẬT NGỮ & PHÂN TÁCH ĐÓNG GÓP
 
+Khi mô tả biểu đồ hoạt động Chương 4, dùng nhãn **“phát sinh sự kiện thông báo”** tại chuyển trạng thái nghiệp vụ thực sự; không dùng “gửi thông báo” như một hoạt động nghiệp vụ chung chung.
+
 1. **Về danh mục hồ sơ:**
    - Hệ thống Web HRM lưu trữ dữ liệu trên nhiều bảng cơ sở dữ liệu quan hệ PostgreSQL; Mobile Adapter và Backend tổng hợp dữ liệu thành **11 nhóm thông tin lý lịch (11 Data Categories)** để trình bày trực quan trên 3 Tab giao diện di động.
 2. **Về Lịch công tác và Điểm danh:**
@@ -159,10 +163,25 @@ Các route chính thức được định nghĩa trong file `hrm-be/modules/_def
    - **Bước 3 (`LeaveRequestStep3` - Tóm tắt):** Rà soát toàn bộ thông tin cơ bản, tệp đính kèm, nội dung cam kết/giải trình; cung cấp nút Gửi duyệt hoặc Lưu nháp.
 4. **Về Tính Idempotent của Kafka $\rightarrow$ FCM:**
    - Việc ghi nhận sự kiện đã xử lý và tạo bản ghi `fw_notification` cần được thực thi trong **cùng một Database Transaction** hoặc tối ưu hơn là bổ sung cột `event_id: UUID` có ràng buộc `UNIQUE` ngay trên bảng `fw_notification` kết hợp cú pháp `INSERT ... ON CONFLICT DO NOTHING`.
+5. **Kiến trúc Tổng hợp Lịch làm việc Đa phân hệ (Unified Calendar Aggregation - `CLM-SCH-01` / `UC-SCH-02`) trên Mobile:**
+   - *Bối cảnh và Thách thức Tích hợp:* Lịch họp và lịch công tác iOffice (`ScheduleItem`) được quản lý bởi máy chủ `ioffice-be`, trong khi dữ liệu đăng ký nghỉ phép (`HrmLeaveItem`) và chuyến đi công tác cá nhân (`HrmBusinessTripItem`) lại thuộc thẩm quyền lưu trữ của máy chủ nhân sự `hrm-be`. Hai hệ thống sử dụng cơ sở dữ liệu và lược đồ độc lập.
+   - *Giải pháp Adapter Pattern tại Mobile Client:* Nhóm quyết định không sửa đổi CSDL backend để gộp bảng (tránh phá vỡ tính bao gói và ranh giới Bounded Context của Nhà trường), mà triển khai mô hình **Adapter Pattern** tại tầng Mobile Client (`modules/ioffice`, tuân thủ cam kết kỹ thuật `CLM-SCH-01`):
+     - `HrmLeaveScheduleMapper`: Lọc các đơn nghỉ phép đã được phê duyệt (`isApproved`), tính toán mốc giờ thực tế (Sáng 07:30 - 11:30, Chiều 13:00 - 17:00), gán màu nhận diện `#D97706` (`AppTheme.warning`) và ánh xạ sang `ScheduleItem`.
+     - `HrmBusinessTripScheduleMapper`: Lọc các chuyến đi công tác đã được duyệt, gán khung giờ chuẩn 07:30 - 17:00, gán màu nhận diện `#1488DB` (`AppColors.primary`) và ánh xạ sang `ScheduleItem`.
+     - `ScheduleItemHelper`: Cung cấp các tiện ích xử lý sự kiện đa ngày (`multiDayRangeText`, `formattedTimeOnDay`), gắn cờ `isMultiDay`, hỗ trợ định dạng an toàn cho giao diện Lịch tuần / Lịch ngày.
+   - *Quy tắc Phân vùng Khóa Chính Âm (Negative ID Collision-Free Partitioning):*
+     - iOffice Event ID: $id_{\text{ioffice}} > 0$.
+     - HRM Nghỉ phép ID: $id_{\text{leave}} = -\text{phieuId} \in [-999999, -1]$.
+     - HRM Đi công tác ID: $id_{\text{trip}} = -(1000000 + \text{id}) \le -1000001$.
+     - Cơ chế này loại trừ 100% khả năng xung đột khóa chính giữa 3 nguồn dữ liệu khác nhau trên cùng một danh sách hiển thị.
+   - *Cơ chế Hợp nhất Trạng thái Riverpod và Cách ly Lỗi (Fault Isolation):*
+     - Provider `scheduleListProvider(startTime, endTime)` gọi bất đồng bộ đồng thời cả 3 nguồn dữ liệu. Các lời gọi sang HRM được bọc riêng trong khối `try-catch`; nếu phân hệ HRM gặp sự cố mạng hoặc lỗi phiên, ứng dụng vẫn hiển thị trọn vẹn lịch họp iOffice mà không làm crash màn hình.
+     - Danh sách sau khi hợp nhất được sắp xếp tăng dần theo mốc thời gian bắt đầu: `combined.sort((a, b) => int.parse(a.startTime).compareTo(int.parse(b.startTime)))`.
+   - *Kiểm chứng Thực nghiệm:* Đã bổ sung 14 unit tests chuyên sâu (`hrm_leave_mapper_test.dart`, `hrm_business_trip_mapper_test.dart`, `schedule_item_helper_test.dart`) cùng **20 widget tests mới** (`compact_schedule_test.dart` (5 tests), `custom_table_calendar_test.dart` (7 tests), `schedule_event_card_widget_test.dart` (8 tests)), nâng tổng số test của `modules/ioffice` lên **77 tests** và tổng toàn bộ Mobile Client đạt **370 tests** (toàn hệ thống **427 tests**, 100% Pass Rate, thời gian thực thi ~21s trên baseline commit `myhcmut-mobile:4fe5d9c`).
 
 ---
 
-## 6. LỜI GIẢI MẪU CHO 7 CÂU HỎI PHẢN BIỆN TRỌNG TÂM CỦA HỘI ĐỒNG
+## 6. LỜI GIẢI MẪU CHO 10 CÂU HỎI PHẢN BIỆN TRỌNG TÂM CỦA HỘI ĐỒNG
 
 ### Câu 1: “`SELECT FOR UPDATE` khóa số dư, nhưng cơ chế nào ngăn hai đơn đồng thời cùng vượt qua `checkTrungLich`?”
 > **Trả lời:**  
@@ -210,3 +229,30 @@ Các route chính thức được định nghĩa trong file `hrm-be/modules/_def
 > 1. *Khi chỉnh sửa cùng đơn nháp:* Hàm `checkTrungLich` tại [tcns_lich_ca_nhan.model.ts](file:///home/xchinh/workspace/hrm-be/modules/md_tcns/tcns_lich_ca_nhan/model/tcns_lich_ca_nhan.model.ts#L173) có mệnh đề `i.phanLoai != phanLoai || i.phieuId != id`, do đó hệ thống tự động loại trừ chính bản ghi lịch của phiếu đang thao tác, người dùng hoàn toàn có thể tiếp tục cập nhật mà không bị báo trùng.  
 > 2. *Cơ chế giải phóng chủ động:* Ứng dụng di động cung cấp chức năng xóa đơn nháp (gọi `DELETE /api/tcns-nghi-phep/dang-ky/:id`). Khi xóa, backend kích hoạt xóa các bản ghi liên quan trong `tcns_nghi_phep_dang_ky`, `tcns_lich_ca_nhan`, và `tcns_quy_trinh` thông qua `Promise.all` (trong mã nguồn hiện tại chưa bọc transaction CSDL), giải phóng ngay lập tức khung giờ cho cán bộ.  
 > 3. *Hạn chế đối với bản nháp bị bỏ quên (Abandoned Drafts):* Hệ thống hiện tại chưa có cơ chế Scheduled Worker / Cron job quét và tự động hủy các bản nháp bị bỏ quên sau thời hạn lưu trữ quy định do quản trị hệ thống cấu hình (ví dụ: 30 ngày kể từ ngày khởi tạo nháp). Nếu cán bộ không chủ động xóa, bản ghi lịch cá nhân vẫn tồn tại và sẽ chặn các đơn đăng ký mới trong cùng khung giờ. Nhóm đã ghi nhận đây là hạn chế nghiệp vụ trong báo cáo và đưa đề xuất triển khai Cron job dọn nháp định kỳ kèm việc bọc `DELETE` trong CSDL transaction vào Chương 7.”
+
+### Câu 8: “Tại sao không lưu trực tiếp sự kiện nghỉ phép và đi công tác vào bảng lịch iOffice ở backend mà lại sử dụng Adapter Pattern tổng hợp ở tầng Mobile Client?”
+> **Trả lời:**  
+> “Nhóm đã nghiên cứu và cân nhắc kỹ giữa hai hướng tiếp cận kiến trúc: (1) Gộp dữ liệu ở tầng cơ sở dữ liệu máy chủ và (2) Áp dụng Adapter Pattern tổng hợp ở tầng Client di động:  
+> 1. *Bảo toàn tính độc lập ranh giới dịch vụ (Bounded Context Separation):* Phân hệ HRM (`hrm-be`) và iOffice (`ioffice-be`) là hai hệ thống máy chủ dịch vụ độc lập của Trường ĐHBK với cơ sở dữ liệu PostgreSQL riêng biệt, lược đồ schema và chính sách phân quyền RBAC hoàn toàn độc lập. Nếu ghi trực tiếp bản ghi nghỉ phép và đi công tác vào bảng lịch `eoffice_lich_tuan` của iOffice, chúng ta sẽ tạo ra sự phụ thuộc chặt chẽ giữa hai backend (Tight Coupling), phá vỡ nguyên lý phân tách trách nhiệm (Single Responsibility Principle) và đòi hỏi phải mở quyền ghi chéo CSDL mức cao giữa hai hệ thống.  
+> 2. *Khác biệt căn bản về vòng đời và thẩm quyền dữ liệu (Lifecycle & Data Authority):* Lịch họp iOffice chủ yếu là lịch sự kiện công cộng hoặc lịch làm việc theo đơn vị; trong khi lịch nghỉ phép và công tác là dữ liệu nhân sự cá nhân nhạy cảm gắn liền với quy trình phê duyệt nhiều bước (`NHAP`, `CHO_DUYET`, `KET_THUC`, `TU_CHOI`, `THU_HOI`), có thể bị chỉnh sửa hoặc thu hồi bất kỳ lúc nào. Nếu sao chép sự kiện vào CSDL iOffice, hệ thống sẽ đối mặt với bài toán đồng bộ dữ liệu phân tán hai chiều cực kỳ phức tạp (Two-Way Eventual Consistency), tiềm ẩn nguy cơ sai lệch dữ liệu nếu đơn nghỉ phép bị thu hồi ở HRM nhưng chưa kịp xóa ở bảng lịch iOffice.  
+> 3. *Nguyên lý Fault Isolation (Cách ly lỗi) và An toàn giao diện:* Mô hình Adapter Pattern trên Mobile Client thông qua `HrmLeaveScheduleMapper` và `HrmBusinessTripScheduleMapper` kết hợp kỹ thuật phân vùng khóa chính âm collision-free (`-phieuId` và `-(1000000 + id)`) cho phép tổng hợp hiển thị đồng nhất mà không làm thay đổi dù chỉ 1 dòng dữ liệu trong CSDL của cả hai backend. Đặc biệt, luồng tổng hợp trong `scheduleListProvider` áp dụng nguyên tắc Fault Isolation: các lời gọi sang HRM được bọc riêng biệt trong khối try/catch; nếu dịch vụ HRM gặp sự cố mạng hoặc cán bộ chưa đăng nhập phiên HRM, ứng dụng vẫn hiển thị trọn vẹn lịch họp iOffice bình thường mà không gây sập giao diện (Graceful Degradation).  
+> 4. *Bằng chứng thực nghiệm:* Nhóm đã hiện thực hóa trọn vẹn kiến trúc này tại baseline commit `4fe5d9c` với 34 bài kiểm thử tự động chuyên sâu cho phân hệ Lịch và iOffice (14 mapper/helper unit tests + 20 widget tests mới trong `modules/ioffice/test/`), nâng tổng số test của `modules/ioffice` lên 77 tests và toàn hệ thống lên 427 tests (100% Pass Rate), chứng minh tính đúng đắn và độ tin cậy của giải pháp kiến trúc này.”
+
+### Câu 9: “Tại sao nhóm nghiên cứu không đưa phân hệ Quản lý Đề tài Khoa học Công nghệ (KHCN) và Chữ ký số Viettel CA vào phạm vi tích hợp nghiệm thu chính thức của luận văn?”
+> **Trả lời:**  
+> “Dựa trên kết quả khảo sát thực tế hệ sinh thái CNTT của Trường ĐHBK – ĐHQG-HCM, nhóm nghiên cứu đã chủ động phân định rạch ròi phạm vi nghiệm thu chính thức của đề tài dựa trên các căn cứ khoa học sau:  
+> 1. *Hiện trạng hạ tầng dịch vụ và CSDL của Nhà trường:* Trường chưa cung cấp hệ thống API backend và CSDL quan hệ tập trung cho phân hệ Quản lý Đề tài KHCN (các quy trình đăng ký, nghiệm thu đề tài hiện vẫn diễn ra qua biểu mẫu giấy hoặc website rời rạc chưa được số hóa thành dịch vụ backend mở). Tương tự, Nhà trường chưa trang bị máy chủ dịch vụ ký số PKI/SmartCA tập trung kết nối trực tiếp với các ứng dụng di động.  
+> 2. *Bảo đảm chuẩn mực trung thực học thuật và khả năng kiểm chứng:* Nếu đưa các phân hệ này vào phạm vi tích hợp nghiệm thu chính thức khi Nhà trường chưa có hạ tầng backend tương ứng, nhóm sẽ buộc phải tự xây dựng các dịch vụ giả lập (mock backend) hoặc tạo các chức năng hình thức không thể vận hành thực tế. Điều này vi phạm nguyên tắc khoa học về tính trung thực và khả năng kiểm chứng thực nghiệm độc lập của luận văn kỹ sư.  
+> 3. *Tập trung vào miền nghiệp vụ và cơ chế hỗ trợ:* Nhóm tập trung vào hai miền nghiệp vụ có backend thực tế đang vận hành là HRM và iOffice, với Auth/SSO là cơ chế xác thực/tích hợp và `modules/notification` là cơ chế thông báo nghiệp vụ xuyên suốt. Phạm vi này được bao phủ bởi 427 bài kiểm thử tự động tại baseline `4fe5d9c`; KHCN và ký số PKI được định vị là hạn chế/hướng phát triển Chương 7.”
+
+### Câu 10: “Nhóm đã xử lý các thách thức về giao diện (UI) và tính công thái học trên màn hình Lịch công tác di động như thế nào, đặc biệt khi hiển thị đồng thời nhiều nguồn sự kiện?”
+> **Trả lời:**  
+> “Khi tích hợp và hiển thị đồng thời nhiều nguồn sự kiện (lịch họp iOffice, lịch nghỉ phép HRM, lịch đi công tác HRM) trên màn hình Lịch công tác di động, nhóm đã giải quyết triệt để các thách thức về giao diện và tính công thái học:  
+> 1. *Phân tích và khắc phục lỗi RenderFlex Overflow trong TableCalendar:* Thư viện `table_calendar` mặc định hiển thị các chấm đánh dấu (marker dots) bên dưới số ngày để thể hiện số lượng sự kiện. Khi một ngày có nhiều sự kiện trùng lặp từ cả 3 nguồn, chiều cao ô ngày vượt quá ràng buộc dọc, phát sinh lỗi `RenderFlex overflowed by X pixels` trên các màn hình có mật độ hiển thị cao hoặc khi chọn ngày. Nhóm đã tái thiết kế `CustomTableCalendar`: loại bỏ hoàn toàn các marker dots gây tràn khung, chuẩn hóa bố cục căn giữa chữ số ngày (`Alignment.center`), và chuyển toàn bộ thông tin trực quan hóa chi tiết xuống danh sách thẻ sự kiện bên dưới (`CompactScheduleView`, `ScheduleEventCardWidget`).  
+> 2. *Khôi phục dynamic eventColor và chuẩn hóa mã màu/biểu tượng ngữ nghĩa:* Nhóm sử dụng hàm ánh xạ màu động `eventColor: (event) => event.color` để phân biệt trực quan tức thì loại lịch theo Design Tokens:  
+>    - *Cuộc họp (Meeting / iOffice):* Xanh dương `#1E88E5` (`AppTheme.primaryBlue`), biểu tượng `Icons.meeting_room_outlined`.  
+>    - *Nghỉ phép (Leave / HRM):* Vàng cam `#FF9800` / `#D97706` (`AppColors.warning`), biểu tượng `Icons.event_busy_outlined`.  
+>    - *Đi công tác (Business Trip / HRM):* Xanh da trời `#1488DB` (`AppColors.primary`), biểu tượng `Icons.flight_takeoff_outlined`.  
+>    Đồng thời, widget `CompactSchedule` được hoàn thiện với các nút điều hướng chevron và viền màu phân định loại lịch rõ ràng.  
+> 3. *Tích hợp thực thể miền `ScheduleAttendanceStatus` hiển thị tức thời trạng thái tham dự:* Nhóm xây dựng enum miền 4 trạng thái (`none`, `attended`, `absent`, `notAttended`) cùng widget `AttendanceStatusChip` gắn trực tiếp trên thẻ sự kiện `ScheduleEventCardWidget`, giúp cán bộ nhận diện tức thì tình trạng điểm danh của mình tại cuộc họp mà không cần mở sâu vào chi tiết.  
+> 4. *Bảo vệ toàn diện bằng 20 Widget Tests tự động:* Toàn bộ các cải tiến giao diện trên được bảo vệ bởi **20 widget tests mới** trong `modules/ioffice` (`compact_schedule_test.dart` [5 tests], `custom_table_calendar_test.dart` [7 tests], `schedule_event_card_widget_test.dart` [8 tests]), đưa tổng số bài test của `modules/ioffice` lên 77 tests và tổng toàn hệ thống lên 427 tests (100% Pass Rate trên baseline `4fe5d9c`), cam kết chất lượng giao diện ổn định và không hồi quy.”

@@ -7,25 +7,29 @@
 \subsection{Kết quả Thực thi Bộ Kiểm thử Tự động (Automated Test Suite)}
 \label{subsec:automated_test_results}
 
-Toàn bộ hệ thống được bảo vệ bởi bộ kiểm thử tự động gồm \textbf{392 ca kiểm thử} độc lập, bao gồm 335 ca kiểm thử phía Mobile Client (thực thi qua \texttt{flutter test}) và 57 ca kiểm thử phía Backend (thực thi qua \texttt{vitest}). 100\% các ca kiểm thử đều vượt qua thành công trong môi trường tích hợp liên tục (CI).
+Toàn bộ hệ thống được bảo vệ bởi bộ kiểm thử tự động gồm \textbf{427 ca kiểm thử} độc lập, bao gồm 370 ca kiểm thử phía Mobile Client (thực thi qua \texttt{flutter test}) và 57 ca kiểm thử phía Backend (thực thi qua \texttt{vitest}). 100\% các ca kiểm thử đều vượt qua thành công trong môi trường tích hợp liên tục (CI).
 
 Bảng \ref{tab:test_suite_breakdown} trình bày chi tiết phân bổ các ca kiểm thử theo từng phân hệ và module chức năng:
 
 \begin{table}[H]
 \centering
-\small
-\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\ttfamily\small}p{5.0cm}|>{\RaggedRight\arraybackslash\small}p{3.8cm}|c|Y|}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\ttfamily\small}p{5.1cm}|>{\RaggedRight\arraybackslash\small}p{2.9cm}|c|>{\centering\arraybackslash}X|}
 \hline
 \textrm{\textbf{Phân hệ / Gói Mã nguồn}} & \textbf{Công cụ Thử nghiệm} & \textbf{Số lượng Tests} & \textbf{Tỷ lệ Vượt qua (Pass Rate)} \\
 \hline
-packages/core (network, auth, system) & Flutter Test / Mockito & 56 ca kiểm thử & 100\% (56/56 Pass) \\
+packages/core/global\_system & Flutter Test / Semantic Tokens & 3 ca kiểm thử & 100\% (3/3 Pass) \\
 \hline
-modules/hrm (leave, profile, btrip) & Flutter Test / Riverpod Test & 232 ca kiểm thử & 100\% (232/232 Pass) \\
+packages/shared/auth & Flutter Test / Mockito & 2 ca kiểm thử & 100\% (2/2 Pass) \\
 \hline
-modules/ioffice \& notification & Flutter Test / Fake Async & 47 ca kiểm thử & 100\% (47/47 Pass) \\
+packages/shared/\allowbreak localization & Flutter Test / l10n Runner & 8 ca kiểm thử & 100\% (8/8 Pass) \\
 \hline
-\textbf{Tổng Phân hệ Mobile Client} & \textbf{Flutter SDK Test Runner} & \textbf{335 ca kiểm thử} & \textbf{100\% (335/335 Pass)} \\
+modules/hrm (leave, profile, btrip) & Flutter Test / Riverpod Test & 233 ca kiểm thử & 100\% (233/233 Pass) \\
+\hline
+modules/ioffice (doc, task, schedule) & Flutter Test / Widget \& Unit & 77 ca kiểm thử & 100\% (77/77 Pass) \\
+\hline
+modules/notification & Flutter Test / Fake Async & 47 ca kiểm thử & 100\% (47/47 Pass) \\
+\hline
+\textbf{Tổng Phân hệ Mobile Client} & \textbf{Flutter SDK Test Runner} & \textbf{370 ca kiểm thử} & \textbf{100\% (370/370 Pass)} \\
 \hline
 hrm-be (sso\_bridge, fw\_auth) & Vitest / Node.js & 46 ca kiểm thử & 100\% (46/46 Pass) \\
 \hline
@@ -33,10 +37,10 @@ hrm-be (concurrency\_race\_condition) & Vitest / Sequelize Mock/Tx & 11 ca kiể
 \hline
 \textbf{Tổng Phân hệ Backend Integration} & \textbf{Vitest Test Framework} & \textbf{57 ca kiểm thử} & \textbf{100\% (57/57 Pass)} \\
 \hline
-\textbf{TOÀN BỘ HỆ THỐNG ĐỒ ÁN} & \textbf{CI/CD Automated Suite} & \textbf{392 ca kiểm thử} & \textbf{100\% (392/392 Pass)} \\
+\textbf{TOÀN BỘ HỆ THỐNG ĐỒ ÁN} & \textbf{CI/CD Automated Suite} & \textbf{427 ca kiểm thử} & \textbf{100\% (427/427 Pass)} \\
 \hline
 \end{tabularx}
-\caption{\textit{Bảng Tổng hợp Kết quả Thực thi Bộ Kiểm thử Tự động Toàn hệ thống}}
+\caption[\textit{Tổng hợp kết quả thực thi bộ kiểm thử tự động}]{\textit{Bảng Tổng hợp Kết quả Thực thi Bộ Kiểm thử Tự động Toàn hệ thống}}
 \label{tab:test_suite_breakdown}
 \end{table}
 
@@ -45,7 +49,7 @@ hrm-be (concurrency\_race\_condition) & Vitest / Sequelize Mock/Tx & 11 ca kiể
 
 Một nguyên tắc quan trọng trong nghiên cứu khoa học và kỹ nghệ phần mềm là sự phân định rạch ròi giữa \textbf{Tỷ lệ Vượt qua Kiểm thử (Test Pass Rate)} và \textbf{Độ bao phủ Mã nguồn (Code Coverage)}:
 \begin{itemize}
-    \item \textbf{Tỷ lệ Vượt qua Kiểm thử (Pass Rate = 100\%):} Chỉ số 392/392 ca kiểm thử đạt kết quả Pass phản ánh rằng hệ thống thỏa mãn 100\% các kịch bản kiểm thử đã được nhóm nghiên cứu thiết kế và dự liệu trước. Tuy nhiên, theo nguyên lý Dijkstra, \textit{``Kiểm thử phần mềm chỉ có thể chứng minh sự hiện diện của lỗi chứ không thể chứng minh sự vắng mặt của lỗi''}. Do đó, con số 100\% Pass Rate không đồng nghĩa với việc hệ thống hoàn toàn không có lỗi (bug-free) trong mọi tình huống sử dụng thực tế.
+    \item \textbf{Tỷ lệ Vượt qua Kiểm thử (Pass Rate = 100\%):} Chỉ số 427/427 ca kiểm thử đạt kết quả Pass phản ánh rằng hệ thống thỏa mãn 100\% các kịch bản kiểm thử đã được nhóm nghiên cứu thiết kế và dự liệu trước. Tuy nhiên, theo nguyên lý Dijkstra, \textit{``Kiểm thử phần mềm chỉ có thể chứng minh sự hiện diện của lỗi chứ không thể chứng minh sự vắng mặt của lỗi''}. Do đó, con số 100\% Pass Rate không đồng nghĩa với việc hệ thống hoàn toàn không có lỗi (bug-free) trong mọi tình huống sử dụng thực tế.
     
     \item \textbf{Độ bao phủ Mã nguồn (Code Coverage):}
     \begin{itemize}
@@ -80,8 +84,7 @@ Nhóm nghiên cứu đã thực hiện kiểm thử liên thông toàn diện tr
 
 \begin{table}[H]
 \centering
-\small
-\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{3.5pt}
 \begin{tabularx}{\textwidth}{|c|>{\RaggedRight\arraybackslash\footnotesize}X|c|c|c|c|c|}
 \hline
 \textbf{STT} & \textbf{API Endpoint} & \textbf{Method} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{Avg (ms)} & \textbf{P95 (ms)} \\
@@ -101,15 +104,13 @@ Nhóm nghiên cứu đã thực hiện kiểm thử liên thông toàn diện tr
 7 & \nolinkurl{/api/schedule/general-item/:id/checkin} & POST & 50 & 145 & \textbf{82} & \textbf{110} \\
 \hline
 \end{tabularx}
-\caption{\textit{Bảng đo lường Thời gian Phản hồi của các API Endpoints cốt lõi}}
+\caption[\textit{Thời gian phản hồi của các API cốt lõi}]{\textit{Bảng đo lường Thời gian Phản hồi của các API Endpoints cốt lõi}}
 \label{tab:api_benchmarks}
 \end{table}
 
 \begin{table}[H]
 \centering
-\small
-\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{|L{5.5cm}|Y|c|c|}
+\begin{tabularx}{\textwidth}{|L{4.6cm}|Y|c|c|}
 \hline
 \textbf{Giai đoạn trong Pipeline} & \textbf{Cơ chế Kỹ thuật} & \textbf{Độ trễ (ms)} & \textbf{Tỷ trọng} \\
 \hline
@@ -123,17 +124,15 @@ Nhóm nghiên cứu đã thực hiện kiểm thử liên thông toàn diện tr
 \hline
 5. Google FCM $\rightarrow$ Client Device & Mạng viễn thông / Wi-Fi đẩy Push tới điện thoại & \textbf{635 ms} & 63.5\% \\
 \hline
-\multicolumn{2}{|l|}{\textbf{TỔNG THỜI GIAN ĐẦU-CUỐI (E2E Latency)}} & \textbf{$\approx$ 1.000 ms (1.0s)} & \textbf{100\%} \\
+\multicolumn{2}{|l|}{\textbf{TỔNG THỜI GIAN ĐẦU-CUỐI (E2E Latency)}} & \textbf{$\approx$ 1.000 ms} & \textbf{100\%} \\
 \hline
 \end{tabularx}
-\caption{\textit{Bảng phân rã độ trễ của Pipeline Thông báo đẩy từ Backend tới Điện thoại}}
+\caption[\textit{Phân rã độ trễ pipeline thông báo đẩy đầu-cuối}]{\textit{Bảng phân rã độ trễ của Pipeline Thông báo đẩy từ Backend tới Điện thoại}}
 \label{tab:fcm_latency}
 \end{table}
 
 \begin{table}[H]
 \centering
-\small
-\renewcommand{\arraystretch}{1.25}
 \begin{tabularx}{\textwidth}{|L{4.8cm}|L{3.5cm}|c|Y|}
 \hline
 \textbf{Chỉ số Hiệu năng} & \textbf{Môi trường Thử nghiệm} & \textbf{Kết quả} & \textbf{Đánh giá Tiêu chuẩn} \\
@@ -151,6 +150,6 @@ Bộ nhớ RAM sử dụng (Tải tối đa / PDF) & Xem tệp PDF lớn \& Danh
 Dung lượng Cài đặt (APK Size) & Bản Release Android Split ABI & \textbf{$\approx$ 24.8 MB} & Nhẹ, tải nhanh ($< 50$ MB) \\
 \hline
 \end{tabularx}
-\caption{\textit{Bảng đo lường Hiệu năng và Mức tiêu thụ Tài nguyên của Ứng dụng MyHCMUT}}
+\caption[\textit{Đo lường hiệu năng và tài nguyên ứng dụng MyHCMUT}]{\textit{Bảng đo lường Hiệu năng và Mức tiêu thụ Tài nguyên của Ứng dụng MyHCMUT}}
 \label{tab:mobile_perf}
 \end{table}

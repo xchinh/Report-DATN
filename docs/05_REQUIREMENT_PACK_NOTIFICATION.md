@@ -1,4 +1,4 @@
-# ĐẶC TẢ YÊU CẦU KỸ THUẬT PHÂN HỆ THÔNG BÁO ĐẨY VÀ TRUNG TÂM THÔNG BÁO DI ĐỘNG
+# ĐẶC TẢ CƠ CHẾ THÔNG BÁO NGHIỆP VỤ XUYÊN SUỐT VÀ TRUNG TÂM THÔNG BÁO DI ĐỘNG
 # (05_REQUIREMENT_PACK_NOTIFICATION.md)
 
 > **Dự án:** Ứng dụng di động MyHCMUT phục vụ Nhân sự Trường Đại học (MyHCMUT Mobile)  
@@ -16,15 +16,15 @@
 
 ---
 
-## 1. TỔNG QUAN VÀ MỤC TIÊU PHÂN HỆ THÔNG BÁO
+## 1. TỔNG QUAN VÀ MỤC TIÊU CƠ CHẾ THÔNG BÁO NGHIỆP VỤ XUYÊN SUỐT
 
-Phân hệ Thông báo trong hệ sinh thái MyHCMUT đóng vai trò là kênh truyền tải thông tin thời gian thực giữa hai máy chủ lõi (**HRM Server** quản lý công tác nhân sự và **iOffice Server** quản lý văn phòng điện tử) đến ứng dụng di động của cán bộ, giảng viên và lãnh đạo nhà trường.
+**Cơ chế thông báo nghiệp vụ xuyên suốt** trong hệ sinh thái MyHCMUT là cơ chế hỗ trợ hai miền nghiệp vụ lõi: **HRM** và **iOffice**. Auth/SSO là cơ chế xác thực/tích hợp riêng; thông báo không được định vị là một miền nghiệp vụ độc lập. Thành phần `modules/notification` cung cấp kênh tiếp nhận, hiển thị và điều hướng thông tin từ hai backend đến ứng dụng di động.
 
 ### 1.1. Phạm vi nghiệp vụ và mục tiêu kỹ thuật
 1. **Thông tin luân chuyển quy trình nhân sự (HRM):** Thông báo biến động trạng thái đơn xin nghỉ phép, duyệt kế hoạch công tác, nhắc nhở bổ sung hồ sơ lý lịch, gia hạn hợp đồng lao động, đào tạo bồi dưỡng.
 2. **Thông tin văn bản điều hành và nhiệm vụ (iOffice):** Thông báo văn bản đến mới phát hành, văn bản đi cần xử lý, nhiệm vụ được giao, và thông báo lịch họp/cuộc họp cần điểm danh.
 3. **Trung tâm thông báo hợp nhất (Unified Mobile Notification Center):** Hợp nhất dòng thông báo từ hai nguồn máy chủ khác biệt (HRM và iOffice), phân trang đồng bộ, hiển thị trạng thái đã đọc/chưa đọc, cung cấp cơ chế lọc theo nguồn, xóa tạm thời hỗ trợ hoàn tác (Undo), và thao tác hàng loạt (Batch Processing).
-4. **Phát tán đa kênh tin cậy (Multi-platform Push Dispatch):** Tận dụng hạ tầng Firebase Cloud Messaging (FCM), APNs (Apple Push Notification service cho iOS) và FCM Transport (Google Play Services cho Android) để gửi thông báo tức thì ngay cả khi ứng dụng bị tắt hoàn toàn.
+4. **Phát tán đa kênh (Multi-platform Push Dispatch):** Tận dụng FCM, APNs và FCM Transport để chuyển phát push khi điều kiện hạ tầng cho phép. Backend chỉ phát sự kiện thông báo; hệ thống không bảo đảm thiết bị nhận được thông báo, cũng không có cam kết exactly-once.
 
 ---
 
@@ -32,7 +32,7 @@ Phân hệ Thông báo trong hệ sinh thái MyHCMUT đóng vai trò là kênh t
 
 ### 2.1. Sơ đồ tuần tự truyền tải đầu-cuối (End-to-End Event Sequence)
 
-Toàn bộ luồng phát tán thông báo từ lúc phát sinh thao tác nghiệp vụ tại máy chủ đến khi xuất hiện trên thiết bị di động được mô tả chi tiết qua sơ đồ sau:
+Luồng dưới đây mô tả từ lúc phát sinh thao tác nghiệp vụ đến nỗ lực chuyển phát tới thiết bị; nó không suy ra bảo đảm thiết bị đã nhận/hiển thị thông báo.
 
 ```mermaid
 sequenceDiagram
@@ -82,7 +82,7 @@ sequenceDiagram
     end
     deactivate Service
     deactivate Consumer
-    Mobile-->>Approver: Hiển thị Banner / Cập nhật Badge / Đồng bộ danh sách
+    Mobile-->>Approver: Có thể hiển thị Banner / Cập nhật Badge / Đồng bộ danh sách
 ```
 
 ### 2.2. Phân tích chi tiết từng chặng xử lý
@@ -90,10 +90,10 @@ sequenceDiagram
 #### Chặng 1: Giao dịch CSDL và Mẫu thiết kế Post-commit Hook
 - **Nguyên lý thiết kế:** Tuyệt đối không phát tán sự kiện thông báo bên trong phạm vi giao dịch cơ sở dữ liệu (Database Transaction). 
 - **Minh chứng mã nguồn:** Tại `modules/md_tcns/tcns_cong_tac/controller/tcns_cong_tac_yeu_cau.controller.ts` và `modules/md_tcns/tcns_nghi_phep/controller.ts`, lệnh `await app.notification.send(...)` chỉ được triệu gọi sau khi giao dịch CSDL đã hoàn thành (`transaction.commit()`).
-- **Mục đích bảo vệ:** Ngăn ngừa tình trạng *Phantom Notification* (thông báo ma) — hiện tượng cán bộ nhận được thông báo "Đơn đã được duyệt" trong khi giao dịch CSDL thực tế bị lỗi, rollback dữ liệu và không hề được duyệt thành công.
+- **Mục đích bảo vệ:** Ngăn ngừa tình trạng *Phantom Notification* (thông báo ma) — hiện tượng sự kiện cho biết “Đơn đã được duyệt” được phát đi khi giao dịch CSDL thực tế bị lỗi và rollback. Post-commit chỉ xác nhận điều kiện phát sự kiện ở backend, không xác nhận thiết bị nhận được thông báo.
 - **Ranh giới học thuật (Claim Traceability CLM-NOT-01 & CLM-NOT-02):**
-  - Mặc dù việc gọi `app.notification.send()` sau commit ngăn được thông báo ma, kiến trúc hiện tại vẫn tồn tại rủi ro mất mát thông báo nếu broker Kafka bị sự cố gián đoạn kết nối đúng tại thời điểm sau commit.
-  - Giải pháp tối ưu lý thuyết là **Transactional Outbox Pattern** (bảng đệm `fw_outbox` ghi cùng transaction với dữ liệu nghiệp vụ, được Kafka Connect / Debezium CDC quét đẩy ra ngoài) — được định vị là đề xuất nghiên cứu phát triển ở Chương 7.
+  - Với **các đường phát thông báo của HRM** được mô tả ở đây, việc gọi `app.notification.send()` sau commit ngăn thông báo ma nhưng vẫn có cửa sổ mất sự kiện nếu broker Kafka gián đoạn đúng thời điểm sau commit, vì các đường này chưa dùng Transactional Outbox.
+  - Với các đường HRM đó, **Transactional Outbox Pattern** (bảng đệm `fw_outbox` ghi cùng transaction với dữ liệu nghiệp vụ, được Kafka Connect / Debezium CDC quét đẩy ra ngoài) là hướng nâng cấp Chương 7. Không khái quát giới hạn này cho toàn hệ thống: `SYSTEM_OPERATION.md` ghi nhận `ioffice-be` có Transactional Outbox riêng.
 
 #### Chặng 2: Kafka Producer Client Wrapper
 - Chức năng phát thông báo được đóng gói qua lớp tiện ích `config/lib/notification.ts`:
@@ -377,7 +377,7 @@ Nhằm bảo đảm tính trung thực học thuật theo tiêu chuẩn của Đ
 
 | Mã Kịch bản | Tình huống lỗi thực tế (Failure Scenario) | Điểm nghẽn kỹ thuật & Hệ quả | Đối sách hiện thực trong mã nguồn | Định hướng nâng cấp lý thuyết (Chương 7) |
 | :---: | :--- | :--- | :--- | :--- |
-| **FAIL-01** | **Kafka Broker gián đoạn kết nối sau DB commit** | Giao dịch nghiệp vụ lưu thành công nhưng Kafka producer ném lỗi, dẫn đến mất sự kiện thông báo. | Bọc lỗi và ghi nhật ký cảnh báo (`Logger.error`), không làm sập tiến trình Express. | Áp dụng **Transactional Outbox Pattern** kết hợp CDC Debezium để bảo đảm chuyển phát At-least-once tin cậy tuyệt đối từ CSDL. |
+| **FAIL-01** | **Kafka Broker gián đoạn kết nối sau DB commit trên đường HRM không dùng Outbox** | Giao dịch nghiệp vụ HRM lưu thành công nhưng Kafka producer ném lỗi, dẫn đến mất sự kiện thông báo. | Bọc lỗi và ghi nhật ký cảnh báo (`Logger.error`), không làm sập tiến trình Express. | Áp dụng **Transactional Outbox Pattern** kết hợp CDC Debezium cho các đường HRM này. `ioffice-be` được ghi nhận có Outbox riêng trong `SYSTEM_OPERATION.md`. |
 | **FAIL-02** | **FCM chuyển phát lặp lại (Duplicate Push)** | Mạng di động chập chờn khiến APNs/FCM gửi lại bản tin Push nhiều lần. | Module di động xử lý idempotent: kiểm tra `message.hashCode` và không tăng số lượng trùng trên cùng phiên nạp. | Bổ sung khóa định danh duy nhất `eventId` trên toàn bộ payload sự kiện từ backend. |
 | **FAIL-03** | **Kafka Consumer gặp sự cố khi ghi DB** | `notification_consumer.ts` bắt lỗi trong `eachMessage` nhưng không ném lại, khiến kafkajs auto-commit offset. | Ghi vết chi tiết `Logger.error` thông tin bản tin thất bại. | Xây dựng hàng đợi thư chết **Dead Letter Queue (SEND_NOTIFY_SERVICE_DLQ)** và retry worker có exponential backoff. |
 | **FAIL-04** | **Thiết bị mất mạng khi thao tác đọc/xóa** | Client gửi request `PUT /api/notification` nhưng bị gián đoạn mạng hoặc máy chủ trả HTTP 500. | Cơ chế Rollback tự động: khôi phục nguyên trạng thái danh sách và bù trừ lại số lượng Badge. | Hàng đợi đồng bộ Offline (Offline Queue lưu trong SQLite cục bộ và đồng bộ lại khi có mạng). |
@@ -386,7 +386,7 @@ Nhằm bảo đảm tính trung thực học thuật theo tiêu chuẩn của Đ
 
 > [!IMPORTANT]
 > **Tuyên bố Học thuật về Tính toàn vẹn (Academic Notice on FCM Delivery):**  
-> Trong toàn bộ tài liệu luận văn, **tuyệt đối không tuyên bố hạ tầng FCM bảo đảm phát tán chính xác một lần duy nhất (Exactly-Once Delivery)**. FCM và APNs là các mạng phân tán quy mô toàn cầu hoạt động trên nguyên lý **At-Least-Once Delivery kết hợp Best-Effort**. Các cơ chế Idempotent State Guard và Transactional Outbox là các giải pháp bù trừ cần thiết được phân tích khoa học tại Chương 3 và Chương 7.
+> Trong toàn bộ tài liệu luận văn, **tuyệt đối không tuyên bố hạ tầng FCM bảo đảm phát tán chính xác một lần duy nhất (Exactly-Once Delivery)**. FCM và APNs là các mạng phân tán quy mô toàn cầu hoạt động trên nguyên lý **At-Least-Once Delivery kết hợp Best-Effort**. Idempotent State Guard và Transactional Outbox là các cơ chế bù trừ; việc áp dụng Outbox phải mô tả theo từng backend/đường phát (ví dụ đường HRM trong tài liệu này, khác với Outbox của `ioffice-be` ghi trong `SYSTEM_OPERATION.md`).
 
 ---
 
@@ -481,7 +481,7 @@ Toàn bộ **47 bài kiểm thử tự động** (Unit & Widget Tests) của mô
 
 ## 8. KẾT LUẬN VÀ LỘ TRÌNH PHÁT TRIỂN CHƯƠNG 7
 
-Phân hệ Thông báo Đẩy và Trung tâm Thông báo Di động đã hoàn thành việc tích hợp toàn diện giữa kiến trúc sự kiện không đồng bộ phía máy chủ (PostgreSQL Post-commit $\to$ Apache Kafka $\to$ Firebase Admin SDK) và ứng dụng di động MyHCMUT (Firebase Messaging $\to$ Local Notifications $\to$ Riverpod State Management $\to$ GoRouter).
+**Cơ chế thông báo nghiệp vụ xuyên suốt** đã tích hợp kiến trúc sự kiện không đồng bộ phía máy chủ (PostgreSQL Post-commit $\to$ Apache Kafka $\to$ Firebase Admin SDK) với ứng dụng di động MyHCMUT (Firebase Messaging $\to$ Local Notifications $\to$ Riverpod State Management $\to$ GoRouter). Đây là cơ chế hỗ trợ HRM/iOffice, không phải miền nghiệp vụ độc lập; backend chỉ phát sự kiện, không bảo đảm thiết bị nhận được thông báo.
 
 Toàn bộ 47 kịch bản kiểm thử đơn vị và giao diện đã chứng minh tính bền vững của các giải pháp thiết kế:
 1. **Bảo vệ toàn vẹn trạng thái:** Cập nhật lạc quan kết hợp tự động rollback khi gặp sự cố mạng.
@@ -489,6 +489,6 @@ Toàn bộ 47 kịch bản kiểm thử đơn vị và giao diện đã chứng 
 3. **Định tuyến ngữ cảnh chính xác:** Động cơ nhận diện từ khóa tiếng Việt phân biệt rạch ròi giữa đơn cần duyệt và đơn cá nhân.
 
 ### Định hướng mở rộng trong Chương 7 của Luận văn:
-- **Transactional Outbox & CDC:** Triển khai Debezium bắt sự kiện thay đổi từ CSDL để xóa bỏ hoàn toàn cửa sổ rủi ro mất mát thông báo khi Kafka gặp sự cố.
+- **Transactional Outbox & CDC cho các đường HRM chưa dùng Outbox:** Triển khai Debezium bắt sự kiện thay đổi từ CSDL để thu hẹp cửa sổ rủi ro mất mát khi Kafka gặp sự cố; không áp dụng mô tả này để suy ra `ioffice-be` chưa có Outbox.
 - **Tối ưu hóa truy vấn hàng loạt (Batching & N+1 Elimination):** Chuyển đổi vòng lặp tuần tự tạo bản ghi `fw_notification_target` sang `bulkCreate`, và áp dụng FCM Multicast API (`admin.messaging().sendEachForMulticast`) cho phép phát tán tối đa 500 thiết bị trên mỗi cuộc gọi mạng.
 - **Bao bọc thông điệp có phiên bản (Schema Versioning Envelope):** Bổ sung trường `eventId` (UUID), `schemaVersion`, và `traceId` vào tải trọng Kafka nhằm hỗ trợ chống lặp thông điệp (deduplication) tại tầng consumer.

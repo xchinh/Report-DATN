@@ -2,7 +2,27 @@
 \label{sec:yeucau_chucnang}
 \label{sec:yeucau_chucnang_modules}
 
-Nhằm đảm bảo tính mạch lạc, dễ dàng quản lý và tương thích chặt chẽ với cấu trúc mã nguồn Modular Monorepo của dự án, phần này phân rã toàn bộ các yêu cầu chức năng thành các phân hệ nghiệp vụ độc lập. Trong từng phân hệ, tài liệu trình bày đầy đủ: mô tả nghiệp vụ, các bảng đặc tả ca sử dụng (Use Cases), cùng hệ thống biểu đồ hoạt động (Activity Diagrams) và biểu đồ tuần tự (Sequence Diagrams) tương ứng:
+Phần này trình bày chi tiết các yêu cầu chức năng của hệ thống MyHCMUT Mobile theo từng phân hệ nghiệp vụ đã được nghiệm thu hoặc có bằng chứng tích hợp. Mỗi phân hệ đặc tả mục tiêu, yêu cầu chức năng (FR), bảng Use Case, quy tắc nghiệp vụ và biểu đồ hoạt động/tuần tự khi phù hợp. Phạm vi được tổ chức theo chức năng của sản phẩm, không theo phân công thực hiện.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Phạm vi đặc tả theo phân hệ}
+\label{tab:module_owner_scope}
+\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
+\hline
+\textbf{Phân hệ} & \textbf{Phạm vi trong chương} \\
+\hline
+Xác thực và SSO & Xác thực Mobile và chuyển tiếp có kiểm soát sang Web HRM. \\
+\hline
+Hồ sơ và Nghỉ phép & Hồ sơ cán bộ, đề xuất cập nhật và quy trình nghỉ phép. \\
+\hline
+iOffice, Lịch và Điểm danh & Văn bản, nhiệm vụ, lịch tổng hợp và điểm danh theo quyền nghiệp vụ. \\
+\hline
+Thông báo & Nhận thông báo, trạng thái đọc và điều hướng nghiệp vụ sâu. \\
+\hline
+\end{tabularx}
+\end{table}
 
 \input{Chapter4/section2/auth/index}
 \newpage
@@ -11,5 +31,3 @@ Nhằm đảm bảo tính mạch lạc, dễ dàng quản lý và tương thích
 \input{Chapter4/section2/ioffice/index}
 \newpage
 \input{Chapter4/section2/notification/index}
-\newpage
-\input{Chapter4/section2/khcn/index}

@@ -1,6 +1,10 @@
 # ĐẶC TẢ VẬN HÀNH VÀ CÁC LUỒNG HOẠT ĐỘNG HỆ THỐNG (SYSTEM OPERATION)
 
 > **Mục tiêu tài liệu:** Giải thích chi tiết và trực quan cách thức vận hành thực tế từ thao tác của Người dùng trên Mobile App, truyền tải qua tầng Mạng (Network & API), xử lý nghiệp vụ tại Hệ thống Backend Hiện hữu của Nhà trường, truy xuất Cơ sở Dữ liệu, và phản hồi kết quả về ứng dụng di động.
+>
+> **Ranh giới bằng chứng:** Nội dung vận hành được đối chiếu với source snapshot hiện hành trong `13_CURRENT_SOURCE_SNAPSHOT.md`; Gate 0 chỉ là mốc lịch sử. Kết quả kiểm thử chỉ là số liệu Gate 0 đã ghi nhận cho đến khi có log tái lập sạch, theo `12_BASELINE_REPRODUCIBILITY_AUDIT.md`.
+
+> **Trạng thái WebApp SSO (15/09/2026):** Working tree hiện tại đã có consumer `POST /api/auth/sso/consume-ticket` tại `ioffice-be`, frontend iOffice/HRM tiêu thụ vé rồi làm sạch URL, và Flutter bridge nhận các sự kiện WebView. Khi Redis sẵn sàng, nhóm SSO/concurrency backend chạy 53/53 pass tại `hrm-be:9e39ccc`; chưa có kiểm thử E2E Mobile → FE → consumer backend trong phiên này.
 
 ---
 
@@ -71,8 +75,8 @@ Hệ sinh thái đề tài bao gồm nhiều thành phần phối hợp chặt c
 | `hrm-fe` $\rightarrow$ `hrm-be` | HTTPS REST | `POST /api/auth/sso/consume-ticket`<br>Payload: `{ ticket }` | Web FE gửi vé để BE xác thực qua Redis `getDel` và thiết lập Web Session Cookie (`connect.sid`, HttpOnly, Secure). |
 | `Mobile` $\rightarrow$ `ioffice-be` | HTTPS REST (Bearer JWT) | `GET /api/e-office/van-ban-den-mobile/...`<br>`GET /api/mission/general/...` | Tra cứu văn bản đến/đi, tải tệp PDF; truy vấn tiến độ nhiệm vụ và cây đầu việc `outlined-tree`. |
 | `Mobile` $\leftrightarrow$ `ioffice-be` | WebSocket (WSS / Socket.IO) | Event: `scheduleCheckin`, `absence` | Điểm danh cuộc họp thời gian thực trong khung giờ mở trước 1h; backend kiểm tra authoritative quyền và giờ; đồng bộ trạng thái. |
-| `hrm-be` / `ioffice-be` $\rightarrow$ `Kafka` | TCP (Kafka Protocol) | Topic: `SEND_NOTIFY_SERVICE` | Đẩy sự kiện thông báo bất đồng bộ khi có đơn mới, duyệt đơn, hoặc giao nhiệm vụ (non-blocking). |
-| `hrm-be (Consumer)` $\rightarrow$ `FCM` $\rightarrow$ `Mobile` | HTTPS REST (FCM v1) $\rightarrow$ APNs/FCM Push | Payload: 4 trường Metadata (`source`, `entityType`, `entityId`, `isApproval`) | Chuyển phát thông báo đẩy tới thiết bị di động, kích hoạt Deep Linking mở đúng màn hình chi tiết. |
+| `hrm-be` / `ioffice-be` $\rightarrow$ `Kafka` | TCP (Kafka Protocol) | Topic: `SEND_NOTIFY_SERVICE` | Backend phát sự kiện cho cơ chế thông báo nghiệp vụ xuyên suốt khi có chuyển trạng thái nghiệp vụ thực sự (non-blocking). |
+| `hrm-be (Consumer)` $\rightarrow$ `FCM` $\rightarrow$ `Mobile` | HTTPS REST (FCM v1) $\rightarrow$ APNs/FCM Push | Payload: 4 trường Metadata (`source`, `entityType`, `entityId`, `isApproval`) | Nỗ lực chuyển phát push và hỗ trợ Deep Linking nếu thiết bị nhận; backend không bảo đảm thiết bị nhận thông báo. |
 
 ---
 
@@ -187,7 +191,7 @@ Mỗi tương tác dữ liệu trên ứng dụng di động đều tuân thủ 
        │ SQL Query
        ▼
 ┌──────────────┐
-│ PostgreSQL   │ (6. hcmut_hanh_chinh_dev: SELECT * FROM van_ban_den_general ...)
+│ PostgreSQL   │ (6. hcmut_hanh_chinh_dev: SELECT * FROM eoffice_van_ban_den ...)
 └──────┬───────┘
        │ Database Records
        ▼
@@ -270,7 +274,9 @@ sequenceDiagram
 
 ### 6.1. Luồng 1: Đăng ký & Kiểm tra Điều kiện Nghỉ phép (Form Wizard 3 bước)
 
-#### 6.1.1. Luồng Vận hành Hiện tại tại Commit Bảo vệ (`hrm-be:15a6e321`, `myhcmut-mobile:161d5bb8`)
+> **Mốc đối chuẩn:** Báo cáo sử dụng baseline Gate 0 `hrm-be:38745a26` và `myhcmut-mobile:4fe5d9c`. Tại `hrm-be:38745a26`, `acquireLeaveLock` đã được gọi trong các đường ghi nghỉ phép và sử dụng `pg_advisory_xact_lock` trong transaction. Các sơ đồ ở commit cũ bên dưới chỉ được giữ để giải thích hiện trạng trước hardening; không được đọc là hiện trạng baseline.
+
+#### 6.1.1. Luồng lịch sử trước Concurrency Hardening (`hrm-be:15a6e321`, `myhcmut-mobile:161d5bb8`)
 
 ```mermaid
 sequenceDiagram
@@ -332,10 +338,10 @@ sequenceDiagram
     HRM-->>CB: Bắn thông báo FCM hoàn tất tới điện thoại Cán bộ
 ```
 
-#### 6.1.2. Thiết kế Cải tiến Kiểm soát Tương tranh Đề xuất (Proposed Two-Tier Concurrency Control Design - Chương 5)
+#### 6.1.2. Kiểm soát tương tranh đã hiện thực tại Gate 0
 
 > [!IMPORTANT]
-> **Định vị Học thuật:** Sơ đồ dưới đây là **thiết kế kiến trúc đề xuất** (trình bày trong Chương 5) nhằm kiểm soát điểm nghẽn *Check-then-Act Race Condition* trên các đường ghi cùng tuân thủ giao thức khóa đối với hàm `checkTrungLich`. Giải pháp này chưa kích hoạt tại commit bảo vệ và được đưa vào lộ trình triển khai ở Chương 7.
+> **Định vị học thuật:** Sơ đồ dưới đây mô tả cơ chế đã có tại `hrm-be:38745a26`, kiểm soát điểm nghẽn *Check-then-Act Race Condition* trên các đường ghi cùng tuân thủ giao thức khóa. Cơ chế không bảo vệ các tiến trình ghi ngoài giao thức; Exclusion Constraint cấp CSDL vẫn là hướng phát triển.
 
 ```mermaid
 sequenceDiagram
@@ -344,7 +350,7 @@ sequenceDiagram
     participant HRM as HRM Backend
     participant DB as PostgreSQL Database
 
-    Note over Mobile,DB: Đường ghi nộp đơn chính thức được tuần tự hóa (Proposed Concurrency-Safe Write)
+    Note over Mobile,DB: Đường ghi nộp đơn chính thức được tuần tự hóa tại baseline Gate 0
     Mobile->>HRM: PUT /api/upload/tcns-nghi-phep/dang-ky { id, data: { ...formData, isSend: 1 } }
     HRM->>DB: 1. BEGIN TRANSACTION
     HRM->>DB: 2. SELECT pg_advisory_xact_lock(hashtext(:shcc)) [Tuần tự hóa ghi theo cán bộ]
@@ -425,7 +431,7 @@ sequenceDiagram
    - Khi bấm vào văn bản $\rightarrow$ Mobile tải tệp đính kèm và render trực tiếp qua trình xem PDF tích hợp.
 2. **Phân phối & Giao việc Chỉ đạo (Lãnh đạo Đơn vị)**:
    - Lãnh đạo mở văn bản đến $\rightarrow$ chọn cán bộ xử lý $\rightarrow$ nhập nội dung chỉ đạo và thời hạn hoàn thành $\rightarrow$ bấm *Phân phối*.
-   - Mobile gọi `POST /api/e-office/van-ban-den/distribute` $\rightarrow$ `ioffice-be` lưu vào `van_ban_den_distribution` và gửi thông báo cho chuyên viên được phân công.
+   - Mobile gọi `POST /api/e-office/van-ban-den/distribute` $\rightarrow$ `ioffice-be` lưu vào `eoffice_distribution` và phát sinh sự kiện thông báo cho cơ chế thông báo nghiệp vụ xuyên suốt.
 3. **Theo dõi Văn bản đi**:
    - Cán bộ tra cứu danh mục văn bản đi qua `GET /api/e-office/van-ban-di-mobile/page/:page/:size` để theo dõi tiến độ thẩm định, ký duyệt và phát hành.
 
@@ -500,7 +506,7 @@ Cơ chế thông báo đẩy được thiết kế theo mô hình **phân tách 
    │
    ▼
 [2. EVENT PRODUCER]
-   hrm-be gọi Notification.send(data) -> Đẩy tin nhắn vào Kafka Topic: SEND_NOTIFY_SERVICE
+   hrm-be gọi Notification.send(data) -> Phát sự kiện thông báo vào Kafka Topic: SEND_NOTIFY_SERVICE
    │ (Tiến trình ghi DB nghiệp vụ hoàn tất độc lập; Producer gửi bất đồng bộ qua kafkajs)
    ▼
 [3. APACHE KAFKA MESSAGE BROKER]
@@ -531,7 +537,8 @@ Cơ chế thông báo đẩy được thiết kế theo mô hình **phân tách 
 
 > [!NOTE]
 > **Đặc tính kỹ thuật và đánh đổi (Trade-offs):**
-> 1. **Mô hình gửi Producer:** Nghiệp vụ PostgreSQL commit trước, sau đó Producer mới bắn Kafka qua `kafkajs` (cấu hình retry 5 lần, exponential backoff, in-memory queue). Đây là mô hình bất đồng bộ tách rời nhằm bảo đảm thời gian phản hồi API nghiệp vụ, chấp nhận đánh đổi rằng nếu Broker/Node crash ngay giữa lúc commit DB và gửi message thì thông báo có thể bị thất lạc (chưa cài đặt Transactional Outbox pattern).
+> 0. **Ranh giới trách nhiệm:** Đây là cơ chế thông báo nghiệp vụ xuyên suốt hỗ trợ HRM/iOffice, không phải miền nghiệp vụ độc lập. Backend chỉ phát sự kiện, không bảo đảm thiết bị nhận push.
+> 1. **Mô hình phát sự kiện phụ thuộc từng backend:** Không được khái quát một cơ chế cho toàn hệ thống. Source snapshot hiện hành xác nhận `ioffice-be` có Transactional Outbox (ghi `outbox_events`, relay Kafka, retry và cleanup). Các luồng chỉ phát Kafka sau commit ở backend khác vẫn phải được mô tả theo đúng mã nguồn của luồng đó; chưa có kiểm thử runtime trong phiên này để kết luận phạm vi vận hành thực tế của outbox.
 > 2. **Xử lý trùng lặp Consumer:** Thông điệp chưa gắn `eventId` mang tính duy nhất toàn cục; khi Kafka consumer rebalance hoặc reprocess partition có thể dẫn tới thông báo lặp lại (at-least-once delivery).
 > 3. **Dọn dẹp Dead Token:** Consumer tự động bắt lỗi `registration-token-not-registered` từ Google FCM để xóa token vô hiệu khỏi bảng `fw_user_device_token`.
 

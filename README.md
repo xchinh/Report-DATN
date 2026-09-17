@@ -24,29 +24,29 @@ Báo cáo Đồ án Tốt nghiệp ngành **Khoa học Máy tính**, Khoa Khoa h
 
 ## 📖 Tổng Quan Báo Cáo
 
-Đề tài tập trung nghiên cứu, thiết kế, hiện thực hóa và kiểm thử ứng dụng di động **MyHCMUT** đa nền tảng (iOS & Android) phục vụ hơn 1.000 cán bộ, giảng viên và lãnh đạo Trường Đại học Bách khoa – ĐHQG-HCM. Ứng dụng đóng vai trò là một **Cổng di động tập trung**, tích hợp an toàn với hệ sinh thái dịch vụ Backend hiện hữu của Nhà trường thông qua REST API, WebSocket và Firebase Cloud Messaging (FCM).
+Đề tài tập trung nghiên cứu, thiết kế, hiện thực hóa và kiểm thử ứng dụng di động **MyHCMUT** đa nền tảng (iOS & Android) phục vụ cán bộ, giảng viên và lãnh đạo Trường Đại học Bách khoa – ĐHQG-HCM. Ứng dụng đóng vai trò là một **cổng tương tác di động tập trung**, tích hợp với các hệ thống nghiệp vụ hiện hữu qua REST API, WebSocket và Firebase Cloud Messaging (FCM). HRM và iOffice vẫn là nguồn dữ liệu và nơi quyết định nghiệp vụ có thẩm quyền.
 
-### 5 Phân Hệ Chức Năng Cốt Lõi:
-1. **Quản lý Hồ sơ Nhân sự (HRM)**: Tra cứu và cập nhật lý lịch 11 danh mục thông tin, Diff Viewer đối chiếu thay đổi, Form Wizard cập nhật hồ sơ, quy trình phê duyệt nghỉ phép & đi công tác.
-2. **Văn phòng điện tử (iOffice)**: Tra cứu, quản trị và xem trước văn bản đến / văn bản đi (PDF viewer), theo dõi luồng xử lý văn bản nhanh chóng.
-3. **Quản lý Nhiệm vụ (Missions/Tasks)**: Phân loại 5 trạng thái công việc, phân công nhiệm vụ, cập nhật tiến độ, gửi báo cáo giải trình.
-4. **Lịch công tác & Điểm danh Cuộc họp**: Đồng bộ lịch tuần trường, lịch đơn vị và điểm danh cuộc họp theo thời gian thực (Real-time Socket.IO).
-5. **Trung tâm Thông báo đẩy (FCM Notification Hub)**: Tiếp nhận thông báo tức thời, phân loại danh mục, điều hướng sâu (Deep Linking) đến màn hình nghiệp vụ tương ứng.
+### 4 Phân Hệ Nghiệm Thu
+1. **Xác thực và SSO**: Quản lý phiên Mobile, chuyển tiếp sang WebView bằng vé dùng một lần.
+2. **Quản lý nhân sự (HRM)**: Hồ sơ cán bộ, nghỉ phép và đi công tác theo workflow do HRM backend kiểm soát.
+3. **Văn phòng điện tử (iOffice)**: Văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp theo quyền iOffice.
+4. **Trung tâm thông báo**: Tiếp nhận thông báo và điều hướng sâu đến đối tượng nghiệp vụ.
+
+KHCN, ký số PKI và họp trực tuyến WebRTC không thuộc phạm vi nghiệm thu vì chưa có hạ tầng backend tương ứng; chúng chỉ là hướng phát triển tương lai.
 
 ---
 
-## 🏛️ Cấu Trúc Nội Dung Báo Cáo (8 Chương)
+## 🏛️ Cấu Trúc Nội Dung Báo Cáo (7 Chương)
 
 | Chương | Tên Chương | Nội Dung Tóm Tắt |
 | :--- | :--- | :--- |
 | **Chương 1** | **Giới thiệu** | Đặt vấn đề, mục tiêu, đối tượng, phạm vi & ranh giới nghiên cứu, ý nghĩa đề tài. |
 | **Chương 2** | **Phân tích các hệ thống liên quan** | Khảo sát thị trường, đánh giá ưu/nhược điểm các giải pháp HRM/iOffice và đề xuất mô hình tích hợp di động. |
-| **Chương 3** | **Cơ sở lý thuyết và công nghệ** | Tổng quan Flutter, Riverpod 3, Clean Architecture, Node.js/Express, PostgreSQL, FCM, Socket.IO. |
+| **Chương 3** | **Cơ sở lý thuyết và công nghệ** | MVC, REST/HTTPS/JWT, Flutter, Melos, Node.js/Express, PostgreSQL, FCM và Socket.IO. |
 | **Chương 4** | **Phân tích yêu cầu hệ thống** | Đặc tả Persona, ma trận phân quyền RBAC, yêu cầu chức năng (FR) và phi chức năng (NFR). |
-| **Chương 5** | **Đặc tả Use-Case và Biểu đồ hoạt động** | Sơ đồ Use-Case tổng thể, bảng đặc tả chi tiết 5 ca sử dụng cốt lõi, Activity & Sequence Diagrams. |
-| **Chương 6** | **Phân tích và thiết kế hệ thống** | Thiết kế CSDL (ERD/Data Dictionary), kiến trúc tầng Mobile, bộ giải mã Token đa miền và mô hình vận hành E2E. |
-| **Chương 7** | **Kết quả hiện thực và kiểm thử** | Giao diện hiện thực, kết quả kiểm thử tự động (Unit/Widget/Integration Tests), kiểm thử hiệu năng API & FCM. |
-| **Chương 8** | **Tổng kết và hướng phát triển** | Tổng kết thành quả đạt được, đóng góp thực tiễn, hạn chế và kế hoạch mở rộng trong tương lai. |
+| **Chương 5** | **Phân tích và thiết kế hệ thống** | Kiến trúc, dữ liệu, giao thức và các giải pháp kỹ thuật trọng yếu. |
+| **Chương 6** | **Kết quả hiện thực và kiểm thử** | Chức năng đã hiện thực, kết quả tích hợp và bằng chứng kiểm thử. |
+| **Chương 7** | **Tổng kết và hướng phát triển** | Đối chiếu mục tiêu, hạn chế và hướng hoàn thiện. |
 
 ---
 
@@ -59,20 +59,22 @@ Báo cáo Đồ án Tốt nghiệp ngành **Khoa học Máy tính**, Khoa Khoa h
 ├── Chapter2/             # Chương 2: Phân tích các hệ thống liên quan
 ├── Chapter3/             # Chương 3: Cơ sở lý thuyết và công nghệ
 ├── Chapter4/             # Chương 4: Phân tích yêu cầu hệ thống
-├── Chapter5/             # Chương 5: Đặc tả Use-Case và Biểu đồ hoạt động
-├── Chapter6/             # Chương 6: Phân tích và thiết kế hệ thống
-├── Chapter7/             # Chương 7: Kết quả hiện thực và kiểm thử
-├── Chapter8/             # Chương 8: Tổng kết và hướng phát triển
+├── Chapter5/             # Chương 5: Phân tích và thiết kế hệ thống
+├── Chapter6/             # Chương 6: Kết quả hiện thực và kiểm thử
+├── Chapter7/             # Chương 7: Tổng kết và hướng phát triển
 ├── docs/                 # Tài liệu đặc tả, blueprint & tài liệu tham khảo dự án
 │   ├── THESIS_BLUEPRINT.md
 │   ├── SYSTEM_OPERATION.md
 │   ├── ARCHITECTURE_SCOPE.md
-│   └── HUONG_DAN_CHI_TIET_VIET_8_CHUONG.md
-├── img/                  # Sơ đồ kiến trúc, biểu đồ UML, ERD và ảnh minh họa
+│   ├── 01_GATE0_EVIDENCE_INDEX.md
+│   ├── 02_SCOPE_CLAIM_TRACEABILITY.md
+│   ├── DOCUMENTATION_GOVERNANCE.md
+│   ├── 12_BASELINE_REPRODUCIBILITY_AUDIT.md
+│   ├── 13_CURRENT_SOURCE_SNAPSHOT.md
+│   └── 14_REPORT_7_CHAPTER_AUDIT.md
+├── image/                # Thư mục hình ảnh báo cáo (logo, theory, usecase, architecture, erd, uml)
 ├── main.tex              # Mã nguồn tài liệu LaTeX chính (Root Document)
-├── template.tex          # Cấu hình bìa, định dạng và quy chuẩn trình bày
 ├── reference.tex         # Danh mục tài liệu tham khảo
-├── hcmut.png             # Logo Trường Đại học Bách khoa
 ├── .gitignore            # Cấu hình loại bỏ file rác biên dịch LaTeX
 └── README.md             # Tài liệu giới thiệu tổng quan đồ án
 ```

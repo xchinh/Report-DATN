@@ -7,6 +7,7 @@
 > - Tống Duy Khang (MSSV: 2211467) — Phân hệ Văn phòng số iOffice (Văn bản đến/đi, PDF Viewer) & Quản lý Nhiệm vụ (Missions/Tasks).  
 > **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tùng  
 > **Thời điểm thẩm định:** Tháng 09/2026 (Mốc khóa Gate 0 & Concurrency Hardening)  
+> **Trạng thái tái lập:** Các kết quả 427/427 dưới đây là kết quả Gate 0 đã ghi nhận. Xem `12_BASELINE_REPRODUCIBILITY_AUDIT.md` trước khi diễn giải chúng như kết quả vừa chạy lại.
 
 ---
 
@@ -17,7 +18,7 @@ Mọi phân tích kiến trúc, số liệu kiểm thử và kết quả đánh 
 | STT | Kho mã nguồn (Repository) | Nhánh (Branch) | Full Commit Hash (40 ký tự) | Ngày Commit | Tác giả & Trách nhiệm chính |
 | :---: | :--- | :---: | :---: | :---: | :--- |
 | 1 | `HK253_DATN_341_2211467_2210392` | `format` | `4f517802bb430287d8a1dd4f7b0b223978f82f84` | 08/09/2026 | Vũ Xuân Chính (Tài liệu Báo cáo Luận văn & Kiến trúc) |
-| 2 | `myhcmut-mobile` | `feat/leaveRequest` | `161d5bb848f97983682654e17771b88aeb638af6` | 01/09/2026 | Vũ Xuân Chính (Flutter Modular Monorepo, Core, HRM, Notify, SSO, iOffice UI) |
+| 2 | `myhcmut-mobile` | `feat/leaveRequest` | `4fe5d9cbd92e971f0b4b75ebfd308e7a8486d079` | 14/09/2026 | Vũ Xuân Chính (Flutter Modular Monorepo, Core, HRM, Notify, SSO, iOffice UI & Unified Calendar) |
 | 3 | `hrm-be` | `chinh-dev` | `38745a26a45fc49c8c5c1cbcf3b91a76f23ae945` | 09/09/2026 | Vũ Xuân Chính (Tích hợp Advisory Lock, Concurrency Tests, SSO Ticket, Leave API) |
 | 4 | `ioffice-be` | `main` | `53f069a366f7d465253b6fceedeea25a01bec176` | 07/09/2026 | Hệ thống hiện hữu Nhà trường (Chính tích hợp API/Socket Lịch & Điểm danh) |
 | 5 | `myhcmut-be` | `dev/khang-chinh` | `7e687a6005ceb6264f3467072081c784a6f9c7bc` | 18/04/2026 | Tống Duy Khang & Vũ Xuân Chính (API Gateway / Mobile BFF) |
@@ -29,39 +30,45 @@ Mọi phân tích kiến trúc, số liệu kiểm thử và kết quả đánh 
 - **Backend Runtime:** Node.js `v22.22.2`, TypeScript `5.x`, Vitest `4.1.10`.
 - **Cơ sở dữ liệu & Caching:** PostgreSQL `14.x` (hỗ trợ `pg_advisory_xact_lock`), Redis `7.x` (hỗ trợ `GETDEL`).
 
+### Phân định Ranh giới Hệ thống & Phạm vi Nghiệm thu Gate 0:
+- **Phân hệ và module loại trừ khỏi phạm vi nghiệm thu:** Các phân hệ/module gồm Quản lý Khoa học Công nghệ (`modules/khcn`), Ký số PKI CA (`packages/core/hcmut_sign`), và Phòng họp trực tuyến WebRTC (`meetings`) hoàn toàn **không có hệ thống máy chủ backend tương ứng trong hạ tầng CNTT hiện hữu của Nhà trường**. Do đó, các thành phần này được loại trừ tuyệt đối (Strictly Excluded) khỏi phạm vi cam kết kỹ thuật và hồ sơ nghiệm thu Gate 0 của đề tài (chỉ được định vị là hướng mở rộng trong tương lai tại Chương 7).
+- **Phạm vi kiểm chuẩn chính thức:** Hai miền nghiệp vụ cốt lõi là Quản lý Nhân sự (HRM) và Văn phòng số & Lịch tổng hợp (iOffice). Auth/SSO là cơ chế xác thực và tích hợp Mobile--Web; `modules/notification` hiện thực **cơ chế thông báo nghiệp vụ xuyên suốt** cho các miền này, không phải một miền nghiệp vụ độc lập. Các bằng chứng kiểm thử vẫn bao gồm đường dẫn mã và 47 kiểm thử của `modules/notification`.
+
 ---
 
 ## 2. BẢNG TỔNG HỢP KIỂM THỬ ĐỘC LẬP (TESTING MASTER METRICS)
 
-Toàn bộ hệ thống kiểm thử tự động được thực thi cục bộ trên môi trường chuẩn, đạt tỷ lệ **100% Pass Rate** trên tổng số **392 kiểm thử tự động**.
+Gate 0 ghi nhận tỷ lệ **100% Pass Rate** trên tổng số **427 kiểm thử tự động**. Đây là số liệu lịch sử của snapshot đã khóa, không phải xác nhận tái chạy tự động ở mọi working tree hiện tại.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════╗
 ║                      TỔNG KẾT KIỂM THỬ TOÀN HỆ THỐNG                                 ║
 ║                                                                                       ║
-║   ► Tổng số Test Cases tự động:   392 / 392 PASSED                                    ║
+║   ► Tổng số Test Cases tự động:   427 / 427 PASSED                                    ║
 ║   ► Tỷ lệ Đỗ (Pass Rate):         100.0% (0 Failed, 0 Skipped)                        ║
-║   ► Phân bổ:                      335 Mobile (Flutter) + 57 Backend (Vitest)          ║
+║   ► Phân bổ:                      370 Mobile (Flutter) + 57 Backend (Vitest)          ║
 ║   ► Bổ sung Concurrency Tests:    11 tests kiểm tra khóa tương tranh & race condition ║
+║   ► Bổ sung Unified Calendar:     34 tests kiểm tra Lịch tổng hợp (14 mapper/helper   ║
+║                                   + 20 widget tests)                                  ║
 ║   ► Kiểm thử tích hợp thủ công:   4 kịch bản E2E Staging hoàn thành (Android + iOS)   ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### 2.1. Chi tiết Kiểm thử Phía Ứng dụng Di động (`myhcmut-mobile:161d5bb8`)
-Kiểm thử thực thi bằng lệnh `flutter test --no-pub` trên từng gói và mô-đun trong cấu trúc Melos Monorepo:
+### 2.1. Chi tiết Kiểm thử Phía Ứng dụng Di động (`myhcmut-mobile:4fe5d9c`)
+Kiểm thử Gate 0 được tổng hợp từ lệnh `flutter test --no-pub` chạy riêng tại sáu gói/mô-đun trong bảng dưới đây. Không dùng `melos run test` toàn workspace làm lệnh tái lập, vì script hiện quét các package không có thư mục `test`; chi tiết tại `12_BASELINE_REPRODUCIBILITY_AUDIT.md`.
 
 | STT | Mô-đun / Package | Đường dẫn tương đối | Loại kiểm thử | Số Test Cases | Trạng thái | Thời gian thực thi |
 | :---: | :--- | :--- | :--- | :---: | :---: | :---: |
-| 1 | `modules/hrm` | `modules/hrm/test/` | Unit, Widget & Logic Model (Leave, Profile, Timeline) | **232** | **232/232 PASS** | 5.8s |
+| 1 | `modules/hrm` | `modules/hrm/test/` | Unit, Widget & Logic Model (Leave, Profile, Timeline) | **233** | **233/233 PASS** | 5.8s |
 | 2 | `modules/notification` | `modules/notification/test/` | Provider, StateNotifier, Route Parser | **47** | **47/47 PASS** | 6.2s |
-| 3 | `modules/ioffice` | `modules/ioffice/test/` | Mission Models, Attendance Widget, Check-in Provider | **43** | **43/43 PASS** | 2.5s |
+| 3 | `modules/ioffice` | `modules/ioffice/test/` | 57 unit/state/mapper + 20 widget tests: `compact_schedule`, `custom_table_calendar`, `schedule_event_card` | **77** | **77/77 PASS** | ~4.8s |
 | 4 | `packages/shared/localization` | `packages/shared/localization/test/` | FieldMetadataResolver, MultiLanguage Parser | **8** | **8/8 PASS** | 1.1s |
 | 5 | `packages/core/global_system` | `packages/core/global_system/test/` | `AppBatchActionBar` Widget & Action Toggle | **3** | **3/3 PASS** | 1.3s |
 | 6 | `packages/shared/auth` | `packages/shared/auth/test/` | `AuthUser` & `LoginResponse` Serialization | **2** | **2/2 PASS** | 0.8s |
-| **CỘNG** | **Toàn bộ Mobile Client** | — | **Unit & Widget Tests** | **335** | **335/335 PASS** | **~17.7s** |
+| **CỘNG** | **Toàn bộ Mobile Client** | — | **Unit & Widget Tests** | **370** | **370/370 PASS** | **~21s** |
 
 ### 2.2. Chi tiết Kiểm thử Phía Máy chủ Backend (`hrm-be:38745a26`)
-Kiểm thử thực thi bằng lệnh `npx vitest run test/unit/sso_*.unit.test.ts test/unit/tcns_nghi_phep/*.unit.test.ts`:
+Gate 0 ghi nhận kết quả từ lệnh `npx vitest run test/unit/sso_*.unit.test.ts test/unit/tcns_nghi_phep/*.unit.test.ts`. Việc tái lập cần Redis test khả dụng; đợt kiểm toán ngày 15/09/2026 chưa có dịch vụ này.
 
 | STT | Phân nhóm kiểm thử | Tệp tin kiểm thử | Trọng tâm kiểm tra kỹ thuật | Số Test Cases | Kết quả |
 | :---: | :--- | :--- | :--- | :---: | :---: |
@@ -94,7 +101,7 @@ Một nguyên tắc cốt lõi của chuẩn mực học thuật là **tuyệt �
 ├────────────────────────────────────────────┬───────────────────────────────────────────┤
 │ Tỷ lệ Đỗ Kiểm thử (Pass Rate = 100%)       │ Độ Bao phủ Mã nguồn (Code Coverage)       │
 ├────────────────────────────────────────────┼───────────────────────────────────────────┤
-│ • Số lượng: 392/392 test cases vượt qua.   │ • Backend Vitest Line Coverage: ~28.75%   │
+│ • Số lượng: 427/427 test cases vượt qua.   │ • Backend Vitest Line Coverage: ~28.75%   │
 │ • Định nghĩa: Toàn bộ các test case được   │ • Mobile Monorepo Core/HRM: ~70%          │
 │   thiết kế và lập trình đều chạy thành     │ • Định nghĩa: Tỷ lệ dòng lệnh và nhánh    │
 │   công, không có lỗi runtime hay logic.    │   logic được kích hoạt khi chạy test      │
@@ -124,7 +131,7 @@ flowchart LR
         B2["Gửi duyệt lặp / Lost Update<br/>(PUT không có State Guard)"]
         B3["Phát tán Kafka sớm<br/>(Dispatch trước khi Commit DB)"]
         B4["Bản nháp mồ côi (Orphan Drafts)<br/>(Thoát màn hình để lại rác)"]
-        B5["Mâu thuẫn số liệu kiểm thử<br/>(312 vs 335 vs 358 vs 392)"]
+        B5["Mâu thuẫn số liệu kiểm thử<br/>(Dị biệt giữa các bản thảo cũ)"]
     end
 
     subgraph Solutions["Giải pháp đã hiện thực & thẩm định"]
@@ -132,7 +139,7 @@ flowchart LR
         S2["Atomic State Guard<br/>WHERE id=:id AND maQuyTrinh='NHAP'"]
         S3["Tách rời vòng đời Kafka<br/>Chỉ emit sau khi Transaction Commit"]
         S4["Cờ isNewlyCreated & cleanup<br/>Tự động DELETE khi thoát form nháp"]
-        S5["Khóa chốt Testing Matrix<br/>392 tests = 335 Mobile + 57 Backend"]
+        S5["Khóa chốt Testing Matrix<br/>427 tests = 370 Mobile + 57 Backend"]
     end
 
     B1 ==> S1
@@ -156,14 +163,14 @@ flowchart LR
 
 ### 4.3. Tách rời vòng đời phát thông báo Kafka khỏi Transaction CSDL
 - **Hiện trạng cũ:** Lệnh phát sự kiện thông báo `app.messageQueue.send('SEND_NOTIFY_SERVICE', ...)` được gọi bên trong khối try/catch khi transaction CSDL chưa commit; nếu sau đó transaction bị rollback, thông báo vẫn bị gửi đi, khiến Lãnh đạo nhận thông báo rác cho đơn không tồn tại.
-- **Giải pháp:** Di chuyển toàn bộ lời gọi phát tán sự kiện Kafka ra sau câu lệnh `await transaction.commit()`. Chỉ khi dữ liệu đã ghi nhận an toàn và bền vững vào CSDL thì thông báo mới được phát đi.
+- **Giải pháp:** Di chuyển toàn bộ lời gọi phát tán sự kiện Kafka ra sau câu lệnh `await transaction.commit()`. Chỉ khi dữ liệu đã ghi nhận an toàn và bền vững vào CSDL thì backend mới phát **sự kiện thông báo**; việc này không bảo đảm thiết bị nhận được thông báo.
 
 ### 4.4. Giảm thiểu Bản nháp Mồ côi phía Client (`isNewlyCreated`)
 - **Hiện trạng cũ:** Khi người dùng bấm "Tạo đơn" trên Mobile, hệ thống gọi `POST /dang-ky-mobile` sinh phiếu nháp và bản ghi lịch cá nhân. Nếu người dùng tắt màn hình hoặc bấm Back mà không nộp, bản ghi nháp bị kẹt lại và chặn các lần nộp đơn sau.
 - **Giải pháp:** Gắn cờ `isNewlyCreated = true` trong `LeaveRequestPage`. Nếu người dùng chủ động nhấn nút Hủy hoặc Thoát trong phiên tạo mới, ứng dụng hiển thị hộp thoại xác nhận và tự động gọi `DELETE /api/tcns-nghi-phep/dang-ky/:id` trong transaction có bảo vệ Advisory Lock để dọn dẹp nguyên tử toàn bộ bản ghi đơn, lịch cá nhân và quy trình liên quan.
 
 ### 4.5. Chuẩn hóa và Đồng bộ Số liệu Kiểm thử Đồ án
-- Nhóm đã rà soát toàn bộ monorepo Mobile và backend, loại bỏ các con số mâu thuẫn trong các bản thảo cũ (312 vs 358 vs 381), chốt con số duy nhất có bằng chứng thực nghiệm: **392 tests (335 Mobile Flutter tests + 57 Backend Vitest tests)**.
+- Nhóm đã rà soát toàn bộ monorepo Mobile và backend, loại bỏ các con số mâu thuẫn phân tán ở các bản thảo sơ bộ cũ, chốt con số duy nhất có bằng chứng thực nghiệm: **427 tests (370 Mobile Flutter tests + 57 Backend Vitest tests)**, đạt 100% Pass Rate (100% test cases passed).
 
 ---
 
@@ -180,6 +187,7 @@ flowchart LR
 | **Mobile Leave Views** | `myhcmut-mobile/modules/hrm/lib/src/time_off/views/` | Wizard 3 bước (`LeaveRequestStep1..3`), `LeaveRequestPage`, `LeaveViewDetail`. |
 | **Mobile Leave Logic** | `myhcmut-mobile/modules/hrm/lib/src/time_off/providers/` | `LeaveRequestProvider`, `LeaveProvider`, `DanhMucProvider`. |
 | **Mobile Leave Tests** | `myhcmut-mobile/modules/hrm/test/time_off/` | 7 tệp test kiểm chứng tính ngày làm việc, kiểm tra trùng, validate form. |
+| **Unified Calendar Tests** | `myhcmut-mobile/modules/ioffice/test/` | 34 test cases kiểm chứng Lịch tổng hợp (14 mapper/helper: `hrm_leave_mapper_test.dart`, `hrm_business_trip_mapper_test.dart`, `schedule_item_helper_test.dart`; 20 widget tests: `compact_schedule_test.dart`, `custom_table_calendar_test.dart`, `schedule_event_card_widget_test.dart`). |
 | **Batch Action Widget** | `myhcmut-mobile/packages/core/global_system/lib/src/widgets/app_batch_action_bar.dart` | Thanh tác vụ duyệt hàng loạt (`AppBatchActionBar`). |
 | **Hardening Review** | `HK253_DATN_341_2211467_2210392/docs/concurrency_hardening/` | 5 tệp báo cáo kỹ thuật từ `00A` đến `00E` chứng minh quá trình kiểm toán và kiểm thử. |
 

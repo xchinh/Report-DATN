@@ -152,7 +152,7 @@ Dành riêng cho việc làm cơ sở bối cảnh toàn hệ thống trong Báo
 | **CTX-BTR-01** | Đăng ký chuyến công tác | Cán bộ khởi tạo tờ trình công tác cá nhân/đoàn, khai báo 5 bước Wizard kèm file kế hoạch. | Tống Duy Khang |
 | **CTX-BTR-02** | Thẩm định xung đột lịch | Hệ thống kiểm tra trùng lịch thông qua `tcnsLichCaNhan.checkTrungLich()`. | Backend Core (`hrm-be`) |
 | **CTX-BTR-03** | Thẩm định & Phê duyệt đa cấp | Trưởng đơn vị, Phòng TCCB và BGH duyệt hồ sơ theo thẩm quyền hoặc trả lại yêu cầu bổ sung. | Tống Duy Khang (UI) & `hrm-be` |
-| **CTX-BTR-04** | Đồng bộ hồ sơ & Thông báo | Ghi nhận quá trình công tác vào lý lịch cán bộ (`tcnsQuaTrinhDiCongTac`) và gửi thông báo FCM. | Tích hợp hệ thống chung |
+| **CTX-BTR-04** | Đồng bộ hồ sơ & phát sinh sự kiện thông báo | Ghi nhận quá trình công tác vào lý lịch cán bộ (`tcnsQuaTrinhDiCongTac`), rồi backend phát sự kiện cho cơ chế thông báo nghiệp vụ xuyên suốt; FCM không bảo đảm thiết bị nhận. | Tích hợp hệ thống chung |
 
 ---
 
@@ -160,7 +160,9 @@ Dành riêng cho việc làm cơ sở bối cảnh toàn hệ thống trong Báo
 
 ### 7.1. Trích dẫn cho Chương 1 (Đặt vấn đề, Mục tiêu & Phân công)
 * **Trong mục Bối cảnh Nghiệp vụ:**
-  > *"Trong môi trường giáo dục đại học, cán bộ giảng viên thường xuyên tham gia các chuyến công tác trong nước và quốc tế phục vụ nghiên cứu khoa học, giảng dạy và hợp tác đối ngoại. MyHCMUT Mobile giải quyết bài toán xử lý hồ sơ công tác linh động ngoài văn phòng, hỗ trợ lập kế hoạch công tác, phân công đoàn đi và trình duyệt đa cấp tức thời."*
+> *"Trong môi trường giáo dục đại học, cán bộ giảng viên thường xuyên tham gia các chuyến công tác trong nước và quốc tế phục vụ nghiên cứu khoa học, giảng dạy và hợp tác đối ngoại. MyHCMUT Mobile giải quyết bài toán xử lý hồ sơ công tác linh động ngoài văn phòng, hỗ trợ lập kế hoạch công tác, phân công đoàn đi và trình duyệt đa cấp tức thời."*
+
+* Khi lập biểu đồ hoạt động Chương 4, tại các chuyển trạng thái nghiệp vụ thực sự (nộp, duyệt, từ chối, trả lại) ghi **“phát sinh sự kiện thông báo”**, không ghi chung chung “gửi thông báo”.
 * **Trong Bảng Phân công Trách nhiệm Đề tài:**
   > | Thành viên | Phân hệ Phụ trách Chính | Đóng góp Kỹ thuật Nổi bật |
   > | :--- | :--- | :--- |

@@ -11,8 +11,10 @@ Dữ liệu hồ sơ lý lịch của cán bộ bao gồm khối lượng thông
 
 \begin{table}[H]
 \centering
-\renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{|p{4.2cm}|X|}
+\caption[\textit{Phân nhóm danh mục thông tin hồ sơ lý lịch}]{\textit{Phân nhóm các danh mục thông tin hồ sơ lý lịch cán bộ}}
+\label{tab:profile_groups}
+\vspace{0.15cm}
+\begin{tabularx}{\textwidth}{|L{4.2cm}|Y|}
 \hline
 \textbf{Nhóm giao diện} & \textbf{Các danh mục thông tin thành phần} \\
 \hline
@@ -23,240 +25,272 @@ Dữ liệu hồ sơ lý lịch của cán bộ bao gồm khối lượng thông
 \textbf{Chế độ và thông tin khác} & Quá trình lương và phụ cấp; Khen thưởng; Kỷ luật; Thông tin sức khỏe và thông tin khác; Kê khai tài sản / thu nhập. \\
 \hline
 \end{tabularx}
-\caption{\textit{Phân nhóm các danh mục thông tin hồ sơ lý lịch cán bộ}}
-\label{tab:profile_groups}
 \end{table}
 
 Cách thức phân nhóm này giúp giảm tải áp lực hiển thị dữ liệu trên màn hình nhỏ mà vẫn giữ nguyên mô hình dữ liệu quan hệ có thẩm quyền của hệ thống HRM gốc.
 
 \subsubsection{Yêu cầu chức năng}
 
-\begin{itemize}[leftmargin=1.5cm]
-    \item \textbf{FR-PRO-01 -- Tra cứu hồ sơ:} Cán bộ/giảng viên phải có khả năng tra cứu hồ sơ lý lịch của chính mình trên ứng dụng di động một cách nhanh chóng và an toàn.
-    
-    \item \textbf{FR-PRO-02 -- Xem chi tiết theo nhóm:} Hệ thống phải tổ chức dữ liệu thành các thẻ/nhóm tab khoa học để người dùng có thể chuyển đổi linh hoạt giữa các nhóm thông tin mà không phải tải toàn bộ dữ liệu cồng kềnh trong một lần.
-    
-    \item \textbf{FR-PRO-03 -- Hiển thị dữ liệu danh mục:} Các mã danh mục (dân tộc, tôn giáo, học hàm, học vị, ngạch công chức...) do backend trả về phải được ứng dụng ánh xạ chuẩn xác thành tên gọi có ý nghĩa đối với người dùng thông qua bộ từ điển danh mục cục bộ.
-    
-    \item \textbf{FR-PRO-04 -- Hỗ trợ cập nhật hồ sơ:} Đối với các trường thông tin chưa hỗ trợ biểu mẫu nhập liệu native trên Mobile, hệ thống phải cho phép người dùng mở biểu mẫu cập nhật của HRM Web ngay trong ứng dụng qua cơ chế vé SSO một lần.
-    
-    \item \textbf{FR-PRO-05 -- Đồng bộ dữ liệu sau cập nhật:} Sau khi nhận được tín hiệu hoàn tất cập nhật từ WebView qua JavaScript Bridge, ứng dụng Mobile phải tự động kích hoạt tải lại dữ liệu hồ sơ mới nhất từ backend để làm mới giao diện.
-    
-    \item \textbf{FR-PRO-06 -- Thẩm định yêu cầu cập nhật:} Người dùng có thẩm quyền (chuyên viên Phòng TCCB) phải có khả năng xem danh sách các yêu cầu đề xuất cập nhật hồ sơ, so sánh trực quan giá trị hiện tại với giá trị mới đề xuất và thực hiện phê duyệt hoặc từ chối từng phần.
-\end{itemize}
+\begin{table}[H]
+\centering
+\small
+\caption{Yêu cầu chức năng phân hệ hồ sơ cán bộ}
+\label{tab:fr_profile}
+\begin{tabularx}{\textwidth}{|L{1.7cm}|L{3.1cm}|L{2.4cm}|Y|}
+\hline
+\textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả/ràng buộc} \\
+\hline
+FR-PRO-01 & Tra cứu hồ sơ & Cán bộ/giảng viên & Xem hồ sơ cá nhân do HRM cung cấp. \\
+\hline
+FR-PRO-02 & Đề xuất và đồng bộ cập nhật & Cán bộ/giảng viên & Mở biểu mẫu HRM Web qua SSO và làm mới dữ liệu sau thao tác. \\
+\hline
+FR-PRO-03 & Thẩm định thay đổi & Chuyên viên TCCB & Xem sai khác, đối chiếu minh chứng và phê duyệt hoặc từ chối theo quyền. \\
+\hline
+\end{tabularx}
+\end{table}
 
 \subsubsection{Đặc tả Ca sử dụng (Use Cases)}
 
+Bảng sau tổng hợp ba Ca sử dụng cốt lõi của phân hệ Hồ sơ cán bộ. Mỗi ca sử dụng được đặc tả rõ để bao quát từ tra cứu, đề xuất thay đổi đến thẩm định thay đổi.
+
+\begin{table}[H]
+\centering
+\caption[\textit{Danh mục Use Case tổng quát phân hệ Hồ sơ Cán bộ}]{\textit{Danh mục Ca sử dụng tổng quát phân hệ Hồ sơ Cán bộ}}
+\label{tab:mapping_uc_pro}
+\vspace{0.15cm}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\small}p{2.8cm}|>{\RaggedRight\arraybackslash\small}p{4.2cm}|Y|}
+\hline
+\textbf{Mã Use Case} & \textbf{Tên Use Case Tổng quát} & \textbf{Mục tiêu Nghiệp vụ} \\
+\hline
+\textbf{UC-PRO-01} & Tra cứu và Xem chi tiết Hồ sơ Cán bộ & Tra cứu thông tin lý lịch 11 nhóm danh mục phân bố trên 3 tab, hiển thị nhanh và giải mã danh mục tự động. \\
+\hline
+\textbf{UC-PRO-02} & Đề xuất Cập nhật Thông tin Hồ sơ & Cán bộ truy cập biểu mẫu cập nhật qua phiên an toàn, đính kèm minh chứng đối với thông tin pháp lý. \\
+\hline
+\textbf{UC-PRO-03} & Thẩm định và Phê duyệt Thay đổi Hồ sơ & Chuyên viên TCCB đối chuẩn sai khác (Diff Viewer), thẩm định minh chứng và phê duyệt/từ chối từng dòng đề xuất. \\
+\hline
+\end{tabularx}
+\end{table}
+
 \usecasespec{
   id={UC-PRO-01},
-  name={Tra cứu hồ sơ cán bộ},
+  name={Tra cứu và Xem chi tiết Hồ sơ Cán bộ},
+  shortname={Tra cứu hồ sơ cán bộ},
   actor={Cán bộ / Giảng viên},
-  pre={Cán bộ đã đăng nhập thành công vào ứng dụng MyHCMUT Mobile.},
-  trigger={Người dùng nhấn chọn mục \textit{``Hồ sơ''} trên thanh điều hướng chính.},
+  desc={Cho phép cán bộ xem hồ sơ lý lịch cá nhân theo các nhóm thông tin phù hợp với màn hình Mobile.},
+  pre={Cán bộ đã đăng nhập thành công vào ứng dụng.},
+  trigger={Người dùng mở chức năng Hồ sơ.},
   mainflow={
-    1. Mobile kiểm tra và tải dữ liệu lý lịch từ bộ nhớ đệm hoặc gửi API request lên backend. \newline
-    2. Hệ thống hiển thị tổng quan thông tin cá nhân (ảnh đại diện, họ tên, mã cán bộ, chức vụ, đơn vị). \newline
-    3. Người dùng chuyển đổi giữa các nhóm thông tin (Cá nhân, Đào tạo, Lương, Phụ cấp...). \newline
-    4. Hệ thống thực hiện ánh xạ mã danh mục và hiển thị chi tiết các trường thông tin tương ứng.
+    1. Ứng dụng yêu cầu dữ liệu hồ sơ của tài khoản đang đăng nhập từ HRM. \newline
+    2. Hệ thống hiển thị thông tin tổng quan và các nhóm thông tin cá nhân, gia đình, công tác--đào tạo, chế độ và thông tin khác. \newline
+    3. Người dùng chọn một nhóm để xem chi tiết; ứng dụng hiển thị giá trị danh mục dưới dạng tên gọi dễ hiểu. \newline
+    4. Người dùng có thể làm mới dữ liệu để nhận thông tin mới nhất từ HRM.
   },
-  altflow={
-    Không có dữ liệu trong cache và kết nối API thất bại $\rightarrow$ Hệ thống hiển thị trạng thái lỗi mạng kèm nút \textit{``Thử lại''} để người dùng tải lại dữ liệu.
-  },
-  post={Người dùng nắm bắt được đầy đủ thông tin hồ sơ; dữ liệu gốc trên hệ thống không bị thay đổi.},
+  exflow={- \textit{Ngoại lệ 1a (Không tải được dữ liệu):} Ứng dụng thông báo lỗi kết nối và cho phép người dùng thử lại.},
+  post={Người dùng xem được thông tin hồ sơ do HRM cung cấp; dữ liệu gốc không bị thay đổi.},
   label={tab:uc_pro_01}
 }
 
 \usecasespec{
   id={UC-PRO-02},
-  name={Đề xuất cập nhật hồ sơ},
+  name={Đề xuất Cập nhật Thông tin Hồ sơ},
+  shortname={Đề xuất cập nhật hồ sơ},
   actor={Cán bộ / Giảng viên},
-  pre={Người dùng đã đăng nhập và đang ở màn hình xem chi tiết hồ sơ.},
-  trigger={Người dùng nhấn nút \textit{``Chỉnh sửa thông tin''} tại một nhóm danh mục.},
+  desc={Cho phép cán bộ mở biểu mẫu cập nhật hiện có, gửi thay đổi và minh chứng khi thông tin cần xác thực.},
+  pre={Cán bộ đã đăng nhập và đang xem hồ sơ cá nhân.},
+  trigger={Người dùng chọn cập nhật hồ sơ.},
   mainflow={
-    1. Mobile gửi yêu cầu cấp vé SSO dùng một lần lên backend. \newline
-    2. Backend cấp vé; Mobile mở In-App WebView chuyển đến biểu mẫu chỉnh sửa của HRM Web. \newline
-    3. Người dùng nhập các thông tin cần thay đổi và tải lên tệp/ảnh minh chứng hợp lệ. \newline
-    4. Người dùng nhấn nút gửi đề xuất $\rightarrow$ Hệ thống HRM ghi nhận yêu cầu vào hàng đợi chờ thẩm định. \newline
-    5. Web phát thông điệp thành công qua JavaScript Bridge tới ứng dụng Mobile. \newline
-    6. Mobile đóng WebView và tự động tải lại dữ liệu hồ sơ mới nhất từ máy chủ.
+    1. Ứng dụng mở biểu mẫu cập nhật được hệ thống HRM hỗ trợ. \newline
+    2. Người dùng nhập hoặc sửa thông tin cần thay đổi và đính kèm minh chứng khi được yêu cầu. \newline
+    3. Người dùng gửi đề xuất cập nhật. \newline
+    4. Hệ thống ghi nhận đề xuất ở trạng thái chờ thẩm định. \newline
+    5. Sau khi hoàn tất thao tác, ứng dụng làm mới dữ liệu hồ sơ hiển thị.
   },
-  altflow={
-    Vé hết hạn, WebView không tải được hoặc gửi yêu cầu thất bại $\rightarrow$ Hệ thống hiển thị thông báo lỗi; dữ liệu hồ sơ chính thức giữ nguyên không đổi.
-  },
-  post={Bản ghi đề xuất cập nhật được tạo thành công ở trạng thái chờ thẩm định (\texttt{PENDING}).},
+  exflow={- \textit{Ngoại lệ 3a (Thiếu dữ liệu hoặc minh chứng):} Hệ thống yêu cầu người dùng bổ sung trước khi tiếp nhận đề xuất.},
+  post={Đề xuất cập nhật và minh chứng được gửi vào quy trình thẩm định; hồ sơ chính thức chưa thay đổi cho đến khi được phê duyệt.},
   label={tab:uc_pro_02}
 }
 
 \usecasespec{
   id={UC-PRO-03},
-  name={Thẩm định thay đổi hồ sơ},
-  actor={Chuyên viên Phòng Tổ chức Cán bộ có thẩm quyền.},
-  goal={Thẩm định, phê duyệt hoặc từ chối các thông tin lý lịch do cán bộ gửi đề xuất thay đổi.},
-  pre={Chuyên viên đã đăng nhập và tài khoản được cấp quyền thẩm định hồ sơ.},
+  name={Thẩm định và Phê duyệt Thay đổi Hồ sơ},
+  shortname={Thẩm định thay đổi hồ sơ},
+  actor={Chuyên viên Phòng Tổ chức Cán bộ có thẩm quyền},
+  desc={Cho phép chuyên viên TCCB đối chiếu sai khác (Diff Viewer), thẩm định minh chứng và phê duyệt hoặc từ chối đề xuất cập nhật.},
+  pre={Chuyên viên đã đăng nhập và tài khoản được phân quyền thẩm định hồ sơ cán bộ.},
+  trigger={Chuyên viên mở danh sách các yêu cầu cập nhật hồ sơ đang chờ xử lý trên ứng dụng.},
   mainflow={
-    1. Chuyên viên mở danh sách các yêu cầu cập nhật hồ sơ đang chờ xử lý. \newline
-    2. Chọn một yêu cầu cụ thể để xem chi tiết. \newline
-    3. Hệ thống hiển thị giao diện so sánh trực quan (Diff Viewer): làm nổi bật giá trị hiện tại và giá trị mới đề xuất kèm tài liệu minh chứng đính kèm. \newline
-    4. Chuyên viên kiểm tra tính pháp lý của minh chứng và chọn \textit{``Phê duyệt''} hoặc \textit{``Từ chối''}. \newline
-    5. Backend ghi nhận kết quả thẩm định, cập nhật hồ sơ chính thức (nếu duyệt) và gửi thông báo phản hồi cho cán bộ.
+    1. Chuyên viên mở danh sách đề xuất cập nhật hồ sơ chờ xử lý. \newline
+    2. Chọn một đề xuất cụ thể để xem xét. \newline
+    3. Hệ thống hiển thị giao diện đối chiếu (Diff Viewer) làm nổi bật giá trị cũ/mới kèm liên kết mở minh chứng. \newline
+    4. Chuyên viên kiểm tra minh chứng, lựa chọn \textit{``Phê duyệt''} hoặc \textit{``Từ chối''} từng trường hoặc toàn bộ. \newline
+    5. Hệ thống cập nhật hồ sơ chính thức (nếu duyệt), ghi nhận Audit Log và gửi thông báo kết quả cho cán bộ.
   },
-  post={Trạng thái yêu cầu đề xuất chuyển thành \texttt{APPROVED} hoặc \texttt{REJECTED}; cơ sở dữ liệu nhân sự cập nhật tương ứng.},
+  altflow={
+    - \textit{Luồng 4a (Duyệt từng phần):} Chuyên viên phê duyệt các trường hợp lệ và từ chối các trường chưa đạt.
+  },
+  exflow={
+    - \textit{Ngoại lệ 4a (Từ chối đề xuất):} Chuyên viên bắt buộc nhập lý do từ chối $\rightarrow$ Hệ thống lưu trạng thái và phản hồi cho cán bộ.
+  },
+  post={Trạng thái yêu cầu đề xuất chuyển thành Đã duyệt (\texttt{APPROVED}) hoặc Bị từ chối (\texttt{REJECTED}); dữ liệu chính thức được đồng bộ.},
   label={tab:uc_pro_03}
 }
 
-\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
+\subsubsection{Biểu đồ hoạt động đề xuất và phê duyệt cập nhật hồ sơ}
 
-\begin{itemize}[leftmargin=1.5cm]
-    \item \textbf{BR-PRO-01:} Cơ sở dữ liệu của hệ thống HRM backend là nguồn dữ liệu duy nhất có thẩm quyền pháp lý đối với thông tin hồ sơ cán bộ; dữ liệu lưu tạm (cache) trên Mobile chỉ đóng vai trò hiển thị nhanh, không được xem là nguồn chính thức.
-    \item \textbf{BR-PRO-02:} Bảng danh mục cục bộ lưu trữ trên Mobile chỉ phục vụ giải mã hiển thị tên gọi, không được phép can thiệp hoặc ghi đè dữ liệu danh mục gốc.
-    \item \textbf{BR-PRO-03:} Dữ liệu bộ nhớ đệm hồ sơ phải được phân tách triệt để theo mã định danh tài khoản (\texttt{user\_id}); tuyệt đối không hiển thị dữ liệu đệm của phiên trước sau khi đã thay đổi tài khoản đăng nhập.
-    \item \textbf{BR-PRO-04:} Ngay sau khi nhận được sự kiện hoàn tất cập nhật từ WebView, Mobile phải gửi request đồng bộ lại toàn bộ dữ liệu từ backend để đảm bảo tính nhất quán.
-    \item \textbf{BR-PRO-05:} Các thông tin do cán bộ đề xuất thay đổi tuyệt đối không được tự động cập nhật vào hồ sơ chính thức khi chưa trải qua quy trình thẩm định và phê duyệt của chuyên viên TCCB có thẩm quyền.
-\end{itemize}
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering Chèn Activity Diagram: Đề xuất và phê duyệt cập nhật hồ sơ cán bộ}}
+\caption{Biểu đồ hoạt động đề xuất và phê duyệt cập nhật hồ sơ cán bộ}
+\label{fig:activity_profile_approval}
+\end{figure}
 
 \subsection{Phân hệ quản lý nghỉ phép}
 \label{subsec:req_leave}
 
 \subsubsection{Mục tiêu}
-Phân hệ Quản lý nghỉ phép hỗ trợ cán bộ/giảng viên thực hiện toàn diện quy trình nghỉ phép trên thiết bị di động: từ việc tra cứu số ngày phép còn lại, lập đơn nghỉ qua quy trình từng bước, đính kèm minh chứng, nộp đơn vào luồng phê duyệt, đến việc theo dõi tiến độ xử lý của lãnh đạo.
+Phân hệ Quản lý nghỉ phép hỗ trợ cán bộ/giảng viên thực hiện toàn diện quy trình nghỉ phép trên thiết bị di động: từ việc tra cứu số ngày phép còn lại, lập đơn nghỉ qua quy trình hướng dẫn từng bước (Form Wizard 3 bước), đính kèm tài liệu minh chứng, nộp đơn vào luồng phê duyệt, đến việc theo dõi tiến độ xử lý của lãnh đạo đơn vị và chuyên viên Phòng Tổ chức Cán bộ.
 
-Các cơ chế kiểm tra (validation) tức thời trên giao diện Mobile nhằm hỗ trợ người dùng phát hiện lỗi nhập liệu từ sớm; tuy nhiên, backend HRM luôn là thành phần thẩm quyền duy nhất ra quyết định một lá đơn có hợp lệ và được chuyển tiếp vào quy trình phê duyệt hay không.
+Hệ thống thiết lập ranh giới rõ ràng giữa ứng dụng di động và hệ thống nghiệp vụ: các bước kiểm tra tức thời trên giao diện Mobile nhằm hỗ trợ người dùng phát hiện sớm các sai sót khi nhập liệu; trong khi đó, backend HRM luôn là thành phần thẩm quyền duy nhất thẩm định tính hợp lệ và ra quyết định chuyển tiếp đơn vào quy trình luân chuyển phê duyệt.
 
 \subsubsection{Yêu cầu chức năng}
 
-\begin{itemize}[leftmargin=1.5cm]
-    \item \textbf{FR-LEV-01 -- Xem danh sách và quỹ phép:} Cán bộ phải xem được danh sách toàn bộ các đơn nghỉ phép cá nhân theo từng trạng thái và thông tin số ngày phép năm (tổng quỹ phép, số ngày đã nghỉ, số ngày còn lại) do backend cung cấp.
-    
-    \item \textbf{FR-LEV-02 -- Khởi tạo đơn:} Hệ thống phải cho phép cán bộ khởi tạo một đơn nghỉ phép mới và tự động lưu trạng thái nháp (\texttt{DRAFT}) ngay từ bước đầu để tránh mất dữ liệu khi gián đoạn nhập liệu.
-    
-    \item \textbf{FR-LEV-03 -- Nhập thông tin nghỉ phép:} Người dùng phải khai báo được đầy đủ các thông tin: khoảng thời gian nghỉ (từ ngày đến ngày), buổi bắt đầu/kết thúc (sáng, chiều, cả ngày), loại hình nghỉ phép, địa điểm nghỉ, số điện thoại liên hệ và lý do chi tiết.
-    
-    \item \textbf{FR-LEV-04 -- Kiểm tra điều kiện trước khi gửi (Pre-validation):} Ứng dụng phải hỗ trợ kiểm tra nhanh các điều kiện nghiệp vụ ngay trên giao diện nhập liệu: tính toán số ngày làm việc thực tế, kiểm tra trùng lặp với các đơn đã nộp, cảnh báo mốc nộp trễ theo quy định và kiểm tra số dư quỹ phép. Kết quả tiền kiểm tra này chỉ mang tính định hướng UX và không thay thế bước kiểm tra bắt buộc của backend khi nộp đơn.
-    
-    \item \textbf{FR-LEV-05 -- Quản lý minh chứng:} Người dùng phải có khả năng chọn và tải lên các tệp tài liệu/ảnh minh chứng hợp lệ (đơn xin nghỉ thai sản, giấy xuất viện, đơn xin việc riêng...) trước khi gửi đơn.
-    
-    \item \textbf{FR-LEV-06 -- Lưu nháp hoặc gửi duyệt:} Sau khi hoàn thiện các bước của biểu mẫu, người dùng có thể lựa chọn lưu lại đơn ở trạng thái nháp để tiếp tục chỉnh sửa sau hoặc chính thức nộp gửi đơn vào quy trình phê duyệt.
-    
-    \item \textbf{FR-LEV-07 -- Chỉnh sửa, xóa và thu hồi đơn:} Người dùng chỉ được phép chỉnh sửa hoặc xóa đơn khi đơn đang ở trạng thái Nháp; hoặc thu hồi đơn khi đơn đang Chờ duyệt và chưa có cấp quản lý nào thực hiện thao tác xử lý.
-    
-    \item \textbf{FR-LEV-08 -- Xử lý đơn bị trả lại:} Trong trường hợp đơn bị cấp quản lý trả lại để bổ sung thông tin, người tạo đơn phải có khả năng chỉnh sửa các nội dung theo yêu cầu và nộp lại vào quy trình luân chuyển.
-    
-    \item \textbf{FR-LEV-09 -- Phê duyệt đơn:} Người dùng có thẩm quyền quản lý (Lãnh đạo đơn vị, Ban Giám hiệu, Chuyên viên TCCB) phải xem được danh sách đơn chờ duyệt và thực hiện các hành động: Phê duyệt, Từ chối kèm lý do hoặc Trả lại yêu cầu bổ sung.
-    
-    \item \textbf{FR-LEV-10 -- Xử lý nhiều đơn (Batch Approval):} Hệ thống phải hỗ trợ cấp quản lý chọn đồng thời nhiều đơn nghỉ phép trong danh sách chờ để thực hiện phê duyệt hàng loạt trong một thao tác. Sau khi xử lý, Mobile phải tự động đồng bộ lại trạng thái thực tế của từng đơn từ backend.
-\end{itemize}
+\begin{table}[H]
+\centering
+\small
+\caption{Yêu cầu chức năng phân hệ nghỉ phép}
+\label{tab:fr_leave}
+\begin{tabularx}{\textwidth}{|L{1.7cm}|L{3.0cm}|L{2.4cm}|Y|}
+\hline
+\textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả/ràng buộc} \\
+\hline
+FR-LEV-01 & Lập và gửi đơn nghỉ phép & Cán bộ & Nhập đơn ba bước, minh chứng và giải trình khi cần; có thể lưu nháp hoặc gửi duyệt. \\
+\hline
+FR-LEV-02 & Kiểm tra điều kiện & Ứng dụng, backend & Kiểm tra ngày làm việc, lịch, hạn nộp và quỹ phép; backend xác nhận cuối cùng. \\
+\hline
+FR-LEV-03 & Quản lý đơn đã tạo & Cán bộ & Tra cứu, chỉnh sửa, thu hồi hoặc hủy đơn theo trạng thái hồ sơ. \\
+\hline
+FR-LEV-04 & Phê duyệt theo quyền & Cấp xử lý & Phê duyệt, từ chối, trả lại hoặc xử lý hàng loạt theo workflow backend. \\
+\hline
+\end{tabularx}
+\end{table}
 
 \subsubsection{Đặc tả Ca sử dụng (Use Cases)}
 
-\usecasespec{
-  id={UC-LEV-01},
-  name={Đăng ký nghỉ phép},
-  actor={Cán bộ / Giảng viên},
-  pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn nghỉ phép.},
-  trigger={Người dùng chọn biểu tượng tạo mới đơn nghỉ phép trên ứng dụng.},
-  mainflow={
-    1. Hệ thống khởi tạo đơn ở trạng thái nháp (\texttt{DRAFT}). \newline
-    2. Người dùng nhập thông tin qua biểu mẫu từng bước (Wizard): chọn loại phép, khoảng thời gian, buổi bắt đầu/kết thúc, địa điểm và lý do. \newline
-    3. Hệ thống hỗ trợ tính toán số ngày làm việc thực tế và kiểm tra các ràng buộc cơ bản. \newline
-    4. Người dùng tải lên tài liệu minh chứng đính kèm (nếu loại phép yêu cầu). \newline
-    5. Người dùng kiểm tra lại thông tin tổng hợp tại bước xem lại (Review) và nhấn nút \textit{``Gửi duyệt''}. \newline
-    6. Backend kiểm tra tính toàn vẹn nghiệp vụ lần cuối, cập nhật trạng thái đơn thành \texttt{PENDING} và chuyển vào quy trình luân chuyển phê duyệt.
-  },
-  altflow={
-    - \textit{Điều kiện không hợp lệ (trùng lịch nghỉ, vượt quỹ phép):} Hệ thống từ chối gửi đơn và hiển thị thông báo lỗi cụ thể. \newline
-    - \textit{Đăng ký trễ hạn:} Hệ thống yêu cầu người dùng nhập bổ sung nội dung giải trình lý do nộp trễ trước khi cho phép nộp đơn.
-  },
-  post={Đơn nghỉ phép được ghi nhận vào hệ thống ở trạng thái Chờ duyệt (\texttt{PENDING}).},
-  label={tab:uc_lev_01}
-}
+Bảng sau tổng hợp các Ca sử dụng. Hai luồng làm thay đổi trạng thái hồ sơ là đăng ký/nộp đơn và thẩm định/phê duyệt được đặc tả chi tiết; tra cứu và quản lý đơn cá nhân được giữ ở mức tổng quát.
+
+\begin{table}[H]
+\centering
+\caption[\textit{Danh mục Use Case tổng quát phân hệ Nghỉ phép}]{\textit{Danh mục Ca sử dụng tổng quát phân hệ Quản lý Nghỉ phép}}
+\label{tab:mapping_uc_lev}
+\vspace{0.15cm}
+\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\small}p{2.8cm}|>{\RaggedRight\arraybackslash\small}p{4.2cm}|Y|}
+\hline
+\textbf{Mã Use Case} & \textbf{Tên Use Case Tổng quát} & \textbf{Mục tiêu Nghiệp vụ} \\
+\hline
+\textbf{UC-LEV-01} & Tra cứu và Quản lý Đơn nghỉ phép cá nhân & Theo dõi số ngày phép, xem danh sách đơn, xem chi tiết tiến trình duyệt, thu hồi hoặc xóa đơn nháp. \\
+\hline
+\textbf{UC-LEV-02} & Đăng ký và Nộp đơn nghỉ phép & Khởi tạo đơn mới, nhập liệu qua Wizard 3 bước, đính kèm minh chứng, giải trình trễ hạn và nộp đơn phê duyệt. \\
+\hline
+\textbf{UC-LEV-03} & Thẩm định và Phê duyệt Đơn nghỉ phép & Xem xét nội dung đơn, minh chứng và phê duyệt/từ chối/trả lại đơn (hỗ trợ cả duyệt đơn lẻ và duyệt hàng loạt). \\
+\hline
+\end{tabularx}
+\end{table}
 
 \usecasespec{
-  id={UC-LEV-02},
-  name={Phê duyệt đơn nghỉ phép},
-  actor={Lãnh đạo đơn vị / Chuyên viên TCCB có thẩm quyền.},
-  pre={Đơn nghỉ phép đang ở bước duyệt thuộc thẩm quyền của tác nhân hiện tại.},
+  id={UC-LEV-01},
+  name={Tra cứu và Quản lý Đơn nghỉ phép cá nhân},
+  shortname={Quản lý đơn nghỉ phép cá nhân},
+  actor={Cán bộ / Giảng viên},
+  desc={Cho phép cán bộ theo dõi số dư quỹ phép năm, tra cứu danh sách đơn theo năm và trạng thái, xem tiến trình duyệt, thu hồi đơn chờ duyệt hoặc chỉnh sửa nộp lại đơn bị trả lại.},
+  pre={Cán bộ đã đăng nhập thành công vào ứng dụng MyHCMUT Mobile.},
+  trigger={Người dùng chọn chức năng \textit{``Nghỉ phép''} từ màn hình chính của ứng dụng.},
   mainflow={
-    1. Người duyệt mở danh sách đơn chờ duyệt và chọn một đơn cụ thể. \newline
-    2. Xem chi tiết thông tin đơn, lịch sử các bước duyệt trước đó và tài liệu minh chứng. \newline
-    3. Chọn hành động xử lý: \textit{``Phê duyệt''}, \textit{``Từ chối''} hoặc \textit{``Trả lại''}. \newline
-    4. Backend kiểm tra quyền hạn và trạng thái đơn tại thời điểm xử lý; thực hiện chuyển đơn sang bước tiếp theo hoặc kết thúc quy trình; gửi thông báo kết quả cho người tạo đơn.
+    1. Người dùng mở mục \textit{``Nghỉ phép''}. Hệ thống hiển thị bộ chọn năm, thẻ thống kê quỹ phép (tổng, đã nghỉ, còn lại), bộ lọc trạng thái và danh sách đơn. \newline
+    2. Người dùng chọn năm hoặc trạng thái để lọc danh sách đơn. \newline
+    3. Người dùng chọn xem một đơn cụ thể. Hệ thống hiển thị chi tiết gồm 3 thẻ: Nội dung, Quy trình duyệt, Lịch sử thao tác. \newline
+    4. Đối với đơn Chờ duyệt, người dùng nhấn \textit{``Thu hồi''}. Hệ thống hiển thị hộp thoại xác nhận. \newline
+    5. Người dùng xác nhận $\rightarrow$ Đơn chuyển sang trạng thái Đã thu hồi, hệ thống giải phóng lịch trình tạm thời.
   },
   altflow={
-    Đơn đã bị thu hồi hoặc đã được xử lý bởi một người duyệt khác có cùng thẩm quyền $\rightarrow$ Backend từ chối cập nhật và Mobile tải lại dữ liệu mới nhất.
+    - \textit{Luồng 2a (Làm mới):} Vuốt màn hình xuống (Pull-to-refresh) để tải lại danh sách đơn mới nhất. \newline
+    - \textit{Luồng 3a (Sửa đơn bị trả lại):} Nhấn \textit{``Sửa \& Gửi lại''} để mở biểu mẫu hoàn thiện và nộp lại đơn.
   },
-  post={Đơn nghỉ phép được cập nhật trạng thái mới trên hệ thống backend.},
+  exflow={
+    - \textit{Ngoại lệ 4a (Thu hồi thất bại):} Đơn đã được cấp quản lý tiếp nhận xử lý $\rightarrow$ Hệ thống từ chối và làm mới trạng thái mới nhất.
+  },
+  post={Cán bộ nắm bắt thông tin quỹ phép và trạng thái đơn; thay đổi thu hồi hoặc sửa đổi được cập nhật đồng bộ.},
+  label={tab:uc_lev_01}
+}
+\usecasespec{
+  id={UC-LEV-02},
+  name={Đăng ký và Nộp đơn nghỉ phép},
+  shortname={Đăng ký và nộp đơn nghỉ phép},
+  actor={Cán bộ / Giảng viên},
+  desc={Cho phép cán bộ lập mới đơn nghỉ phép qua biểu mẫu hướng dẫn từng bước, kiểm tra điều kiện thời gian và quỹ phép, đính kèm minh chứng và nộp duyệt.},
+  pre={Cán bộ đã đăng nhập vào hệ thống và tài khoản có quyền lập đơn nghỉ phép.},
+  trigger={Người dùng nhấn nút tạo mới đơn nghỉ phép trên giao diện ứng dụng.},
+  mainflow={
+    1. Người dùng nhấn tạo mới đơn nghỉ phép. Hệ thống khởi tạo nháp sơ bộ và hiển thị biểu mẫu Form Wizard. \newline
+    2. Người dùng chọn khoảng thời gian nghỉ, loại hình nghỉ phép, địa điểm, số điện thoại liên hệ và lý do nghỉ. \newline
+    3. Hệ thống tự động tính số ngày làm việc thực tế (trừ T7, CN, Lễ/Tết) và kiểm tra số dư quỹ phép năm. \newline
+    4. Người dùng tải lên tệp minh chứng đính kèm (đối với các loại phép có quy định bắt buộc). \newline
+    5. Người dùng xem lại thông tin tổng hợp và nhấn \textit{``Gửi duyệt''}. \newline
+    6. Hệ thống thẩm định hợp lệ, chuyển trạng thái đơn sang Chờ duyệt và gửi thông báo đến cấp quản lý.
+  },
+  altflow={
+    - \textit{Luồng 2a (Lưu nháp):} Chọn lưu nháp tại bất kỳ bước nào để tiếp tục hoàn thiện sau. \newline
+    - \textit{Luồng 4a (Nộp trễ hạn):} Nếu nộp muộn hơn thời hạn quy định, hệ thống yêu cầu nhập bổ sung nội dung giải trình lý do nộp trễ. \newline
+    - \textit{Luồng 5a (Hủy tạo đơn):} Người dùng nhấn thoát $\rightarrow$ Hệ thống xác nhận và tự động xóa bản ghi nháp sơ bộ.
+  },
+  exflow={
+    - \textit{Ngoại lệ 3a (Xung đột lịch):} Thời gian nghỉ trùng lặp lịch công tác hoặc đơn nghỉ khác $\rightarrow$ Báo lỗi và yêu cầu chọn lại. \newline
+    - \textit{Ngoại lệ 3b (Quỹ phép không đủ):} Số ngày đăng ký vượt quá số ngày phép còn lại $\rightarrow$ Cảnh báo để người dùng điều chỉnh.
+  },
+  post={Đơn nghỉ phép được ghi nhận vào hệ thống ở trạng thái Chờ duyệt để chờ cấp quản lý thẩm định.},
   label={tab:uc_lev_02}
 }
 
 \usecasespec{
   id={UC-LEV-03},
-  name={Phê duyệt nhiều đơn nghỉ phép (Batch Approval)},
-  actor={Cấp quản lý có thẩm quyền phê duyệt.},
-  trigger={Người dùng chọn chế độ chọn nhiều (chọn checkbox) và nhấn nút duyệt hàng loạt.},
+  name={Thẩm định và Phê duyệt Đơn nghỉ phép},
+  shortname={Thẩm định và phê duyệt đơn nghỉ phép},
+  actor={Lãnh đạo Đơn vị, Chuyên viên Phòng Tổ chức Cán bộ},
+  desc={Cho phép cấp quản lý thẩm định nội dung đơn, xem xét minh chứng và thực hiện phê duyệt, từ chối hoặc yêu cầu bổ sung thông tin (hỗ trợ cả duyệt đơn lẻ và duyệt hàng loạt).},
+  pre={Người duyệt đã đăng nhập và tài khoản được phân quyền phê duyệt tương ứng với bước luân chuyển hiện tại của đơn.},
+  trigger={Người duyệt mở danh sách đơn chờ duyệt từ ứng dụng hoặc qua thông báo nhắc việc.},
   mainflow={
-    1. Mobile gửi danh sách ID các đơn cần duyệt cùng hành động xử lý lên backend. \newline
-    2. Backend xử lý từng đơn một cách tuần tự hoặc theo nhóm, cập nhật trạng thái cho từng đơn hợp lệ. \newline
-    3. Backend trả về kết quả chi tiết: số đơn duyệt thành công và danh sách các đơn bị lỗi (kèm nguyên nhân). \newline
-    4. Mobile hiển thị thông báo kết quả tổng hợp và tự động tải lại danh sách đơn để phản ánh đúng thực tế.
+    1. Người duyệt mở danh sách đơn nghỉ phép chờ xử lý thuộc thẩm quyền. \newline
+    2. Chọn xem chi tiết một đơn để kiểm tra thông tin cán bộ, lý do, tài liệu minh chứng và giải trình nộp trễ (nếu có). \newline
+    3. Người duyệt chọn hành động: \textit{``Phê duyệt''}, \textit{``Từ chối''} hoặc \textit{``Trả lại''}. \newline
+    4. Hệ thống kiểm tra tính hợp lệ của trạng thái đơn tại thời điểm thao tác. \newline
+    5. Hệ thống cập nhật trạng thái mới, trừ quỹ phép (nếu là bước duyệt cuối của TCCB) và gửi thông báo kết quả cho người tạo đơn.
   },
   altflow={
-    Một đơn bị lỗi giữa chừng (do trạng thái bị thay đổi) không làm ảnh hưởng đến các đơn đã được duyệt thành công trước đó; không mặc định toàn bộ đợt duyệt bị hủy bỏ.
+    - \textit{Luồng 3a (Duyệt hàng loạt):} Chọn nhiều đơn trên danh sách và nhấn duyệt hàng loạt $\rightarrow$ Hệ thống xử lý tuần tự và thông báo kết quả tổng hợp. \newline
+    - \textit{Luồng 3b (Trả lại đơn):} Chọn \textit{``Trả lại''} kèm nội dung yêu cầu $\rightarrow$ Đơn chuyển sang Bị trả lại để cán bộ sửa.
   },
-  post={Trạng thái thực tế của toàn bộ các đơn được cập nhật và hiển thị đồng bộ trên Mobile.},
+  exflow={
+    - \textit{Ngoại lệ 3a (Từ chối đơn):} Bắt buộc nhập lý do từ chối trước khi hệ thống ghi nhận kết quả. \newline
+    - \textit{Ngoại lệ 4a (Đơn đã đổi trạng thái):} Đơn đã bị thu hồi hoặc cấp khác xử lý trước $\rightarrow$ Báo lỗi và làm mới danh sách.
+  },
+  post={Đơn nghỉ phép được chuyển sang bước phê duyệt tiếp theo hoặc hoàn tất (Đã duyệt / Bị từ chối); quỹ phép được trừ khi duyệt bước cuối.},
   label={tab:uc_lev_03}
 }
-
-\subsubsection{Quy tắc nghiệp vụ (Business Rules)}
-
-\begin{itemize}[leftmargin=1.5cm]
-    \item \textbf{BR-LEV-01:} Ngày bắt đầu nghỉ không được diễn ra sau ngày kết thúc; khoảng thời gian kết hợp giữa ngày và buổi bắt đầu/kết thúc phải tạo thành một khoảng thời gian có độ dài dương hợp lệ.
-    \item \textbf{BR-LEV-02:} Số ngày nghỉ phép thực tế phải được tính toán dựa trên ngày làm việc tiêu chuẩn của Nhà trường, tự động loại trừ các ngày thứ Bảy, Chủ nhật, ngày nghỉ Lễ/Tết theo quy định và tính toán bổ sung ngày làm việc bù theo cấu hình của backend.
-    \item \textbf{BR-LEV-03:} Thời hạn tối thiểu phải nộp đơn trước ngày nghỉ phụ thuộc vào cấu hình nghiệp vụ hiện hành của Nhà trường tại phân hệ HRM (ví dụ nghỉ ngắn hạn nộp trước tối thiểu 3 ngày làm việc; nghỉ dài hạn nộp trước 15 ngày).
-    \item \textbf{BR-LEV-04:} Trường hợp người dùng nộp đơn muộn hơn thời hạn quy định, hệ thống bắt buộc người dùng phải cung cấp nội dung giải trình lý do nộp trễ trước khi kích hoạt nộp đơn chính thức.
-    \item \textbf{BR-LEV-05:} Trước khi chấp nhận một đơn nghỉ phép vào quy trình duyệt, hệ thống backend bắt buộc phải kiểm tra xung đột thời gian với các khoảng lịch nghỉ phép và lịch đi công tác đã tồn tại trước đó của cán bộ.
-    \item \textbf{BR-LEV-06:} Đối với các loại hình nghỉ phép đặc thù (nghỉ thai sản, nghỉ ốm đau dài ngày, nghỉ việc riêng có hưởng lương...), hệ thống yêu cầu bắt buộc phải đính kèm ít nhất một tệp tài liệu minh chứng hợp lệ.
-    \item \textbf{BR-LEV-07:} Toàn bộ các bước kiểm tra ràng buộc được Mobile thực hiện trong quá trình nhập liệu chỉ nhằm phản hồi sớm để tối ưu trải nghiệm (UX); backend bắt buộc phải thẩm định lại toàn bộ điều kiện tại thời điểm nhận request chính thức.
-    \item \textbf{BR-LEV-08:} Chỉ người tạo đơn hoặc những vai trò được phân quyền tương ứng mới có quyền chỉnh sửa, xóa, thu hồi hoặc luân chuyển đơn.
-    \item \textbf{BR-LEV-09:} Thông tin quỹ phép hiển thị trên màn hình chỉ là số liệu tham khảo tại thời điểm truy vấn; việc trừ số ngày vào quỹ phép chính thức chỉ xảy ra khi đơn đạt trạng thái phê duyệt bước cuối cùng tại backend.
-    \item \textbf{BR-LEV-10:} Một yêu cầu phê duyệt sẽ bị hệ thống từ chối cập nhật nếu trạng thái hiện tại của đơn trong cơ sở dữ liệu không còn phù hợp với bước xử lý mà người duyệt yêu cầu.
-    \item \textbf{BR-LEV-11:} Trong thao tác phê duyệt hàng loạt, kết quả của từng đơn phải được xử lý độc lập; ứng dụng Mobile phải tự động đồng bộ lại danh sách sau khi thao tác kết thúc để tránh sai lệch thông tin.
-\end{itemize}
 
 \subsubsection{Biểu đồ Hoạt động (Activity Diagrams)}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\linewidth]{img/uml/activity_leave_process.png}
-    \caption{\textit{Biểu đồ Hoạt động Quy trình Đăng ký và Phê duyệt Nghỉ phép}}
-    \label{fig:act_hrm_leave}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\linewidth]{img/uml/activity_business_trip.png}
-    \caption{\textit{Biểu đồ Hoạt động Quy trình Đăng ký và Phê duyệt Đi công tác}}
-    \label{fig:act_hrm_btrip}
+\centering
+\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering Chèn Activity Diagram: Đăng ký và phê duyệt nghỉ phép}}
+\caption{Biểu đồ hoạt động quy trình đăng ký và phê duyệt nghỉ phép}
+\label{fig:act_hrm_leave}
 \end{figure}
 
 \subsubsection{Biểu đồ Tuần tự (Sequence Diagrams)}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{img/uml/seq_leave_validation.png}
-    \caption{\textit{Biểu đồ Tuần tự Đăng ký và Kiểm tra Ràng buộc Nghỉ phép Thời gian thực}}
-    \label{fig:seq_hrm_leave_val}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\linewidth]{img/uml/seq_leave_approval.png}
-    \caption{\textit{Biểu đồ Tuần tự Phê duyệt Đơn Nghỉ phép Đa cấp}}
+    \fbox{\parbox[c][6cm][c]{0.85\linewidth}{\centering Chèn Sequence Diagram: Phê duyệt đơn nghỉ phép đa cấp}}
+    \caption[\textit{Biểu đồ tuần tự phê duyệt đơn nghỉ phép đa cấp}]{\textit{Biểu đồ Tuần tự Phê duyệt Đơn Nghỉ phép Đa cấp}}
     \label{fig:seq_hrm_leave_app}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\linewidth]{img/uml/seq_profile_diff.png}
-    \caption{\textit{Biểu đồ Tuần tự Thẩm định So sánh Sai khác (Diff Viewer) Sửa Lý lịch}}
-    \label{fig:seq_hrm_diff}
 \end{figure}

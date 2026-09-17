@@ -53,7 +53,7 @@ Không thay đổi tên đề tài nếu chưa có xác nhận của giảng vi�
 | Validate 4 tầng | Kiểm tra điều kiện nghỉ phép đa giai đoạn |
 | 48/72 giờ | 2/3 ngày làm việc; 48/72 giờ chỉ là chuỗi thông báo kế thừa nếu cần trích dẫn code |
 | E2E tự động | Kiểm thử tích hợp đầu-cuối thủ công trên staging |
-| 100% coverage | Pass rate 358/358; line/branch coverage chưa đo toàn hệ thống |
+| 100% coverage | Pass rate 370/370 Mobile (427/427 toàn hệ thống); line/branch coverage chưa đo toàn hệ thống |
 
 ## 3. Thứ tự ưu tiên của nguồn
 
@@ -76,12 +76,12 @@ Không thay đổi tên đề tài nếu chưa có xác nhận của giảng vi�
 - [ ] Trong Architecture Scope, thay “lưu trữ khóa an toàn phần cứng” bằng “lưu trữ token bảo mật theo nền tảng; khả năng hardware-backed phụ thuộc thiết bị và cấu hình”.
 - [ ] Trong System Operation, mô tả badge là dấu chấm hoặc số lượng tùy hệ điều hành/launcher.
 - [ ] Thống nhất mọi nơi dùng “ba giai đoạn kỹ thuật” cho luồng nộp đơn nghỉ phép.
-- [ ] KHCN luôn được gắn nhãn UI prototype, ngoài phạm vi tích hợp backend và không thuộc tiêu chí nghiệm thu chức năng chính.
+- [ ] KHCN và ký số nâng cao luôn được khẳng định là định hướng tương lai, ngoài phạm vi tích hợp backend (hạ tầng Nhà trường không có CSDL/backend KHCN và máy chủ PKI CA) và tuyệt đối không thuộc tiêu chí nghiệm thu chức năng chính.
 
 ### 4.2. Bằng chứng phải lưu lại
 
 - [ ] Full commit hash, branch và ngày commit cho từng repository.
-- [ ] Output nguyên bản của `flutter test` cho 312 test.
+- [ ] Output nguyên bản của `flutter test` cho 370 test Mobile.
 - [ ] Output nguyên bản của Vitest cho 46 test SSO.
 - [ ] Checklist bốn kịch bản E2E thủ công, ghi đúng thiết bị thực sự đã dùng.
 - [ ] Ảnh chụp màn hình hoặc video ngắn cho các luồng chính.
@@ -108,13 +108,13 @@ Nhằm nâng cấp cơ chế kiểm soát tương tranh từ `Thiết kế đề
 Trước khi triển khai gói công việc backend và viết báo cáo, bắt buộc thực hiện Rebaseline cho `myhcmut-mobile`:
 
 1. **Kiểm kê số liệu kiểm thử chính xác:** Xác định rõ cơ cấu kiểm thử toàn monorepo Mobile:
-   * `modules/hrm`: 232 tests (pass 100%).
+   * `modules/hrm`: 233 tests (pass 100%).
    * `modules/notification`: 47 tests (pass 100%).
-   * `modules/ioffice`: 43 tests (pass 100%).
+   * `modules/ioffice`: 77 tests (pass 100%, bao gồm 14 tests Unified Calendar và 20 widget tests).
    * `packages/core/global_system`: 3 tests (pass 100%).
    * `packages/shared/auth`: 2 tests (pass 100%).
    * `packages/shared/localization`: 8 tests (pass 100%).
-   * **Tổng cộng Mobile:** **335 tests** (pass rate 100%). Kết hợp 46 tests Backend SSO đạt **381 tests tự động chạy cục bộ**. Không tuyên bố là 100% code coverage.
+   * **Tổng cộng Mobile:** **370 tests** (pass rate 100%). Kết hợp 57 tests Backend (46 SSO + 11 Concurrency) đạt **427 tests tự động chạy cục bộ**. Không tuyên bố là 100% code coverage.
 2. **Khóa Commit Hash Mobile mới:** Tạo commit trên branch `feat/leaveRequest`, ghi nhận hash mới vào Evidence Index.
 3. **Định vị chính xác tính năng dọn dẹp nháp:** Cơ chế `isNewlyCreated` giúp giảm đáng kể bản nháp mồ côi trong luồng thoát thông thường; không tuyên bố "giải quyết triệt để", vẫn giữ Cron job dọn nháp định kỳ trong Chương 7.
 4. **Định vị tệp đính kèm rời rạc (Orphan Files):** Ghi nhận việc tải lên từng tệp độc lập có thể để lại tệp rác trên server nếu đơn bị hủy bất thường; đề xuất tác vụ quét dọn tệp mồ côi trong Chương 7.
@@ -274,39 +274,31 @@ Người đọc phân biệt được nội dung nào native, nội dung nào We
 
 Không còn câu nào khiến người đọc hiểu `/dang-ky-mobile` đã gửi duyệt, hoặc `/validate` là chốt chặn cuối; phân biệt rõ cơ chế Advisory Lock đã hiện thực và kiểm thử ở tầng backend với Exclusion Constraint đề xuất ở tầng schema CSDL.
 
-### 7.3. Trung tâm thông báo và điều hướng nghiệp vụ
+### 7.3. Cơ chế thông báo đẩy và điều hướng nghiệp vụ sâu
 
-#### Nội dung phải khóa
+#### Định hướng học thuật và ranh giới trình bày
 
-- Nguồn thông báo từ HRM và iOffice.
-- Vòng đời FCM token: đăng ký, cập nhật, xóa token không hợp lệ và xử lý logout.
-- Kafka topic `SEND_NOTIFY_SERVICE`, producer, consumer và bảng lưu thông báo.
-- Bốn trường metadata phục vụ định tuyến: `source`, `entityType`, `entityId`, `isApproval`.
-- `NotificationRouteParser`, fallback route và xử lý entity không còn tồn tại.
-- Foreground/background/terminated behavior.
-- Badge chỉ hiển thị dấu chấm hoặc số lượng tùy OS/launcher.
-- Giao dịch nghiệp vụ không phụ thuộc FCM, nhưng có cửa sổ mất thông báo do chưa có Transactional Outbox.
-- Có khả năng thông báo trùng do chưa có `eventId`/idempotency constraint.
+- **Định vị:** Thông báo được định vị là **cơ chế hỗ trợ kỹ thuật xuyên suốt (Cross-cutting Supporting Mechanism)** kết nối các sự kiện nghiệp vụ từ HRM/iOffice đến người dùng Mobile, không cấu thành cụm Use Case nghiệp vụ độc lập tại Chương 4.
+- **Ranh giới hạ tầng:** Hạ tầng phát tán sự kiện (Kafka Broker) là thành phần hiện hữu của Nhà trường. Báo cáo **trừu tượng hóa ở mức kiến trúc khái quát** (*Backend $\rightarrow$ Hạ tầng xử lý sự kiện / Broker $\rightarrow$ FCM $\rightarrow$ Mobile Client*), **không trình bày các thông số nội bộ của Kafka (topic cụ thể, partition key, consumer group, offset)** nhằm thu hẹp diện tích bề mặt chất vấn trước Hội đồng.
+- **Trọng tâm đóng góp của sinh viên:** Tập trung trọn vẹn vào phía **Mobile Client**:
+  - Quản lý vòng đời Device Token và thu hồi khi logout.
+  - Bốn trường metadata định tuyến: `source`, `entityType`, `entityId`, `isApproval`.
+  - Bộ phân giải `NotificationRouteParser` và điều hướng sâu `GoRouter` vào đúng màn hình nghiệp vụ (đơn nghỉ phép, công tác, nhiệm vụ).
+  - Xử lý các trạng thái vòng đời ứng dụng (foreground, background, terminated).
+  - Xử lý ngoại lệ: fallback route khi entity không còn tồn tại hoặc không đủ thẩm quyền.
 
-#### Use Case dự kiến
+#### Thể hiện trong Báo cáo
 
-- `UC-NOT-01`: Xem danh sách thông báo.
-- `UC-NOT-02`: Đánh dấu trạng thái đã đọc.
-- `UC-NOT-03`: Nhận thông báo theo trạng thái ứng dụng.
-- `UC-NOT-04`: Điều hướng đến đúng ngữ cảnh nghiệp vụ.
-- `UC-NOT-05`: Đăng ký/cập nhật/xóa device token.
-
-#### Hình/bảng cần chuẩn bị
-
-- Activity Diagram người dùng nhận và mở thông báo.
-- Bảng ánh xạ metadata sang route.
-- Bảng hành vi foreground/background/terminated.
-- Sequence Diagram Kafka–consumer–FCM–Mobile đặt ở Chương 5.
-- Bảng failure mode: mất event, duplicate, dead token, route sai/thiếu.
+- **Chương 4:** Tích hợp điểm phát sinh thông báo thành Action Node ngầm tự động: `[Gửi thông báo cho người liên quan]` trong Activity Diagrams của quy trình duyệt Nghỉ phép, Công tác và Nhiệm vụ.
+- **Chương 5:** Sơ đồ khối kiến trúc khái quát luồng dữ liệu thông báo; bỏ Sequence Diagram Kafka chi tiết để tránh làm loãng trọng tâm đề tài. Text thuyết minh gói gọn trong 1 đoạn văn.
+- **Hình/bảng cần chuẩn bị:**
+  - Bảng ánh xạ metadata sang GoRouter route (Bảng `tab:deep_link_matrix`).
+  - Bảng cấu trúc metadata định tuyến (Bảng `tab:notification_metadata`).
+  - Bảng hành vi tiếp nhận theo trạng thái ứng dụng (foreground/background/terminated).
 
 #### Điều kiện hoàn thành
 
-Báo cáo không dùng “đảm bảo gửi 100%”, “exactly-once” hoặc “badge luôn hiện số”.
+Báo cáo không dùng “đảm bảo gửi 100%”, “exactly-once” hoặc “badge luôn hiện số”; không đi sâu vào cấu hình Kafka broker.
 
 ### 7.4. Vé xác thực dùng một lần và In-App WebView
 
@@ -363,7 +355,7 @@ Phân hệ Đi công tác thuộc `TEAM_SCOPE` / `IN_SYSTEM_SCOPE` do sinh viên
   - `POST /api/tcns-di-cong-tac/duyet` (Duyệt / Từ chối / Trả lại).
   - `GET /api/tcns-di-cong-tac/page/:pageNumber/:pageSize` (Danh sách duyệt).
   - Hàm kiểm tra trùng lịch dùng chung: `tcnsLichCaNhan.checkTrungLich()`.
-- **Hiện trạng kiểm thử:** Chưa có Unit/Widget Test tự động trong monorepo Mobile (`modules/hrm/test/`), chỉ kiểm thử tích hợp thủ công trên Staging. Tuyệt đối không nhận là có automated test coverage trong báo cáo.
+- **Hiện trạng kiểm thử phân hệ HRM:** Phân hệ HRM đã có 233 bài test tự động (Unit & Widget tests) cho Hồ sơ cán bộ, ReviewDiffCard và Nghỉ phép Form Wizard; riêng phân hệ Đi công tác phía Client được kiểm thử luồng tích hợp thủ công trên Staging kết hợp kiểm chuẩn qua 4 kịch bản E2E.
 
 #### Use Case bối cảnh dự kiến (Traceability Context):
 
@@ -524,7 +516,7 @@ Không viết mục 3.2 như tài liệu hướng dẫn framework. Mỗi công n
 | Buổi | Thời lượng | Công việc | Đầu ra bắt buộc |
 | ---: | ---: | --- | --- |
 | 1 | 3 giờ | Gate 0, sửa hai điểm còn sót, khóa commits và nguồn | Baseline final + evidence index |
-| 1a | 3 giờ | **Mobile Rebaseline Gate:** Khóa commit Mobile mới, lưu raw test output 335 tests, cập nhật Sequence Diagram & State Machine | Commit Mobile + Raw Test Output + Sơ đồ cập nhật |
+| 1a | 3 giờ | **Mobile Rebaseline Gate:** Khóa commit Mobile mới, lưu raw test output 370 tests, cập nhật Sequence Diagram & State Machine | Commit Mobile + Raw Test Output + Sơ đồ cập nhật |
 | 1b | 4 giờ | **Concurrency Hardening Gate:** Refactor Advisory Lock, State Guard, Lan truyền Transaction và chạy 8 Concurrency Tests | Code `hrm-be` + commit hash mới + log 8/8 test pass |
 | 2 | 3 giờ | Scope Matrix, Claim Register, Glossary (Cập nhật `STUDENT_IMPLEMENTED`) | Ba bảng nguồn duy nhất |
 | 3 | 4 giờ | Requirement pack Hồ sơ cán bộ | UC/BR/Activity/evidence |
@@ -557,9 +549,9 @@ Một phần chỉ được đánh dấu hoàn thành khi:
 ## 15. Thứ tự bắt đầu ngay (Plan V3.1)
 
 1. Hoàn tất Gate 0 và Evidence Index.
-2. **Thực thi Mobile Rebaseline Gate (Buổi 1a):** Commit các thay đổi trên `myhcmut-mobile:feat/leaveRequest`, lưu toàn bộ raw test output của 335 tests, cập nhật Sequence Diagram Bước 2 và State Machine.
+2. **Thực thi Mobile Rebaseline Gate (Buổi 1a):** Commit các thay đổi trên `myhcmut-mobile:feat/leaveRequest`, lưu toàn bộ raw test output của 370 tests, cập nhật Sequence Diagram Bước 2 và State Machine.
 3. **Thực thi Concurrency Hardening Gate (Buổi 1b):** Refactor `tcns_lich_ca_nhan.model.ts`, `tcns_nghi_phep/controller.ts` (bọc `POST`, `PUT`, `DELETE` trong Advisory Lock và transaction), viết bộ 8 integration tests trên PostgreSQL, commit mã nguồn `hrm-be` và lấy commit hash mới.
-4. Tạo Scope Matrix + Claim Register + Glossary (chuyển Advisory Lock thành `STUDENT_IMPLEMENTED`, cập nhật con số 381 tests tự động cục bộ).
+4. Tạo Scope Matrix + Claim Register + Glossary (chuyển Advisory Lock thành `STUDENT_IMPLEMENTED`, cập nhật con số 427 tests tự động cục bộ).
 5. Viết requirement pack Hồ sơ cán bộ và Nghỉ phép (theo hệ thống Use Cases `UC-LEV-01..10` và Rules `BR-LEV-01..12`).
 6. Tiếp tục với Thông báo và One-Time Ticket SSO.
 7. Khi bốn pack hoàn thành, bắt đầu soạn mục 4.1.

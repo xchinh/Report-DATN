@@ -41,7 +41,7 @@
 5. [MINH CHỨNG THỰC TẾ TỪ MÃ NGUỒN VÀ KIỂM THỬ ĐỐI CHUẨN](#5-minh-chứng-thực-tế-từ-mã-nguồn-và-kiểm-thử-đối-chuẩn)
    - [5.1. Dẫn chứng mã nguồn kiểm toán các lỗ hổng tương tranh trên Web HRM](#51-dẫn-chứng-mã-nguồn-kiểm-toán-các-lỗ-hổng-tương-tranh-trên-web-hrm)
    - [5.2. Hiện thực cơ chế khóa tương tranh PostgreSQL Advisory Lock 2 thành phần](#52-hiện-thực-cơ-chế-khóa-tương-tranh-postgresql-advisory-lock-2-thành-phần)
-   - [5.3. Bằng chứng kiểm thử tự động 100% Pass Rate (392/392 Test Cases)](#53-bằng-chứng-kiểm-thử-tự-động-100-pass-rate-392392-test-cases)
+   - [5.3. Bằng chứng kiểm thử tự động 100% Pass Rate (427/427 Test Cases)](#53-bằng-chứng-kiểm-thử-tự-động-100-pass-rate-427427-test-cases)
    - [5.4. Bảng đối chiếu toàn diện: Hiện trạng Web HRM cũ và Hệ sinh thái MyHCMUT Mobile](#54-bảng-đối-chiếu-toàn-diện-hiện-trạng-web-hrm-cũ-và-hệ-sinh-thái-myhcmut-mobile)
 6. [KẾT LUẬN VÀ CHUYỂN TIẾP SANG ĐẶC TẢ YÊU CẦU CHI TIẾT (MỤC 4.2)](#6-kết-luận-và-chuyển-tiếp-sang-đặc-tả-yêu-cầu-chi-tiết-mục-42)
 
@@ -76,6 +76,8 @@ Mặc dù các hệ thống này đã từng bước số hóa nghiệp vụ gi�
 - Cán bộ phải ghi nhớ nhiều địa chỉ URL khác nhau để thực hiện các nghiệp vụ thường nhật.
 - Mỗi hệ thống Web được thiết kế độc lập theo chuẩn desktop màn hình rộng, không được tối ưu hóa cho màn hình cảm ứng di động cỡ nhỏ.
 - Không tồn tại một kênh truyền thông di động hợp nhất để gom tụ thông báo đẩy và hỗ trợ điều hướng sâu (Deep Linking) trực tiếp đến tác vụ cần xử lý.
+
+Đặc biệt về mặt hiện trạng hạ tầng dữ liệu và các phân hệ nghiệp vụ, cần khẳng định rõ: hệ sinh thái công nghệ thông tin phục vụ quản lý của Trường ĐHBK – ĐHQG-HCM trong thực tế chỉ bao gồm **Cơ sở dữ liệu Nhân sự (HRM Database trên PostgreSQL)** và **Cơ sở dữ liệu Văn phòng số (iOffice Database trên SQL Server / PostgreSQL)**; hoàn toàn **không tồn tại hạ tầng cơ sở dữ liệu hay dịch vụ máy chủ của phân hệ Quản lý Khoa học và Công nghệ (KHCN)**. Do đó, phạm vi tích hợp thực tế của đề tài tập trung trọn vẹn vào dữ liệu thực của HRM và iOffice; mọi nhu cầu về số hóa đề tài KHCN hoặc tích hợp ký số chuyên dụng (PKI CA / SmartCA) đều được xác định rõ là hướng phát triển trong tương lai và không thuộc hiện trạng hệ thống thông tin của đề tài.
 
 ---
 
@@ -348,6 +350,8 @@ Khi endpoint gọi mà không có transaction (hoặc transaction bị rollback 
 
 ## 4. ĐỊNH VỊ CỦA MYHCMUT MOBILE: PHÂN HỆ MỞ RỘNG ĐA KÊNH (OMNICHANNEL EXTENSION)
 
+Trong định vị này, HRM và iOffice là hai miền nghiệp vụ lõi. Auth/SSO là cơ chế xác thực và tích hợp; Kafka, FCM và `modules/notification` tạo thành **cơ chế thông báo nghiệp vụ xuyên suốt**, không phải một miền nghiệp vụ độc lập. Backend chỉ phát sự kiện thông báo và không bảo đảm thiết bị nhận.
+
 ### 4.1. Bản chất phân hệ mở rộng đồng hành (Co-existing Extension, Not a Replacement)
 Xuất phát từ việc phân tích sâu sắc các hạn chế trên, mục tiêu của Đồ án Tốt nghiệp **hoàn toàn không phải là xây dựng một hệ thống thay thế hay loại bỏ Web HRM hiện hữu**. Thay vào đó, đề tài định vị **MyHCMUT Mobile là một phân hệ di động mở rộng đa kênh (Omnichannel Mobile Extension)**, đóng vai trò như một Cổng giao tiếp di động tập trung (Unified Mobile Gateway), đồng hành và bổ trợ hoàn hảo cho hệ sinh thái phần mềm quản trị của Trường ĐHBK – ĐHQG-HCM:
 
@@ -459,20 +463,20 @@ Cập nhật `tcns_lich_ca_nhan.model.ts` nhận tham số `options?: { transact
   }
   ```
 - Tại lệnh xóa `DELETE /dang-ky/:id`, gom toàn bộ 5 bảng vào trong Transaction được bảo vệ bởi Advisory Lock.
-- Trì hoãn phát sự kiện Kafka: Chuyển toàn bộ các lệnh gọi gửi thông báo Kafka ra sau câu lệnh `await transaction.commit()`, bảo đảm không bao giờ phát tán thông báo ma nếu CSDL gặp lỗi.
+- Trì hoãn phát sự kiện Kafka: Chuyển toàn bộ các lệnh gọi phát sự kiện thông báo Kafka ra sau câu lệnh `await transaction.commit()`, ngăn phát thông báo ma khi CSDL rollback. Backend chỉ phát sự kiện; không có bảo đảm thiết bị nhận được thông báo.
 
-### 5.3. Bằng chứng kiểm thử tự động 100% Pass Rate (392/392 Test Cases)
-Hệ thống mã nguồn sau khi củng cố tương tranh đã được kiểm chuẩn tự động độc lập thông qua bộ kiểm thử tự động toàn diện, đạt tỷ lệ thành công **100% Pass Rate** trên tổng số **392 test cases** (chi tiết đối chuẩn tại [01_GATE0_EVIDENCE_INDEX.md](file:///home/xchinh/workspace/HK253_DATN_341_2211467_2210392/docs/01_GATE0_EVIDENCE_INDEX.md)):
+### 5.3. Bằng chứng kiểm thử tự động 100% Pass Rate (427/427 Test Cases)
+Hệ thống mã nguồn sau khi củng cố tương tranh đã được kiểm chuẩn tự động độc lập thông qua bộ kiểm thử tự động toàn diện, đạt tỷ lệ thành công **100% Pass Rate** trên tổng số **427 test cases** (chi tiết đối chuẩn tại [01_GATE0_EVIDENCE_INDEX.md](file:///home/xchinh/workspace/HK253_DATN_341_2211467_2210392/docs/01_GATE0_EVIDENCE_INDEX.md)):
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════════════╗
 ║                      BẢNG TỔNG KẾT KIỂM CHUẨN TOÀN HỆ THỐNG                          ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════╣
-║ 1. TỔNG TEST CASES TỰ ĐỘNG THÔNG QUA: 392 / 392 PASSED (TỶ LỆ: 100.0%)               ║
-║    • Phía Ứng dụng Di động (Flutter Test): 335 / 335 tests passed (~17.7 giây)        ║
-║      - modules/hrm (Nghỉ phép, Lý lịch, Timeline, Model):      232 tests             ║
+║ 1. TỔNG TEST CASES TỰ ĐỘNG THÔNG QUA: 427 / 427 PASSED (TỶ LỆ: 100.0%)               ║
+║    • Phía Ứng dụng Di động (Flutter Test): 370 / 370 tests passed (~21 giây)         ║
+║      - modules/hrm (Nghỉ phép, Lý lịch, Timeline, Model):      233 tests             ║
 ║      - modules/notification (FCM, StateNotifier, Route Parser): 47 tests             ║
-║      - modules/ioffice (Nhiệm vụ, Điểm danh họp WebSocket):     43 tests             ║
+║      - modules/ioffice (Nhiệm vụ, Điểm danh, Lịch tổng hợp):    77 tests             ║
 ║      - packages/shared/localization (Field Metadata, Parser):    8 tests             ║
 ║      - packages/core/global_system (AppBatchActionBar Widget):   3 tests             ║
 ║      - packages/shared/auth (AuthUser, Login Serialization):     2 tests             ║

@@ -10,6 +10,10 @@
 > **Mốc đối chuẩn:** Gate 0 — Khóa Baseline Học thuật & Bằng chứng Kỹ thuật (Tháng 09/2026)  
 > **Trạng thái tài liệu:** 🔒 **BASELINE RELEASE v1.0 (VERIFIED IMPLEMENTATION)**
 
+> [!NOTE]
+> **PHẠM VI XÁC THỰC VẬN HÀNH THỰC TẾ:**  
+> Trong môi trường đánh giá và vận hành thực tế của MyHCMUT Mobile, ứng dụng sử dụng phương thức **Đăng nhập bằng Tài khoản định danh nội bộ (Tên đăng nhập / Mã số cán bộ / Email và Mật khẩu)** kết hợp cơ chế JWT Bearer Token và **Cầu nối One-Time Ticket SSO sang In-App WebView**. Các phần phân tích CAS/OIDC trong tài liệu này phản ánh hạ tầng backend kế thừa và giao thức dự phòng, không phải điều kiện tiên quyết trong luồng demo và kiểm chuẩn chính thức.
+
 ---
 
 ## MỤC LỤC
@@ -31,7 +35,7 @@
    - 4.1. Cấu trúc Thông điệp & Parser An toàn (Message Specification)
    - 4.2. Cơ chế Xác thực Nguồn gốc (Origin Validation & Domain Allowlist)
    - 4.3. Vòng đời Điều phối Sự kiện Nghiệp vụ (Action Dispatching Pipeline)
-5. [MÔ HÌNH ĐE DỌA (STRIDE THREAT MODEL) & GIẢI PHÁP PHÒNG THỦ](#5-mô-hình-đe-dọa-stride-threat-model--giải-pháp-phòng-thủ)
+5. [PHÂN TÍCH AN TOÀN KỸ THUẬT & CƠ CHẾ PHÒNG VỆ CẦU NỐI SSO](#5-phân-tích-an-toàn-kỹ-thuật--cơ-chế-phòng-vệ-cầu-nối-sso)
    - 5.1. Spoofing (Giả mạo danh tính)
    - 5.2. Tampering (Can thiệp / Làm sai lệch dữ liệu)
    - 5.3. Repudiation (Chối bỏ trách nhiệm)
@@ -586,14 +590,14 @@ Khi nhận được sự kiện hợp lệ từ nguồn tin cậy, `SsoBridgeHan
 
 ---
 
-## 5. MÔ HÌNH ĐE DỌA (STRIDE THREAT MODEL) & GIẢI PHÁP PHÒNG THỦ
+## 5. PHÂN TÍCH AN TOÀN KỸ THUẬT & CƠ CHẾ PHÒNG VỆ CẦU NỐI SSO
 
-Hệ thống xác thực và tích hợp SSO In-App WebView được phân tích an ninh toàn diện dựa trên mô hình **STRIDE** (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege):
+Cơ chế cầu nối One-Time Ticket SSO chuyển tiếp phiên từ Native Mobile sang In-App WebView được phân tích an ninh toàn diện dựa trên 6 khía cạnh bảo vệ cốt lõi (Giả mạo danh tính, Can thiệp sửa đổi, Chối bỏ trách nhiệm, Tiết lộ thông tin, Từ chối dịch vụ và Leo thang đặc quyền):
 
 ```
-                                      ┌───────────────────────────────┐
-                                      │  STRIDE THREAT MODEL MATRIX   │
-                                      └──────────────┬────────────────┘
+                                      ┌────────────────────────────────────────────────┐
+                                      │ SSO BRIDGE SECURITY THREAT & DEFENSE MATRIX   │
+                                      └──────────────┬─────────────────────────────────┘
                                                      │
          ┌───────────────┬───────────────┬───────────┴───┬───────────────┬───────────────┐
          ▼               ▼               ▼               ▼               ▼               ▼

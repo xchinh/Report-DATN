@@ -1,6 +1,8 @@
 # ĐẶC TẢ RANH GIỚI VÀ PHẠM VI KIẾN TRÚC HỆ THỐNG (ARCHITECTURE SCOPE)
 *Phiên bản Chuẩn hóa Cấu trúc Thư mục Codebase & Báo cáo 7 Chương (Folder-Based Edition)*
 
+> **Trạng thái bằng chứng:** Các commit Gate 0 là snapshot dùng cho báo cáo. Các số liệu test trong tài liệu là kết quả Gate 0 đã ghi nhận; không diễn giải là kết quả tái chạy hiện tại nếu chưa có log tái lập theo `12_BASELINE_REPRODUCIBILITY_AUDIT.md`.
+
 > **Đề tài Đồ án Tốt nghiệp:** “Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học”  
 > **Định vị Đề tài:** Phát triển Ứng dụng Di động Đa nền tảng (Flutter) tích hợp và mở rộng các Hệ thống Dịch vụ Backend hiện hữu của Nhà trường (HRM và iOffice).  
 > **Quy chuẩn Phân bổ Báo cáo:** Tập trung vào kiến trúc ứng dụng di động kết hợp với các dịch vụ mở rộng trên backend (Mobile Extension Services) và tích hợp API đa miền.
@@ -22,15 +24,14 @@ myhcmut-mobile/
 ├── packages/
 │   ├── core/                                  <- [CÁC THƯ VIỆN LÕI DÙNG CHUNG]
 │   │   ├── global_system/                     <- Material 3 Semantic Tokens, BeVietnamPro font, AppBatchActionBar, Toastification
-│   │   ├── network/                           <- Dio Client, MultiDomainAuthInterceptor, MultiDomainTokenManager (SharedPreferences + In-memory cache)
-│   │   └── hcmut_sign/                        <- Module ký số mở rộng (PKI, local_auth sinh trắc học, XML-DSig)
+│   │   └── network/                           <- Dio Client, MultiDomainAuthInterceptor, MultiDomainTokenManager (SharedPreferences + In-memory cache)
 │   │
 │   └── shared/                                <- [CÁC TIỆN ÍCH DÙNG CHUNG]
 │       ├── auth/                              <- AuthStateProvider, AuthUser DTO, One-Time Ticket SSO Client
 │       └── localization/                      <- Đa ngôn ngữ động Tiếng Việt / Tiếng Anh (shared_localization)
 │
 └── modules/                                   <- [CÁC PHÂN HỆ NGHIỆP VỤ ĐỘC LẬP]
-    ├── hrm/                                   <- Phân hệ Quản trị Nhân sự
+    ├── hrm/                                   <- Phân hệ Quản trị Nhân sự (233 tests)
     │   ├── lib/src/profile/                   <- Tra cứu lý lịch 11 danh mục, SQLite MasterDataDatabaseService (47 danh mục), SWR Cache [Vũ Xuân Chính]
     │   ├── lib/src/approve_profile/           <- Thẩm định Diff Viewer (ReviewDiffCard) sửa lý lịch [Vũ Xuân Chính]
     │   ├── lib/src/time_off/                  <- Đăng ký nghỉ phép Form Wizard 3 bước, Kiểm tra điều kiện đa giai đoạn [Vũ Xuân Chính]
@@ -38,18 +39,16 @@ myhcmut-mobile/
     │   ├── lib/src/business_trip/             <- Đăng ký đi công tác Form Wizard 5 bước [Tống Duy Khang - OUT_OF_CHINH_SCOPE]
     │   └── lib/src/approve_business_trip/     <- Phê duyệt chuyến công tác [Tống Duy Khang - OUT_OF_CHINH_SCOPE]
     │
-    ├── ioffice/                               <- Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác
+    ├── ioffice/                               <- Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác (77 tests)
     │   ├── lib/src/incoming_docs/             <- Sổ văn bản đến, Trình xem PDF (pdfrx), Phân phối chỉ đạo
     │   ├── lib/src/outgoing_docs/             <- Tra cứu sổ văn bản đi
     │   ├── lib/src/mission/                   <- Điều hành Nhiệm vụ (3 nhóm, 5 tab lọc, 4 tab chi tiết, cây outlined-tree) [Tống Duy Khang; Chính refactor UI]
-    │   └── lib/src/schedule/                  <- Lịch tuần trường/đơn vị, Điểm danh họp thời gian thực qua WebSocket (Socket.IO) [Vũ Xuân Chính]
+    │   └── lib/src/schedule/                  <- Lịch tuần trường/đơn vị, Điểm danh họp thời gian thực qua WebSocket (Socket.IO), Lịch làm việc tổng hợp đa phân hệ (Unified Calendar) [Vũ Xuân Chính]
     │
-    ├── notification/                          <- Phân hệ Trung tâm Thông báo [Vũ Xuân Chính]
-    │   ├── lib/src/notification/services/     <- Firebase Messaging (FCM HTTP v1), Background & Foreground handlers
-    │   ├── lib/src/notification/utils/        <- NotificationRouteParser (giải mã 4 trường metadata phục vụ Deep Linking)
-    │   └── lib/src/notification/views/        <- Danh sách thông báo, Quản lý số đếm Badge icon theo hỗ trợ OEM (app_badge_plus)
-    │
-    └── khcn/                                  <- Phân hệ Khoa học Công nghệ (UI Prototype/Templates sẵn sàng tích hợp, ngoài phạm vi tích hợp BE thực tế)
+    └── notification/                          <- Phân hệ Trung tâm Thông báo (47 tests) [Vũ Xuân Chính]
+        ├── lib/src/notification/services/     <- Firebase Messaging (FCM HTTP v1), Background & Foreground handlers
+        ├── lib/src/notification/utils/        <- NotificationRouteParser (giải mã 4 trường metadata phục vụ Deep Linking)
+        └── lib/src/notification/views/        <- Danh sách thông báo, Quản lý số đếm Badge icon theo hỗ trợ OEM (app_badge_plus)
 ```
 
 ---
@@ -79,7 +78,8 @@ myhcmut-mobile/
 |  │     • Phân hệ Nhiệm vụ: modules/ioffice/mission (3 nhóm, 5 tab lọc, 4 tab chi tiết, tree).    │  |
 |  │     • Luồng phê duyệt đơn sơ khởi cho nghỉ phép và công tác.                                 │  |
 |  │  C. Bộ kiểm thử tự động Chạy cục bộ:                                                         │  |
-|  │     • 335 tests Mobile (HRM: 232, Notification: 47, iOffice: 43, Core: 13), 46 tests BE SSO. │  |
+|  │     • 370 tests Mobile (HRM: 233, Notification: 47, iOffice: 77, Packages/Core: 13).         │  |
+|  │     • 57 tests Backend (tổng cộng toàn hệ thống 427 tests tự động, 100% Pass Rate).          │  |
 |  │     • Phân hệ Đi công tác xác thực qua kiểm thử thủ công tích hợp (Manual Staging Testing).  │  |
 |  └──────────────────────────────────────────────────────────────────────────────────────────────┘  |
 |                                                                                                    |
@@ -170,10 +170,10 @@ Hệ sinh thái mã nguồn bao gồm 4 repository chính và cụm hạ tầng 
 
 | Chương Báo cáo | Thư mục Mã nguồn LaTeX Tương ứng | Thư mục Codebase Tương ứng | Nội dung Trọng tâm |
 | :--- | :--- | :--- | :--- |
-| **Chương 1: Giới thiệu** | `Chapter1/` | Toàn bộ dự án | Bối cảnh 4 điểm nghẽn Web Desktop, mục tiêu, phân định phạm vi ranh giới hệ thống, tóm tắt 5 phân hệ. |
+| **Chương 1: Giới thiệu** | `Chapter1/` | Toàn bộ dự án | Bối cảnh 4 điểm nghẽn Web Desktop, mục tiêu, phân định phạm vi ranh giới hệ thống, tóm tắt 4 phân hệ hoạt động (`auth`, `hrm`, `ioffice`, `notification`). |
 | **Chương 2: Khảo sát Hệ thống Liên quan** | `Chapter2/` | Nghiên cứu thị trường | So sánh App SaaS (Base, 1Office) vs Web nội bộ ĐHBK; đề xuất Cổng di động tập trung. |
-| **Chương 3: Cơ sở Lý thuyết & Công nghệ** | `Chapter3/` | `pubspec.yaml`, `melos.yaml` | Lý thuyết Clean Architecture, Shared JWT, 6 Bảng Trade-off Mobile Stack (Flutter, Riverpod, GoRouter, Melos, Dio, SQLite), Backend Node.js, Kafka, FCM, Socket.IO. |
-| **Chương 4: Phân tích và Đặc tả Yêu cầu** | `Chapter4/` | `modules/` & `packages/` | Ma trận RBAC, Sơ đồ Use Case tổng thể; Phân rã 5 phân hệ nghiệp vụ kết hợp Bảng đặc tả Use Case, Quy tắc nghiệp vụ (Business Rules), Sơ đồ Hoạt động (Activity Diagrams); Yêu cầu chức năng và Phi chức năng (Chỉ tiêu Thiết kế Mục tiêu). |
-| **Chương 5: Phân tích và Thiết kế Hệ thống** | `Chapter5/` | `packages/core/` & Database | Targeted ERD 15 bảng, Clean Architecture 3 tầng, Sơ đồ Tuần tự Kỹ thuật (Technical Sequence Diagrams), MultiDomainAuthInterceptor, Notification Metadata Routing, Thiết kế Kiểm soát Tương tranh 2 Lớp (Advisory Lock). |
-| **Chương 6: Kết quả Hiện thực và Kiểm thử** | `Chapter6/` | `apps/myhcmut`, `test/` | Giao diện các màn hình 5 phân hệ; Ma trận kiểm thử đơn vị & widget tự động chạy cục bộ (312 tests Mobile + 46 tests Backend SSO đạt 358/358 pass); 4 kịch bản tích hợp đầu-cuối thủ công trên staging; Đo lường định lượng thực nghiệm (đối chiếu Chỉ tiêu Thiết kế Mục tiêu). |
-| **Chương 7: Tổng kết và Hướng phát triển** | `Chapter7/` | Đánh giá tổng thể | Nhận xét đối chiếu mục tiêu, giá trị thực tiễn cho ĐHBK, hạn chế và 6 hướng hoàn thiện kỹ thuật trọng tâm: (1) Khóa tương tranh PostgreSQL Advisory Lock & GIST; (2) Ràng buộc duy nhất UNIQUE/UPSERT điểm danh cuộc họp; (3) Tác vụ Cron tự động dọn dẹp bản nháp bỏ rơi và tệp rác; (4) Lưu trữ khóa an toàn phần cứng (Keystore/Keychain); (5) Mẫu hình Transactional Outbox & Idempotency cho Kafka/FCM; (6) Khung kiểm thử tự động E2E và đo độ bao phủ lcov toàn monorepo. |
+| **Chương 3: Cơ sở Lý thuyết & Công nghệ** | `Chapter3/` | `pubspec.yaml`, `melos.yaml` | MVC tại backend, nguyên lý module hóa theo miền nghiệp vụ, REST/HTTPS và Bearer JWT; các bảng trade-off Mobile Stack (Flutter, Riverpod, GoRouter, Melos, Dio, SQLite), Backend Node.js, Kafka, FCM, Socket.IO. |
+| **Chương 4: Phân tích và Đặc tả Yêu cầu** | `Chapter4/` | `modules/` & `packages/` | Ma trận RBAC, Sơ đồ Use Case tổng thể; Phân rã 4 phân hệ chính (`auth`, `hrm`, `ioffice`, `notification`) kết hợp Bảng đặc tả Use Case, Quy tắc nghiệp vụ (Business Rules), Sơ đồ Hoạt động (Activity Diagrams); Yêu cầu chức năng và Phi chức năng (Chỉ tiêu Thiết kế Mục tiêu). |
+| **Chương 5: Phân tích và Thiết kế Hệ thống** | `Chapter5/` | `packages/core/` & Database | Targeted ERD 15 bảng, Clean Architecture 3 tầng, Sơ đồ Tuần tự Kỹ thuật (Technical Sequence Diagrams), MultiDomainAuthInterceptor, Notification Metadata Routing, Thiết kế Tích hợp Unified Calendar (Adapter Pattern), Thiết kế Kiểm soát Tương tranh 2 Lớp (Advisory Lock). |
+| **Chương 6: Kết quả Hiện thực và Kiểm thử** | `Chapter6/` | `apps/myhcmut`, `test/` | Giao diện các màn hình 4 phân hệ hoạt động; ma trận kiểm thử Gate 0 đã ghi nhận (370 Mobile [HRM: 233, Notification: 47, iOffice: 77, Packages/Core: 13] + 57 Backend = 427/427); 4 kịch bản tích hợp đầu-cuối thủ công trên staging; chỉ công bố đo lường định lượng khi có log và phương pháp đo. |
+| **Chương 7: Tổng kết và Hướng phát triển** | `Chapter7/` | Đánh giá tổng thể | Nhận xét đối chiếu mục tiêu, giá trị thực tiễn cho ĐHBK, hạn chế (trong đó có phân hệ KHCN và module ký số PKI hcmut_sign dừng ở mức nghiên cứu định hướng do chưa có backend API) và các hướng hoàn thiện kỹ thuật trọng tâm: (1) Khóa tương tranh PostgreSQL Advisory Lock & GIST; (2) Ràng buộc duy nhất UNIQUE/UPSERT điểm danh cuộc họp; (3) Tác vụ Cron tự động dọn dẹp bản nháp bỏ rơi và tệp rác; (4) Lưu trữ khóa an toàn phần cứng (Keystore/Keychain); (5) Mẫu hình Transactional Outbox & Idempotency cho Kafka/FCM; (6) Khung kiểm thử tự động E2E và đo độ bao phủ lcov toàn monorepo; (7) Tích hợp chính thức phân hệ KHCN và hệ thống Ký số tập trung khi hạ tầng Nhà trường sẵn sàng. |
