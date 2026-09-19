@@ -4,7 +4,7 @@
 \label{subsec:req_schedule}
 
 \subsubsection{Mục tiêu}
-Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác kết nối trực tiếp với dịch vụ \texttt{ioffice-be} của Nhà trường, cung cấp cho viên chức và giảng viên khả năng tra cứu văn bản đến/đi, theo dõi tiến độ thực hiện nhiệm vụ và theo dõi lịch công tác tuần trên thiết bị di động. Đối với các cuộc họp có cấu hình điểm danh, ứng dụng hỗ trợ ghi nhận có mặt hoặc báo vắng kèm lý do giải trình; mọi điều kiện thẩm quyền và khung thời gian hợp lệ đều do hệ thống máy chủ kiểm soát độc lập. Đồng thời, phân hệ hỗ trợ xem toàn văn tài liệu số đính kèm và cho phép lãnh đạo đơn vị thực hiện phân phối, phê duyệt bút phê chỉ đạo ngay trên ứng dụng.
+Phân hệ Văn phòng số, Nhiệm vụ và Lịch công tác được kết nối trực tiếp với hệ thống \texttt{ioffice} của nhà trường, cung cấp cho viên chức và giảng viên khả năng tra cứu văn bản đến/đi, theo dõi tiến độ thực hiện nhiệm vụ và theo dõi lịch công tác tuần trên thiết bị di động. Đối với các cuộc họp có cấu hình điểm danh, ứng dụng hỗ trợ ghi nhận có mặt hoặc báo vắng kèm lý do giải trình; mọi điều kiện thẩm quyền và khung thời gian hợp lệ đều do hệ thống máy chủ kiểm soát độc lập. Đồng thời, phân hệ hỗ trợ xem toàn văn tài liệu số đính kèm và cho phép lãnh đạo đơn vị thực hiện phân phối, phê duyệt bút phê chỉ đạo ngay trên ứng dụng.
 
 \subsubsection{Yêu cầu chức năng}
 
@@ -26,6 +26,26 @@ FR-IOFF-03 & Đồng bộ thời gian thực & Ứng dụng & Cập nhật trạ
 \end{tabularx}
 \end{table}
 
+%van ban den
+\begin{table}[H]
+\centering
+\small
+\caption{Yêu cầu chức năng phân hệ iOffice trên mobile: văn bản đến}
+\label{tab:fr_ioffice_indoc}
+\begin{tabularx}{\textwidth}{|L{1.8cm}|L{3.0cm}|L{2.3cm}|Y|}
+\hline
+\textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả/ràng buộc} \\
+\hline
+FR-IOFF-04 & Tra cứu và giám sát tiến độ văn bản & Người dùng & Hỗ trợ phân loại và lọc văn bản, cho phép xem chi tiết dòng thời gian tiến trình luân chuyển và bảng tiến độ thực hiện của từng đơn vị. \\
+\hline
+FR-IOFF-05 & Phân công trách nhiệm & Chuyên viên, văn thư P.HC & Tiến hành phân công các loại trách nhiệm, công việc tới các đơn vị hoặc đích danh cá nhân. \\
+\hline
+FR-IOFF-06 & Thao tác trong quy trình & Người dùng & Thực hiện các thao tác như tham mưu, chỉ đạo, hoặc tiếp nhận các nhiệm vụ trong quy trình. \\
+\hline
+FR-IOFF-07 & Xem chi tiết nhiệm vụ đi kèm với văn bản & Người dùng & Cho phép xem chi tiết nhiệm vụ được phân công, bao gồm trạng thái, tiến độ, báo cáo và các công việc liên quan. \\
+\hline
+\end{tabularx}
+\end{table}
 \subsubsection{Đặc tả Ca sử dụng (Use Cases)}
 
 Bảng sau tổng hợp các Ca sử dụng. Ngoài điểm danh thời gian thực, hai quy trình làm thay đổi việc phân công và tiến độ công việc cũng được đặc tả chi tiết.
@@ -45,6 +65,13 @@ Bảng sau tổng hợp các Ca sử dụng. Ngoài điểm danh thời gian th�
 \hline
 \end{tabularx}
 \end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{image/usecase/UC\_DOC.png}
+    \caption{\textit{Sơ đồ use-case văn bản đến}}
+    \label{fig:ID_UC}
+\end{figure}
 
 \usecasespec{
   id={UC-SCH-01},
@@ -93,13 +120,83 @@ Bảng sau tổng hợp các Ca sử dụng. Ngoài điểm danh thời gian th�
   label={tab:uc_sch_02}
 }
 
+\usecasespec{
+    id={UC-ID-01},
+    name={Phân công trách nhiệm},
+    shortname={Phân công nhiệm vụ},
+    actor={Chuyên viên, văn thư P.HC},
+    desc={Cho phép người dùng phân công các loại trách nhiệm, công việc tới các đơn vị hoặc đích danh cá nhân.},
+    pre={Người dùng đã đăng nhập và có quyền phân công nhiệm vụ.},
+    trigger={Người dùng mở màn hình chi tiết văn bản đến và chọn chức năng phân công.},
+    mainflow={
+        1. Người dùng chọn văn bản đến cần phân công. \newline
+        2. Người dùng chọn loại trách nhiệm và đối tượng nhận nhiệm vụ (đơn vị hoặc cá nhân). \newline
+        3. Hệ thống lưu trữ thông tin phân công trên văn bản và gửi thông báo đến các đối tượng liên quan.
+    },
+    exflow={- \textit{3a (Đối tượng không hợp lệ):} Người dùng chọn đối tượng không có quyền nhận nhiệm vụ $\rightarrow$ Hệ thống từ chối và thông báo lỗi.},
+    post={Thông tin phân công được lưu trữ và các đối tượng nhận nhiệm vụ được thông báo kịp thời.},
+    label={tab:uc_id_01}
+}
+
+\usecasespec{
+    id={UC-ID-02},
+    name={Tham mưu văn bản đến},
+    shortname={Tham mưu văn bản},
+    actor={Lãnh đạo phòng Hành chính},
+    desc={Thực hiện tham mưu cho văn bản đến.},
+    pre={Lãnh đạo phòng Hành chính đã đăng nhập vào hệ thống.},
+    trigger={Người dùng mở màn hình chi tiết văn bản đến.},
+    mainflow={
+        1. Người dùng xem chi tiết văn vản đến và các thông tin liên quan. \newline
+        2. Người dùng nhập ý kiến và gửi tham mưu. \newline
+        3. Hệ thống cập nhật trạng thái văn bản và lưu trữ thông tin thao tác.
+    },
+    altflow={
+        - \textit{1a (Thực hiện phân công trách nhiệm):} Nếu chưa có thông tin phân công, người dùng tiến hành phân công trách nhiệm (nếu có quyền) (UC-ID-01). \newline
+    },
+    post={Trạng thái nhiệm vụ được cập nhật và thông tin thao tác được lưu trữ chính thức.},
+    label={tab:uc_id_02}
+}
+
+\usecasespec{
+    id={UC-ID-03},
+    name={Chỉ đạo văn bản đến},
+    shortname={Chỉ đạo văn bản},
+    actor={Ban Giám Hiệu},
+    desc={Thực hiện chỉ đạo cho văn bản đến.},
+    pre={Ban Giám Hiệu đã đăng nhập và có quyền chỉ đạo cho văn bản đến.},
+    trigger={Người dùng mở màn hình chi tiết văn bản đến.},
+    mainflow={
+        1. Người dùng xem chi tiết văn vản đến và các thông tin liên quan. \newline
+        2. Người dùng nhập ý kiến và gửi chỉ đạo. \newline
+        3. Hệ thống cập nhật trạng thái nhiệm vụ và lưu trữ thông tin thao tác.
+    },
+    altflow={
+        - \textit{1a (Thực hiện phân công trách nhiệm):} Nếu chưa có thông tin phân công, người dùng tiến hành phân công trách nhiệm (nếu có quyền) (UC-ID-01). \newline
+        - \textit{3a (Khởi tạo nhiệm vụ liên kết):} Tại bước 3, nếu văn bản là loại \textit{Triển khai nhiệm vụ}, hệ thống sẽ tự động tạo một nhiệm vụ tương ứng trong hệ thống quản lý nhiệm vụ. \newline
+    },
+    post={Trạng thái nhiệm vụ được cập nhật và thông tin thao tác được lưu trữ chính thức.},
+    label={tab:uc_id_03}
+}
+
 \subsubsection{Biểu đồ Hoạt động (Activity Diagrams)}
 
 \begin{figure}[H]
     \centering
-    \fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering Chèn Activity Diagram: Điểm danh hoặc báo vắng cuộc họp}}
-    \caption[\textit{Biểu đồ hoạt động điểm danh cuộc họp}]{\textit{Biểu đồ Hoạt động Quy trình Điểm danh Cuộc họp Thời gian thực}}
+    \includegraphics[width=0.85\linewidth]{image/uml/attendant_activity.png}
+    \caption{\textit{Sơ đồ hoạt động: Điểm danh cuộc họp}}
     \label{fig:act_ioffice_attendance}
 \end{figure}
 
 Biểu đồ hình~\ref{fig:act_ioffice_attendance} mô tả luồng kiểm tra điều kiện tham dự, đối soát thời gian thực và ghi nhận trạng thái điểm danh hoặc báo vắng cuộc họp.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\linewidth]{image/uml/doc_activity.png}
+    \caption{\textit{Sơ đồ hoạt động: Văn bản đến}}
+    \label{fig:ID_ACT}
+\end{figure}
+
+
+%\input{Chapter4/section2/ioffice/incomming_docs.tex}
