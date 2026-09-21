@@ -1,33 +1,36 @@
-\section{Yêu cầu chức năng theo phân hệ}
+\section{Yêu cầu chức năng và đặc tả nghiệp vụ}
 \label{sec:yeucau_chucnang}
 \label{sec:yeucau_chucnang_modules}
 
-Phần này trình bày chi tiết các yêu cầu chức năng của hệ thống MyHCMUT Mobile theo từng phân hệ nghiệp vụ đã được nghiệm thu hoặc có bằng chứng tích hợp. Mỗi phân hệ đặc tả mục tiêu, yêu cầu chức năng (FR), bảng Use Case, quy tắc nghiệp vụ và biểu đồ hoạt động/tuần tự khi phù hợp. Phạm vi được tổ chức theo chức năng của sản phẩm, không theo phân công thực hiện.
+Phần này trình bày chi tiết các yêu cầu chức năng của hệ thống MyHCMUT Mobile theo bốn nhóm nghiệp vụ chính gồm: quản lý hồ sơ cá nhân, quản lý nghỉ phép, quản lý công tác và Văn phòng số, nhiệm vụ, lịch công tác. Đối với mỗi nhóm, các yêu cầu chức năng được xác định từ những mục tiêu mà người dùng cần thực hiện trên ứng dụng và được cụ thể hóa bằng các use case tương ứng.
+
+Các use case tập trung vào mục tiêu nghiệp vụ của người dùng, không tách riêng các thao tác kỹ thuật nội bộ. Biểu đồ hoạt động được sử dụng đối với những quy trình cần làm rõ trình tự xử lý, điều kiện và các nhánh nghiệp vụ; biểu đồ tuần tự được sử dụng đối với những kịch bản cần thể hiện sự phối hợp ở mức logic giữa người dùng, ứng dụng di động và hệ thống nghiệp vụ nguồn.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Phạm vi đặc tả theo phân hệ}
+\caption{Phạm vi đặc tả theo nhóm nghiệp vụ}
 \label{tab:module_owner_scope}
-\begin{tabularx}{\textwidth}{|L{3.2cm}|Y|}
+\begin{tabularx}{\textwidth}{|L{4.2cm}|Y|}
 \hline
-\textbf{Phân hệ} & \textbf{Phạm vi trong chương} \\
+\textbf{Nhóm nghiệp vụ} & \textbf{Phạm vi đặc tả trong chương} \\
 \hline
-Xác thực và SSO & Xác thực Mobile và chuyển tiếp có kiểm soát sang Web HRM. \\
+Quản lý hồ sơ cá nhân & Tra cứu các danh mục thông tin lý lịch cán bộ; cập nhật trực tiếp các thông tin được phép hoặc gửi đề xuất kèm minh chứng đối với thông tin cần thẩm định. \\
 \hline
-Hồ sơ và Nghỉ phép & Hồ sơ cán bộ, đề xuất cập nhật và quy trình nghỉ phép. \\
+Quản lý nghỉ phép & Tra cứu quỹ phép tham khảo, lập và gửi đơn nghỉ phép qua quy trình hướng dẫn, theo dõi và xử lý yêu cầu theo quy trình phê duyệt. \\
 \hline
-iOffice, Lịch và Điểm danh & Văn bản, nhiệm vụ, lịch tổng hợp và điểm danh theo quyền nghiệp vụ. \\
+Quản lý công tác & Lập và gửi hồ sơ công tác qua biểu mẫu hướng dẫn 5 bước, kiểm tra xung đột thời gian, theo dõi và xử lý hồ sơ theo quy trình phê duyệt. \\
 \hline
-Thông báo & Nhận thông báo, trạng thái đọc và điều hướng nghiệp vụ sâu. \\
+Văn phòng số, nhiệm vụ và lịch công tác & Tra cứu văn bản đến/đi, theo dõi nhiệm vụ, xem lịch công tác tổng hợp đa nguồn và điểm danh/báo vắng cuộc họp. \\
 \hline
 \end{tabularx}
 \end{table}
 
-\input{Chapter4/section2/auth/index}
 \newpage
-\input{Chapter4/section2/hrm/index}
+\input{Chapter4/section2/profile/index}
 \newpage
-\input{Chapter4/section2/ioffice/index}
+\input{Chapter4/section2/leave/index}
 \newpage
-\input{Chapter4/section2/notification/index}
+\input{Chapter4/section2/business_trip/index}
+\newpage
+\input{Chapter4/section2/ioffice_schedule/index}

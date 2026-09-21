@@ -1,152 +1,31 @@
-\section{Kiến trúc Hệ thống}
+\section{Kiến trúc tổng thể hệ thống}
 \label{sec:kientruc_hethong}
 
-Dựa trên các yêu cầu chức năng và phi chức năng đã được phân tích ở Chương 4, chương này trình bày chi tiết về kiến trúc tổng thể, cấu trúc thư mục dự án, các thành phần hệ thống, luồng vận hành khép kín, các giải pháp tích hợp hạ tầng ngầm và lược đồ thiết kế cơ sở dữ liệu. Toàn bộ kiến trúc được định hướng tối ưu hóa cho môi trường di động, bảo đảm tính phân tách ranh giới nghiệp vụ và khả năng mở rộng trong tương lai.
+Ứng dụng MyHCMUT Mobile được phát triển nhằm cung cấp một điểm truy cập trên thiết bị di động đến các chức năng nhân sự và văn phòng số của Trường Đại học Bách khoa -- ĐHQG-HCM. Thay vì xây dựng lại các hệ thống nghiệp vụ hiện hữu, đề tài tập trung phát triển ứng dụng Flutter và bổ sung những điểm tích hợp cần thiết để khai thác chức năng, dữ liệu và quy trình xử lý từ HRM và iOffice.
 
-\subsection{Sơ đồ Kiến trúc Tổng thể}
-\label{subsec:so_do_kientruc_tongthe}
-
-Hệ thống MyHCMUT được thiết kế theo mô hình kiến trúc Client-Server (Khách-Chủ) đa tầng. Kiến trúc này tách biệt hoàn toàn giữa ứng dụng di động phía người dùng (Mobile Client) và các dịch vụ xử lý nghiệp vụ tập trung phía máy chủ (Backend Services), các cơ sở dữ liệu quan hệ và các hệ thống hạ tầng ngầm hỗ trợ.
-
-Sơ đồ kiến trúc tổng thể tại Hình~\ref{fig:kientruc_tongthe} minh họa sự tương tác giữa các thành phần công nghệ trong toàn bộ hệ sinh thái:
+Kiến trúc tổng thể của hệ thống được thể hiện tại Hình~\ref{fig:mobile_overall_architecture}, gồm ứng dụng di động, các dịch vụ backend, giao diện HRM Web, tầng dữ liệu và các dịch vụ hỗ trợ. Trong đó, ứng dụng di động đảm nhiệm tương tác với người dùng và kết nối đến các hệ thống nghiệp vụ; các backend tiếp tục chịu trách nhiệm xác thực yêu cầu, kiểm tra quyền truy cập, xử lý nghiệp vụ và quản lý dữ liệu thuộc phạm vi của từng hệ thống.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\linewidth]{image/architecture/overall_system_operation.png}
-    \caption[\textit{Sơ đồ kiến trúc tổng thể hệ thống MyHCMUT Mobile}]{\textit{Sơ đồ Kiến trúc Tổng thể Hệ thống MyHCMUT Mobile}}
-    \label{fig:kientruc_tongthe}
+    \includegraphics[width=0.95\linewidth,height=0.32\textheight,keepaspectratio]{image/architecture/architecture_overall.png}
+    \caption[\textit{Kiến trúc tổng thể hệ thống MyHCMUT Mobile}]{\textit{Kiến trúc tổng thể hệ thống MyHCMUT Mobile}}
+    \label{fig:mobile_overall_architecture}
 \end{figure}
 
-Toàn bộ hệ thống kết nối chặt chẽ giữa 4 khối chức năng:
-\begin{itemize}
-    \item \textbf{Tầng Trình diễn Di động (Mobile Client):} Ứng dụng di động Flutter đa nền tảng (Android và iOS) phục vụ cán bộ, giảng viên tiếp cận thông tin và xử lý nghiệp vụ tức thì.
-    \item \textbf{Tầng Cổng Di động \& Dịch vụ Nghiệp vụ (Backend Services \& Mobile Adapters):} Cụm 3 dịch vụ chuyên biệt (\texttt{hrm-be}, \texttt{ioffice-be}, \texttt{myhcmut-be}) kết hợp các bộ điều hợp (Mobile Adapters) tinh giản dữ liệu cho thiết bị di động.
-    \item \textbf{Tầng Lưu trữ Dữ liệu Quan hệ (Relational Databases):} 3 cơ sở dữ liệu quan hệ PostgreSQL độc lập (\texttt{tcns}, \texttt{ioffice}, \texttt{myhcmut}) lưu trữ bền vững dữ liệu nghiệp vụ của Nhà trường.
-    \item \textbf{Tầng Hạ tầng Ngầm \& Dịch vụ Tích hợp (Infrastructure \& Middleware):} Hàng đợi sự kiện Apache Kafka, máy chủ bộ nhớ đệm Redis, cổng dịch vụ Google Firebase Cloud Messaging (FCM HTTP v1), cùng hệ thống xác thực tập trung CAS SSO và LDAP.
-\end{itemize}
+\textbf{Ứng dụng MyHCMUT Mobile} được xây dựng bằng Flutter, cung cấp giao diện cho các chức năng hồ sơ cán bộ, nghỉ phép, đi công tác, văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng kết nối trực tiếp đến các backend thông qua API và sử dụng WebView để tái sử dụng biểu mẫu cập nhật hồ sơ cán bộ từ HRM Web.
 
-\subsection{Cấu trúc Thư mục Dự án}
-\label{subsec:cautruc_thumuc}
+\textbf{Auth Service} tiếp nhận yêu cầu đăng nhập và cấp thông tin xác thực cho ứng dụng di động. Sau khi đăng nhập thành công, ứng dụng sử dụng access token khi gửi yêu cầu đến HRM Backend và iOffice Backend. Mỗi backend tự xác thực token, thiết lập ngữ cảnh người dùng và kiểm tra quyền thực hiện nghiệp vụ tương ứng. Auth Service không đóng vai trò trung gian chuyển tiếp các yêu cầu nghiệp vụ giữa ứng dụng và hai backend này.
 
-\subsubsection{Cấu trúc Frontend (Flutter Monorepo / Melos)}
-Phần Frontend ứng dụng di động được tổ chức theo mô hình Kiến trúc Phân tầng Hướng Phân hệ (Feature-First Clean Architecture) kết hợp cấu trúc Đa gói (Modular Monorepo) quản lý bởi Melos. Mô hình này hoàn toàn tương thích và ánh xạ trực tiếp với cơ sở lý thuyết MVC:
-\begin{itemize}
-    \item \textbf{Tầng View (Trình diễn Giao diện):} Đảm nhận bởi lớp Presentation (\texttt{pages/}, \texttt{widgets/}) kết hợp hệ thống thiết kế Material 3 Semantic Tokens (\texttt{packages/core/global\_system}).
-    \item \textbf{Tầng Controller / Presenter (Điều phối Trạng thái):} Đảm nhận bởi bộ quản lý trạng thái phản ứng Riverpod (\texttt{Notifier}, \texttt{AsyncNotifier}) tiếp nhận tương tác từ View, gọi kiểm tra dữ liệu và kết nối với Repository.
-    \item \textbf{Tầng Model (Mô hình Dữ liệu Client):} Đảm nhận bởi các thực thể nghiệp vụ (Domain Entities) và các đối tượng truyền tải dữ liệu bất biến (Freezed DTOs).
-\end{itemize}
+\textbf{HRM Backend} cung cấp các chức năng quản lý nhân sự, bao gồm hồ sơ cán bộ, nghỉ phép, đi công tác và các quy trình phê duyệt liên quan. Đề tài kế thừa các nghiệp vụ và quy trình hiện hữu, đồng thời bổ sung hoặc điều chỉnh một số API và cơ chế tích hợp để phục vụ ứng dụng di động. HRM Backend tiếp tục chịu trách nhiệm xử lý nghiệp vụ và quản lý dữ liệu nhân sự tại hệ thống nguồn.
 
-\begin{verbatim}
-apps/
-  myhcmut/ ............................ Ung dung di dong chinh (Runner)
-    lib/
-      main.dart ....................... Diem khoi chay ung dung
-      app.dart ........................ Cau hinh MaterialApp, Theme & Router
-      presentation/ ................... Man hinh dieu huong tong the (ShellRoute)
-packages/
-  core/
-    global_system/ .................... Material 3 Semantic Tokens, Theme & Widgets
-    network/ .......................... Dio Client & MultiDomainAuthInterceptor
-    database/ ......................... SQLite Cuc bo luu 47 danh muc Master Data
-  shared/
-    auth/ ............................. Dinh danh AuthUser, MultiDomainTokenManager
-    localization/ ..................... Da ngon ngu En/Vi & FieldMetadataResolver
-modules/
-  hrm/ ................................ Phan he Ho so Can bo, Nghi phep & Cong tac
-  ioffice/ ............................ Phan he Van ban, Lich hop tuan & Diem danh
-  notification/ ....................... Phan he Hop thu Thong bao & Lich su tin nhan
-\end{verbatim}
+\textbf{iOffice Backend} cung cấp các chức năng văn phòng số, bao gồm văn bản đến, văn bản đi, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng di động chủ yếu khai thác các API hiện hữu của iOffice để hiển thị thông tin và thực hiện các thao tác được phép. Một số điều chỉnh payload thông báo phục vụ điều hướng sâu từ thiết bị di động được thực hiện tại các thành phần liên quan. Trong phạm vi hiện tại, ứng dụng sử dụng giao diện native và API của iOffice; iOffice Web không được xem là một luồng WebView đã tích hợp hoàn chỉnh.
 
-Chi tiết các gói mã nguồn chính phía Frontend:
-\begin{itemize}
-    \item \texttt{apps/myhcmut}: Gói ứng dụng thực thi chính, khởi tạo môi trường, nạp các cấu hình toàn cục và thiết lập khung điều hướng chính (ShellRoute).
-    \item \texttt{packages/core/global\_system}: Định nghĩa hệ thống Semantic Tokens theo Material 3 (hỗ trợ Light/Dark Mode), các widget chuẩn hóa dùng chung như thanh tác vụ hàng loạt \texttt{AppBatchActionBar}, khối thông báo lỗi \texttt{AppErrorRetry}.
-    \item \texttt{packages/core/network}: Chứa HTTP Client \texttt{Dio} và bộ điều phối xác thực đa miền \texttt{MultiDomainAuthInterceptor}.
-    \item \texttt{packages/core/database}: Chứa dịch vụ SQLite cục bộ lưu đệm 47 bảng danh mục hành chính (Master Data).
-    \item \texttt{packages/shared/auth}: Quản lý thực thể định danh người dùng \texttt{AuthUser}, điều phối vòng đời Access Token và Refresh Token qua \texttt{MultiDomainTokenManager}.
-    \item \texttt{packages/shared/localization}: Quản lý từ điển song ngữ Anh/Việt và giải mã nhãn động cho các trường hồ sơ lý lịch.
-    \item \texttt{modules/}: Chứa các phân hệ nghiệp vụ độc lập (\texttt{hrm}, \texttt{ioffice}, \texttt{notification}). Mỗi phân hệ được đóng gói đầy đủ 3 lớp Clean Architecture: \texttt{presentation/}, \texttt{domain/} và \texttt{data/}.
-\end{itemize}
+\textbf{HRM Web} là giao diện Web hiện hữu được ứng dụng tái sử dụng để cập nhật hồ sơ cán bộ. Khi người dùng mở chức năng này, ứng dụng yêu cầu một vé xác thực dùng một lần và mở biểu mẫu trong WebView. HRM Web gửi vé đến HRM Backend để thiết lập phiên làm việc trên Web, sau đó người dùng có thể thao tác trên biểu mẫu mà không cần đăng nhập lại. Cơ chế chuyển tiếp phiên được trình bày chi tiết tại Mục~\ref{sec:tich_hop_he_thong}.
 
-\subsubsection{Cấu trúc Backend (Mô hình Modular MVC)}
-Hệ thống Backend của Nhà trường được tổ chức theo mô hình \textbf{Modular MVC (Model -- View -- Controller đóng gói theo phân hệ nghiệp vụ)}. Thay vì gom toàn bộ Controller và Model vào các thư mục toàn cục gây phân mảnh khi quy mô hệ thống tăng lớn, kiến trúc Modular MVC đóng gói mỗi phân hệ thành một đơn vị độc lập chứa đầy đủ Model (lược đồ thực thể quan hệ cơ sở dữ liệu), Controller (xử lý logic nghiệp vụ và điều phối request) và Router API; trong khi tầng View được tách rời và đảm nhận trọn vẹn bởi ứng dụng di động Flutter thông qua giao thức RESTful API:
+\textbf{Tầng dữ liệu và lưu trữ hỗ trợ} gồm các cơ sở dữ liệu PostgreSQL riêng biệt của HRM và iOffice, cùng Redis phục vụ vé SSO và phiên Web. Ứng dụng di động không truy cập trực tiếp các thành phần lưu trữ này mà trao đổi dữ liệu thông qua backend tương ứng. Mỗi hệ thống nghiệp vụ tiếp tục quản lý dữ liệu và các quy tắc xử lý thuộc phạm vi của mình. Các nhóm dữ liệu liên quan trực tiếp đến ứng dụng được trình bày tại Mục~\ref{sec:thietke_csdl}.
 
-\begin{verbatim}
-hrm-be/ (Port 6023 - Backend Quan tri Nhan su)
-  modules/
-    md_tcns/
-      tcns_nghi_phep/
-        controller/ ................... Controller: Thu ly don, duyet va tinh phep
-        model/ ........................ Model: Thuc the tcns_nghi_phep_dang_ky
-        index.ts ...................... Router: Khai bao cac endpoint RESTful API
-      tcns_dang_ky_cong_tac/
-        controller/ ................... Controller: Ho so di cong tac
-        model/ ........................ Model: Thuc the tcns_di_cong_tac
-      tcns_lich_ca_nhan/
-        controller/ ................... Controller: Dieu hop lich, checkTrungLich
-        model/ ........................ Model: Thuc the tcns_lich_ca_nhan
-    md_staff/
-      staff_ly_lich/
-        controller/ ................... Controller: Mobile Adapter & Review Diff
-        model/ ........................ Model: Thuc the 11 phan muc ly lich can bo
-    _default/
-      fw_auth/
-        controller/ ................... Controller: Xac thuc CAS SSO, cap SSO Ticket
-ioffice-be/ (Port 3001 - Backend Van phong Dien tu)
-  modules/
-    van_ban_den/ ...................... Controller & Model xu ly van ban den
-    mission_outlined/ ................. Controller & Model cay nhiem vu phan cap
-    schedule_general/ ................. Controller & Model tong hop lich hop tuan
-myhcmut-be/ (Port 4000 - Cong Thong tin & Dinh danh)
-  modules/
-    cas_auth/ ......................... Controller ket noi CAS SSO va LDAP
-    device_token/ ..................... Controller & Model quan ly token thiet bi
-\end{verbatim}
+Bên cạnh các kết nối API, ứng dụng tiếp nhận thông báo đẩy qua Firebase Cloud Messaging từ các hệ thống nghiệp vụ và sử dụng Socket.IO cho chức năng điểm danh cuộc họp theo thời gian thực. Ứng dụng cũng tổng hợp dữ liệu lịch từ HRM và iOffice để hiển thị trong một giao diện thống nhất. Các cơ chế tích hợp này được trình bày tại Mục~\ref{sec:tich_hop_he_thong}.
 
-\subsection{Chi tiết các Thành phần Hệ thống}
-\label{subsec:thanhphan_hethong}
+Việc kết nối trực tiếp đến nhiều backend giúp đề tài tái sử dụng API hiện hữu và duy trì quyền xử lý nghiệp vụ tại từng hệ thống nguồn, nhưng đồng thời yêu cầu ứng dụng tự quản lý cấu hình kết nối, lỗi và trạng thái của từng miền dịch vụ. Việc tách các miền dịch vụ có thể giới hạn ảnh hưởng của sự cố theo từng nhóm chức năng; mức độ suy giảm cụ thể phụ thuộc vào những backend mà chức năng đang sử dụng.
 
-Hệ thống được tổ chức thành 4 tầng logic chính, mỗi tầng đảm nhận một vai trò chuyên biệt:
-\begin{enumerate}
-    \item \textbf{Presentation Layer (Tầng Trình bày - Mobile App):}
-    \begin{itemize}
-        \item Được phát triển bằng Flutter Framework đa nền tảng, tạo ra trải nghiệm người dùng đồng nhất, mượt mà trên cả Android và iOS.
-        \item Tiếp nhận tương tác người dùng, hiển thị giao diện tuân thủ bảng mã màu Material 3 Semantic Tokens (\texttt{global\_system}), tự động thích ứng hoàn hảo giữa hai chế độ Sáng và Tối.
-        \item Quản lý trạng thái ứng dụng phản ứng bằng Riverpod (\texttt{Notifier}, \texttt{AsyncNotifier}) và điều hướng URL phân cấp với GoRouter. Tầng này thực hiện kiểm tra dữ liệu hợp lệ sơ bộ phía máy khách (Client-side Validation) trước khi gửi yêu cầu mạng nhằm giảm tải băng thông.
-        \item Tích hợp sẵn trình đọc văn bản PDF nội bộ (\texttt{pdfrx}), thành phần lịch tuần tùy biến (\texttt{CustomTableCalendar}) và In-App WebView phục vụ các biểu mẫu web chuyên sâu.
-    \end{itemize}
-
-    \item \textbf{Business Logic Layer (Tầng Nghiệp vụ \& Cổng Di động):}
-    \begin{itemize}
-        \item Được xây dựng trên nền tảng Node.js và Express.js/NestJS, đóng vai trò là trung tâm xử lý dữ liệu và thực thi quy tắc nghiệp vụ của Nhà trường.
-        \item \textit{API Routing \& Mobile Adapters:} Tiếp nhận các yêu cầu mạng, chuyển tiếp tới các bộ điều hợp di động (Mobile Adapters) để tinh giản payload JSON phức tạp từ Web Desktop, giảm 65\% kích thước gói tin truyền tải trên mạng di động 4G/5G.
-        \item \textit{Middleware Pipeline:} Thực hiện các tác vụ tiền xử lý: giải mã JWT bằng Shared Secret, kiểm tra phân quyền người dùng theo vai trò (RBAC), kiểm tra cấu hình bảo mật.
-        \item \textit{Business Rules Engine:} Thực thi động cơ quy trình luân chuyển đơn từ nhiều cấp thẩm định (Workflow Engine), thuật toán tự động kiểm tra trùng lịch cá nhân (\texttt{checkTrungLich}), kiểm tra quy định báo trước và trừ quỹ phép năm của cán bộ.
-    \end{itemize}
-
-    \item \textbf{Data Layer (Tầng Dữ liệu - Chiến lược Hybrid Storage):}
-    \begin{itemize}
-        \item \textit{PostgreSQL (Persistent Storage):} Lưu trữ toàn bộ dữ liệu nghiệp vụ quan trọng và có cấu trúc trên 3 cơ sở dữ liệu quan hệ độc lập: \texttt{myhcmut} (tài khoản, thiết bị), \texttt{tcns} (hồ sơ cán bộ, nghỉ phép, công tác, lịch cá nhân) và \texttt{ioffice} (văn bản đến/đi, cây nhiệm vụ, lịch họp). Mọi thao tác ghi dữ liệu nhạy cảm đều được bọc kín trong Database Transaction nhằm bảo đảm tính toàn vẹn dữ liệu (ACID).
-        \item \textit{Redis (In-Memory Data Store):} Bộ nhớ trong truy xuất cực nhanh với độ trễ dưới 5ms, đóng vai trò làm bộ nhớ đệm (Cache) cho các dữ liệu nóng và kho lưu trữ vé xác thực SSO có thời gian sống ngắn.
-        \item \textit{SQLite Cục bộ (Local Data Source):} Lưu trữ đệm 47 bảng danh mục hành chính dùng chung (Master Data) trên thiết bị di động, giúp các biểu mẫu nhập liệu và danh sách chọn (dropdown) hiển thị tức thì kể cả khi mạng chập chờn.
-    \end{itemize}
-
-    \item \textbf{Third-Party \& Infrastructure Services (Hạ tầng Ngầm \& Dịch vụ Tích hợp):}
-    \begin{itemize}
-        \item \textit{Google Firebase Cloud Messaging (FCM HTTP v1):} Kênh dịch vụ đám mây phát thông báo đẩy (Push Notification) tức thời tới thiết bị di động Android và iOS.
-        \item \textit{Apache Kafka (chế độ KRaft):} Hệ thống hàng đợi thông điệp tiếp nhận các sự kiện nghiệp vụ từ backend để phân phối xử lý bất đồng bộ.
-        \item \textit{CAS SSO \& Máy chủ Danh bạ LDAP:} Hạ tầng xác thực danh bạ cán bộ tập trung của Nhà trường.
-    \end{itemize}
-\end{enumerate}
-
-\subsection{Cơ chế Hoạt động và Luồng Dữ liệu}
-\label{subsec:luong_dulieu}
-
-Quy trình vận hành đầu-cuối của một chu trình tương tác hoàn chỉnh trên hệ thống diễn ra khép kín qua 5 bước tuần tự:
-\begin{enumerate}
-    \item \textbf{Khởi tạo Request tại Mobile App:} Cán bộ thực hiện thao tác trên màn hình điện thoại (nộp đơn nghỉ phép, điểm danh họp, phê duyệt văn bản). Ứng dụng thực hiện tiền kiểm tra dữ liệu (Client-side Validation), đóng gói payload thành bản tin JSON và phát tín hiệu HTTP Request qua HTTP Client \texttt{Dio}.
-    \item \textbf{Xác thực \& Điều phối Đa miền:} Bộ chặn \texttt{MultiDomainAuthInterceptor} phân tích tên miền đích, tự động gắn chuỗi Bearer JWT Token tương ứng. Trường hợp Token hết hạn (máy chủ trả về mã HTTP 401), Interceptor tạm khóa hàng đợi và tự động kích hoạt tiến trình làm mới token ngầm (Silent Refresh) để gửi lại request mà không gián đoạn trải nghiệm người dùng.
-    \item \textbf{Xử lý Nghiệp vụ \& Ghi nhận DB:} Máy chủ Backend tiếp nhận request, mở Transaction trong PostgreSQL, thực thi các kiểm tra ràng buộc nghiệp vụ (kiểm tra trùng lịch qua \texttt{checkTrungLich}, tính số ngày phép, thẩm định quyền hạn). Nếu thỏa mãn, dữ liệu được ghi nhận bền vững xuống cơ sở dữ liệu quan hệ.
-    \item \textbf{Phản hồi Dữ liệu \& Cập nhật Giao diện:} Backend trả về HTTP Response 200 kèm gói tin JSON tinh gọn. Client deserialize dữ liệu sang các đối tượng Freezed DTO bất biến, Riverpod chuyển trạng thái sang \texttt{AsyncValue.data} giúp giao diện người dùng cập nhật ngay lập tức.
-    \item \textbf{Tác vụ Nền Bất đồng bộ (Background Tasks):} Đối với các hành động cần thông báo (như duyệt đơn nghỉ phép hoặc phát hành văn bản mới), Backend kích hoạt tác vụ nền bất đồng bộ đẩy sự kiện sang hàng đợi Kafka và thông báo đẩy FCM tới điện thoại cán bộ liên quan, bảo đảm luồng xử lý chính không bị trì hoãn.
-\end{enumerate}
+Như vậy, phạm vi phát triển của đề tài tập trung vào ứng dụng MyHCMUT Mobile và các phần mở rộng tích hợp với hệ thống hiện hữu. HRM Backend, iOffice Backend cùng các cơ sở dữ liệu tương ứng được kế thừa mà không xây dựng mới. Cấu trúc các thành phần và điểm mở rộng này được trình bày chi tiết tại Mục~\ref{sec:thietke_kientruc_thanhphan}.

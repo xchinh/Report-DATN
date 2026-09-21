@@ -1,0 +1,28 @@
+sequenceDiagram
+    autonumber
+    actor User as Người dùng
+    participant Mobile as MyHCMUT Mobile
+    participant HRM as HRM Backend
+    participant Redis
+    participant WebView
+    participant Web as HRM Web
+
+    User->>Mobile: Yêu cầu mở biểu mẫu hồ sơ
+    Mobile->>HRM: POST /api/auth/sso/generate-ticket
+    HRM->>Redis: Lưu ticket → {shcc, targetSystem=hrm, createdAt} (TTL 60 giây)
+    Redis-->>HRM: Xác nhận lưu
+    HRM-->>Mobile: Trả One-Time Ticket
+    Mobile->>WebView: Mở URL biểu mẫu kèm ticket
+    WebView->>Web: Tải biểu mẫu
+    Web->>HRM: POST /api/auth/sso/consume-ticket (ticket trong body)
+    HRM->>Redis: GETDEL ticket
+    Redis-->>HRM: Payload hoặc không có vé
+    alt Vé hợp lệ và targetSystem=hrm
+        HRM->>HRM: Kiểm tra người dùng, tạo và lưu phiên Web
+        HRM-->>Web: Thành công + Set-Cookie
+        Web-->>WebView: Hiển thị biểu mẫu đã xác thực
+    else Vé hết hạn, đã dùng hoặc sai hệ thống đích
+        HRM-->>Web: Từ chối tiêu thụ vé
+        Web-->>WebView: Hiển thị lỗi, cần yêu cầu vé mới từ ứng dụng
+    end
+    Web->>Web: history.replaceState xóa ticket khỏi URL sau lần thử tiêu thụ

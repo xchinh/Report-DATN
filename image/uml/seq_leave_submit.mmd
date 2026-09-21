@@ -1,0 +1,30 @@
+sequenceDiagram
+    autonumber
+    actor User as Cán bộ/Giảng viên
+    participant App as MyHCMUT Mobile
+    participant HRM as Hệ thống HRM
+    participant DB as CSDL HRM
+
+    User->>App: Khởi tạo đơn nghỉ phép
+    App->>App: Kiểm tra ngày đăng ký hợp lệ
+    alt Ngày đăng ký không hợp lệ
+        App-->>User: Hiển thị cảnh báo
+    else Ngày đăng ký hợp lệ
+        App->>HRM: Yêu cầu tạo bản nháp
+        HRM->>DB: Kiểm tra quyền và khởi tạo nháp
+        DB-->>HRM: Mã đơn nháp
+        HRM-->>App: Trả thông tin đơn nháp
+        User->>App: Nhập thời gian, lý do và minh chứng
+        App->>HRM: Gửi dữ liệu kiểm tra
+        HRM->>DB: Tính ngày làm việc, kiểm tra số dư và trùng lịch
+        alt Không đạt điều kiện
+            HRM-->>App: Trả nguyên nhân cần điều chỉnh
+            App-->>User: Hiển thị cảnh báo
+        else Đạt điều kiện
+        User->>App: Xác nhận gửi duyệt
+        App->>HRM: Nộp đơn
+        HRM->>DB: Cập nhật đơn và tạo bước quy trình
+        HRM-->>App: Trả trạng thái chờ duyệt
+        App-->>User: Thông báo gửi thành công
+        end
+    end

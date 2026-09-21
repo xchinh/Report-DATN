@@ -79,7 +79,7 @@ MyHCMUT Mobile hướng đến các nhóm người dùng tham gia vào những n
 - **Chuyên viên đơn vị, chuyên viên và lãnh đạo Phòng Tổ chức Cán bộ (TCCB), Ban Giám Hiệu (BGH):** tham gia quy trình đi công tác tùy theo loại hồ sơ và bước xử lý nghiệp vụ theo quy chế của Nhà trường.
 - **Các vai trò thuộc iOffice:** tham gia các nghiệp vụ văn bản, nhiệm vụ và lịch công tác theo quyền được hệ thống hiện hữu cấp.
 
-Ma trận phân quyền chi tiết và các ca sử dụng tương ứng được trình bày tại Chương 4.
+Ma trận phân quyền chi tiết và các use case tương ứng được trình bày tại Chương 4.
 
 ### 1.4.2. Phạm vi chức năng
 

@@ -1,0 +1,61 @@
+---
+config:
+  layout: elk
+  theme: neutral
+  fontFamily: "'Recursive Variable', sans-serif"
+---
+flowchart TB
+    repo["myhcmut-mobile/<br><b>Flutter Monorepo</b>"]
+
+    apps["apps/"]
+    modules["modules/"]
+    packages["packages/"]
+
+    app["myhcmut/<br>Điểm khởi chạy · Điều hướng<br>Tích hợp các module"]
+
+    hrm["hrm/<br>Hồ sơ · Nghỉ phép · Công tác<br>và các chức năng phê duyệt"]
+    ioffice["ioffice/<br>Văn bản · Nhiệm vụ · Lịch<br>và điểm danh cuộc họp"]
+    notification["notification/<br>Tiếp nhận thông báo<br>và điều hướng nghiệp vụ"]
+
+    core["core/"]
+    shared["shared/"]
+    globalSystem["global_system/<br>Thành phần giao diện<br>và tiện ích hệ thống"]
+    network["network/<br>Dio Factory · Interceptor<br>Quản lý token"]
+    auth["auth/<br>Đăng nhập · Trạng thái xác thực"]
+    localization["localization/<br>Đa ngôn ngữ"]
+
+    repo --> apps
+    repo --> modules
+    repo --> packages
+
+    apps --> app
+
+    modules --> hrm
+    modules --> ioffice
+    modules --> notification
+
+    packages --> core
+    packages --> shared
+    core --> globalSystem
+    core --> network
+    shared --> auth
+    shared --> localization
+
+    app -. "tích hợp" .-> hrm
+    app -. "tích hợp" .-> ioffice
+    app -. "tích hợp" .-> notification
+    hrm -. "sử dụng chung" .-> core
+    ioffice -. "sử dụng chung" .-> core
+    notification -. "sử dụng chung" .-> shared
+
+    classDef root fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#102a43;
+    classDef folder fill:#f4f6f8,stroke:#5f6b7a,stroke-width:1.5px,color:#102a43;
+    classDef appNode fill:#e8f5e9,stroke:#2e7d32,color:#102a43;
+    classDef moduleNode fill:#fff8e1,stroke:#f9a825,color:#102a43;
+    classDef packageNode fill:#f3e5f5,stroke:#7b1fa2,color:#102a43;
+
+    class repo root;
+    class apps,modules,packages,core,shared folder;
+    class app appNode;
+    class hrm,ioffice,notification moduleNode;
+    class globalSystem,network,auth,localization packageNode;

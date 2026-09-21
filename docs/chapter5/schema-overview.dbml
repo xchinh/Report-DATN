@@ -1,0 +1,142 @@
+// ERD tổng quan rút gọn cho Mục 5.3.1, không dùng để sinh DDL.
+// Hai miền HRM và iOffice thuộc hai CSDL PostgreSQL độc lập, không có FK chéo.
+// Màu xanh (#2563EB): FK vật lý. Màu cam (#D97706): liên kết logic do backend duy trì.
+
+Project chapter5_data_overview {
+  database_type: 'PostgreSQL'
+  Note: 'Chỉ giữ bảng đại diện và trường khóa/liên kết để sơ đồ tổng quan đọc được trên trang báo cáo.'
+}
+
+TableGroup hrm_profile [color: #2563EB] {
+  staff_ly_lich
+  staff_ly_lich_request
+}
+
+TableGroup hrm_leave [color: #16A34A] {
+  tcns_nghi_phep_dang_ky
+  tcns_so_nghi_phep_nam
+}
+
+TableGroup hrm_business_trip [color: #EA580C] {
+  tcns_dang_ky_cong_tac
+}
+
+TableGroup ioffice_documents [color: #7C3AED] {
+  eoffice_van_ban_den
+  eoffice_van_ban_di
+  eoffice_distribution
+}
+
+TableGroup ioffice_missions [color: #9333EA] {
+  mission_general
+  mission_report_batch
+  mission_report
+}
+
+TableGroup ioffice_schedule [color: #0891B2] {
+  schedule_general
+  schedule_general_item
+  schedule_meeting_attendance
+}
+
+Table staff_ly_lich {
+  shcc varchar(20) [pk, not null]
+  ho varchar(150)
+  ten varchar(50)
+}
+
+Table staff_ly_lich_request {
+  id integer [pk, increment, not null]
+  shcc varchar(20) [note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  trang_thai varchar(20)
+}
+
+Table tcns_nghi_phep_dang_ky {
+  id integer [pk, increment, not null]
+  shcc text [note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  ma_quy_trinh text
+  trang_thai text
+}
+
+Table tcns_so_nghi_phep_nam {
+  nam numeric [not null]
+  shcc text [not null, note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  tong_so_ngay numeric
+
+  Indexes {
+    (nam, shcc) [pk]
+  }
+}
+
+Table tcns_dang_ky_cong_tac {
+  id integer [pk, increment, not null]
+  shcc text [note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  ma_quy_trinh text
+  trang_thai text
+}
+
+Table eoffice_van_ban_den {
+  id integer [pk, increment, not null]
+  mission_id integer [note: 'Liên kết logic đến mission_general.id.']
+  trang_thai varchar(20)
+}
+
+Table eoffice_van_ban_di {
+  id integer [pk, increment, not null]
+  trang_thai varchar(50)
+}
+
+Table eoffice_distribution {
+  id integer [pk, increment, not null]
+  distributed_id integer
+  distributed_type varchar(20)
+  status varchar(20)
+  Note: 'Liên kết đa hình; distributed_id được diễn giải theo distributed_type.'
+}
+
+Table mission_general {
+  id integer [pk, increment, not null]
+  title text
+  status varchar(50)
+}
+
+Table mission_report_batch {
+  id integer [pk, increment, not null]
+  mission_id integer
+  status varchar(50)
+}
+
+Table mission_report {
+  id integer [pk, increment, not null]
+  mission_id integer
+  status varchar(50)
+}
+
+Table schedule_general {
+  id integer [pk, increment, not null]
+  name varchar(255)
+}
+
+Table schedule_general_item {
+  id integer [pk, increment, not null]
+  general_id integer [note: 'Liên kết logic đến schedule_general.id.']
+  name text
+}
+
+Table schedule_meeting_attendance {
+  id integer [pk, increment, not null]
+  item_id integer [not null, note: 'Liên kết logic đến schedule_general_item.id.']
+  created_by varchar(10)
+  attended boolean
+}
+
+Ref logical_profile_owner: staff_ly_lich_request.shcc > staff_ly_lich.shcc [color: #D97706]
+Ref logical_leave_owner: tcns_nghi_phep_dang_ky.shcc > staff_ly_lich.shcc [color: #D97706]
+Ref logical_leave_balance_owner: tcns_so_nghi_phep_nam.shcc > staff_ly_lich.shcc [color: #D97706]
+Ref logical_trip_owner: tcns_dang_ky_cong_tac.shcc > staff_ly_lich.shcc [color: #D97706]
+
+Ref logical_incoming_document_mission: eoffice_van_ban_den.mission_id > mission_general.id [color: #D97706]
+Ref physical_report_batch_mission: mission_report_batch.mission_id > mission_general.id [color: #2563EB]
+Ref physical_report_mission: mission_report.mission_id > mission_general.id [color: #2563EB]
+Ref logical_schedule_item: schedule_general_item.general_id > schedule_general.id [color: #D97706]
+Ref logical_schedule_attendance: schedule_meeting_attendance.item_id > schedule_general_item.id [color: #D97706]

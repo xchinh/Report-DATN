@@ -222,7 +222,7 @@ flowchart LR
   4. Máy chủ mở transaction:
      - Gọi `acquireLeaveLock(shcc, transaction)`.
      - Chạy `checkTrungLich` kiểm tra xung đột thời gian (loại trừ ID đơn hiện tại).
-     - Kiểm tra không có giải trình đang chờ duyệt (`validateKhongCoGiaiTrinhChoDuyet`).
+     - Các quy tắc liên quan đến hồ sơ Giải trình được tách khỏi phạm vi hiện thực Mobile hiện tại và chỉ được xem là định hướng phát triển.
      - Kiểm tra quy tắc đăng ký trước (`validateDangKyTruoc`).
      - **Thực thi Atomic State Guard:**
        ```sql
@@ -344,7 +344,7 @@ flowchart LR
      - **Từ chối (`REJECTED`):** Nhập lý do từ chối và gửi `POST /api/tcns/quy-trinh/rejected`.
      - **Trả lại (`TRA_LAI`):** Nhập yêu cầu bổ sung và chuyển đơn về cho người tạo.
   4. Máy chủ thực thi cập nhật lịch sử `tcns_quy_trinh_history`.
-  5. Nếu bước duyệt đạt trạng thái kết thúc (`isEnd = true` / `maQuyTrinh = 'KET_THUC'`), Stored Procedure `tcns_nghi_phep_dang_ky_insert` được kích hoạt, thực thi khóa dòng `SELECT FOR UPDATE` trên `tcns_so_nghi_phep_nam` để trừ số ngày phép khả dụng một cách an toàn tuyệt đối.
+  5. Nếu bước duyệt đạt trạng thái kết thúc (`isEnd = true` / `maQuyTrinh = 'KET_THUC'`), Stored Procedure `tcns_nghi_phep_dang_ky_insert` được kích hoạt, thực thi khóa dòng `SELECT FOR UPDATE` trên `tcns_so_nghi_phep_nam` để bảo vệ việc cập nhật số ngày phép khả dụng trong phạm vi giao dịch.
   6. Bắn thông báo kết quả xét duyệt qua Kafka đến thiết bị của cán bộ nộp đơn.
 * **Ánh xạ Mã nguồn & Kiểm thử:**
   - UI Mobile: `leave_view_detail.dart`, `popup_workflow_buttons_test.dart`.
@@ -446,8 +446,7 @@ flowchart LR
       Navigator.pop(context);
       context.push('/hrm/giai-trinh');
       ```
-  - **Quy tắc chặn xung đột kép:** Một cán bộ đang có hồ sơ giải trình nghỉ phép ở trạng thái `CHO_DUYET` thì hệ thống **tuyệt đối không cho phép đăng ký thêm đơn nghỉ phép mới** nhằm bảo đảm trật tự xét duyệt:
-    `validateKhongCoGiaiTrinhChoDuyet(shcc)` kiểm tra bảng `tcns_giai_trinh`.
+  - Route `/hrm/giai-trinh` hiện là điểm điều hướng từ Mobile. Việc tạo hồ sơ, lưu minh chứng, thẩm định/phê duyệt và quy tắc liên kết kết quả Giải trình với đơn nghỉ phép là định hướng phát triển; không dùng chúng làm claim hiện thực của Mobile.
 * **Hiện thực mã nguồn:**
   - Mobile: `create_time_dialog.dart` (L637-660), `hrm_features.dart` (L57: `/hrm/giai-trinh`).
   - Backend: `helper.ts` (L113-127), `controller.ts` (L149, L308).
@@ -524,7 +523,7 @@ flowchart LR
   - Phía Mobile Client bổ sung cờ trạng thái `isSubmitting` để vô hiệu hóa nút bấm ngay khi vừa chạm.
 * **Hiện thực mã nguồn:**
   - Backend: `tcns_nghi_phep/controller.ts` (L328-336).
-* **Bằng chứng kiểm thử:** `concurrency_race_condition.unit.test.ts` (Case 3: Atomic Guard - 100% pass).
+* **Bằng chứng kiểm thử:** `concurrency_race_condition.unit.test.ts` (Case 3: Atomic Guard); kết quả cần được chạy lại trước khi trích dẫn trong báo cáo.
 
 ---
 
@@ -750,9 +749,7 @@ flowchart TD
     ShowBanner --> ClickLink["Cán bộ bấm: 'Vui lòng nộp Giải trình để được xem xét'"]
     ClickLink --> PopDialog["Navigator.pop(context) - Đóng hộp thoại"]
     PopDialog --> Redirect["context.push('/hrm/giai-trinh') - Điều hướng sang Mô-đun Giải trình"]
-    Redirect --> CreateGT["Tạo đơn Giải trình nộp trễ hạn kèm minh chứng lý do"]
-    CreateGT --> WaitApproval["Lãnh đạo đơn vị xem xét duyệt đơn Giải trình"]
-    WaitApproval --> CanLeave["Sau khi Giải trình được duyệt -> Cho phép nộp phép chính thức"]
+    Redirect --> FutureGT["Điểm truy cập Giải trình<br/>(workflow là hướng phát triển)"]
 ```
 
 ---
@@ -794,7 +791,7 @@ stateDiagram-v2
 
 ## 5. MA TRẬN TRUY VẾT & CHỈ SỐ KIỂM THỬ TỰ ĐỘNG (243 TESTS)
 
-Hệ thống sở hữu bộ kiểm thử tự động toàn diện đạt tỷ lệ thành công tuyệt đối **100% Pass Rate** trên tổng số **243 test cases** liên quan trực tiếp đến phân hệ Quản lý Nghỉ phép (gồm 232 tests Mobile HRM và 11 tests Backend Concurrency Hardening).
+Tài liệu ghi nhận kết quả kiểm thử của thời điểm rà soát đối với các nội dung thuộc phân hệ Quản lý Nghỉ phép. Các số liệu test cần được chạy lại trước khi trích dẫn trong báo cáo; không dùng cụm từ ``100\% Pass Rate'' như một claim không gắn với lần chạy kiểm thử cụ thể.
 
 ### 5.1. Bảng Phân Bổ 232 Kiểm Thử Mobile (`modules/hrm`)
 Toàn bộ kiểm thử thực thi thông qua lệnh: `flutter test --no-pub` tại thư mục `modules/hrm/`.
@@ -876,10 +873,10 @@ Nhằm bảo đảm tính trung thực tuyệt đối của báo cáo Đồ án 
    - Cơ chế PostgreSQL Advisory Lock kết hợp lan truyền Transaction chỉ bảo vệ tuần tự hóa thành công giữa **các luồng ghi cùng tuân thủ giao thức lấy khóa này**.
    - Nếu có tiến trình bên ngoài can thiệp trực tiếp vào bảng `tcns_lich_ca_nhan` mà không gọi `pg_advisory_xact_lock`, xung đột vẫn có thể xảy ra. Giải pháp bảo vệ độc lập cấp CSDL schema (PostgreSQL Exclusion Constraint `EXCLUDE USING gist`) được định vị chính xác là **đề xuất nghiên cứu phát triển trong tương lai (Chương 7)**.
 3. **Phân định minh bạch giữa Tỷ lệ đỗ kiểm thử (Pass Rate) và Độ bao phủ mã nguồn (Code Coverage):**
-   - Tỷ lệ 100% Pass Rate trên 243 bài kiểm thử phản ánh việc toàn bộ các test case được thiết kế đều chạy thành công.
+   - Kết quả Pass Rate phải được gắn với lần chạy kiểm thử và commit tương ứng; không sử dụng tỷ lệ này như một bảo đảm tuyệt đối về chất lượng hoặc bao phủ mã nguồn.
    - Độ bao phủ dòng lệnh (Line Coverage) thực tế của backend là ~28.75% và mobile là ~70%. Báo cáo trình bày trung thực hai chỉ số này, không đánh đồng khái niệm.
 4. **Không ngộ nhận bộ nhớ đệm SQLite trên Mobile lưu trữ hồ sơ cá nhân nhạy cảm:**
-   - Cơ sở dữ liệu SQLite cục bộ (`master_data_database_service.dart`) chỉ lưu trữ 47 bảng danh mục hành chính dùng chung. Dữ liệu nghỉ phép và hồ sơ cá nhân chỉ được lưu tạm thời qua bộ nhớ đệm SWR (SharedPreferences / RAM) và được dọn dẹp khi đăng xuất.
+   - Cơ sở dữ liệu SQLite cục bộ (`master_data_database_service.dart`) chỉ lưu trữ 47 bảng danh mục hành chính dùng chung. Dữ liệu nghỉ phép và hồ sơ cá nhân có thể được lưu tạm thời qua bộ nhớ đệm SWR (SharedPreferences / RAM); không khẳng định cache hồ sơ được dọn dẹp khi đăng xuất nếu chưa có bằng chứng gọi hàm xóa trong luồng này.
 
 ---
 *Tài liệu đặc tả yêu cầu kỹ thuật phân hệ Nghỉ phép này là căn cứ chuẩn mực kỹ thuật cao nhất để đối chuẩn mã nguồn, biên soạn Chương 3, Chương 4, Chương 5 của Luận văn tốt nghiệp và phục vụ Hội đồng phản biện.*

@@ -1,88 +1,565 @@
-\section{Các Hệ thống Ngầm và Giải pháp Tích hợp Hạ tầng}
-\label{sec:hethong_ngam_tichhop}
+\section{Mô hình dữ liệu phục vụ ứng dụng}
+\label{sec:thietke_csdl}
 
-Bên cạnh các tầng dịch vụ chính, sự vận hành trơn tru và liền mạch của hệ sinh thái MyHCMUT phụ thuộc mật thiết vào các giải pháp hạ tầng ngầm. Các thành phần này đóng vai trò là hàng đợi xử lý sự kiện bất đồng bộ, bộ nhớ đệm tốc độ cao và cầu nối tích hợp dữ liệu đa hệ thống.
+Mục này trình bày các nhóm dữ liệu nghiệp vụ liên quan trực tiếp đến những chức năng của MyHCMUT Mobile. HRM và iOffice sử dụng hai cơ sở dữ liệu PostgreSQL riêng biệt đã tồn tại trước đề tài; nhóm không thiết kế mới toàn bộ cơ sở dữ liệu của hai hệ thống. Các mô hình được rút gọn từ schema thực tế và chỉ giữ những bảng, trường dữ liệu và quan hệ cần thiết để giải thích hoạt động của ứng dụng.
 
-\subsection{Hàng đợi Sự kiện Apache Kafka trong Xử lý Tác vụ Nền Bất đồng bộ}
-\label{subsec:kafka_background_task}
+Trong các lược đồ dữ liệu, đường màu xanh biểu diễn khóa ngoại vật lý đã được xác nhận từ schema, còn đường màu cam biểu diễn liên kết logic do backend duy trì. Ký hiệu khóa chính, duy nhất và không rỗng chỉ được sử dụng khi có constraint vật lý tương ứng. Các tệp DBML phục vụ trực quan hóa báo cáo, không được sử dụng để sinh migration hoặc thay thế schema của hệ thống đang vận hành.
 
-Trong quản trị đại học, các sự kiện nghiệp vụ diễn ra thường xuyên: Lãnh đạo ký duyệt đơn nghỉ phép, văn thư phát hành văn bản khẩn, hoặc Trưởng đơn vị giao nhiệm vụ mới. Những hành động này đòi hỏi hệ thống phải phát thông báo đẩy (Push Notification) tức thời tới điện thoại của cán bộ liên quan.
+Trong các từ điển dữ liệu rút gọn, dấu “--” nghĩa là bảng không nêu ràng buộc vật lý cho trường đó; không thể suy ra trường cho phép hoặc không cho phép giá trị \texttt{NULL} chỉ từ ký hiệu này.
 
-\subsubsection{Bài toán Trì hoãn Luồng Xử lý (Request Blocking)}
-Nếu dịch vụ backend gọi trực tiếp API của Google Firebase Cloud Messaging (FCM HTTP v1) ngay trong luồng xử lý chính:
-\begin{itemize}
-    \item Độ trễ mạng từ dịch vụ bên thứ ba (thường dao động từ 500ms đến 2.000ms) sẽ làm gián đoạn luồng xử lý của máy chủ, khiến người dùng trên ứng dụng di động phải chờ đợi lâu sau khi bấm thao tác.
-    \item Trong trường hợp kết nối mạng giữa máy chủ backend và dịch vụ Firebase gặp sự cố tạm thời, toàn bộ yêu cầu của người dùng có nguy cơ bị báo lỗi dù dữ liệu nghiệp vụ thực tế đã được lưu thành công vào cơ sở dữ liệu.
-\end{itemize}
+\subsection{Tổng quan mô hình dữ liệu}
+\label{subsec:tong_quan_csdl}
 
-\subsubsection{Cơ chế Vận hành qua Apache Kafka}
-Để giải quyết bài toán này, hệ thống áp dụng cơ chế xử lý tác vụ nền bất đồng bộ thông qua hàng đợi Apache Kafka (chế độ KRaft):
-\begin{enumerate}
-    \item \textbf{Phát tán Sự kiện Nhanh:} Ngay sau khi hoàn tất việc ghi nhận dữ liệu vào cơ sở dữ liệu PostgreSQL trong transaction, Backend chỉ cần bắn một thông điệp sự kiện nhẹ nhàng (JSON chứa \texttt{type}, \texttt{targetId}, \texttt{receiverShcc}, \texttt{action}) vào Kafka Topic \texttt{SEND\_NOTIFY\_SERVICE}. Thao tác đẩy thông điệp vào Kafka diễn ra trong vòng dưới 10ms, giúp Backend phản hồi mã thành công HTTP 200 ngay lập tức cho ứng dụng di động.
-    \item \textbf{Tiêu thụ và Phát thông báo Bất đồng bộ:} Một tiến trình Worker chạy độc lập ở chế độ ngầm (Background Worker) liên tục lắng nghe và tiêu thụ các thông điệp từ Kafka Topic. Khi nhận được thông điệp, Worker trích xuất mã cán bộ người nhận, tra cứu mã định danh thiết bị tương ứng và gọi Firebase Admin SDK để đẩy thông báo tới điện thoại của cán bộ.
-    \item \textbf{Đảm bảo Thứ tự Thông báo:} Kafka Producer sử dụng mã số cán bộ \texttt{shcc} của người nhận làm khóa phân vùng (Partition Key). Nhờ cơ chế băm nhất quán, toàn bộ thông báo gửi cho cùng một cá nhân luôn được chuyển vào một phân vùng duy nhất theo thứ tự thời gian, bảo đảm trình tự thông báo không bao giờ bị đảo lộn.
-\end{enumerate}
+Dữ liệu nghiệp vụ được chia thành miền HRM và miền iOffice theo hệ thống sở hữu. Miền HRM bao gồm hồ sơ cán bộ, yêu cầu cập nhật hồ sơ, nghỉ phép, hạn mức phép năm và đi công tác. Miền iOffice bao gồm văn bản, nhiệm vụ, báo cáo tiến độ, lịch công tác và điểm danh cuộc họp. Ứng dụng chỉ trao đổi dữ liệu thông qua API của backend tương ứng và không truy cập trực tiếp cơ sở dữ liệu.
 
-\subsection{Hệ thống Lưu trữ Đệm In-Memory Redis và Cầu nối Xác thực Vé SSO}
-\label{subsec:redis_caching_sso}
+Hình~\ref{fig:chapter5_data_overview} kết hợp các bảng đại diện của hai miền để thể hiện phạm vi dữ liệu phục vụ ứng dụng. Đây là lược đồ tổng quan rút gọn, không phải một cơ sở dữ liệu hợp nhất. Giữa HRM và iOffice không có khóa ngoại chéo; lịch tổng hợp được tạo từ các phản hồi API độc lập tại phía ứng dụng thay vì sao chép dữ liệu nguồn sang một bảng chung.
 
-Máy chủ lưu trữ bộ nhớ trong Redis đóng hai vai trò trọng yếu trong hệ thống: vừa là bộ nhớ đệm truy xuất tốc độ cao, vừa là kho lưu trữ vé xác thực an toàn phục vụ cầu nối đăng nhập một lần (Single Sign-On -- SSO).
-
-\subsubsection{Cơ chế Lưu trữ Bộ đệm Tốc độ cao (In-Memory Caching)}
-Để giảm tải các truy vấn lặp đi lặp lại xuống cơ sở dữ liệu PostgreSQL, các thông tin tra cứu thường xuyên như trạng thái phiên đăng nhập, cấu hình quyền hạn được lưu trực tiếp trên bộ nhớ RAM của Redis. Khi nhận request từ client:
-\begin{itemize}
-    \item Backend kiểm tra sự tồn tại của dữ liệu trong Redis trước (Cache Hit). Nếu có sẵn, dữ liệu được trả về ngay lập tức với độ trễ chỉ từ 2ms đến 5ms.
-    \item Trường hợp dữ liệu chưa có trong bộ đệm (Cache Miss), Backend mới truy vấn xuống PostgreSQL, sau đó lưu kết quả vào Redis với thời gian sống hợp lý (TTL) để phục vụ cho các yêu cầu tiếp theo.
-\end{itemize}
-
-\subsubsection{Cầu nối Xác thực One-Time Ticket SSO qua In-App WebView}
-Nhằm cho phép cán bộ truy cập liền mạch các biểu mẫu hoặc báo cáo nghiệp vụ chuyên sâu trên nền tảng Web HRM mà không phải đăng nhập lại từ đầu, hệ thống thiết kế giải pháp cầu nối vé xác thực sử dụng Redis:
+Redis, token thiết bị và dữ liệu thông báo không thuộc lược đồ nghiệp vụ này. Vai trò của chúng được trình bày tại Mục~\ref{sec:tich_hop_he_thong}; bộ nhớ đệm và SQLite trên thiết bị đã được trình bày tại Mục~\ref{subsec:kientruc_ung_dung_mobile}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{image/uml/seq_login_token.png}
-    \caption[\textit{Quy trình cầu nối vé SSO qua Redis}]{\textit{Quy trình Cấp phát Token và Cầu nối One-Time Ticket SSO qua Redis}}
-    \label{fig:seq_sso_bridge}
+    \IfFileExists{image/schemas/overview-schema.png}{%
+        \includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio]{image/schemas/overview-schema.png}%
+    }{%
+        \IfFileExists{image/erd/chapter5-data-overview.png}{%
+            \includegraphics[width=\linewidth,height=0.25\textheight,keepaspectratio]{image/erd/chapter5-data-overview.png}%
+        }{%
+            \fbox{\parbox{0.90\linewidth}{\centering\vspace{1.2cm}
+            \textit{Xuất hình từ \texttt{docs/chapter5/schema-overview.dbml}}
+            \vspace{1.2cm}}}%
+        }%
+    }
+    \caption[\textit{Lược đồ tổng quan các miền dữ liệu phục vụ MyHCMUT Mobile}]{\textit{Lược đồ tổng quan các miền dữ liệu phục vụ MyHCMUT Mobile}}
+    \label{fig:chapter5_data_overview}
 \end{figure}
 
-Quy trình diễn ra theo 4 giai đoạn đơn giản và an toàn:
-\begin{enumerate}
-    \item \textbf{Yêu cầu Cấp vé:} Khi người dùng bấm vào liên kết biểu mẫu nghiệp vụ trên ứng dụng di động, app gửi request có kèm Bearer Token lên endpoint \texttt{POST /api/auth/sso/generate-ticket}.
-    \item \textbf{Sinh Vé Ngẫu nhiên có Thời hạn Ngắn:} Backend sử dụng bộ sinh số ngẫu nhiên mật mã học tạo ra một chuỗi vé 64 ký tự hex an toàn, lưu vào Redis kèm thông tin định danh cán bộ với thời gian sống ngắn chỉ 60 giây (\texttt{TTL = 60s}).
-    \item \textbf{Mở In-App WebView:} Ứng dụng di động mở trình duyệt nhúng In-App WebView trỏ tới địa chỉ Web đích kèm tham số vé trong URL: \nolinkurl{https://hrm.hcmut.edu.vn/.../?ticket=<hex64>}.
-    \item \textbf{Tiêu thụ Vé Nguyên tử:} Trang Web tiếp nhận tham số vé, lập tức gửi lên máy chủ để đổi lấy phiên đăng nhập hợp lệ. Máy chủ thực hiện thao tác đọc và xóa vé ngay lập tức khỏi Redis bằng lệnh nguyên tử \texttt{GETDEL}. Vé bị tiêu hủy ngay sau lần sử dụng đầu tiên, bảo đảm an toàn tuyệt đối và ngăn chặn việc tái sử dụng trái phép. Cán bộ vào thẳng trang nghiệp vụ mà không cần gõ lại mật khẩu.
-\end{enumerate}
+\subsection{Dữ liệu quản lý hồ sơ cá nhân}
+\label{subsec:du_lieu_ho_so}
 
-\subsection{Giải pháp Tích hợp Lịch làm việc Tổng hợp (Unified Calendar)}
-\label{subsec:unified_calendar}
+Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính sách cập nhật của từng trường thông tin, HRM Backend có thể ghi trực tiếp một số thay đổi vào hồ sơ chính thức hoặc tiếp nhận đề xuất cần thẩm định. Với các đề xuất này, yêu cầu được lưu tại \texttt{staff\_ly\_lich\_request}, nội dung thay đổi theo từng trường tại \texttt{staff\_ly\_lich\_request\_detail} và tệp minh chứng tại \texttt{staff\_ly\_lich\_request\_file}; sau khi được xử lý theo quy trình, các thay đổi được chấp thuận mới được phản ánh vào hồ sơ chính thức. Các liên kết qua \texttt{shcc}, \texttt{request\_id} và \texttt{request\_detail\_id} là liên kết logic, chưa được khai báo thành khóa ngoại vật lý trong schema đối chiếu. Cấu trúc các bảng của phân hệ hồ sơ cá nhân được thể hiện trong Hình~\ref{fig:chapter5_profile_schema}.
 
-Tính năng \textbf{Lịch làm việc Tổng hợp (Unified Calendar)} trên ứng dụng MyHCMUT Mobile cho phép cán bộ theo dõi toàn bộ lịch trình công tác trong tuần trên một màn hình duy nhất, bao gồm cả lịch họp từ hệ thống Văn phòng điện tử (\texttt{ioffice-be}) và lịch nghỉ phép, đi công tác từ hệ thống Nhân sự (\texttt{hrm-be}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/schemas/profile-schema.png}
+    \caption[\textit{Lược đồ dữ liệu rút gọn của phân hệ hồ sơ cá nhân}]{\textit{Lược đồ dữ liệu rút gọn của phân hệ hồ sơ cá nhân}}
+    \label{fig:chapter5_profile_schema}
+\end{figure}
 
-\subsubsection{Ngăn ngừa Xung đột Định danh qua Quy tắc Khóa Âm}
-Do hai hệ thống backend sở hữu hai cơ sở dữ liệu hoàn toàn độc lập, các sự kiện có thể phát sinh mã số định danh trùng nhau (ví dụ: cuộc họp số 15 của iOffice và đơn nghỉ phép số 15 của HRM). Nếu nạp chung vào một danh sách hiển thị, ứng dụng sẽ nhận diện sai lệch và gây lỗi giao diện.
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của phân hệ hồ sơ cán bộ}]{\textit{Từ điển dữ liệu rút gọn của phân hệ hồ sơ cán bộ}}\label{tab:staff_profile_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{staff\_ly\_lich} & \texttt{shcc} & varchar & PK, NOT NULL & Mã cán bộ và định danh hồ sơ chính thức. \\
+\cline{2-5}
+ & \texttt{ho} & varchar & -- & Họ và tên đệm của cán bộ. \\
+\cline{2-5}
+ & \texttt{ten} & varchar & -- & Tên của cán bộ. \\
+\cline{2-5}
+ & \texttt{email} & varchar & -- & Email công vụ do Nhà trường cấp. \\
+\cline{2-5}
+ & \texttt{email\_ca\_nhan} & varchar & -- & Email cá nhân của cán bộ. \\
+\cline{2-5}
+ & \texttt{sdt} & varchar & -- & Số điện thoại liên hệ của cán bộ. \\
+\cline{2-5}
+ & \mbox{\texttt{don\_vi}} & varchar & -- & Đơn vị công tác của cán bộ. \\
+\cline{2-5}
+ & \texttt{chuc\_vu\_chinh} & varchar & -- & Chức vụ chính quyền của cán bộ. \\
+\cline{2-5}
+ & \texttt{chuc\_danh} & text & -- & Chức danh khoa học hoặc nghề nghiệp. \\
+\cline{2-5}
+ & \texttt{hoc\_ham} & varchar & -- & Học hàm (Giáo sư, Phó giáo sư). \\
+\cline{2-5}
+ & \texttt{hoc\_vi} & varchar & -- & Học vị cao nhất của cán bộ. \\
+\cline{2-5}
+ & \texttt{ngach} & varchar & -- & Ngạch viên chức hiện tại. \\
+\cline{2-5}
+ & \texttt{cdnn} & varchar & -- & Chức danh nghề nghiệp. \\
+\cline{2-5}
+ & \texttt{vtvl} & varchar & -- & Vị trí việc làm được phân công. \\
+\hline
+\texttt{staff\_ly\_lich\_request} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh yêu cầu cập nhật hồ sơ. \\
+\cline{2-5}
+ & \texttt{shcc} & varchar & -- & Liên kết logic đến cán bộ gửi yêu cầu. \\
+\cline{2-5}
+ & \texttt{phan\_loai} & varchar & -- & Phân loại nhóm thông tin cần cập nhật. \\
+\cline{2-5}
+ & \texttt{previous\_data} & jsonb & -- & Dữ liệu hồ sơ trước khi đề xuất thay đổi. \\
+\cline{2-5}
+ & \texttt{changes} & jsonb & -- & Nội dung dữ liệu đề xuất cập nhật. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & varchar & -- & Trạng thái thẩm định của yêu cầu. \\
+\cline{2-5}
+ & \texttt{ly\_do} & text & -- & Lý do đề xuất cập nhật hồ sơ. \\
+\cline{2-5}
+ & \texttt{ly\_do\_tu\_choi} & text & -- & Phản hồi lý do khi từ chối yêu cầu. \\
+\hline
+\texttt{staff\_ly\_lich\_request\_detail} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh chi tiết yêu cầu. \\
+\cline{2-5}
+ & \texttt{request\_id} & integer & -- & Liên kết logic đến yêu cầu cập nhật. \\
+\cline{2-5}
+ & \texttt{action} & varchar & -- & Thao tác thực hiện (thêm, sửa, xóa). \\
+\cline{2-5}
+ & \texttt{field} & text & -- & Tên trường dữ liệu đề xuất thay đổi. \\
+\cline{2-5}
+ & \texttt{previous\_data} & jsonb & -- & Giá trị dữ liệu cũ trước khi điều chỉnh. \\
+\cline{2-5}
+ & \texttt{changes} & jsonb & -- & Giá trị dữ liệu mới được đề xuất. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & varchar & -- & Kết quả thẩm định chi tiết từng mục. \\
+\cline{2-5}
+ & \texttt{reviewed\_at} & bigint & -- & Thời điểm thẩm định (timestamp). \\
+\cline{2-5}
+ & \texttt{reviewed\_by} & varchar & -- & Mã cán bộ thực hiện thẩm định. \\
+\hline
+\texttt{staff\_ly\_lich\_request\_file} & \texttt{file\_id} & uuid & PK, NOT NULL & Định danh tệp minh chứng. \\
+\cline{2-5}
+ & \texttt{request\_detail\_id} & integer & -- & Liên kết logic đến chi tiết yêu cầu. \\
+\cline{2-5}
+ & \texttt{file\_path} & text & -- & Đường dẫn lưu trữ tệp trên hệ thống. \\
+\cline{2-5}
+ & \texttt{file\_name} & text & -- & Tên hiển thị gốc của tệp minh chứng. \\
+\end{xltabular}
 
-Để giải quyết vấn đề này một cách đơn giản và hiệu quả, ứng dụng di động áp dụng \textbf{Quy tắc Phân vùng Khóa Âm}:
-\begin{itemize}
-    \item Sự kiện họp từ iOffice: Giữ nguyên mã số gốc nguyên dương ($id > 0$).
-    \item Sự kiện nghỉ phép từ HRM: Được ánh xạ thành số âm trực tiếp theo mã phiếu: $id = -\text{phieuId}$ ($< 0$).
-    \item Sự kiện đi công tác từ HRM: Được ánh xạ thành số âm phân vùng riêng biệt: $id = -(1000000 + \text{id})$ ($< -1000000$).
-\end{itemize}
-Quy tắc này bảo đảm tập mã định danh của các nguồn dữ liệu là hoàn toàn rời nhau, loại bỏ nguy cơ trùng khóa mà không đòi hỏi bất kỳ sự thay đổi nào ở cơ sở dữ liệu máy chủ.
+\subsection{Dữ liệu quản lý nghỉ phép}
+\label{subsec:du_lieu_nghi_phep}
 
-\subsubsection{Chuẩn hóa Dữ liệu qua Adapter Pattern}
-Ứng dụng sử dụng mẫu thiết kế Adapter để hợp nhất hai luồng dữ liệu:
-\begin{itemize}
-    \item Định nghĩa cấu trúc thực thể thống nhất \texttt{ScheduleItemModel} chứa các thuộc tính chung: tiêu đề sự kiện, thời gian bắt đầu, thời gian kết thúc, địa điểm và cờ phân loại nguồn dữ liệu.
-    \item Các bộ chuyển đổi chuyên biệt (\texttt{HrmLeaveScheduleMapper}, \texttt{HrmBusinessTripScheduleMapper}) tiếp nhận dữ liệu từ HRM, tính toán mã ID âm tương ứng, gán màu sắc nhận diện đặc trưng (màu cam cho nghỉ phép, màu xanh cho công tác) và chuyển đổi thành đối tượng \texttt{ScheduleItemModel}.
-    \item Bộ điều phối Riverpod trên ứng dụng di động kích hoạt đồng thời các cuộc gọi API tới cả hai máy chủ, gộp danh sách sự kiện và hiển thị trực quan trên thành phần lịch tuần tùy biến \texttt{CustomTableCalendar}.
-\end{itemize}
+Dữ liệu nghỉ phép được tổ chức quanh bảng \texttt{tcns\_nghi\_phep\_dang\_ky}. Các bảng lịch cá nhân, quy trình, người xử lý và lịch sử phản ánh những phần khác nhau của vòng đời phiếu. Bảng \texttt{tcns\_so\_nghi\_phep\_nam} lưu hạn mức theo khóa chính phức hợp \texttt{(nam, shcc)}, đúng thứ tự cột trong schema. Các trường \texttt{phieu\_id} và \texttt{shcc} liên kết dữ liệu bằng logic backend, không phải FK vật lý. Mô hình các bảng và mối liên kết của phân hệ nghỉ phép được thể hiện trong Hình~\ref{fig:chapter5_leave_schema}.
 
-\subsection{Luồng Tải tệp Đính kèm Hai bước (Two-Step Attachment)}
-\label{subsec:two_step_upload}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{image/schemas/leave-schema.png}
+    \caption[\textit{Lược đồ dữ liệu rút gọn của phân hệ nghỉ phép}]{\textit{Lược đồ dữ liệu rút gọn của phân hệ nghỉ phép}}
+    \label{fig:chapter5_leave_schema}
+\end{figure}
 
-Trong quy trình nộp đơn xin nghỉ phép có minh chứng (giấy nghỉ ốm của bệnh viện, quyết định triệu tập), tệp đính kèm cần được liên kết chính xác với phiếu đăng ký của cán bộ. Hệ thống thiết kế quy trình tải tệp 2 bước rõ ràng:
-\begin{enumerate}
-    \item \textbf{Bước 1 (Khởi tạo Phiếu nháp):} Khi người dùng điền xong thông tin ở bước đầu tiên của Form Wizard (chọn loại nghỉ, số ngày, lý do), ứng dụng gửi yêu cầu tạo phiếu nháp lên máy chủ và nhận về mã định danh \texttt{phieuId} vừa được sinh ra trong cơ sở dữ liệu.
-    \item \textbf{Bước 2 (Tải tệp kèm Mã phiếu):} Tại bước tiếp theo, người dùng chọn tệp minh chứng từ điện thoại. Ứng dụng gửi tệp lên endpoint tải tệp kèm theo mã \texttt{phieuId}. Máy chủ lưu tệp vào kho lưu trữ an toàn và cập nhật trực tiếp đường dẫn vào trường \texttt{attachment\_url} của phiếu tương ứng.
-    \item \textbf{Dọn dẹp Nháp Mồ côi:} Nếu người dùng hủy bỏ thao tác trước khi bấm nộp chính thức, ứng dụng tự động gửi lệnh xóa phiếu nháp, bảo đảm cơ sở dữ liệu luôn gọn gàng và không bị tồn đọng các bản ghi rác.
-\end{enumerate}
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của phân hệ nghỉ phép}]{\textit{Từ điển dữ liệu rút gọn của phân hệ nghỉ phép}}\label{tab:leave_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{tcns\_nghi\_phep\_dang\_ky} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{shcc} & text & -- & Mã số cán bộ đăng ký nghỉ phép. \\
+\cline{2-5}
+ & \mbox{\texttt{ma\_don\_vi}} & text & -- & Đơn vị công tác của cán bộ. \\
+\cline{2-5}
+ & \texttt{ngay\_bat\_dau} & bigint & -- & Thời điểm bắt đầu nghỉ (timestamp). \\
+\cline{2-5}
+ & \texttt{ngay\_ket\_thuc} & bigint & -- & Thời điểm kết thúc nghỉ (timestamp). \\
+\cline{2-5}
+ & \texttt{period} & text & -- & Buổi bắt đầu nghỉ (sáng, chiều hoặc cả ngày). \\
+\cline{2-5}
+ & \texttt{period\_ket\_thuc} & text & -- & Buổi kết thúc nghỉ phép. \\
+\cline{2-5}
+ & \texttt{so\_ngay\_thuc\_nghi} & numeric & -- & Tổng số ngày thực tế xin nghỉ. \\
+\cline{2-5}
+ & \texttt{hinh\_thuc} & text & -- & Hình thức nghỉ (phép năm, việc riêng,...). \\
+\cline{2-5}
+ & \texttt{ly\_do} & text & -- & Lý do xin nghỉ phép của cán bộ. \\
+\cline{2-5}
+ & \texttt{files} & jsonb & -- & Danh sách tệp minh chứng đính kèm. \\
+\cline{2-5}
+ & \texttt{ma\_quy\_trinh} & text & -- & Mã quy trình phê duyệt áp dụng. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái xử lý hiện tại của phiếu. \\
+\hline
+\texttt{tcns\_lich\_ca\_nhan} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi lịch cá nhân. \\
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{ngay\_bat\_dau} & bigint & -- & Thời điểm bắt đầu hiển thị trên lịch. \\
+\cline{2-5}
+ & \texttt{ngay\_ket\_thuc} & bigint & -- & Thời điểm kết thúc trên lịch. \\
+\cline{2-5}
+ & \texttt{period} & text & -- & Buổi bắt đầu trên lịch cá nhân. \\
+\cline{2-5}
+ & \texttt{period\_ket\_thuc} & text & -- & Buổi kết thúc trên lịch cá nhân. \\
+\hline
+\texttt{tcns\_quy\_trinh} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bước quy trình phê duyệt. \\
+\cline{2-5}
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{ma} & text & -- & Mã định danh của bước phê duyệt. \\
+\cline{2-5}
+ & \texttt{step\_no} & integer & -- & Thứ tự thực hiện của bước trong quy trình. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái xử lý của bước quy trình. \\
+\cline{2-5}
+ & \texttt{is\_initial} & boolean & -- & Cờ xác định bước khởi tạo đầu tiên. \\
+\cline{2-5}
+ & \texttt{is\_end} & boolean & -- & Cờ xác định bước kết thúc quy trình. \\
+\cline{2-5}
+ & \texttt{targets} & jsonb & -- & Cấu hình đối tượng thẩm quyền xử lý. \\
+\cline{2-5}
+ & \texttt{parallel\_group} & jsonb & -- & Cấu hình nhánh xử lý song song. \\
+\hline
+\texttt{tcns\_quy\_trinh\_user} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phân công xử lý. \\
+\cline{2-5}
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{shcc} & jsonb & -- & Danh sách cán bộ được phân công xử lý. \\
+\cline{2-5}
+ & \texttt{ma\_quy\_trinh} & text & -- & Mã bước quy trình được phân công. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái xử lý của cán bộ được phân công. \\
+\cline{2-5}
+ & \texttt{forward\_to} & text & -- & Thông tin người hoặc bước được chuyển tiếp. \\
+\hline
+\texttt{tcns\_quy\_trinh\_history} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh lịch sử xử lý (audit trail). \\
+\cline{2-5}
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{ma\_quy\_trinh} & text & -- & Bước quy trình tại thời điểm xử lý. \\
+\cline{2-5}
+ & \texttt{shcc} & text & -- & Mã cán bộ thực hiện thao tác. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái ghi nhận tại thời điểm xử lý. \\
+\cline{2-5}
+ & \texttt{thoi\_gian} & bigint & -- & Thời điểm thực hiện thao tác (timestamp). \\
+\cline{2-5}
+ & \texttt{data} & jsonb & -- & Dữ liệu vết và nội dung ghi nhận thao tác. \\
+\hline
+\texttt{tcns\_so\_nghi\_phep\_nam} & \texttt{nam} & numeric & PK ghép, NOT NULL & Năm quản lý hạn mức nghỉ phép. \\
+\cline{2-5}
+ & \texttt{shcc} & text & PK ghép, NOT NULL & Mã cán bộ được quản lý hạn mức phép. \\
+\cline{2-5}
+ & \texttt{tong\_so\_ngay} & numeric & -- & Tổng số ngày phép được nghỉ trong năm. \\
+\end{xltabular}
+
+\subsection{Dữ liệu quản lý công tác}
+\label{subsec:du_lieu_cong_tac}
+
+Dữ liệu công tác được tổ chức quanh phiếu đăng ký, danh sách người tham gia, kế hoạch và quá trình công tác sau phê duyệt. Các bảng liên kết với phiếu bằng \texttt{dang\_ky\_id} thông qua logic HRM Backend. Trường \texttt{id} của bảng kế hoạch được sinh tự động và không rỗng nhưng schema đối chiếu chưa khai báo là khóa chính vật lý. Cấu trúc dữ liệu của phân hệ công tác được minh họa trong Hình~\ref{fig:chapter5_business_trip_schema}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.70\textheight,keepaspectratio]{image/schemas/business-trip-schema.png}
+    \caption[\textit{Lược đồ dữ liệu rút gọn của phân hệ công tác}]{\textit{Lược đồ dữ liệu rút gọn của phân hệ công tác}}
+    \label{fig:chapter5_business_trip_schema}
+\end{figure}
+
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của phân hệ công tác}]{\textit{Từ điển dữ liệu rút gọn của phân hệ công tác}}\label{tab:business_trip_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{tcns\_dang\_ky\_cong\_tac} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phiếu đăng ký công tác. \\
+\cline{2-5}
+ & \texttt{shcc} & text & -- & Mã cán bộ đăng ký chuyến công tác. \\
+\cline{2-5}
+ & \mbox{\texttt{don\_vi}} & text & -- & Đơn vị công tác của cán bộ đăng ký. \\
+\cline{2-5}
+ & \texttt{ngay\_bat\_dau} & numeric & -- & Ngày bắt đầu chuyến công tác. \\
+\cline{2-5}
+ & \texttt{ngay\_ket\_thuc} & numeric & -- & Ngày kết thúc chuyến công tác. \\
+\cline{2-5}
+ & \texttt{dia\_diem} & text & -- & Địa điểm đến công tác. \\
+\cline{2-5}
+ & \texttt{quoc\_gia} & jsonb & -- & Thông tin quốc gia (công tác nước ngoài). \\
+\cline{2-5}
+ & \texttt{noi\_dung} & text & -- & Nội dung chi tiết của chuyến công tác. \\
+\cline{2-5}
+ & \texttt{muc\_tieu} & text & -- & Mục tiêu đạt được của chuyến đi. \\
+\cline{2-5}
+ & \texttt{nguon\_kinh\_phi} & text & -- & Nguồn kinh phí chi trả cho chuyến đi. \\
+\cline{2-5}
+ & \texttt{files} & jsonb & -- & Danh sách tệp quyết định hoặc minh chứng. \\
+\cline{2-5}
+ & \texttt{ma\_quy\_trinh} & text & -- & Mã quy trình phê duyệt công tác. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái phê duyệt hiện tại của phiếu. \\
+\hline
+\texttt{tcns\_dang\_ky\_cong\_tac\_tham\_gia} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh thành viên tham gia đoàn. \\
+\cline{2-5}
+ & \texttt{dang\_ky\_id} & numeric & -- & Liên kết logic đến phiếu đăng ký công tác. \\
+\cline{2-5}
+ & \texttt{shcc} & text & -- & Mã số của cán bộ tham gia đoàn. \\
+\cline{2-5}
+ & \mbox{\texttt{don\_vi}} & text & -- & Đơn vị công tác của cán bộ tham gia. \\
+\cline{2-5}
+ & \texttt{chuc\_vu} & text & -- & Chức vụ của cán bộ tham gia. \\
+\cline{2-5}
+ & \texttt{is\_truong\_doan} & boolean & -- & Cờ xác định cán bộ là trưởng đoàn. \\
+\cline{2-5}
+ & \texttt{is\_dang\_vien} & boolean & -- & Thông tin Đảng viên phục vụ đối ngoại. \\
+\hline
+\texttt{tcns\_dang\_ky\_cong\_tac\_ke\_hoach} & \texttt{id} & integer & Tự tăng, NOT NULL & Định danh kỹ thuật; chưa có PK vật lý. \\
+\cline{2-5}
+ & \texttt{dang\_ky\_id} & integer & -- & Liên kết logic đến phiếu đăng ký công tác. \\
+\cline{2-5}
+ & \texttt{stt} & integer & -- & Thứ tự mốc hoạt động trong kế hoạch. \\
+\cline{2-5}
+ & \texttt{noi\_dung} & text & -- & Nội dung hoạt động tại mốc kế hoạch. \\
+\cline{2-5}
+ & \texttt{ngay\_bat\_dau} & bigint & -- & Thời điểm bắt đầu hoạt động (timestamp). \\
+\cline{2-5}
+ & \texttt{ngay\_ket\_thuc} & bigint & -- & Thời điểm kết thúc hoạt động (timestamp). \\
+\cline{2-5}
+ & \texttt{dia\_diem} & text & -- & Địa điểm cụ thể của hoạt động kế hoạch. \\
+\hline
+\texttt{tcns\_qua\_trinh\_di\_cong\_tac} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi quá trình công tác. \\
+\cline{2-5}
+ & \texttt{dang\_ky\_id} & numeric & -- & Liên kết logic đến phiếu đăng ký công tác. \\
+\cline{2-5}
+ & \texttt{shcc} & text & -- & Mã cán bộ thực hiện công tác. \\
+\cline{2-5}
+ & \texttt{ngay\_bat\_dau} & numeric & -- & Ngày bắt đầu theo kế hoạch. \\
+\cline{2-5}
+ & \texttt{ngay\_ket\_thuc} & numeric & -- & Ngày kết thúc theo kế hoạch. \\
+\cline{2-5}
+ & \texttt{ngay\_ve\_thuc\_te} & bigint & -- & Thời điểm trở về thực tế của cán bộ. \\
+\cline{2-5}
+ & \texttt{noi\_dung} & text & -- & Nội dung công việc đã thực hiện. \\
+\cline{2-5}
+ & \texttt{ket\_qua\_cong\_tac} & text & -- & Kết quả và báo cáo sau chuyến công tác. \\
+\end{xltabular}
+
+\subsection{Dữ liệu văn phòng số, nhiệm vụ và lịch công tác}
+\label{subsec:du_lieu_ioffice}
+
+Dữ liệu iOffice được chia thành ba nhóm để sơ đồ và từ điển dữ liệu có thể đọc được trong báo cáo. Trong toàn bộ nhóm bảng được đối chiếu, chỉ hai quan hệ từ \texttt{mission\_report\_batch.mission\_id} và \texttt{mission\_report.mission\_id} đến \texttt{mission\_general.id} là khóa ngoại vật lý. Các đường màu cam còn lại thể hiện liên kết logic.
+
+\subsubsection{Dữ liệu văn bản}
+
+Hai bảng văn bản lưu dữ liệu văn bản đến và văn bản đi; bảng phân phối lưu người hoặc đơn vị nhận xử lý. \texttt{eoffice\_distribution.distributed\_id} là liên kết đa hình được diễn giải theo \texttt{distributed\_type}, nên không thể khai báo thành một FK đơn đến một bảng văn bản cụ thể. Cấu trúc các bảng của nhóm văn bản được thể hiện trong Hình~\ref{fig:chapter5_ioffice_documents_schema}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.70\textheight,keepaspectratio]{image/schemas/documents-schema.png}
+    \caption[\textit{Lược đồ dữ liệu rút gọn của nhóm văn bản iOffice}]{\textit{Lược đồ dữ liệu rút gọn của nhóm văn bản iOffice}}
+    \label{fig:chapter5_ioffice_documents_schema}
+\end{figure}
+
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của nhóm văn bản iOffice}]{\textit{Từ điển dữ liệu rút gọn của nhóm văn bản iOffice}}\label{tab:ioffice_document_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{eoffice\_van\_ban\_den} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh văn bản đến. \\
+\cline{2-5}
+ & \texttt{so\_van\_ban} & varchar & -- & Số hiệu phát hành của văn bản đến. \\
+\cline{2-5}
+ & \texttt{noi\_dung} & text & -- & Nội dung trích yếu, tóm tắt của văn bản. \\
+\cline{2-5}
+ & \texttt{ngay\_van\_ban} & bigint & -- & Ngày ban hành văn bản (timestamp). \\
+\cline{2-5}
+ & \texttt{ngay\_nhan} & bigint & -- & Ngày cơ quan tiếp nhận văn bản (timestamp). \\
+\cline{2-5}
+ & \texttt{han\_hoan\_thanh} & bigint & -- & Hạn hoàn thành xử lý văn bản (timestamp). \\
+\cline{2-5}
+ & \texttt{trang\_thai} & varchar & -- & Trạng thái xử lý văn bản hiện tại. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & -- & Liên kết logic đến nhiệm vụ phát sinh từ văn bản. \\
+\cline{2-5}
+ & \texttt{created\_at} & bigint & NOT NULL & Thời điểm tạo bản ghi văn bản. \\
+\hline
+\texttt{eoffice\_van\_ban\_di} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh văn bản đi. \\
+\cline{2-5}
+ & \texttt{ky\_hieu} & varchar & -- & Ký hiệu phân loại của văn bản đi. \\
+\cline{2-5}
+ & \texttt{so} & varchar & -- & Số hiệu cấp cho văn bản đi. \\
+\cline{2-5}
+ & \texttt{trich\_yeu} & varchar & -- & Trích yếu nội dung văn bản phát hành. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & varchar & -- & Trạng thái phê duyệt của văn bản đi. \\
+\hline
+\texttt{eoffice\_distribution} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi phân phối văn bản. \\
+\cline{2-5}
+ & \texttt{distributed\_id} & integer & -- & Khóa đa hình tham chiếu đến văn bản liên quan. \\
+\cline{2-5}
+ & \texttt{distributed\_type} & varchar & -- & Loại đối tượng phân phối (văn bản đến, đi). \\
+\cline{2-5}
+ & \texttt{shcc} & varchar & -- & Mã cán bộ được chỉ định nhận xử lý. \\
+\cline{2-5}
+ & \mbox{\texttt{ma\_don\_vi}} & varchar & -- & Mã đơn vị được chỉ định xử lý văn bản. \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái tiếp nhận và xử lý phân phối. \\
+\end{xltabular}
+
+\subsubsection{Dữ liệu nhiệm vụ}
+
+Nhiệm vụ tổng quát được tách thành các đầu việc, thành viên và các đợt báo cáo tiến độ. \texttt{mission\_outlined.parent\_id} tạo cấu trúc cây bằng liên kết logic đệ quy. Hai FK vật lý đến \texttt{mission\_general} được giữ nguyên trong sơ đồ; các liên kết nhiệm vụ còn lại do iOffice Backend duy trì. Cấu trúc các bảng của nhóm nhiệm vụ được thể hiện trong Hình~\ref{fig:chapter5_ioffice_missions_schema}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{image/schemas/mission-schema.png}
+    \caption[\textit{Lược đồ dữ liệu rút gọn của nhóm nhiệm vụ iOffice}]{\textit{Lược đồ dữ liệu rút gọn của nhóm nhiệm vụ iOffice}}
+    \label{fig:chapter5_ioffice_missions_schema}
+\end{figure}
+
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của nhóm nhiệm vụ iOffice}]{\textit{Từ điển dữ liệu rút gọn của nhóm nhiệm vụ iOffice}}\label{tab:ioffice_mission_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{mission\_general} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh nhiệm vụ tổng quát. \\
+\cline{2-5}
+ & \texttt{title} & text & -- & Tiêu đề tên gọi của nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{start\_date} & bigint & -- & Thời điểm bắt đầu thực hiện (timestamp). \\
+\cline{2-5}
+ & \texttt{end\_date} & bigint & -- & Hạn chót hoàn thành nhiệm vụ (timestamp). \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái tiến độ thực hiện nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{progress} & integer & -- & Tỷ lệ phần trăm hoàn thành ($0 - 100\%$). \\
+\hline
+\texttt{mission\_outlined} & \texttt{id} & integer & PK, NOT NULL & Định danh đầu việc trong nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & -- & Liên kết logic đến nhiệm vụ tổng quát. \\
+\cline{2-5}
+ & \texttt{parent\_id} & integer & -- & Liên kết logic đệ quy đến đầu việc cha. \\
+\cline{2-5}
+ & \texttt{ten} & varchar & -- & Tên gọi cụ thể của đầu việc. \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái thực hiện của đầu việc. \\
+\hline
+\texttt{mission\_member} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh thành viên tham gia nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & -- & Liên kết logic đến nhiệm vụ tổng quát. \\
+\cline{2-5}
+ & \texttt{shcc} & varchar & -- & Mã số cán bộ tham gia thực hiện. \\
+\cline{2-5}
+ & \texttt{is\_manage} & boolean & -- & Cờ xác định vai trò quản lý đầu việc. \\
+\hline
+\texttt{mission\_report\_batch} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh đợt báo cáo tiến độ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & FK đến \texttt{mission\_general.id} & Nhiệm vụ được yêu cầu báo cáo. \\
+\cline{2-5}
+ & \texttt{title} & text & -- & Tiêu đề hoặc nội dung yêu cầu báo cáo. \\
+\cline{2-5}
+ & \texttt{due\_date} & bigint & -- & Hạn chót nộp báo cáo (timestamp). \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái tiếp nhận của đợt báo cáo. \\
+\hline
+\texttt{mission\_report} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi báo cáo tiến độ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & FK đến \texttt{mission\_general.id} & Khóa ngoại đến nhiệm vụ được báo cáo. \\
+\cline{2-5}
+ & \texttt{report\_batch\_id} & integer & -- & Liên kết logic đến đợt báo cáo tương ứng. \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái phê duyệt của báo cáo tiến độ. \\
+\cline{2-5}
+ & \texttt{progress} & integer & -- & Tiến độ hoàn thành tự đánh giá ($\%$). \\
+\end{xltabular}
+
+\subsubsection{Dữ liệu lịch và điểm danh}
+
+Lịch tổng quát gồm các sự kiện và danh sách phân công tham dự. Bảng điểm danh lưu kết quả có mặt hoặc báo vắng. Các liên kết qua \texttt{general\_id}, \texttt{item\_id} và \texttt{assign\_id} là liên kết logic. Schema hiện tại chưa có \texttt{UNIQUE(item\_id, created\_by)}, vì vậy việc ngăn bản ghi điểm danh trùng phụ thuộc vào kiểm tra của backend. Cấu trúc nhóm dữ liệu lịch và điểm danh được trình bày trong Hình~\ref{fig:chapter5_ioffice_schedule_schema}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{image/schemas/schedule-schema.png}
+    \caption[\textit{Lược đồ dữ liệu rút gọn của nhóm lịch và điểm danh iOffice}]{\textit{Lược đồ dữ liệu rút gọn của nhóm lịch và điểm danh iOffice}}
+    \label{fig:chapter5_ioffice_schedule_schema}
+\end{figure}
+
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của nhóm lịch và điểm danh iOffice}]{\textit{Từ điển dữ liệu rút gọn của nhóm lịch và điểm danh iOffice}}\label{tab:ioffice_schedule_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{schedule\_general} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh lịch tổng quát. \\
+\cline{2-5}
+ & \texttt{name} & varchar & -- & Tên của lịch làm việc tổng quát. \\
+\hline
+\texttt{schedule\_general\_item} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh sự kiện hoặc cuộc họp. \\
+\cline{2-5}
+ & \texttt{general\_id} & integer & -- & Liên kết logic đến lịch tổng quát. \\
+\cline{2-5}
+ & \texttt{name} & text & -- & Tên hoặc nội dung sự kiện, cuộc họp. \\
+\cline{2-5}
+ & \texttt{start\_time} & bigint & -- & Thời điểm bắt đầu sự kiện (timestamp). \\
+\cline{2-5}
+ & \texttt{end\_time} & bigint & -- & Thời điểm kết thúc sự kiện (timestamp). \\
+\hline
+\texttt{schedule\_general\_assign} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phân công tham dự sự kiện. \\
+\cline{2-5}
+ & \texttt{item\_id} & integer & -- & Liên kết logic đến sự kiện lịch tương ứng. \\
+\cline{2-5}
+ & \texttt{shcc} & varchar & -- & Mã cán bộ được phân công tham dự. \\
+\cline{2-5}
+ & \texttt{vai\_tro} & varchar & -- & Vai trò trong sự kiện (chủ trì, tham dự). \\
+\hline
+\texttt{schedule\_meeting\_attendance} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh kết quả điểm danh. \\
+\cline{2-5}
+ & \texttt{item\_id} & integer & NOT NULL & Liên kết logic đến sự kiện cuộc họp. \\
+\cline{2-5}
+ & \texttt{assign\_id} & integer & -- & Liên kết logic đến phân công tham dự. \\
+\cline{2-5}
+ & \texttt{attended} & boolean & -- & Kết quả điểm danh (có mặt hoặc vắng mặt). \\
+\cline{2-5}
+ & \texttt{ly\_do} & varchar & -- & Lý do xin vắng mặt cuộc họp nếu có. \\
+\cline{2-5}
+ & \texttt{created\_by} & varchar & -- & Mã cán bộ ghi nhận điểm danh. \\
+\cline{2-5}
+ & \texttt{created\_by\_}\mbox{\texttt{don\_vi}} & varchar & -- & Đơn vị của người ghi nhận điểm danh. \\
+\cline{2-5}
+ & \texttt{created\_at} & bigint & -- & Thời điểm thực hiện điểm danh (timestamp). \\
+\end{xltabular}

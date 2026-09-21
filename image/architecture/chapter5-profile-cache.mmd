@@ -1,0 +1,76 @@
+---
+config:
+  layout: elk
+  theme: neutral
+  fontFamily: "'Recursive Variable', sans-serif"
+---
+flowchart TB
+    page["PersonalProfilePage<br><code>ref.watch(profileInfoProvider)</code>"]
+    info["profileInfoProvider<br>Điều phối và tổng hợp dữ liệu"]
+
+    caNhan["profileCaNhanProvider<br>Thông tin cá nhân"]
+    daoTao["profileDaoTaoProvider<br>Đào tạo"]
+    quaTrinh["profileQuaTrinhProvider<br>Quá trình công tác"]
+
+    fetch["fetchWithCacheFirst<br><i>Mỗi provider gọi với endpoint và cache key riêng</i>"]
+    prefs[("SharedPreferences<br>Cache theo người dùng<br>và timestamp")]
+    hasCache{"Đã có cache?"}
+    cacheModel["Chuyển dữ liệu cache<br>thành ProfileModel"]
+    expired{"Quá ngưỡng 12 giờ?"}
+
+    foregroundDio["hrmDioProvider<br>Yêu cầu tải dữ liệu"]
+    foregroundApi["HRM Profile API<br>ca-nhan · dao-tao · qua-trinh"]
+    apiModel["Chuyển phản hồi<br>thành ProfileModel"]
+    saveInitial["Ghi cache và timestamp<br>ở tác vụ bất đồng bộ"]
+
+    backgroundDio["hrmDioProvider<br>Cập nhật nền"]
+    backgroundApi["HRM Profile API"]
+    saveBackground["Ghi cache và timestamp<br>cho lần đọc tiếp theo"]
+    noUiUpdate["Không phát trạng thái mới<br>Không cập nhật trực tiếp giao diện"]
+
+    merge["profileInfoProvider<br><code>Future.wait</code> và <code>mergeWith</code>"]
+    render["PersonalProfilePage<br>Hiển thị trạng thái hiện tại"]
+
+    page --> info
+    info --> caNhan
+    info --> daoTao
+    info --> quaTrinh
+
+    caNhan --> fetch
+    daoTao --> fetch
+    quaTrinh --> fetch
+
+    fetch --> prefs
+    prefs --> hasCache
+
+    hasCache -- "Không" --> foregroundDio
+    foregroundDio --> foregroundApi
+    foregroundApi --> apiModel
+    apiModel --> merge
+    apiModel -. "ghi bất đồng bộ" .-> saveInitial
+    saveInitial -.-> prefs
+
+    hasCache -- "Có" --> cacheModel
+    cacheModel --> expired
+    expired -- "Không" --> merge
+    expired -- "Có: vẫn trả cache" --> merge
+
+    expired -. "Future.microtask" .-> backgroundDio
+    backgroundDio -.-> backgroundApi
+    backgroundApi -.-> saveBackground
+    saveBackground -.-> prefs
+    saveBackground -.-> noUiUpdate
+
+    merge --> render
+
+    classDef ui fill:#e8f0fe,stroke:#1a73e8,stroke-width:2px,color:#102a43;
+    classDef provider fill:#e8f5e9,stroke:#2e7d32,color:#102a43;
+    classDef cache fill:#fff8e1,stroke:#f9a825,color:#102a43;
+    classDef network fill:#f3e5f5,stroke:#7b1fa2,color:#102a43;
+    classDef warning fill:#fce8e6,stroke:#c62828,stroke-dasharray:5 3,color:#7f1d1d;
+
+    class page,render ui;
+    class info,caNhan,daoTao,quaTrinh,fetch,cacheModel,apiModel,merge provider;
+    class prefs,hasCache,expired,saveInitial,saveBackground cache;
+    class foregroundDio,foregroundApi,backgroundDio,backgroundApi network;
+    class noUiUpdate warning;

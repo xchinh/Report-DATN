@@ -1,0 +1,529 @@
+// DBML rút gọn cho Chương 5 — trích từ HRM và iOffice đang vận hành.
+// Mục tiêu: tệp đối chiếu đầy đủ theo phạm vi mobile, không dùng trực tiếp làm hình 5.3.1.
+//
+// Ký hiệu constraint:
+// - [pk], [unique], [not null] là constraint vật lý đọc từ DB.
+// - Ref màu xanh (#2563EB) là FK vật lý; Ref màu cam (#D97706) là liên kết logic.
+// - Quy tắc "business" là invariant do API/transaction đảm bảo, không phải DB constraint.
+
+Project MyHCMUT_Mobile_Chapter5 {
+  database_type: 'PostgreSQL'
+  Note: 'Phạm vi dữ liệu mobile; MyHCMUT Mobile chỉ truy cập thông qua HRM/iOffice Backend.'
+}
+
+TableGroup hrm_profile [color: #2563EB] {
+  staff_ly_lich
+  staff_ly_lich_request
+  staff_ly_lich_request_detail
+  staff_ly_lich_request_file
+}
+
+Table staff_ly_lich {
+  shcc varchar(20) [pk, not null]
+  ho varchar(150)
+  ten varchar(50)
+  email varchar(70)
+  email_ca_nhan varchar(70)
+  sdt varchar(20)
+  ngay_sinh bigint
+  gioi_tinh varchar(15)
+  cccd varchar(20)
+  don_vi varchar(10)
+  chuc_vu_chinh varchar(10)
+  chuc_danh text
+  hoc_ham varchar(20)
+  hoc_vi varchar(20)
+  ngach varchar(20)
+  cdnn varchar(20)
+  vtvl varchar(20)
+}
+
+Table staff_ly_lich_request {
+  id integer [pk, increment, not null]
+  shcc varchar(20)
+  phan_loai varchar(20)
+  previous_data jsonb
+  changes jsonb
+  trang_thai varchar(20)
+  ly_do text
+  created_at bigint
+  created_by varchar(20)
+  updated_at bigint
+  updated_by varchar(20)
+  is_phan_hoi boolean
+  ly_do_tu_choi text
+  Note: 'Một đề xuất thay đổi hồ sơ; previous_data và changes lưu các thuộc tính thay đổi linh hoạt.'
+}
+
+Table staff_ly_lich_request_detail {
+  id integer [pk, increment, not null]
+  request_id integer
+  action varchar(20)
+  field text
+  trang_thai varchar(20)
+  ly_do text
+  previous_data jsonb
+  changes jsonb
+  reviewed_at bigint
+  reviewed_by varchar(20)
+  created_at bigint
+  updated_at bigint
+}
+
+Table staff_ly_lich_request_file {
+  file_id uuid [pk, not null]
+  request_detail_id integer
+  file_path text
+  file_name text
+  request_phan_hoi_id integer
+}
+
+// logical: các quan hệ dưới đây được dùng trong service HRM, nhưng DB hiện tại không có FK vật lý.
+Ref logical_profile_owner: staff_ly_lich_request.shcc > staff_ly_lich.shcc [color: #D97706]
+Ref logical_profile_request_detail: staff_ly_lich_request_detail.request_id > staff_ly_lich_request.id [color: #D97706]
+Ref logical_profile_detail_file: staff_ly_lich_request_file.request_detail_id > staff_ly_lich_request_detail.id [color: #D97706]
+
+TableGroup hrm_leave [color: #16A34A] {
+  tcns_nghi_phep_dang_ky
+  tcns_lich_ca_nhan
+  tcns_quy_trinh
+  tcns_quy_trinh_user
+  tcns_quy_trinh_history
+  tcns_so_nghi_phep_nam
+}
+
+Table tcns_nghi_phep_dang_ky {
+  id integer [pk, increment, not null]
+  shcc text
+  ma_don_vi text
+  ngay_bat_dau bigint
+  ngay_ket_thuc bigint
+  period text
+  period_ket_thuc text
+  so_ngay_thuc_nghi numeric
+  hinh_thuc text
+  nam_nghi_phep numeric
+  ly_do text
+  ma_quy_trinh text
+  trang_thai text
+  files jsonb
+  ghi_chu text
+  giai_trinh text
+  is_cam_ket boolean
+  is_delete boolean
+  ngay_tao bigint
+  ngay_cap_nhat bigint
+  Note: 'Phiếu nghỉ phép và trạng thái hiện tại của quy trình.'
+}
+
+Table tcns_lich_ca_nhan {
+  id integer [pk, increment, not null]
+  phieu_id integer
+  shcc text
+  phan_loai text
+  ngay_bat_dau bigint
+  ngay_ket_thuc bigint
+  period text
+  period_ket_thuc text
+  is_roi_vi_tri boolean
+}
+
+Table tcns_quy_trinh {
+  id integer [pk, increment, not null]
+  phieu_id integer
+  phan_loai text
+  ma text
+  step_no integer
+  ten_quy_trinh text
+  trang_thai text
+  is_initial boolean
+  is_primary boolean
+  is_end boolean
+  targets jsonb
+  parallel_group jsonb
+}
+
+Table tcns_quy_trinh_user {
+  id integer [pk, increment, not null]
+  phan_loai text
+  phieu_id integer
+  shcc jsonb
+  ma_quy_trinh text
+  forward_to text
+  trang_thai text
+  is_create_user boolean
+}
+
+Table tcns_quy_trinh_history {
+  id integer [pk, increment, not null]
+  phan_loai text
+  trang_thai text
+  thoi_gian bigint
+  ma_quy_trinh text
+  shcc text
+  data jsonb
+  ma_quy_trinh_before text
+  phieu_id integer
+  ma_parallel text
+  is_complete boolean
+  Note: 'Audit trail tách khỏi trạng thái hiện tại của phiếu.'
+}
+
+Table tcns_so_nghi_phep_nam {
+  nam numeric [not null]
+  shcc text [not null]
+  tong_so_ngay numeric
+
+  Indexes {
+    (nam, shcc) [pk]
+  }
+}
+
+// logical: HRM liên kết bằng phieu_id và shcc; schema không khai báo FK vật lý.
+Ref logical_leave_owner: tcns_nghi_phep_dang_ky.shcc > staff_ly_lich.shcc [color: #D97706]
+Ref logical_leave_calendar: tcns_lich_ca_nhan.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
+Ref logical_leave_workflow: tcns_quy_trinh.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
+Ref logical_leave_assignee: tcns_quy_trinh_user.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
+Ref logical_leave_history: tcns_quy_trinh_history.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
+Ref logical_leave_balance_owner: tcns_so_nghi_phep_nam.shcc > staff_ly_lich.shcc [color: #D97706]
+
+// business: cập nhật trạng thái phải kiểm tra bước/quy trình hiện hành.
+// business: cập nhật số ngày phép theo (nam, shcc) trong transaction có khóa hàng (SELECT ... FOR UPDATE).
+
+TableGroup hrm_business_trip [color: #EA580C] {
+  tcns_dang_ky_cong_tac
+  tcns_dang_ky_cong_tac_tham_gia
+  tcns_dang_ky_cong_tac_ke_hoach
+  tcns_qua_trinh_di_cong_tac
+}
+
+Table tcns_dang_ky_cong_tac {
+  id integer [pk, increment, not null]
+  shcc text
+  don_vi text
+  ngay_bat_dau numeric
+  ngay_ket_thuc numeric
+  dia_diem text
+  quoc_gia jsonb
+  noi_dung text
+  muc_tieu text
+  hinh_thuc text
+  phan_loai text
+  nguon_kinh_phi text
+  files jsonb
+  ma_quy_trinh text
+  trang_thai text
+  ngay_tao numeric
+  ket_qua_cong_tac text
+  Note: 'Phiếu đăng ký công tác và thông tin phục vụ lịch tổng hợp.'
+}
+
+Table tcns_dang_ky_cong_tac_tham_gia {
+  id integer [pk, increment, not null]
+  dang_ky_id numeric
+  shcc text
+  don_vi text
+  chuc_vu text
+  is_truong_doan boolean
+  is_dang_vien boolean
+}
+
+Table tcns_dang_ky_cong_tac_ke_hoach {
+  id integer [increment, not null]
+  dang_ky_id integer
+  stt integer
+  noi_dung text
+  ngay_bat_dau bigint
+  ngay_ket_thuc bigint
+  dia_diem text
+  Note: 'Schema hiện hữu không khai báo PK cho bảng này.'
+}
+
+Table tcns_qua_trinh_di_cong_tac {
+  id integer [pk, increment, not null]
+  dang_ky_id numeric
+  shcc text
+  ngay_bat_dau numeric
+  ngay_ket_thuc numeric
+  dia_diem text
+  noi_dung text
+  muc_tieu text
+  hinh_thuc text
+  phan_loai text
+  ket_qua_cong_tac text
+  ngay_ve_thuc_te bigint
+}
+
+// logical: các khóa dang_ky_id được service HRM quản lý, chưa có FK vật lý.
+Ref logical_trip_owner: tcns_dang_ky_cong_tac.shcc > staff_ly_lich.shcc [color: #D97706]
+Ref logical_trip_participant: tcns_dang_ky_cong_tac_tham_gia.dang_ky_id > tcns_dang_ky_cong_tac.id [color: #D97706]
+Ref logical_trip_plan: tcns_dang_ky_cong_tac_ke_hoach.dang_ky_id > tcns_dang_ky_cong_tac.id [color: #D97706]
+Ref logical_trip_history: tcns_qua_trinh_di_cong_tac.dang_ky_id > tcns_dang_ky_cong_tac.id [color: #D97706]
+
+TableGroup ioffice_document_mission [color: #7C3AED] {
+  eoffice_van_ban_den
+  eoffice_van_ban_di
+  eoffice_distribution
+  mission_general
+  mission_outlined
+  mission_member
+  mission_report_batch
+  mission_report
+}
+
+Table eoffice_van_ban_den {
+  id integer [pk, increment, not null]
+  so_van_ban varchar(255)
+  noi_dung text
+  khan boolean
+  don_vi_gui integer
+  ten_don_vi_gui varchar(255)
+  ngay_van_ban bigint
+  ngay_nhan bigint
+  loai_van_ban integer
+  han_hoan_thanh bigint
+  trang_thai varchar(20)
+  step_no integer
+  is_deleted boolean
+  quy_so_id integer
+  quy_trinh_config_id integer
+  mission_id integer
+  created_at bigint [not null]
+}
+
+Table eoffice_van_ban_di {
+  id integer [pk, increment, not null]
+  ky_hieu varchar(50)
+  so varchar(50)
+  ma_don_vi varchar(10)
+  trich_yeu varchar(2000)
+  nam integer
+  loai_van_ban integer
+  trang_thai varchar(50)
+  cap_van_ban varchar(10)
+  quy_so_id integer
+  step_no integer
+  quy_trinh_id integer
+  ngay_van_ban varchar(2)
+  thang_van_ban varchar(2)
+  nam_van_ban varchar(4)
+  created_at bigint
+  updated_at bigint
+  deleted_at bigint
+  created_by varchar(20)
+}
+
+Table eoffice_distribution {
+  id integer [pk, increment, not null]
+  distributed_id integer
+  distributed_type varchar(20)
+  shcc varchar(10)
+  ma_don_vi varchar(10)
+  distributed_at bigint
+  distributed_by varchar(10)
+  note text
+  is_active boolean
+  status varchar(20)
+  viewed_at bigint
+  ly_do_tu_choi text
+  Note: 'Liên kết đa hình: distributed_id chỉ tham chiếu loại đối tượng xác định bởi distributed_type; không thể biểu diễn thành FK đơn.'
+}
+
+Table mission_general {
+  id integer [pk, increment, not null]
+  title text
+  description text
+  type varchar(50)
+  start_date bigint
+  end_date bigint
+  status varchar(50)
+  created_by varchar(20)
+  created_at bigint
+  progress integer
+  slug varchar(50)
+  source varchar(50)
+  cap_nhiem_vu varchar(20)
+  loai_nhiem_vu_id integer
+  quy_trinh varchar(10)
+  don_vi_thuc_hien varchar(10)
+}
+
+Table mission_outlined {
+  id integer [pk, not null]
+  mission_id integer
+  idx varchar(10)
+  parent_id integer
+  ten varchar(255)
+  ke_hoach text
+  start_date bigint
+  end_date bigint
+  priority integer
+  status varchar
+  ly_do text
+  is_deleted boolean
+  review_status text
+  completed_at bigint
+  shcc_list jsonb
+  Note: 'parent_id biểu diễn cây nhiệm vụ; NULL là nút gốc.'
+}
+
+Table mission_member {
+  id integer [pk, increment, not null]
+  mission_id integer
+  shcc varchar(20)
+  ma_don_vi varchar(20)
+  created_at bigint
+  created_by varchar(20)
+  is_manage boolean
+  participant_id integer
+}
+
+Table mission_report_batch {
+  id integer [pk, increment, not null]
+  mission_id integer
+  title text
+  due_date bigint
+  created_at bigint
+  status varchar(50)
+  progress integer
+}
+
+Table mission_report {
+  id integer [pk, increment, not null]
+  report_batch_id integer
+  mission_id integer
+  status varchar(50)
+  ket_qua text
+  progress integer
+  vuong_mac text
+  submitted_at bigint
+  reviewed_at bigint
+  reviewed_by varchar(20)
+  return_reason text
+  revision integer [not null]
+}
+
+// physical FK (đọc trực tiếp từ iOffice DB).
+Ref physical_report_batch_mission: mission_report_batch.mission_id > mission_general.id [color: #2563EB]
+Ref physical_report_mission: mission_report.mission_id > mission_general.id [color: #2563EB]
+// logical: workflow iOffice sử dụng các quan hệ này, nhưng DB chưa đặt FK vật lý.
+Ref logical_mission_outline: mission_outlined.mission_id > mission_general.id [color: #D97706]
+Ref logical_mission_outline_parent: mission_outlined.parent_id > mission_outlined.id [color: #D97706]
+Ref logical_mission_member: mission_member.mission_id > mission_general.id [color: #D97706]
+Ref logical_mission_report_batch: mission_report.report_batch_id > mission_report_batch.id [color: #D97706]
+Ref logical_incoming_document_mission: eoffice_van_ban_den.mission_id > mission_general.id [color: #D97706]
+
+TableGroup ioffice_schedule [color: #0891B2] {
+  schedule_general
+  schedule_general_item
+  schedule_general_assign
+  schedule_meeting_attendance
+}
+
+Table schedule_general {
+  id integer [pk, increment, not null]
+  name varchar(255)
+  note varchar(1000)
+  start_time bigint
+  end_time bigint
+  approve_shcc varchar(10)
+  approve_name varchar(255)
+  update_time bigint
+}
+
+Table schedule_general_item {
+  id integer [pk, increment, not null]
+  all_day boolean
+  start_time bigint
+  end_time bigint
+  type varchar(100)
+  location varchar(1000)
+  note varchar(1000)
+  general_id integer
+  name text
+  is_deleted boolean
+  register_id integer
+  cap varchar(10)
+  quy_trinh_id integer
+  step_no integer
+  shcc varchar(10)
+  don_vi varchar(10)
+  render_assign_text varchar(500)
+  expect_assign integer
+}
+
+Table schedule_general_assign {
+  id integer [pk, increment, not null]
+  item_id integer
+  shcc varchar(10)
+  full_name varchar(255)
+  short_name varchar(255)
+  chuc_vu varchar(10)
+  don_vi varchar(10)
+  vai_tro varchar(100)
+  priority integer
+}
+
+Table schedule_meeting_attendance {
+  id integer [pk, increment, not null]
+  item_id integer [not null]
+  assign_id integer
+  attended boolean
+  ly_do varchar(200)
+  created_by varchar(10)
+  created_by_don_vi varchar(10)
+  created_at bigint
+  Note: 'DB hiện tại chưa có UNIQUE(item_id, created_by); API phải chống bản ghi điểm danh/báo vắng trùng.'
+}
+
+// logical: schema iOffice chưa có FK vật lý cho các quan hệ lịch dưới đây.
+Ref logical_schedule_item: schedule_general_item.general_id > schedule_general.id [color: #D97706]
+Ref logical_schedule_assign: schedule_general_assign.item_id > schedule_general_item.id [color: #D97706]
+Ref logical_schedule_attendance_item: schedule_meeting_attendance.item_id > schedule_general_item.id [color: #D97706]
+Ref logical_schedule_attendance_assign: schedule_meeting_attendance.assign_id > schedule_general_assign.id [color: #D97706]
+
+// business: chỉ người được phân công / có quyền mới ghi nhận attendance; item phải còn hiệu lực.
+
+TableGroup mobile_notification [color: #DC2626] {
+  fw_notification
+  fw_notification_target
+  fw_notification_logs
+  fw_user_device_token
+}
+
+Table fw_notification {
+  id integer [pk, increment, not null]
+  title text
+  sub_title text
+  target_link text
+  icon text
+  icon_color text
+  send_time bigint
+}
+
+Table fw_notification_target {
+  id integer [pk, increment, not null]
+  id_notification integer
+  target integer
+}
+
+Table fw_notification_logs {
+  id integer [pk, increment, not null]
+  id_notification integer
+  target integer
+  is_read boolean
+  is_delete boolean
+}
+
+Table fw_user_device_token {
+  id integer [pk, increment, not null]
+  user_id integer
+  device_token text [unique]
+  create_time bigint
+  session_ref text
+  last_seen bigint
+}
+
+// logical: id_notification liên kết với thông báo; DB hiện tại không khai báo FK vật lý.
+Ref logical_notification_target: fw_notification_target.id_notification > fw_notification.id [color: #D97706]
+Ref logical_notification_log: fw_notification_logs.id_notification > fw_notification.id [color: #D97706]

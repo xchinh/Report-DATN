@@ -1,0 +1,112 @@
+// DBML phục vụ ERD Chương 5, không dùng để sinh DDL.
+// Màu cam (#D97706): liên kết logic do HRM Backend duy trì, không phải FK vật lý.
+
+Project chapter5_leave {
+  database_type: 'PostgreSQL'
+  Note: 'Dữ liệu nghỉ phép thuộc CSDL HRM hiện hữu. Các Ref trong sơ đồ này đều là liên kết logic.'
+}
+
+TableGroup hrm_leave [color: #16A34A] {
+  tcns_nghi_phep_dang_ky
+  tcns_lich_ca_nhan
+  tcns_quy_trinh
+  tcns_quy_trinh_user
+  tcns_quy_trinh_history
+  tcns_so_nghi_phep_nam
+}
+
+
+
+Table tcns_nghi_phep_dang_ky {
+  id integer [pk, increment, not null]
+  shcc text [note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  ma_don_vi text
+  ngay_bat_dau bigint
+  ngay_ket_thuc bigint
+  period text
+  period_ket_thuc text
+  so_ngay_thuc_nghi numeric
+  hinh_thuc text
+  nam_nghi_phep numeric
+  ly_do text
+  ma_quy_trinh text
+  trang_thai text
+  files jsonb
+  ghi_chu text
+  giai_trinh text
+  is_cam_ket boolean
+  is_delete boolean
+  ngay_tao bigint
+  ngay_cap_nhat bigint
+  Note: 'Phiếu nghỉ phép và trạng thái hiện tại của quy trình.'
+}
+
+Table tcns_lich_ca_nhan {
+  id integer [pk, increment, not null]
+  phieu_id integer [note: 'Liên kết logic đến tcns_nghi_phep_dang_ky.id.']
+  shcc text
+  phan_loai text
+  ngay_bat_dau bigint
+  ngay_ket_thuc bigint
+  period text
+  period_ket_thuc text
+  is_roi_vi_tri boolean
+}
+
+Table tcns_quy_trinh {
+  id integer [pk, increment, not null]
+  phieu_id integer [note: 'Liên kết logic đến tcns_nghi_phep_dang_ky.id.']
+  phan_loai text
+  ma text
+  step_no integer
+  ten_quy_trinh text
+  trang_thai text
+  is_initial boolean
+  is_primary boolean
+  is_end boolean
+  targets jsonb
+  parallel_group jsonb
+}
+
+Table tcns_quy_trinh_user {
+  id integer [pk, increment, not null]
+  phan_loai text
+  phieu_id integer [note: 'Liên kết logic đến tcns_nghi_phep_dang_ky.id.']
+  shcc jsonb
+  ma_quy_trinh text
+  forward_to text
+  trang_thai text
+  is_create_user boolean
+}
+
+Table tcns_quy_trinh_history {
+  id integer [pk, increment, not null]
+  phan_loai text
+  trang_thai text
+  thoi_gian bigint
+  ma_quy_trinh text
+  shcc text
+  data jsonb
+  ma_quy_trinh_before text
+  phieu_id integer [note: 'Liên kết logic đến tcns_nghi_phep_dang_ky.id.']
+  ma_parallel text
+  is_complete boolean
+  Note: 'Audit trail tách khỏi trạng thái hiện tại của phiếu.'
+}
+
+Table tcns_so_nghi_phep_nam {
+  nam numeric [not null]
+  shcc text [not null, note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  tong_so_ngay numeric
+
+  Indexes {
+    (nam, shcc) [pk]
+  }
+}
+
+
+
+Ref logical_leave_calendar: tcns_lich_ca_nhan.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
+Ref logical_leave_workflow: tcns_quy_trinh.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
+Ref logical_leave_assignee: tcns_quy_trinh_user.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
+Ref logical_leave_history: tcns_quy_trinh_history.phieu_id > tcns_nghi_phep_dang_ky.id [color: #D97706]
