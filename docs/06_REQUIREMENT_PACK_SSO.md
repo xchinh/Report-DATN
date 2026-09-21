@@ -178,7 +178,7 @@ sequenceDiagram
 
 ### 2.1. Động lực Thiết kế & Ranh giới Kỹ thuật Native – WebView
 
-Ứng dụng di động `myhcmut-mobile` được xây dựng bằng Flutter. Trên ứng dụng di động, người dùng đăng nhập bằng phương thức xác thực Native API và lưu trữ **Bearer JWT Token** trong vùng nhớ an toàn của thiết bị di động.
+Ứng dụng di động `myhcmut-mobile` được xây dựng bằng Flutter. Trên ứng dụng di động, người dùng đăng nhập bằng phương thức xác thực Native API; phiên bản hiện tại lưu một số token trong `SharedPreferences`, vốn không phải cơ chế lưu trữ bảo mật chuyên dụng. Việc chuyển sang Android Keystore hoặc iOS Keychain là hướng hoàn thiện bảo mật.
 
 Tuy nhiên, trong hệ sinh thái của Nhà trường có nhiều nghiệp vụ biểu mẫu đồ sộ và đặc thù cao (ví dụ: Chỉnh sửa Lý lịch Cán bộ gồm 11 phân mục chi tiết, Quản lý Hồ sơ Khoa học, Điều hành Văn bản điện tử iOffice). Việc tái xây dựng 100% các màn hình biểu mẫu này trên mã nguồn Flutter Native đòi hỏi chi phí bảo trì và rủi ro trôi lệch logic nghiệp vụ rất lớn. Do đó, kiến trúc hệ thống áp dụng giải pháp **In-App WebView** để nhúng các trang Web chức năng hiện hữu (`hrm-fe`, `ioffice-fe`).
 
@@ -656,7 +656,7 @@ Cơ chế cầu nối One-Time Ticket SSO chuyển tiếp phiên từ Native Mob
   1. *Tiêu thụ Nguyên tử Một lần Duy nhất (Redis Atomic `GETDEL`):* Ngay tại khoảnh khắc Web Frontend gửi vé lên máy chủ để đổi lấy phiên, hàm `client.getDel()` lập tức đọc và hủy bản ghi trong Redis. Cho dù kẻ tấn công có nghe lén hoặc lấy được mã vé sau đó 1 phần nghìn giây, vé cũng đã trở nên vô giá trị (Null Ticket).
   2. *Thời hạn Sống Cực ngắn (TTL 60s):* Hạn chế tối đa cửa sổ rủi ro (Window of Vulnerability).
   3. *Làm sạch Thanh Địa chỉ (URL Stripping via `replaceState`):* Loại bỏ hoàn toàn tham số `?ticket=...` khỏi URL ngay sau khi nạp trang, ngăn ngừa rò rỉ qua Referer header hoặc khi người dùng chụp ảnh màn hình, sao chép URL.
-  4. *Cookie Hardening (`HttpOnly` + `Secure` + `SameSite=Lax`):* Cấm tuyệt đối JavaScript truy cập cookie phiên, ngăn chặn 100% nguy cơ trích xuất token qua XSS.
+  4. *Cookie Hardening (`HttpOnly` + `Secure` + `SameSite=Lax`):* Hạn chế JavaScript truy cập cookie phiên và giảm một lớp rủi ro trích xuất cookie qua XSS; không loại bỏ các rủi ro an ninh khác.
 
 ---
 

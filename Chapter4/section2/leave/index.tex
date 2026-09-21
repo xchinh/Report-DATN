@@ -1,0 +1,180 @@
+\subsection{Quản lý nghỉ phép}
+\label{subsec:req_leave}
+\label{subsec:module_leave}
+
+\subsubsection{Mục tiêu và yêu cầu chức năng}
+
+Chức năng quản lý nghỉ phép hỗ trợ cán bộ, giảng viên thực hiện các nghiệp vụ nghỉ phép trên thiết bị di động: từ việc tra cứu số ngày phép năm còn lại, lập đơn qua biểu mẫu hướng dẫn, đính kèm minh chứng, nộp đơn vào quy trình luân chuyển phê duyệt, đến việc theo dõi tiến độ xử lý của cấp quản lý đơn vị và chuyên viên Phòng Tổ chức Cán bộ.
+
+Hệ thống thiết lập ranh giới rõ ràng giữa ứng dụng di động và hệ thống nghiệp vụ phía máy chủ: các bước kiểm tra tức thời trên MyHCMUT Mobile (tính số ngày làm việc thực tế, cảnh báo số dư ngày phép, kiểm tra trùng lặp lịch biểu) đóng vai trò hỗ trợ người dùng hoàn thiện dữ liệu chính xác trước khi gửi; trong khi đó, backend HRM là thành phần thẩm quyền duy nhất thẩm định tính hợp lệ cuối cùng, bảo đảm kiểm soát tương tranh và thực thi chuyển trạng thái hồ sơ.
+
+Bảng~\ref{tab:fr_leave} tổng hợp các yêu cầu chức năng của nhóm quản lý nghỉ phép.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Yêu cầu chức năng nhóm quản lý nghỉ phép}
+\label{tab:fr_leave}
+\begin{tabularx}{\textwidth}{|L{1.8cm}|L{3.5cm}|L{2.5cm}|Y|}
+\hline
+\textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả và ràng buộc nghiệp vụ} \\
+\hline
+FR-LEV-01 & Tra cứu quỹ phép và đơn & Cán bộ, Giảng viên & Xem số dư quỹ phép năm tham khảo, lọc danh sách đơn theo năm và trạng thái xử lý. \\
+\hline
+FR-LEV-02 & Lập và gửi đơn nghỉ phép & Cán bộ, Giảng viên & Nhập liệu qua wizard 3 bước, đính kèm minh chứng, lưu nháp hoặc gửi duyệt khi đáp ứng điều kiện nghiệp vụ. \\
+\hline
+FR-LEV-03 & Quản lý đơn đã tạo & Cán bộ, Giảng viên & Thu hồi đơn chờ duyệt, chỉnh sửa nộp lại đơn bị trả lại hoặc xóa bản ghi nháp khi hủy. \\
+\hline
+FR-LEV-04 & Phê duyệt theo thẩm quyền & Cấp phê duyệt & Xem xét nội dung, minh chứng và phê duyệt, từ chối hoặc trả lại đơn theo thẩm quyền được phân công. \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsubsection{Đặc tả Use Case}
+
+Các use case của nhóm quản lý nghỉ phép mô tả trọn vẹn vòng đời của một yêu cầu nghỉ phép từ khi khởi tạo, kiểm tra điều kiện, gửi xử lý, theo dõi cho đến khi được cấp có thẩm quyền ra quyết định. Hình~\ref{fig:uc_leave} thể hiện sơ đồ use case của nhóm quản lý nghỉ phép.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][5.5cm][c]{0.85\linewidth}{\centering \textbf{Sơ đồ Đặc tả Use case Quản lý nghỉ phép} \newline \textit{(Gồm tác nhân Cán bộ/Giảng viên, Lãnh đạo Đơn vị, Chuyên viên TCCB và các use case UC-LEV-01 đến UC-LEV-03)}}}
+\caption{Sơ đồ Đặc tả Use case nhóm Quản lý nghỉ phép}
+\label{fig:uc_leave}
+\end{figure}
+
+Bảng~\ref{tab:mapping_uc_lev} tổng hợp danh mục các use case thuộc nhóm quản lý nghỉ phép.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Danh mục Đặc tả Use case nhóm Quản lý nghỉ phép}
+\label{tab:mapping_uc_lev}
+\vspace{0.15cm}
+\begin{tabularx}{\textwidth}{|L{2.6cm}|L{4.5cm}|Y|}
+\hline
+\textbf{Mã Use Case} & \textbf{Tên Use Case} & \textbf{Mục tiêu Nghiệp vụ} \\
+\hline
+\textbf{UC-LEV-01} & Quản lý đơn nghỉ phép cá nhân & Theo dõi quỹ phép, tra cứu danh sách đơn, xem tiến trình duyệt, thu hồi hoặc sửa đơn. \\
+\hline
+\textbf{UC-LEV-02} & Lập và gửi đơn nghỉ phép & Khởi tạo đơn mới qua wizard 3 bước, kiểm tra điều kiện và gửi phê duyệt. \\
+\hline
+\textbf{UC-LEV-03} & Xử lý đơn nghỉ phép & Xem xét nội dung, kiểm tra minh chứng và phê duyệt, từ chối hoặc yêu cầu chỉnh sửa đơn. \\
+\hline
+\end{tabularx}
+\end{table}
+
+Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-LEV-02} và \textbf{UC-LEV-03} được đặc tả chi tiết tại Bảng~\ref{tab:uc_lev_02} và Bảng~\ref{tab:uc_lev_03}. Đặc tả Use Case \textbf{UC-LEV-01} được đặc tả tại Bảng~\ref{tab:uc_lev_01}.
+
+\usecasespec{
+  id={UC-LEV-01},
+  name={Quản lý đơn nghỉ phép cá nhân},
+  shortname={Quản lý đơn cá nhân},
+  actor={Cán bộ / Giảng viên},
+  desc={Cho phép cán bộ theo dõi số dư quỹ phép năm, tra cứu danh sách đơn, xem tiến trình duyệt, thu hồi đơn chờ xử lý hoặc sửa đơn bị trả lại.},
+  pre={Cán bộ đã đăng nhập thành công vào ứng dụng MyHCMUT Mobile.},
+  trigger={Người dùng chọn chức năng ``Nghỉ phép'' trên màn hình chính.},
+  mainflow={
+    1. Người dùng mở mục ``Nghỉ phép'' để xem số dư quỹ phép tham khảo và danh sách đơn đã lập. \newline
+    2. Người dùng lọc danh sách hoặc chọn một đơn để xem trạng thái và tiến trình xử lý. \newline
+    3. Với đơn đang chờ xử lý, người dùng có thể yêu cầu thu hồi. \newline
+    4. HRM kiểm tra trạng thái hiện tại và ghi nhận kết quả thu hồi khi hợp lệ.
+  },
+  altflow={
+    - \textit{Luồng 3a (Sửa đơn bị trả lại):} Với đơn ở trạng thái Bị trả lại, người dùng chọn chỉnh sửa để bổ sung thông tin và nộp lại.
+  },
+  exflow={
+    - \textit{Ngoại lệ 4a (Thu hồi không thành công):} Đơn đã được cấp quản lý tiếp nhận xử lý $\rightarrow$ hệ thống thông báo trạng thái mới và từ chối thu hồi.
+  },
+  post={Cán bộ nắm bắt đầy đủ thông tin quỹ phép và trạng thái các đơn; các thay đổi thu hồi được cập nhật đồng bộ.},
+  label={tab:uc_lev_01}
+}
+
+\usecasespec{
+  id={UC-LEV-02},
+  name={Lập và gửi đơn nghỉ phép},
+  shortname={Lập và gửi đơn nghỉ phép},
+  actor={Cán bộ / Giảng viên},
+  desc={Cho phép cán bộ lập mới đơn nghỉ phép qua quy trình hướng dẫn 3 bước, kiểm tra thời gian và số dư phép, đính kèm minh chứng và gửi duyệt.},
+  pre={Cán bộ đã đăng nhập vào hệ thống và có quyền lập đơn nghỉ phép.},
+  trigger={Người dùng nhấn nút tạo mới đơn nghỉ phép trên giao diện ứng dụng.},
+  mainflow={
+    1. Người dùng chọn tạo mới đơn nghỉ phép; ứng dụng kiểm tra ngày đăng ký có hợp lệ trước khi yêu cầu tạo nháp. \newline
+    2. Khi ngày đăng ký hợp lệ, hệ thống khởi tạo bản ghi nháp. \newline
+    3. Người dùng nhập thông tin nghỉ phép và đính kèm minh chứng khi được yêu cầu. \newline
+    4. Người dùng rà soát thông tin và gửi đơn. \newline
+    5. HRM kiểm tra các điều kiện nghiệp vụ và tiếp nhận đơn hợp lệ vào quy trình chờ duyệt.
+  },
+  altflow={
+    - \textit{Luồng 3a (Lưu nháp):} Người dùng chọn lưu nháp tại bất kỳ bước nào để tiếp tục hoàn thiện sau. \newline
+    - \textit{Luồng 5a (Hủy tạo đơn):} Người dùng chọn thoát khỏi biểu mẫu $\rightarrow$ ứng dụng tự động dọn dẹp bản ghi nháp vừa tạo.
+  },
+  exflow={
+    - \textit{Ngoại lệ 1a (Ngày đăng ký không hợp lệ):} Ứng dụng thông báo nguyên nhân và không tạo bản ghi nháp. \newline
+    - \textit{Ngoại lệ 3a (Xung đột lịch trình):} Khoảng thời gian nghỉ trùng lặp với kế hoạch công tác hoặc đơn khác $\rightarrow$ hệ thống cảnh báo và yêu cầu điều chỉnh. \newline
+    - \textit{Ngoại lệ 3b (Vượt số dư quỹ phép):} Số ngày đăng ký vượt quá số dư phép năm còn lại $\rightarrow$ hệ thống cảnh báo để người dùng điều chỉnh. \newline
+    - \textit{Ngoại lệ 3c (Quá hạn đăng ký):} Khi kiểm tra thời hạn xác định không thể tạo đơn nghỉ phép thông thường, ứng dụng thông báo nguyên nhân và điều hướng người dùng đến điểm truy cập phân hệ Giải trình. Việc lập và xử lý Giải trình không thuộc phạm vi hiện thực của use case này.
+  },
+  post={Đơn nghỉ phép được ghi nhận vào hệ thống ở trạng thái Chờ duyệt; hệ thống phát sinh thông báo cho người duyệt tương ứng.},
+  label={tab:uc_lev_02}
+}
+
+\usecasespec{
+  id={UC-LEV-03},
+  name={Xử lý đơn nghỉ phép},
+  shortname={Xử lý đơn nghỉ phép},
+  actor={Lãnh đạo Đơn vị, Chuyên viên Phòng Tổ chức Cán bộ},
+  desc={Cho phép người có thẩm quyền thẩm định nội dung đơn, kiểm tra tài liệu minh chứng và thực hiện phê duyệt, từ chối hoặc yêu cầu bổ sung thông tin.},
+  pre={Người duyệt đã đăng nhập và đơn đang ở bước thuộc thẩm quyền xử lý của tài khoản.},
+  trigger={Người duyệt mở danh sách đơn chờ xử lý từ ứng dụng hoặc qua thông báo nhắc việc.},
+  mainflow={
+    1. Người duyệt mở danh sách đơn nghỉ phép chờ xử lý thuộc thẩm quyền phân công. \newline
+    2. Chọn xem chi tiết một đơn để kiểm tra nội dung và minh chứng liên quan. \newline
+    3. Người duyệt lựa chọn hành động: \textit{Phê duyệt}, \textit{Từ chối} hoặc \textit{Trả lại}. \newline
+    4. HRM kiểm tra quyền và trạng thái đơn hiện tại, rồi ghi nhận kết quả xử lý hoặc chuyển đơn sang bước tiếp theo. \newline
+    5. Hệ thống thông báo kết quả cho cán bộ lập đơn; số dư phép được cập nhật khi đơn hoàn tất theo quy tắc nghiệp vụ.
+  },
+  altflow={
+    - \textit{Luồng 3a (Xử lý đồng loạt):} Người duyệt chọn nhiều đơn hợp lệ trên danh sách và thực hiện phê duyệt hàng loạt. \newline
+    - \textit{Luồng 3b (Trả lại yêu cầu chỉnh sửa):} Người duyệt chọn ``Trả lại'' kèm ý kiến yêu cầu $\rightarrow$ đơn chuyển sang trạng thái Bị trả lại để cán bộ hoàn thiện.
+  },
+  exflow={
+    - \textit{Ngoại lệ 3a (Từ chối đơn):} Người duyệt bắt buộc nhập lý do từ chối trước khi hệ thống ghi nhận kết quả. \newline
+    - \textit{Ngoại lệ 4a (Đơn đã thay đổi trạng thái):} Đơn đã bị thu hồi hoặc cấp quản lý khác xử lý trước $\rightarrow$ hệ thống từ chối thao tác và làm mới danh sách.
+  },
+  post={Đơn nghỉ phép được chuyển sang bước phê duyệt tiếp theo hoặc hoàn tất quy trình (Đã duyệt / Bị từ chối); số dư phép được cập nhật chính thức khi duyệt bước cuối.},
+  label={tab:uc_lev_03}
+}
+
+\subsubsection{Biểu đồ hoạt động}
+
+Trong nhóm chức năng quản lý nghỉ phép, hai quy trình có ý nghĩa quyết định đối với vòng đời hồ sơ là quy trình lập đơn của cán bộ và quy trình luân chuyển phê duyệt của cấp quản lý được mô tả bằng biểu đồ hoạt động.
+
+Hình~\ref{fig:act_leave_submit} mô tả quy trình lập và gửi đơn nghỉ phép (UC-LEV-02). Quy trình thể hiện các bước kiểm tra hỗ trợ người dùng: tự động tính số ngày làm việc, kiểm tra số dư phép, kiểm tra hạn nộp và kiểm tra minh chứng bắt buộc trước khi cho phép nộp đơn chính thức. Trường hợp quá hạn, ứng dụng không tiếp tục luồng tạo đơn nghỉ phép thông thường mà thông báo và điều hướng đến điểm truy cập phân hệ Giải trình; quy trình Giải trình được định hướng phát triển ở Chương~7.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering \textbf{Biểu đồ hoạt động: Quy trình lập và gửi đơn nghỉ phép} \newline \textit{(Chi tiết quy trình wizard 3 bước: Nhập thời gian $\rightarrow$ Tính ngày thực tế \& quỹ phép $\rightarrow$ Minh chứng $\rightarrow$ Gửi duyệt; quá hạn $\rightarrow$ điều hướng Giải trình)}}}
+\caption{Biểu đồ hoạt động Quy trình lập và gửi đơn nghỉ phép}
+\label{fig:act_leave_submit}
+\end{figure}
+
+Hình~\ref{fig:act_leave_approve} mô tả quy trình phê duyệt đơn nghỉ phép đa cấp (UC-LEV-03). Quy trình thể hiện hai cấp thẩm quyền (Lãnh đạo đơn vị bước 1 và Phòng TCCB bước 2), các nhánh quyết định (Phê duyệt, Từ chối kèm lý do, Trả lại bổ sung) và bước trừ quỹ phép có thẩm quyền tại bước duyệt cuối cùng.
+
+\begin{figure}[H]
+\centering
+\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering \textbf{Biểu đồ hoạt động: Quy trình phê duyệt đơn nghỉ phép đa cấp} \newline \textit{(Thể hiện hai làn bơi thẩm quyền: Lãnh đạo Đơn vị $\leftrightarrow$ Phòng Tổ chức Cán bộ; trừ quỹ phép tại bước cuối)}}}
+\caption{Biểu đồ hoạt động Quy trình phê duyệt đơn nghỉ phép đa cấp}
+\label{fig:act_leave_approve}
+\end{figure}
+
+\subsubsection{Biểu đồ tuần tự}
+
+Biểu đồ tuần tự mô tả sự tương tác logic giữa Người dùng, MyHCMUT Mobile và Hệ thống HRM trong kịch bản Lập và gửi đơn nghỉ phép (UC-LEV-02). Biểu đồ thể hiện trình tự khởi tạo nháp, kiểm tra các điều kiện dữ liệu cần thiết và ghi nhận đơn ở trạng thái Chờ duyệt.
+
+Hình~\ref{fig:seq_leave_submit} thể hiện biểu đồ tuần tự của use case Gửi yêu cầu nghỉ phép.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{image/uml/seq_leave_submit.png}
+\caption{Biểu đồ tuần tự Gửi yêu cầu nghỉ phép}
+\label{fig:seq_leave_submit}
+\end{figure}

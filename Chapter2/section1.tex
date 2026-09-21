@@ -4,69 +4,133 @@
 \subsection{Hệ thống Quản lý Nhân sự HRM}
 \label{subsec:hrm_hienhuu}
 
-Hệ thống HRM của Nhà trường cung cấp các chức năng quản lý thông tin nhân sự và xử lý các quy trình liên quan đến cán bộ, viên chức. Trong phạm vi đề tài, MyHCMUT Mobile không thay thế HRM mà sử dụng hệ thống này làm nguồn dữ liệu và xử lý nghiệp vụ cho ba nhóm chức năng chính: hồ sơ cán bộ, nghỉ phép và đi công tác.
+Hệ thống Quản lý Nhân sự (HRM) được Nhà trường sử dụng để quản lý thông tin cán bộ, giảng viên và hỗ trợ các nghiệp vụ liên quan đến nhân sự. Trong phạm vi đề tài, các nhóm chức năng được khảo sát gồm tra cứu và cập nhật hồ sơ cá nhân, đăng ký và xử lý nghỉ phép, đăng ký và phê duyệt hồ sơ đi công tác.
 
-\textbf{Quản lý hồ sơ cán bộ.} HRM quản lý các nhóm thông tin lý lịch của cán bộ như thông tin cá nhân, tuyển dụng, quá trình công tác, đào tạo, lương và các thông tin liên quan. MyHCMUT Mobile khai thác dữ liệu này để cung cấp chức năng tra cứu trên thiết bị di động. Đối với các chức năng cập nhật hồ sơ có biểu mẫu lớn hoặc nhiều trường dữ liệu, đề tài tiếp tục tái sử dụng giao diện Web HRM thay vì hiện thực lại toàn bộ trên Mobile.
+Đối với hồ sơ cá nhân, hệ thống cung cấp thông tin nhân sự và hỗ trợ xử lý các yêu cầu thay đổi theo quy định. Các nghiệp vụ nghỉ phép và công tác được thực hiện theo quy trình xử lý tương ứng, trong đó người dùng có thể lập hồ sơ, theo dõi trạng thái và thực hiện thao tác phê duyệt khi có thẩm quyền.
 
-\textbf{Quản lý nghỉ phép.} HRM quản lý dữ liệu liên quan đến quỹ phép, đơn nghỉ và quá trình xử lý hồ sơ. Ứng dụng di động cung cấp giao diện để người dùng tra cứu, đăng ký và thực hiện các thao tác xử lý thuộc phạm vi quyền hạn. Các yêu cầu gửi từ Mobile vẫn được backend HRM kiểm tra trước khi thay đổi trạng thái hoặc dữ liệu nghiệp vụ. Đối với các thao tác ảnh hưởng đến quỹ phép, việc cập nhật được thực hiện tại backend và cơ sở dữ liệu của HRM.
+HRM là hệ thống cung cấp dữ liệu và xử lý nghiệp vụ nhân sự cho MyHCMUT Mobile. Do đó, ứng dụng di động cần khai thác các chức năng và quy trình hiện hữu thông qua giao diện tích hợp, thay vì xây dựng một hệ thống quản lý hồ sơ, nghỉ phép hoặc công tác độc lập.
 
-\textbf{Quản lý đi công tác.} HRM quản lý hồ sơ đi công tác, bao gồm các thông tin về thời gian, địa điểm, thành phần, kế hoạch và các dữ liệu liên quan đến quá trình xử lý hồ sơ. Tùy theo trường hợp nghiệp vụ, hồ sơ có thể trải qua nhiều bước xử lý và liên quan đến nhiều đơn vị. MyHCMUT Mobile cung cấp giao diện để người dùng lập, theo dõi và xử lý hồ sơ trên thiết bị di động, trong khi trạng thái và kết quả xử lý tiếp tục được quản lý bởi backend HRM.
-
-Một đặc điểm liên quan trực tiếp đến hai nghiệp vụ nghỉ phép và đi công tác là việc kiểm tra xung đột thời gian biểu cá nhân. Backend HRM sử dụng cơ chế kiểm tra lịch dùng chung giữa hai nhóm nghiệp vụ này nhằm phát hiện các khoảng thời gian không phù hợp trước khi hồ sơ được xử lý.
-
-Như vậy, đối với phạm vi HRM, vai trò của MyHCMUT Mobile chủ yếu là cung cấp kênh tương tác trên thiết bị di động. Ứng dụng có thể thực hiện các kiểm tra và xử lý hỗ trợ phía client nhằm cải thiện trải nghiệm nhập liệu, nhưng dữ liệu nghiệp vụ và kết quả xử lý cuối cùng vẫn được kiểm tra và quản lý tại hệ thống backend.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/hrm_profile.png}
+        \caption{Tra cứu và cập nhật hồ sơ cá nhân}
+        \label{fig:hrm_profile}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/hrm_nghi_phep.png}
+        \caption{Đăng ký và theo dõi nghỉ phép}
+        \label{fig:hrm_nghi_phep}
+    \end{subfigure}
+    \caption{Giao diện các phân hệ nghiệp vụ chính trên hệ thống HRM hiện hữu của Nhà trường}
+    \label{fig:hrm_hienhuu}
+\end{figure}
 
 \subsection{Hệ thống Văn phòng Điện tử iOffice}
 \label{subsec:ioffice_hienhuu}
 
-Bên cạnh HRM, iOffice cung cấp các chức năng phục vụ công tác hành chính và điều hành. Trong phạm vi MyHCMUT Mobile, các chức năng được tích hợp tập trung vào văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp.
+Hệ thống Văn phòng Điện tử (iOffice) hỗ trợ các hoạt động quản lý, điều hành và xử lý công việc của Nhà trường. Trong phạm vi đề tài, nhóm tập trung khảo sát các chức năng tra cứu văn bản đến, văn bản đi, xem tệp đính kèm, theo dõi nhiệm vụ và lịch làm việc.
 
-\textbf{Văn bản đến và văn bản đi.} Người dùng có thể tra cứu các văn bản thuộc phạm vi được phép truy cập và xem nội dung, thông tin liên quan hoặc tệp đính kèm trên thiết bị di động. MyHCMUT Mobile sử dụng các dịch vụ của iOffice để lấy dữ liệu thay vì duy trì một kho văn bản độc lập.
+Đối với văn bản, hệ thống cho phép người dùng tiếp cận thông tin và thực hiện các thao tác xử lý theo quyền hạn. Đối với nhiệm vụ, iOffice cung cấp thông tin về cấu trúc nhiệm vụ, người được phân công và tiến độ thực hiện. Các chức năng tạo mới và phân công nhiệm vụ tiếp tục được thực hiện trên giao diện Web; phạm vi ứng dụng di động tập trung vào tra cứu, theo dõi và nộp báo cáo tiến độ.
 
-\textbf{Nhiệm vụ và công việc.} iOffice quản lý các nhiệm vụ được giao, thời hạn và trạng thái xử lý. Ứng dụng di động tích hợp các chức năng được lựa chọn nhằm hỗ trợ người dùng theo dõi và thực hiện các thao tác liên quan đến nhiệm vụ trong phạm vi quyền hạn.
+Bên cạnh đó, dữ liệu lịch họp và các thông tin lịch làm việc liên quan là nguồn dữ liệu để MyHCMUT Mobile xây dựng giao diện lịch tổng hợp. iOffice tiếp tục quản lý dữ liệu và quy trình nghiệp vụ tương ứng; ứng dụng di động đảm nhiệm việc truy cập và trình bày những chức năng thuộc phạm vi đề tài.
 
-\textbf{Lịch công tác và điểm danh cuộc họp.} iOffice cung cấp dữ liệu lịch họp, lịch công tác và các chức năng liên quan đến việc tham dự cuộc họp. MyHCMUT Mobile khai thác dữ liệu này để hiển thị lịch trên thiết bị di động và hỗ trợ các thao tác điểm danh hoặc báo vắng khi điều kiện nghiệp vụ cho phép.
-
-Tương tự HRM, iOffice tiếp tục chịu trách nhiệm quản lý dữ liệu và kiểm tra các điều kiện nghiệp vụ tương ứng. MyHCMUT Mobile đóng vai trò là một client tích hợp, sử dụng các giao diện dịch vụ được cung cấp để đưa các chức năng được lựa chọn lên môi trường di động.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/ioffice_van_ban.png}
+        \caption{Tra cứu và theo dõi văn bản đến}
+        \label{fig:ioffice_van_ban}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/ioffice_schedule.png}
+        \caption{Theo dõi lịch công tác trường theo tuần}
+        \label{fig:ioffice_schedule}
+    \end{subfigure}
+    \caption{Giao diện quản lý văn bản và lịch công tác trên hệ thống iOffice hiện hữu của Nhà trường}
+    \label{fig:ioffice_hienhuu}
+\end{figure}
 
 \subsection{Nhận xét về các hệ thống hiện hữu}
 \label{subsec:nhanxet_hethong_hienhuu}
 
-HRM và iOffice đã cung cấp phần lớn dữ liệu và quy trình nghiệp vụ cần thiết cho phạm vi của đề tài. Vì vậy, vấn đề mà MyHCMUT Mobile cần giải quyết không phải là xây dựng lại các hệ thống nghiệp vụ này mà là cung cấp một kênh tương tác phù hợp hơn với thiết bị di động.
+HRM và iOffice đã cung cấp các dữ liệu và quy trình nghiệp vụ cần thiết cho hoạt động nhân sự và điều hành của Nhà trường. Vì vậy, việc phát triển MyHCMUT Mobile không nhằm thay thế các hệ thống này mà tập trung mở rộng khả năng tiếp cận những chức năng phù hợp trên thiết bị di động.
 
-Việc các nghiệp vụ thuộc HRM và iOffice được cung cấp bởi các hệ thống riêng biệt cũng dẫn đến sự phân tán về giao diện và nguồn dữ liệu khi người dùng cần theo dõi thông tin thuộc nhiều miền nghiệp vụ. Một ví dụ là lịch làm việc của cán bộ có thể bao gồm lịch họp từ iOffice, đồng thời có các khoảng nghỉ phép hoặc đi công tác được quản lý tại HRM. Một ứng dụng di động tích hợp có thể tổng hợp các nguồn dữ liệu này tại tầng trình bày mà không yêu cầu hợp nhất cơ sở dữ liệu hoặc thay đổi quyền quản lý dữ liệu của các hệ thống nguồn.
-
-Ngoài các thao tác chủ động của người dùng, môi trường di động còn cho phép sử dụng thông báo đẩy để hỗ trợ người dùng nhận biết các sự kiện phát sinh từ hệ thống. Trong đề tài, khả năng này được xem là cơ chế hỗ trợ cho các nghiệp vụ chính; việc tiếp nhận thông báo không thay thế việc kiểm tra trạng thái và quyền truy cập tại backend khi người dùng mở chức năng tương ứng.
-
-Từ các nhận xét trên, MyHCMUT Mobile được định hướng như một kênh tương tác trên thiết bị di động tích hợp với HRM, iOffice và hệ thống xác thực hiện hữu, thay vì một hệ thống nghiệp vụ độc lập thay thế các nền tảng đang vận hành.
+Từ việc khảo sát, nhóm xác định ba yêu cầu đối với hướng phát triển ứng dụng. Thứ nhất, ứng dụng cần kết nối với các hệ thống nghiệp vụ hiện hữu để truy xuất dữ liệu và gửi yêu cầu xử lý. Thứ hai, các thao tác trên thiết bị di động phải tuân theo quyền hạn và quy trình nghiệp vụ do hệ thống tương ứng quy định. Thứ ba, giao diện di động cần tổ chức những chức năng thường dùng theo hướng thuận tiện cho việc tra cứu, theo dõi và xử lý công việc.
 
 \section{Một số giải pháp có liên quan trên thị trường}
 \label{sec:giaiphap_lienquan}
 
+Bên cạnh các hệ thống đang được Nhà trường sử dụng, nhóm tham khảo một số giải pháp quản lý nhân sự nhằm tìm hiểu cách tổ chức các chức năng tự phục vụ và tương tác với người dùng trên thiết bị di động. Hai giải pháp được lựa chọn khảo sát là Base HRM và Tanca.
+
+Việc khảo sát các sản phẩm này chỉ nhằm tham khảo cách cung cấp chức năng và trải nghiệm sử dụng. Nhóm không đặt mục tiêu lựa chọn một sản phẩm thương mại để thay thế HRM hoặc iOffice của Nhà trường.
+
 \subsection{Base HRM}
 \label{subsec:base_hrm}
 
-Base HRM thuộc hệ sinh thái Base.vn~\cite{base_hrm_doc}, cung cấp các chức năng hỗ trợ quản trị nhân sự và tương tác giữa nhân viên với tổ chức. Các sản phẩm trong hệ sinh thái có hỗ trợ sử dụng trên thiết bị di động, cho phép người dùng thực hiện một số hoạt động tự thao tác như theo dõi thông tin công việc, lịch làm việc, gửi đề xuất hoặc thực hiện các thao tác phê duyệt.
+Base HRM là giải pháp quản lý nhân sự thuộc hệ sinh thái Base~\cite{base_hrm_doc}, cung cấp các chức năng phục vụ việc quản lý thông tin và các hoạt động liên quan đến nhân sự trong tổ chức.
 
-Đối với đề tài, giá trị tham khảo chính của Base HRM nằm ở cách đưa các hoạt động thường xuyên của người dùng từ môi trường Web sang thiết bị di động và tổ chức chúng thành các luồng thao tác ngắn hơn, phù hợp với ngữ cảnh sử dụng Mobile.
+Đối với đề tài, nhóm tập trung tham khảo cách giải pháp tổ chức việc tra cứu thông tin nhân sự và các thao tác tự phục vụ của người dùng. Những nội dung này giúp nhóm xem xét cách trình bày thông tin, tổ chức biểu mẫu và hỗ trợ người dùng theo dõi các yêu cầu liên quan đến cá nhân.
 
-Tuy nhiên, Base HRM là một giải pháp quản trị độc lập với HRM và iOffice đang được Nhà trường sử dụng. Do đó, việc sử dụng một sản phẩm thuộc nhóm này để giải quyết trực tiếp bài toán của đề tài sẽ đặt ra thêm yêu cầu về tích hợp hoặc chuyển đổi dữ liệu, quy trình nghiệp vụ và cơ chế xác thực từ các hệ thống hiện hữu. Trong phạm vi khảo sát của đề tài, Base HRM vì vậy được sử dụng làm giải pháp tham khảo về trải nghiệm Mobile thay vì được xem là phương án thay thế trực tiếp cho HRM và iOffice.
+Tuy nhiên, MyHCMUT Mobile có phạm vi triển khai khác với một sản phẩm quản lý nhân sự độc lập. Ứng dụng phải sử dụng dữ liệu, quyền hạn và quy trình nghiệp vụ từ các hệ thống hiện hữu của Nhà trường. Do đó, những cách tổ chức chức năng tham khảo từ Base HRM chỉ được xem xét khi phù hợp với yêu cầu và điều kiện tích hợp của đề tài.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/base_hrm_1.png}
+        \caption{Không gian làm việc số}
+        \label{fig:base_hrm_1}
+    \end{subfigure}
+    \qquad
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/base_hrm_2.png}
+        \caption{Tiện ích tự phục vụ và gửi đề xuất}
+        \label{fig:base_hrm_2}
+    \end{subfigure}
+    \caption{Minh họa giao diện ứng dụng di động trong hệ sinh thái Base.vn~\cite{base_hrm_doc}}
+    \label{fig:base_hrm}
+\end{figure}
 
 \subsection{Tanca}
 \label{subsec:tanca}
 
-Tanca~\cite{tanca_doc} là nền tảng quản trị nhân sự có hỗ trợ ứng dụng di động và các chức năng tự thao tác dành cho nhân viên. Các nhóm chức năng liên quan bao gồm quản lý thông tin nhân sự, lịch làm việc, nghỉ phép và một số hoạt động quản trị công việc.
+Tanca~\cite{tanca_doc} là giải pháp quản lý nhân sự có các chức năng hỗ trợ hoạt động quản lý và tương tác của người lao động với tổ chức.
 
-Tương tự Base HRM, Tanca cho thấy khả năng đưa các nghiệp vụ nhân sự thường xuyên lên thiết bị di động nhằm giảm sự phụ thuộc vào giao diện Web trên máy tính. Đây là điểm có giá trị tham khảo đối với cách tổ chức trải nghiệm người dùng của MyHCMUT Mobile.
+Trong phạm vi khảo sát, nhóm quan tâm đến cách giải pháp cung cấp các thao tác nhân sự thường dùng trên thiết bị di động, đặc biệt là việc tiếp cận thông tin cá nhân và thực hiện các yêu cầu liên quan đến quá trình làm việc. Đây là những nội dung có thể tham khảo khi thiết kế giao diện và luồng tương tác của MyHCMUT Mobile.
 
-Tuy nhiên, mục tiêu của đề tài không phải xây dựng hoặc lựa chọn một hệ thống HRM mới. MyHCMUT Mobile cần tiếp tục sử dụng dữ liệu và các quy trình đã tồn tại trong HRM và iOffice của Nhà trường. Vì vậy, các nền tảng SaaS như Tanca chủ yếu được sử dụng để tham khảo cách hỗ trợ người dùng trên Mobile; khả năng áp dụng trực tiếp còn phụ thuộc vào yêu cầu tích hợp dữ liệu, quy trình và hạ tầng xác thực cụ thể của Nhà trường.
+Tuy nhiên, các chức năng được tham khảo không thể áp dụng nguyên trạng cho đề tài do MyHCMUT Mobile phải tuân theo dữ liệu, quy trình xử lý và cơ chế phân quyền của HRM và iOffice. Vì vậy, nhóm chỉ kế thừa những cách tổ chức tương tác phù hợp, không sử dụng các sản phẩm thương mại làm nền tảng thay thế hệ thống nghiệp vụ của Nhà trường.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/tanca_1.png}
+        \caption{Tổng quan ca làm và chấm công}
+        \label{fig:tanca_1}
+    \end{subfigure}
+    \qquad
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{image/chapter2/tanca_2.png}
+        \caption{Quản lý và gửi đơn từ tự phục vụ}
+        \label{fig:tanca_2}
+    \end{subfigure}
+    \caption{Minh họa giao diện ứng dụng di động Tanca Mobile~\cite{tanca_doc}}
+    \label{fig:tanca}
+\end{figure}
 
 \section{Tiêu chí và kết quả đối chiếu}
 \label{sec:tieuchi_doichieu}
 
-Từ bài toán đã xác định ở Chương 1, việc đối chiếu các hệ thống được thực hiện dựa trên các tiêu chí liên quan trực tiếp đến phạm vi của đề tài, thay vì đánh giá toàn bộ khả năng của từng sản phẩm.
-
-Các tiêu chí gồm: khả năng cung cấp kênh tương tác trên thiết bị di động; khả năng hỗ trợ các nghiệp vụ nhân sự tự thao tác như hồ sơ, nghỉ phép và công tác; khả năng hỗ trợ các nghiệp vụ điều hành như văn bản, nhiệm vụ và lịch làm việc; khả năng tích hợp với dữ liệu, quy trình và hệ thống xác thực hiện hữu; và khả năng duy trì vai trò của các hệ thống nguồn trong việc quản lý dữ liệu và xử lý nghiệp vụ. Kết quả đối chiếu được tổng hợp trong Bảng~\ref{tab:compare_solutions}.
+Trên cơ sở mục tiêu và phạm vi đề tài, nhóm đối chiếu các hệ thống theo những tiêu chí liên quan trực tiếp đến việc phát triển MyHCMUT Mobile: khả năng sử dụng trên thiết bị di động; hỗ trợ tra cứu và cập nhật thông tin nhân sự; đăng ký và xử lý nghỉ phép; tiếp cận văn bản, nhiệm vụ và lịch làm việc; khả năng tích hợp với hệ thống hiện hữu; và khả năng đáp ứng các quy trình nghiệp vụ của Nhà trường.
 
 \begin{table}[H]
 \centering
@@ -92,34 +156,24 @@ Tổng hợp thông tin giữa các miền nghiệp vụ & Dữ liệu được 
 \end{tabularx}
 \end{table}
 
-Kết quả đối chiếu cho thấy các giải pháp thương mại cung cấp nhiều kinh nghiệm tham khảo về việc tổ chức các hoạt động tự thao tác trên thiết bị di động. Tuy nhiên, bài toán của MyHCMUT Mobile có ràng buộc khác: giải pháp cần hoạt động trên cơ sở HRM, iOffice và hệ thống xác thực đang tồn tại, thay vì đưa dữ liệu và quy trình sang một nền tảng quản trị mới.
+Kết quả đối chiếu cho thấy các giải pháp thương mại cung cấp những cách tiếp cận có thể tham khảo trong việc tổ chức chức năng nhân sự và hỗ trợ người dùng trên thiết bị di động. Trong khi đó, HRM và iOffice là các hệ thống đang cung cấp dữ liệu và quy trình nghiệp vụ tại Nhà trường.
 
-Do đó, giá trị của các giải pháp thị trường trong phạm vi khảo sát chủ yếu nằm ở việc tham khảo cách tổ chức trải nghiệm Mobile. Việc lựa chọn kiến trúc và cơ chế tích hợp của MyHCMUT Mobile phải xuất phát từ ranh giới của các hệ thống hiện hữu và các yêu cầu cụ thể của đề tài.
+Vì vậy, hướng phát triển phù hợp với phạm vi đề tài là xây dựng một ứng dụng di động khai thác các chức năng cần thiết từ HRM và iOffice, đồng thời tổ chức giao diện và luồng tương tác theo đặc điểm sử dụng trên thiết bị di động. Ứng dụng không thay thế các hệ thống nguồn và không tự đảm nhiệm những quy trình nghiệp vụ nằm ngoài phạm vi tích hợp.
 
 \section{Nhu cầu chưa được đáp ứng và định hướng của MyHCMUT Mobile}
 \label{sec:khoangtrong_giaiphap}
 
-Từ việc khảo sát các hệ thống hiện hữu và các giải pháp tham khảo, có thể xác định một số nhu cầu mà MyHCMUT Mobile cần đáp ứng.
+Từ việc khảo sát các hệ thống hiện hữu và tham khảo những giải pháp có liên quan, nhóm xác định nhu cầu trọng tâm của đề tài là cung cấp một kênh truy cập trên thiết bị di động cho các nghiệp vụ nhân sự và điều hành đang được quản lý tại nhiều hệ thống khác nhau.
 
-Thứ nhất, cần có một kênh tương tác trên thiết bị di động cho các nghiệp vụ được lựa chọn từ HRM và iOffice. Kênh này cần tổ chức lại giao diện và luồng thao tác phù hợp với môi trường Mobile nhưng không thay đổi trách nhiệm quản lý dữ liệu của các hệ thống nguồn.
+Theo đó, MyHCMUT Mobile được định hướng phát triển với các nhóm chức năng tra cứu và cập nhật hồ sơ cá nhân, nghỉ phép, công tác, văn phòng số, quản lý nhiệm vụ và lịch làm việc. Ứng dụng đồng thời hỗ trợ tiếp nhận thông báo và điều hướng đến nội dung nghiệp vụ liên quan.
 
-Thứ hai, ứng dụng cần tích hợp với nhiều miền nghiệp vụ mà không xây dựng một cơ sở dữ liệu nghiệp vụ mới để sao chép HRM hoặc iOffice. Một số dữ liệu có thể được tổng hợp tại tầng ứng dụng để phục vụ trình bày, chẳng hạn lịch họp, nghỉ phép và đi công tác, trong khi dữ liệu gốc tiếp tục được lấy từ các hệ thống tương ứng.
+Về mặt tích hợp, ứng dụng sử dụng các dịch vụ hiện hữu để xác thực người dùng, truy xuất dữ liệu và thực hiện các thao tác nghiệp vụ theo quyền hạn. Những chức năng phù hợp được hiện thực trực tiếp trên giao diện di động; một số chức năng Web được tái sử dụng khi cần thiết. Dữ liệu và quy trình xử lý chính tiếp tục được quản lý bởi các hệ thống nghiệp vụ tương ứng.
 
-Thứ ba, đối với các quy trình như nghỉ phép và đi công tác, ứng dụng cần hỗ trợ thao tác thuận tiện trên thiết bị di động nhưng không được xem kết quả kiểm tra phía client là quyết định nghiệp vụ cuối cùng. Các yêu cầu thay đổi dữ liệu hoặc trạng thái vẫn cần được backend tương ứng kiểm tra và xử lý.
-
-Thứ tư, không phải mọi chức năng Web hiện hữu đều cần hoặc phù hợp để tái hiện thực hoàn toàn trên Mobile. Đối với các chức năng có biểu mẫu lớn hoặc phạm vi xử lý rộng, giải pháp cần cho phép tái sử dụng giao diện Web trong ứng dụng và duy trì trải nghiệm đăng nhập liên tục cho người dùng.
-
-Cuối cùng, các khả năng đặc trưng của nền tảng di động như thông báo đẩy có thể được khai thác để hỗ trợ người dùng nhận biết sự kiện và quay lại ngữ cảnh xử lý tương ứng. Đây là cơ chế hỗ trợ trải nghiệm, không thay thế dữ liệu trạng thái hoặc cơ chế phân quyền tại backend.
-
-Các nhu cầu trên hình thành ràng buộc đầu vào cho quá trình phân tích và thiết kế hệ thống. Những cơ chế kỹ thuật cụ thể để giải quyết chúng, bao gồm cấu trúc ứng dụng, phương thức tích hợp nhiều backend, tổng hợp dữ liệu lịch và chuyển tiếp xác thực giữa Mobile và Web, được trình bày ở các chương tiếp theo.
+Định hướng này là cơ sở để nhóm xác định yêu cầu chức năng, yêu cầu phi chức năng và các trường hợp sử dụng của MyHCMUT Mobile tại Chương 4.
 
 \section{Kết luận chương}
 \label{sec:ketluan_chuong2}
 
-Chương này đã khảo sát hai hệ thống nghiệp vụ hiện hữu có liên quan trực tiếp đến phạm vi đề tài là HRM và iOffice, đồng thời tham khảo một số giải pháp quản trị nhân sự có hỗ trợ thiết bị di động.
+Chương này đã khảo sát các hệ thống HRM, iOffice của Nhà trường và tham khảo một số giải pháp quản lý nhân sự có liên quan. Kết quả khảo sát làm rõ phạm vi chức năng có thể khai thác từ các hệ thống hiện hữu và nhu cầu tổ chức những chức năng phù hợp trên thiết bị di động.
 
-Kết quả phân tích cho thấy HRM và iOffice đã cung cấp dữ liệu và các quy trình nghiệp vụ mà đề tài cần khai thác. Vì vậy, MyHCMUT Mobile được định hướng như một kênh tương tác trên thiết bị di động tích hợp với các hệ thống này thay vì một nền tảng nghiệp vụ mới thay thế chúng.
-
-Các giải pháp thị trường cho thấy giá trị của việc hỗ trợ tự thao tác trên Mobile, nhưng không loại bỏ yêu cầu tích hợp với dữ liệu, quy trình và cơ chế xác thực đang tồn tại tại Nhà trường. Từ đó, đề tài xác định các yêu cầu chính đối với giải pháp gồm: cung cấp trải nghiệm phù hợp trên thiết bị di động, tích hợp nhiều hệ thống nguồn, duy trì trách nhiệm xử lý nghiệp vụ tại backend, tổng hợp có chọn lọc dữ liệu giữa các miền và hỗ trợ tái sử dụng chức năng Web khi phù hợp.
-
-Những yêu cầu này là cơ sở để các chương tiếp theo trình bày nền tảng lý thuyết, phân tích yêu cầu và thiết kế kỹ thuật của MyHCMUT Mobile.
+Trên cơ sở đó, đề tài lựa chọn hướng phát triển MyHCMUT Mobile như một ứng dụng tích hợp, tận dụng dữ liệu và quy trình nghiệp vụ đang được Nhà trường vận hành. Các yêu cầu cụ thể của ứng dụng sẽ được phân tích và đặc tả tại Chương 4.

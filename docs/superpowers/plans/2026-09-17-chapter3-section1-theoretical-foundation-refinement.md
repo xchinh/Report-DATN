@@ -14,7 +14,7 @@
 
 ## Global Constraints
 - **Nguyên tắc phân định ranh giới (Separation of Concerns):** 
-  - Mục 3.1 thuần túy là lý thuyết, nguyên lý, tiêu chuẩn và giao thức; KHÔNG chứa tên thư mục mã nguồn (`features/auth`), KHÔNG chứa tên biến cấu hình (`AUTH_JWT_SECRET`), KHÔNG chứa code thuật toán lock, KHÔNG chứa sơ đồ ca sử dụng / use case của Chương 4, KHÔNG chứa thiết kế chi tiết của Chương 5.
+  - Mục 3.1 thuần túy là lý thuyết, nguyên lý, tiêu chuẩn và giao thức; KHÔNG chứa tên thư mục mã nguồn (`features/auth`), KHÔNG chứa tên biến cấu hình (`AUTH_JWT_SECRET`), KHÔNG chứa code thuật toán lock, KHÔNG chứa sơ đồ use case / use case của Chương 4, KHÔNG chứa thiết kế chi tiết của Chương 5.
   - Mục 3.2.2 là quyết định lựa chọn công nghệ và triển khai thực tế trên Mobile bằng Melos.
 - **Tính chính xác học thuật:**
   - JWT chuẩn JWS: Payload chỉ encode Base64URL, không mã hóa bảo mật dữ liệu; chữ ký HMAC-SHA256 (hoặc RSA/ECDSA) bảo đảm tính toàn vẹn (Integrity) và xác thực nguồn gốc (Authenticity).

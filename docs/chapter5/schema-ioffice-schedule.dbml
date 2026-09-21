@@ -1,0 +1,75 @@
+// DBML phục vụ ERD Chương 5, không dùng để sinh DDL.
+// Màu cam (#D97706): liên kết logic do iOffice Backend duy trì, không phải FK vật lý.
+
+Project chapter5_ioffice_schedule {
+  database_type: 'PostgreSQL'
+  Note: 'Nhóm dữ liệu lịch và điểm danh thuộc CSDL iOffice hiện hữu. Các Ref trong sơ đồ này đều là liên kết logic.'
+}
+
+TableGroup ioffice_schedule [color: #0891B2] {
+  schedule_general
+  schedule_general_item
+  schedule_general_assign
+  schedule_meeting_attendance
+}
+
+Table schedule_general {
+  id integer [pk, increment, not null]
+  name varchar(255)
+  note varchar(1000)
+  start_time bigint
+  end_time bigint
+  approve_shcc varchar(10)
+  approve_name varchar(255)
+  update_time bigint
+}
+
+Table schedule_general_item {
+  id integer [pk, increment, not null]
+  all_day boolean
+  start_time bigint
+  end_time bigint
+  type varchar(100)
+  location varchar(1000)
+  note varchar(1000)
+  general_id integer [note: 'Liên kết logic đến schedule_general.id.']
+  name text
+  is_deleted boolean
+  register_id integer
+  cap varchar(10)
+  quy_trinh_id integer
+  step_no integer
+  shcc varchar(10)
+  don_vi varchar(10)
+  render_assign_text varchar(500)
+  expect_assign integer
+}
+
+Table schedule_general_assign {
+  id integer [pk, increment, not null]
+  item_id integer [note: 'Liên kết logic đến schedule_general_item.id.']
+  shcc varchar(10)
+  full_name varchar(255)
+  short_name varchar(255)
+  chuc_vu varchar(10)
+  don_vi varchar(10)
+  vai_tro varchar(100)
+  priority integer
+}
+
+Table schedule_meeting_attendance {
+  id integer [pk, increment, not null]
+  item_id integer [not null, note: 'Liên kết logic đến schedule_general_item.id.']
+  assign_id integer [note: 'Liên kết logic đến schedule_general_assign.id.']
+  attended boolean
+  ly_do varchar(200)
+  created_by varchar(10)
+  created_by_don_vi varchar(10)
+  created_at bigint
+  Note: 'Schema đối chiếu chưa có UNIQUE(item_id, created_by).'
+}
+
+Ref logical_schedule_item: schedule_general_item.general_id > schedule_general.id [color: #D97706]
+Ref logical_schedule_assign: schedule_general_assign.item_id > schedule_general_item.id [color: #D97706]
+Ref logical_schedule_attendance_item: schedule_meeting_attendance.item_id > schedule_general_item.id [color: #D97706]
+Ref logical_schedule_attendance_assign: schedule_meeting_attendance.assign_id > schedule_general_assign.id [color: #D97706]

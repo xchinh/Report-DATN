@@ -1,0 +1,96 @@
+// DBML phục vụ ERD Chương 5, không dùng để sinh DDL.
+// Màu xanh (#2563EB): FK vật lý. Màu cam (#D97706): liên kết logic do iOffice Backend duy trì.
+
+Project chapter5_ioffice_missions {
+  database_type: 'PostgreSQL'
+  Note: 'Nhóm dữ liệu nhiệm vụ thuộc CSDL iOffice hiện hữu.'
+}
+
+TableGroup ioffice_missions [color: #9333EA] {
+  mission_general
+  mission_outlined
+  mission_member
+  mission_report_batch
+  mission_report
+}
+
+Table mission_general {
+  id integer [pk, increment, not null]
+  title text
+  description text
+  type varchar(50)
+  start_date bigint
+  end_date bigint
+  status varchar(50)
+  created_by varchar(20)
+  created_at bigint
+  progress integer
+  slug varchar(50)
+  source varchar(50)
+  cap_nhiem_vu varchar(20)
+  loai_nhiem_vu_id integer
+  quy_trinh varchar(10)
+  don_vi_thuc_hien varchar(10)
+}
+
+Table mission_outlined {
+  id integer [pk, not null]
+  mission_id integer [note: 'Liên kết logic đến mission_general.id.']
+  idx varchar(10)
+  parent_id integer [note: 'Liên kết logic đệ quy đến mission_outlined.id.']
+  ten varchar(255)
+  ke_hoach text
+  start_date bigint
+  end_date bigint
+  priority integer
+  status varchar
+  ly_do text
+  is_deleted boolean
+  review_status text
+  completed_at bigint
+  shcc_list jsonb
+  Note: 'parent_id biểu diễn cây đầu việc; NULL là nút gốc.'
+}
+
+Table mission_member {
+  id integer [pk, increment, not null]
+  mission_id integer [note: 'Liên kết logic đến mission_general.id.']
+  shcc varchar(20)
+  ma_don_vi varchar(20)
+  created_at bigint
+  created_by varchar(20)
+  is_manage boolean
+  participant_id integer
+}
+
+Table mission_report_batch {
+  id integer [pk, increment, not null]
+  mission_id integer [note: 'FK vật lý đến mission_general.id.']
+  title text
+  due_date bigint
+  created_at bigint
+  status varchar(50)
+  progress integer
+}
+
+Table mission_report {
+  id integer [pk, increment, not null]
+  report_batch_id integer [note: 'Liên kết logic đến mission_report_batch.id.']
+  mission_id integer [note: 'FK vật lý đến mission_general.id.']
+  status varchar(50)
+  ket_qua text
+  progress integer
+  vuong_mac text
+  submitted_at bigint
+  reviewed_at bigint
+  reviewed_by varchar(20)
+  return_reason text
+  revision integer [not null]
+}
+
+Ref physical_report_batch_mission: mission_report_batch.mission_id > mission_general.id [color: #2563EB]
+Ref physical_report_mission: mission_report.mission_id > mission_general.id [color: #2563EB]
+Ref logical_mission_outline: mission_outlined.mission_id > mission_general.id [color: #D97706]
+Ref logical_mission_outline_parent: mission_outlined.parent_id > mission_outlined.id [color: #D97706]
+Ref logical_mission_member: mission_member.mission_id > mission_general.id [color: #D97706]
+Ref logical_mission_report_batch: mission_report.report_batch_id > mission_report_batch.id [color: #D97706]

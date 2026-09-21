@@ -1,0 +1,11 @@
+erDiagram
+    STAFF_LY_LICH ||--o{ STAFF_LY_LICH_REQUEST : "yêu cầu thay đổi"
+    STAFF_LY_LICH_REQUEST ||--o{ STAFF_LY_LICH_REQUEST_DETAIL : "chi tiết thay đổi"
+    TCNS_NGHI_PHEP_DANG_KY ||--o{ TCNS_LICH_CA_NHAN : "giữ chỗ lịch"
+    TCNS_NGHI_PHEP_DANG_KY ||--o{ TCNS_QUY_TRINH_HISTORY : "lịch sử"
+    TCNS_DANG_KY_CONG_TAC ||--o{ TCNS_DANG_KY_CONG_TAC_THAM_GIA : "thành viên"
+    MISSION_GENERAL ||--o{ MISSION_OUTLINED : "cấu trúc"
+    SCHEDULE_GENERAL_ITEM ||--o{ SCHEDULE_GENERAL_ASSIGN : "phân công"
+    SCHEDULE_GENERAL_ITEM ||--o{ SCHEDULE_MEETING_ATTENDANCE : "điểm danh"
+    FW_NOTIFICATION ||--o{ FW_NOTIFICATION_TARGET : "người nhận"
+    FW_NOTIFICATION ||--o{ FW_NOTIFICATION_LOGS : "đọc/xóa"

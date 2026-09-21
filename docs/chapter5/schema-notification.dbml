@@ -1,0 +1,47 @@
+// DBML phục vụ phần thông báo của Chương 5, không dùng để sinh DDL.
+// Màu cam (#D97706): liên kết logic do HRM Backend duy trì, không phải FK vật lý.
+
+Project chapter5_notification {
+  database_type: 'PostgreSQL'
+  Note: 'Dữ liệu thông báo không thuộc ERD nghiệp vụ của Mục 5.3; được dùng làm bằng chứng cho Mục 5.4.'
+}
+
+
+
+Table fw_notification {
+  id integer [pk, increment, not null]
+  title text
+  sub_title text
+  target_link text
+  icon text
+  icon_color text
+  send_time bigint
+}
+
+Table fw_notification_target {
+  id integer [pk, increment, not null]
+  id_notification integer
+  target integer
+}
+
+Table fw_notification_logs {
+  id integer [pk, increment, not null]
+  id_notification integer
+  target integer
+  is_read boolean
+  is_delete boolean
+}
+
+Table fw_user_device_token {
+  id integer [pk, increment, not null]
+  user_id integer
+  device_token text [unique]
+  create_time bigint
+  session_ref text
+  last_seen bigint
+}
+
+
+
+Ref logical_notification_target: fw_notification_target.id_notification > fw_notification.id [color: #D97706]
+Ref logical_notification_log: fw_notification_logs.id_notification > fw_notification.id [color: #D97706]

@@ -1,6 +1,8 @@
 # MỤC 4.1: PHÂN TÍCH HIỆN TRẠNG HỆ THỐNG QUẢN LÝ NHÂN SỰ VÀ ĐIỀU HÀNH TẠI TRƯỜNG ĐẠI HỌC BÁCH KHOA – ĐHQG-HCM
 # (07_SECTION_4_1_CURRENT_STATE.md)
 
+> **Trạng thái tài liệu:** Bản audit lịch sử. Các claim kỹ thuật, số liệu kiểm thử và phạm vi chức năng tại đây cần được kiểm chứng lại trước khi dùng trong luận văn; nguồn đặc tả hiện hành là nội dung các chương LaTeX và requirement pack đã được cập nhật.
+
 > **Đề tài Đồ án Tốt nghiệp:** Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học (MyHCMUT Mobile)  
 > **Cơ quan chủ quản:** Trường Đại học Bách khoa – Đại học Quốc gia Thành phố Hồ Chí Minh  
 > **Sinh viên thực hiện:**  

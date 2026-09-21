@@ -1,0 +1,380 @@
+// Generated read-only from live PostgreSQL schema.
+
+TableGroup hrm_profile {
+  staff_ly_lich
+  staff_ly_lich_request
+  staff_ly_lich_request_detail
+  staff_ly_lich_request_file
+}
+
+TableGroup hrm_leave {
+  tcns_nghi_phep_dang_ky
+  tcns_lich_ca_nhan
+  tcns_quy_trinh
+  tcns_quy_trinh_user
+  tcns_quy_trinh_history
+  tcns_so_nghi_phep_nam
+}
+
+TableGroup hrm_business_trip {
+  tcns_dang_ky_cong_tac
+  tcns_dang_ky_cong_tac_tham_gia
+  tcns_dang_ky_cong_tac_ke_hoach
+  tcns_qua_trinh_di_cong_tac
+}
+
+TableGroup notification {
+  fw_notification
+  fw_notification_target
+  fw_notification_logs
+  fw_user_device_token
+}
+
+Table staff_ly_lich {
+  shcc varchar(20) [pk, not null]
+  email varchar(70)
+  ho varchar(150)
+  ten varchar(50)
+  ten_goi_khac varchar(150)
+  ngay_sinh bigint
+  noi_sinh varchar(15)
+  dan_toc varchar(15)
+  ton_giao varchar(15)
+  gioi_tinh varchar(15)
+  thanh_phan_gia_dinh varchar(15)
+  ma_so_thue varchar(20)
+  cccd varchar(20)
+  email_ca_nhan varchar(70)
+  noi_cap_cccd varchar(5)
+  ngay_cap_cccd bigint
+  quoc_tich varchar(5)
+  sdt varchar(20)
+  avatar text
+  cccd_back text
+  cccd_front text
+  ngan_hang varchar(100)
+  chi_nhanh varchar(200)
+  stk varchar(20)
+  bhxh varchar(20)
+  bhyt varchar(20)
+  doi_tuong_chinh_sach varchar(100)
+  ma_nhan_vien varchar(20)
+  suc_khoe varchar(500)
+  chieu_cao integer
+  can_nang integer
+  nhom_mau varchar(5)
+  ngay_nhap_ngu bigint
+  ngay_xuat_ngu bigint
+  quan_ham varchar(5)
+  loai_nghi varchar(10)
+  ngay_vao_doan bigint
+  ngay_vao_cong_doan bigint
+  ngay_vao_dang bigint
+  ngay_vao_dang_ct bigint
+  is_dang_vien boolean
+  che_do_cu text
+  bi_bat_di_tu text
+  nhan_than_nuoc_ngoai text
+  to_chuc_nuoc_ngoai text
+  so_truong_cong_tac text
+  cong_viec_lam_lau_nhat text
+  trinh_do_van_hoa varchar(20)
+  hoc_ham varchar(20)
+  hoc_vi varchar(20)
+  ngach varchar(20)
+  cdnn varchar(20)
+  vtvl varchar(20)
+  is_vien_chuc boolean
+  don_vi varchar(10)
+  chuc_vu_chinh varchar(10)
+  don_vi_chuyen_mon varchar(10)
+  loai_can_bo varchar(10)
+  nghe_nghiep_truoc_tuyen_dung varchar(100)
+  don_vi_tuyen_dung varchar(200)
+  ngay_bat_dau_cong_tac bigint
+  ngay_vao_bien_che bigint
+  ngay_vao_truong bigint
+  sqd_tuyen_dung varchar(50)
+  noi_dang_db text
+  noi_dang_ct text
+  noi_doan text
+  tinh_trang_hon_nhan varchar(20)
+  so_the_dang_vien text
+  chuc_danh text
+  bo_mon_goc varchar(10)
+  sqd_vao_bien_che text
+  ten_ngan_hang text
+  chuyen_nganh_dao_tao text
+  nam_tot_nghiep_hoc_vi_cao_nhat integer
+}
+
+Table staff_ly_lich_request {
+  id integer [pk, increment, not null]
+  shcc varchar(20)
+  phan_loai varchar(20)
+  previous_data jsonb
+  changes jsonb
+  trang_thai varchar(20)
+  ly_do text
+  created_at bigint
+  created_by varchar(20)
+  updated_at bigint
+  updated_by varchar(20)
+  is_phan_hoi boolean
+  ly_do_tu_choi text
+}
+
+Table staff_ly_lich_request_detail {
+  id integer [pk, increment, not null]
+  request_id integer
+  action varchar(20)
+  field text
+  trang_thai varchar(20)
+  ly_do text
+  previous_data jsonb
+  changes jsonb
+  reviewed_at bigint
+  reviewed_by varchar(20)
+  created_at bigint
+  created_by varchar(20)
+  updated_at bigint
+  updated_by varchar(20)
+  ly_do_tu_choi text
+}
+
+Table staff_ly_lich_request_file {
+  file_id uuid [pk, not null]
+  request_detail_id integer
+  file_path text
+  file_name text
+  request_phan_hoi_id integer
+}
+
+Table tcns_nghi_phep_dang_ky {
+  ngay_bat_dau bigint
+  so_ngay_thuc_nghi numeric
+  ngay_ket_thuc bigint
+  ma_don_vi text
+  ngay_cap_nhat bigint
+  id integer [pk, increment, not null]
+  period text
+  ma_chuc_vu text
+  ly_do text
+  hinh_thuc text
+  period_ket_thuc text
+  shcc text
+  nam_nghi_phep numeric
+  files jsonb
+  ngay_tao bigint
+  ma_chuc_danh text
+  quoc_gia jsonb
+  ghi_chu text
+  so_ngay_nghi numeric
+  ma_quy_trinh text
+  trang_thai text
+  so_quyet_dinh text
+  dia_diem jsonb
+  is_dang_vien boolean
+  ngay_quyet_dinh bigint
+  is_cam_ket boolean
+  giai_trinh text
+  is_y_kien boolean
+  is_delete boolean
+}
+
+Table tcns_lich_ca_nhan {
+  period text
+  ngay_bat_dau bigint
+  id integer [pk, increment, not null]
+  ngay_ket_thuc bigint
+  phan_loai text
+  period_ket_thuc text
+  phieu_id integer
+  shcc text
+  is_roi_vi_tri boolean
+}
+
+Table tcns_quy_trinh {
+  targets jsonb
+  ma text
+  step_no integer
+  ten_quy_trinh text
+  is_primary boolean
+  is_initial boolean
+  id integer [pk, increment, not null]
+  phan_loai text
+  trang_thai text
+  is_end boolean
+  phieu_id integer
+  parallel_group jsonb
+}
+
+Table tcns_quy_trinh_user {
+  id integer [pk, increment, not null]
+  phan_loai text
+  phieu_id integer
+  shcc jsonb
+  ma_quy_trinh text
+  forward_to text
+  trang_thai text
+  is_create_user boolean
+}
+
+Table tcns_quy_trinh_history {
+  phan_loai text
+  trang_thai text
+  thoi_gian bigint
+  ma_quy_trinh text
+  id integer [pk, increment, not null]
+  shcc text
+  data jsonb
+  ma_quy_trinh_before text
+  phieu_id integer
+  ma_parallel text
+  is_complete boolean
+}
+
+Table tcns_so_nghi_phep_nam {
+  nam numeric [not null]
+  shcc text [not null]
+  tong_so_ngay numeric
+}
+
+Table tcns_dang_ky_cong_tac {
+  id integer [pk, increment, not null]
+  shcc text
+  ngay_bat_dau numeric
+  ngay_ket_thuc numeric
+  nguon_kinh_phi text
+  dia_diem text
+  quoc_gia jsonb
+  noi_dung text
+  muc_tieu text
+  hinh_thuc text
+  phan_loai text
+  is_bao_cao boolean
+  thoi_gian_bao_cao numeric
+  files jsonb
+  don_vi text
+  ngay_tao numeric
+  don_vi_duyet jsonb
+  ngay_cap_nhat numeric
+  ma_quy_trinh text
+  trang_thai text
+  nam text
+  muc_tieu_khac text
+  nguon_kinh_phi_khac text
+  so_quyet_dinh text
+  ket_qua_cong_tac text
+  co_quan_cong_tac text
+  can_cu_cong_tac text
+  giay_moi text
+  khoan_chi_thanh_toan text
+  is_cam_ket boolean
+  lich_trinh text
+  khoan_chi_thanh_toan_khac text
+  type text
+  thao_tac_don_vi jsonb
+  xa_phuong text
+  tinh_thanh jsonb
+  so_quyet_dinh_duyet text
+  so_ngay_cong_tac integer
+  ngay_quyet_dinh bigint
+  is_cam_ket_bao_cao boolean
+  is_dang_vien boolean
+  ngay_ve_thuc_te bigint
+}
+
+Table tcns_dang_ky_cong_tac_tham_gia {
+  id integer [pk, increment, not null]
+  dang_ky_id numeric
+  shcc text
+  don_vi text
+  chuc_vu text
+  is_truong_doan boolean
+  is_dang_vien boolean
+}
+
+Table tcns_dang_ky_cong_tac_ke_hoach {
+  id integer [increment, not null]
+  dang_ky_id integer
+  stt integer
+  noi_dung text
+  ngay_bat_dau bigint
+  ngay_ket_thuc bigint
+  dia_diem text
+}
+
+Table tcns_qua_trinh_di_cong_tac {
+  id integer [pk, increment, not null]
+  dang_ky_id numeric
+  shcc text
+  ngay_bat_dau numeric
+  ngay_ket_thuc numeric
+  nguon_kinh_phi text
+  dia_diem text
+  quoc_gia jsonb
+  noi_dung text
+  muc_tieu text
+  hinh_thuc text
+  phan_loai text
+  is_bao_cao boolean
+  thoi_gian_bao_cao numeric
+  don_vi text
+  nam text
+  muc_tieu_khac text
+  nguon_kinh_phi_khac text
+  so_quyet_dinh text
+  ket_qua_cong_tac text
+  co_quan_cong_tac text
+  can_cu_cong_tac text
+  giay_moi text
+  khoan_chi_thanh_toan text
+  is_cam_ket boolean
+  lich_trinh text
+  khoan_chi_thanh_toan_khac text
+  type text
+  xa_phuong text
+  tinh_thanh jsonb
+  so_quyet_dinh_duyet text
+  ngay_quyet_dinh bigint
+  ngay_ve_thuc_te bigint
+  cho_phep_bo_sung_bao_cao boolean
+  nguoi_cho_phep_bo_sung text
+  ngay_cho_phep_bo_sung bigint
+  list_shcc jsonb
+}
+
+Table fw_notification {
+  sub_title text
+  send_time bigint
+  icon varchar(100)
+  id integer [pk, increment, not null]
+  target_link text
+  icon_color varchar(100)
+  title text
+}
+
+Table fw_notification_target {
+  id_notification integer
+  id integer [pk, increment, not null]
+  target integer
+}
+
+Table fw_notification_logs {
+  target integer
+  id integer [pk, increment, not null]
+  is_read boolean
+  id_notification integer
+  is_delete boolean
+}
+
+Table fw_user_device_token {
+  user_id integer
+  device_token text [unique]
+  id integer [pk, increment, not null]
+  create_time bigint
+  session_ref text
+  last_seen bigint
+}
+

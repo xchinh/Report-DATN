@@ -1,0 +1,27 @@
+sequenceDiagram
+    autonumber
+    actor User as Đại biểu cuộc họp
+    participant App as MyHCMUT Mobile
+    participant IOffice as Hệ thống iOffice
+    participant DB as CSDL iOffice
+
+    User->>App: Mở chi tiết cuộc họp
+    App->>IOffice: Lấy thông tin cuộc họp và trạng thái tham dự
+    IOffice->>DB: Kiểm tra quyền và cấu hình điểm danh
+    DB-->>IOffice: Thông tin cuộc họp
+    IOffice-->>App: Trả trạng thái có thể thao tác
+    alt Cuộc họp cho phép điểm danh
+        User->>App: Chọn có mặt hoặc báo vắng kèm lý do
+        App->>IOffice: Gửi trạng thái tham dự
+        IOffice->>DB: Kiểm tra thời gian, quyền và trạng thái hiện tại
+        alt Thao tác hợp lệ
+            IOffice->>DB: Ghi nhận trạng thái tham dự
+            IOffice-->>App: Trả kết quả thành công
+            App-->>User: Cập nhật trạng thái hiển thị
+        else Không hợp lệ
+            IOffice-->>App: Trả lý do từ chối
+            App-->>User: Hiển thị thông báo
+        end
+    else Không hỗ trợ hoặc đã hết thời gian
+        App-->>User: Thông báo không thể điểm danh
+    end

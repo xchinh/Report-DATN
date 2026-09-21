@@ -153,7 +153,7 @@ Việc này sẽ giúp Hội đồng đánh giá sinh viên là người có đ�
 | :---: | :--- | :---: | :--- |
 | **1** | **Sơ đồ Ranh giới Hệ thống (System Context & Scope)** | **BẮT BUỘC** | Chương 1 (Hình 1.1): Làm rõ ranh giới Core Mobile vs Supporting BE. |
 | **2** | **Kiến trúc Flutter Monorepo (Melos Package Flow)** | **BẮT BUỘC** | Chương 2 (Hình 2.1): Thể hiện cấu trúc các Packages và Modules. |
-| **3** | **Sơ đồ Ca sử dụng Tổng thể (System Use Case Diagram)** | **BẮT BUỘC** | Chương 3 (Hình 3.1): Phân bổ ca sử dụng theo 4 nhóm tác nhân. |
+| **3** | **Sơ đồ Đặc tả Use caseTổng thể (System Use Case Diagram)** | **BẮT BUỘC** | Chương 3 (Hình 3.1): Phân bổ use case theo 4 nhóm tác nhân. |
 | **4** | **Activity Diagram: Quy trình Đăng ký & Phê duyệt Nghỉ phép** | **BẮT BUỘC** | Chương 3 (Hình 3.2): Thể hiện rẽ nhánh validation và duyệt đa cấp. |
 | **5** | **Activity Diagram: Quy trình Quản lý Nhiệm vụ & Báo cáo** | **BẮT BUỘC** | Chương 3 (Hình 3.3): Thể hiện cây đầu việc và đợt báo cáo tiến độ. |
 | **6** | **Activity Diagram: Quy trình Điểm danh Cuộc họp Thời gian thực** | **BẮT BUỘC** | Chương 3 (Hình 3.4): Thể hiện ràng buộc khung giờ và báo vắng. |
@@ -250,8 +250,8 @@ CHƯƠNG 2: CƠ SỞ LÝ THUYẾT VÀ CÔNG NGHỆ NỀN TẢNG (Khoảng 18-20 
 
 CHƯƠNG 3: PHÂN TÍCH VÀ THIẾT KẾ HỆ THỐNG (Khoảng 25-30 trang)
   3.1. Phân tích yêu cầu hệ thống (Yêu cầu chức năng và Yêu cầu phi chức năng)
-  3.2. Mô hình Ca sử dụng (Use Case Modeling & Ma trận phân quyền RBAC)
-  3.3. Đặc tả chi tiết các Ca sử dụng cốt lõi (Nghỉ phép, Diff lý lịch, Quản lý Nhiệm vụ, Điểm danh họp)
+  3.2. Mô hình Đặc tả Use Case (Use Case Modeling & Ma trận phân quyền RBAC)
+  3.3. Đặc tả chi tiết các Đặc tả Use casecốt lõi (Nghỉ phép, Diff lý lịch, Quản lý Nhiệm vụ, Điểm danh họp)
   3.4. Thiết kế quy trình hoạt động (Activity Diagrams cho Nghỉ phép, Nhiệm vụ, Điểm danh)
   3.5. Thiết kế động tương tác hệ thống (7 Sequence Diagrams then chốt)
   3.6. Thiết kế Cơ sở Dữ liệu (Targeted ERD cho các thực thể Mobile và Data Dictionary)

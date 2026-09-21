@@ -13,12 +13,12 @@
 
 ## 1. Bản chất, Định vị và Tổng quan Tương tác Hệ thống
 - **Thực trạng**: Trường Đại học Bách khoa – ĐHQG-HCM là cơ sở giáo dục đại học có quy mô hoạt động lớn với 1.061 viên chức và người lao động, trong đó có 667 giảng viên; quy mô đào tạo khoảng 28.000 học viên và sinh viên (theo thông tin chính thức được Nhà trường công bố năm 2026, hcmut.edu.vn). Các hệ thống quản trị nhân sự (HRM), văn phòng điện tử (iOffice), điều hành nhiệm vụ (Tasks) và lịch công tác hiện hữu của Nhà trường chủ yếu hoạt động trên nền tảng Web Desktop, gây bất tiện khi cán bộ di chuyển giữa 2 cơ sở (Quận 10 và Dĩ An - Thủ Đức) hoặc cần xử lý công việc tức thời ngoài văn phòng.
-- **Mục tiêu cốt lõi của Đề tài**: Thiết kế và hiện thực **Ứng dụng di động đa nền tảng (MyHCMUT Mobile App)** phục vụ cán bộ, giảng viên và lãnh đạo nhà trường; đóng vai trò là một Cổng giao tiếp di động tập trung, tích hợp an toàn với các dịch vụ Backend hiện hữu của Nhà trường thông qua giao thức REST API, WebSocket và Event Streaming; đồng thời tích hợp giải pháp WebApp Hybrid (In-App WebView với One-Time Ticket SSO) cho các biểu mẫu quản trị chuyên sâu.
+- **Mục tiêu cốt lõi của Đề tài**: Thiết kế và hiện thực **Ứng dụng di động đa nền tảng (MyHCMUT Mobile App)** phục vụ cán bộ, giảng viên và lãnh đạo nhà trường; đóng vai trò là một cổng giao tiếp di động tích hợp với các dịch vụ Backend hiện hữu của Nhà trường thông qua REST API, WebSocket và Event Streaming; đồng thời tích hợp WebApp Hybrid (In-App WebView với One-Time Ticket SSO) cho các biểu mẫu quản trị chuyên sâu.
 - **Tổng quan Ma trận Tương tác Đa Dự án:**
   1. `myhcmut-mobile` (Flutter) $\leftrightarrow$ `myhcmut-be` (Port 4000): Xác thực CAS SSO / LDAP và tiếp nhận chuỗi Bearer JWT Token dùng chung (Shared JWT).
-  2. `myhcmut-mobile` $\leftrightarrow$ `hrm-be` (Port 6023): Tra cứu lý lịch 11 danh mục, kiểm tra điều kiện nghỉ phép đa giai đoạn, tạo/duyệt đơn nghỉ phép và đăng ký/phê duyệt đi công tác (`/api/tcns-di-cong-tac/*`); yêu cầu cấp vé One-Time Ticket SSO (TTL 60s trên Redis).
+  2. `myhcmut-mobile` $\leftrightarrow$ `hrm-be` (Port 6023): Tra cứu các danh mục lý lịch do HRM cung cấp, kiểm tra điều kiện nghỉ phép, tạo/duyệt đơn nghỉ phép và đăng ký/phê duyệt đi công tác (`/api/tcns-di-cong-tac/*`); yêu cầu cấp vé One-Time Ticket SSO (TTL 60s trên Redis).
   3. `myhcmut-mobile` $\leftrightarrow$ `hrm-fe` (Port 6022): Mở giao diện In-App WebView nhúng WebApp sửa lý lịch; nhận tín hiệu `profile_updated` qua JavaScript Bridge để reload trạng thái trên mobile.
-  4. `myhcmut-mobile` $\leftrightarrow$ `ioffice-be` (Port 3001): Tra cứu văn bản đến/đi (`eoffice_van_ban_den`, `eoffice_distribution`) và xem PDF trực tiếp; quản lý nhiệm vụ (Tasks) theo cây `outlined-tree`; theo dõi Lịch tuần và Lịch làm việc tổng hợp đa phân hệ (Unified Calendar Aggregation kết hợp lịch họp iOffice, lịch nghỉ phép và công tác HRM qua Adapter Pattern); điểm danh cuộc họp thời gian thực qua WebSocket (Socket.IO).
+  4. `myhcmut-mobile` $\leftrightarrow$ `ioffice-be` (Port 3001): Tra cứu văn bản đến/đi (`eoffice_van_ban_den`, `eoffice_distribution`) và xem PDF trực tiếp; quản lý nhiệm vụ (Tasks) theo cây `outlined-tree`; theo dõi Lịch tuần và Lịch làm việc tổng hợp đa phân hệ (Unified Calendar Aggregation kết hợp lịch họp iOffice, lịch nghỉ phép và công tác HRM qua Adapter Pattern); cập nhật trạng thái điểm danh qua WebSocket (Socket.IO).
   5. `hrm-be` / `ioffice-be` $\rightarrow$ `Kafka` $\rightarrow$ `Google FCM` $\rightarrow$ `myhcmut-mobile`: Đường ống thông báo đẩy bất đồng bộ dựa trên 4 trường Metadata có cấu trúc (`type`, `targetId`, `route`, `action`) phục vụ Deep Linking.
 
 ---
@@ -41,7 +41,7 @@ myhcmut-mobile/
     │   ├── lib/src/
     │   │   ├── document/       <- Tra cứu Văn bản đến/đi (eoffice_van_ban_den, eoffice_distribution), xem PDF trực tiếp
     │   │   ├── mission/        <- Quản lý Nhiệm vụ (3 nhóm, 5 tab lọc, 4 tab chi tiết, cây outlined-tree)
-    │   │   └── schedule/       <- Lịch tuần, Lịch làm việc tổng hợp đa phân hệ, Điểm danh họp thời gian thực WebSocket Socket.IO
+    │   │   └── schedule/       <- Lịch tuần, Lịch làm việc tổng hợp đa phân hệ, cập nhật trạng thái điểm danh qua WebSocket Socket.IO
     │   │       ├── mappers/    <- Unified Calendar Adapters: HrmLeaveScheduleMapper (-phieuId), HrmBusinessTripScheduleMapper (-(1000000+id)), ScheduleItemHelper
     │   │       ├── models/     <- ScheduleItemModel, AttendanceModel, ScheduleAttendanceStatus (none, attended, absent, notAttended)
     │   │       ├── providers/  <- Riverpod unifiedScheduleProvider (tổng hợp 3 nguồn iOffice, Nghỉ phép, Đi công tác)
@@ -64,7 +64,7 @@ myhcmut-mobile/
 
 | Tác nhân (Actor) | Quyền hệ thống (`permissions`) | Chức năng chính trên Mobile App |
 | :--- | :--- | :--- |
-| **Cán bộ / Giảng viên** | `cn:ly_lich`<br>`cn:nghi_phep`<br>`cn:di_cong_tac`<br>`iofficeMission:read`<br>`scheduleGeneral:read` | • Tra cứu 11 phân mục lý lịch cán bộ.<br>• Gửi đề xuất cập nhật lý lịch kèm ảnh minh chứng.<br>• Đăng ký nghỉ phép Form Wizard 3 bước kết hợp kiểm tra điều kiện đa giai đoạn.<br>• Đăng ký chuyến đi công tác (địa điểm, kinh phí, đoàn công tác).<br>• Tra cứu văn bản đến được giao, xem tệp PDF trực tiếp.<br>• Xem danh sách nhiệm vụ, cây đầu việc, gửi báo cáo đợt.<br>• Xem lịch công tác, Lịch làm việc tổng hợp đa phân hệ (họp, nghỉ phép, công tác qua Unified Calendar), điểm danh họp trước giờ họp 1h hoặc báo vắng.<br>• Nhận thông báo đẩy và điều hướng sâu (Deep Link). |
+| **Cán bộ / Giảng viên** | `cn:ly_lich`<br>`cn:nghi_phep`<br>`cn:di_cong_tac`<br>`iofficeMission:read`<br>`scheduleGeneral:read` | • Tra cứu các danh mục lý lịch cán bộ.<br>• Gửi đề xuất cập nhật lý lịch kèm ảnh minh chứng.<br>• Đăng ký nghỉ phép Form Wizard 3 bước kết hợp kiểm tra điều kiện; khi quá hạn, ứng dụng chỉ điều hướng đến điểm truy cập Giải trình, còn workflow Giải trình là hướng phát triển.<br>• Đăng ký chuyến đi công tác (địa điểm, kinh phí, đoàn công tác).<br>• Tra cứu văn bản đến được giao, xem tệp PDF trực tiếp.<br>• Xem danh sách nhiệm vụ, cây đầu việc, gửi báo cáo đợt.<br>• Xem lịch công tác, Lịch làm việc tổng hợp đa phân hệ (họp, nghỉ phép, công tác qua Unified Calendar), điểm danh họp hoặc báo vắng.<br>• Nhận thông báo đẩy và điều hướng sâu (Deep Link). |
 | **Lãnh đạo Đơn vị** (Trưởng/Phó Khoa, Phòng) | `dv:nghi_phep:read/write`<br>`dv:di_cong_tac:read/write`<br>`eofficeVanBanDen:manage`<br>`iofficeMission:manage` | • Toàn bộ quyền của Cán bộ.<br>• Thẩm định & Phê duyệt/Từ chối đơn nghỉ phép đơn vị.<br>• Phê duyệt danh sách cán bộ đi công tác.<br>• Phân phối chỉ đạo văn bản đến kèm cán bộ xử lý và hạn chót (`eoffice_van_ban_den`, `eoffice_distribution`).<br>• Giám sát tiến độ nhiệm vụ đơn vị, duyệt báo cáo tiến độ.<br>• Tạo lịch họp nội bộ đơn vị. |
 | **Lãnh đạo Trường** (Hiệu trưởng, Phó HT) | `tcns:quy_trinh:manage`<br>`eofficeVanBanDi:read`<br>`scheduleGeneral:manage` | • Xem xét văn bản đi cấp trường.<br>• Cho ý kiến chỉ đạo văn bản đến quan trọng.<br>• Theo dõi các nhiệm vụ trọng tâm toàn trường.<br>• Phê duyệt Lịch tuần trường chính thức. |
 | **Chuyên viên TCCB** (Mã đơn vị `94`) | `tcns:ly_lich:manage`<br>`tcns:request_ly_lich:read`<br>`tcns:nghi_phep:write` | • Thẩm định hồ sơ so sánh sai khác (Diff Viewer) sửa lý lịch.<br>• Phê duyệt đơn nghỉ phép bước cuối & Cấp số quyết định.<br>• Quản lý quỹ phép năm cán bộ. |
@@ -134,7 +134,7 @@ HK253_DATN_341_2211467_2210392/
 │       ├── Hệ quản trị CSDL PostgreSQL & Kiểm soát tương tranh bằng PostgreSQL Advisory Lock (`pg_advisory_xact_lock`)
 │       ├── Hàng đợi phân tán Apache Kafka (KRaft mode) xử lý sự kiện bất đồng bộ
 │       ├── Google Firebase Cloud Messaging (FCM HTTP v1) cho đường ống thông báo đẩy
-│       ├── Giao thức WebSocket Socket.IO phục vụ điểm danh cuộc họp thời gian thực
+│       ├── Giao thức WebSocket Socket.IO phục vụ cập nhật trạng thái điểm danh cuộc họp
 │       └── In-memory data store Redis lưu trữ vé xác thực One-Time Ticket SSO (TTL 60s, cơ chế atomic getDel)
 │
 ├── Chapter4/  CHƯƠNG IV: PHÂN TÍCH VÀ ĐẶC TẢ YÊU CẦU HỆ THỐNG (25%)
@@ -159,7 +159,7 @@ HK253_DATN_341_2211467_2210392/
 │   │   ├── Xác thực SSO qua Vé dùng một lần (One-Time Ticket SSO Bridge, Redis getDel & Làm sạch URL bằng JS History API)
 │   │   ├── Quy trình Nộp đơn Nghỉ phép 3 Giai đoạn Kỹ thuật (Tạo nháp -> Wizard Pre-validation -> Nộp duyệt chính thức)
 │   │   ├── Quy trình Phê duyệt Đơn Nghỉ phép & Trừ Quỹ phép Năm (Per-Item Commit & Khóa bi quan SELECT FOR UPDATE)
-│   │   ├── Điểm danh Họp Thời gian thực (UX Gate 1h trên Mobile & Authoritative Backend Enforcement iOffice qua Socket.IO)
+│   │   ├── Điểm danh Họp (UX Gate 1h trên Mobile & Authoritative Backend Enforcement iOffice qua Socket.IO)
 │   │   └── Pipeline Thông báo Đẩy Bất đồng bộ (Kafka Topic -> FCM v1 -> Metadata Deep Linking)
 │   ├── 5.4 Bộ Điều phối Token Đa miền (MultiDomainAuthInterceptor & MultiDomainTokenManager)
 │   └── 5.5 Thiết kế Kiến trúc Kiểm soát Tương tranh 2 Lớp (PostgreSQL Advisory Lock `pg_advisory_xact_lock` tầng backend & đề xuất Exclusion Constraints cấp CSDL)
@@ -167,7 +167,7 @@ HK253_DATN_341_2211467_2210392/
 ├── Chapter6/  CHƯƠNG VI: KẾT QUẢ HIỆN THỰC VÀ KIỂM THỬ (18%)
 │   ├── 6.1 Kết quả Hiện thực Giao diện và Logic các Phân hệ:
 │   │   ├── Cấu trúc Dự án Modular Monorepo Melos
-│   │   ├── HRM Mobile (Lý lịch 11 mục, ReviewDiffCard, Wizard Nghỉ phép 3 bước, Đi công tác 5 bước, AppBatchActionBar dùng chung)
+│   │   ├── HRM Mobile (các danh mục lý lịch, ReviewDiffCard, Wizard Nghỉ phép 3 bước, Đi công tác 5 bước, AppBatchActionBar dùng chung)
 │   │   ├── Chuẩn hóa Giao diện Chéo phân hệ (Redesign các màn hình Approve và Missions theo Design Tokens)
 │   │   ├── Schedule Mobile: Lịch tuần, Điểm danh họp WebSocket Socket.IO trước 1h với trạng thái ScheduleAttendanceStatus; Giao diện Lịch làm việc tổng hợp đa phân hệ hiển thị hợp nhất sự kiện họp, nghỉ phép, công tác; Tối ưu CustomTableCalendar căn giữa chữ số ngày, loại bỏ marker dots chống RenderFlex overflow, khôi phục dynamic eventColor và màu ngữ nghĩa (Meeting #1E88E5, Leave #FF9800/#D97706, Business Trip #1488DB)
 │   │   └── Trung tâm Thông báo FCM, Deep Linking & Quy trình Kiểm thử Tự động Chạy Cục bộ
@@ -211,7 +211,7 @@ Nhằm phản ánh trung thực cấu trúc CSDL quan hệ thực tế tại `io
 2. **`eoffice_distribution`**: Bảng phân phối chỉ đạo, lưu vết cán bộ chủ trì, cán bộ phối hợp và thời hạn xử lý văn bản.
 3. **`eoffice_van_ban_di`**: Bảng quản lý hồ sơ phát hành và luân chuyển văn bản đi.
 4. **`eoffice_mission`**: Bảng lưu trữ nhiệm vụ, phân cấp cây đầu việc (`outlined-tree`).
-5. **`eoffice_lich_tuan` & `eoffice_diem_danh`**: Nhóm bảng quản lý lịch họp tuần, cuộc họp đơn vị và sự kiện điểm danh thời gian thực.
+5. **`eoffice_lich_tuan` & `eoffice_diem_danh`**: Nhóm bảng quản lý lịch họp tuần, cuộc họp đơn vị và sự kiện điểm danh.
 
 ### 5.3 Quy tắc Nghiệp vụ Báo trước Nghỉ phép (`BR-LEV-03`)
 

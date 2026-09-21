@@ -1,0 +1,223 @@
+// Generated read-only from live PostgreSQL schema.
+
+TableGroup ioffice_documents {
+  eoffice_van_ban_den
+  eoffice_distribution
+  eoffice_van_ban_di
+}
+
+TableGroup ioffice_mission {
+  mission_general
+  mission_outlined
+  mission_member
+  mission_report
+  mission_report_batch
+}
+
+TableGroup ioffice_schedule {
+  schedule_general
+  schedule_general_item
+  schedule_general_assign
+  schedule_meeting_attendance
+}
+
+Table eoffice_van_ban_den {
+  id integer [pk, increment, not null]
+  so_van_ban varchar(255)
+  noi_dung text
+  khan boolean
+  don_vi_gui integer
+  ten_don_vi_gui varchar(255)
+  ngay_van_ban bigint
+  ngay_nhan bigint
+  loai_van_ban integer
+  han_hoan_thanh bigint
+  nam integer
+  ghi_chu text
+  trang_thai varchar(20)
+  step_no integer
+  is_deleted boolean
+  quy_so_id integer
+  quy_trinh_config_id integer
+  mission_id integer
+  search_vector tsvector
+  is_thong_tin boolean
+  created_at bigint [not null]
+  deployment_at bigint
+}
+
+Table eoffice_distribution {
+  id integer [pk, increment, not null]
+  distributed_id integer
+  distributed_type varchar(20)
+  shcc varchar(10)
+  ma_don_vi varchar(10)
+  distributed_at bigint
+  distributed_by varchar(10)
+  note text
+  is_active boolean
+  status varchar(20)
+  viewed_at bigint
+  ly_do_tu_choi text
+}
+
+Table eoffice_van_ban_di {
+  id integer [pk, increment, not null]
+  ky_hieu varchar(50)
+  so varchar(50)
+  ma_don_vi varchar(10)
+  trich_yeu varchar(2000)
+  nam integer
+  loai_van_ban integer
+  trang_thai varchar(50)
+  cap_van_ban varchar(10)
+  quy_so_id integer
+  step_no integer
+  ghi_chu varchar(2000)
+  quy_trinh_id integer
+  ngay_van_ban varchar(2)
+  thang_van_ban varchar(2)
+  nam_van_ban varchar(4)
+  created_at bigint
+  updated_at bigint
+  deleted_at bigint
+  search_vector tsvector
+  created_by varchar(20)
+}
+
+Table mission_general {
+  id integer [pk, increment, not null]
+  title text
+  description text
+  type varchar(50)
+  status varchar(50)
+  start_date bigint
+  end_date bigint
+  created_at bigint
+  created_by varchar(20)
+  progress integer
+  slug varchar(50)
+  source varchar(50)
+  search_vector tsvector
+  cap_nhiem_vu varchar(20)
+  loai_nhiem_vu_id integer
+  quy_trinh varchar(10)
+  don_vi_thuc_hien varchar(10)
+}
+
+Table mission_outlined {
+  id integer [pk, not null]
+  mission_id integer
+  idx varchar(10)
+  parent_id integer
+  ten varchar(255)
+  ke_hoach text
+  start_date bigint
+  end_date bigint
+  priority integer
+  status varchar(null)
+  ly_do text
+  is_deleted boolean
+  review_status text
+  completed_at bigint
+  shcc_list jsonb
+}
+
+Table mission_member {
+  id integer [pk, increment, not null]
+  mission_id integer
+  shcc varchar(20)
+  ma_don_vi varchar(20)
+  created_at bigint
+  created_by varchar(20)
+  is_manage boolean
+  participant_id integer
+}
+
+Table mission_report {
+  id integer [pk, increment, not null]
+  report_batch_id integer
+  status varchar(50)
+  ket_qua text
+  created_at bigint
+  created_by varchar(20)
+  urgent boolean
+  mission_id integer
+  title text
+  submitted_at bigint
+  reviewed_at bigint
+  reviewed_by varchar(20)
+  return_reason text
+  revision integer [not null]
+  progress integer
+  vuong_mac text
+}
+
+Table mission_report_batch {
+  id integer [pk, increment, not null]
+  mission_id integer
+  title text
+  due_date bigint
+  created_at bigint
+  status varchar(50)
+  progress integer
+}
+
+Table schedule_general {
+  id integer [pk, increment, not null]
+  name varchar(255)
+  note varchar(1000)
+  update_time bigint
+  start_time bigint
+  end_time bigint
+  approve_shcc varchar(10)
+  approve_name varchar(255)
+}
+
+Table schedule_general_item {
+  id integer [pk, increment, not null]
+  all_day boolean
+  start_time bigint
+  end_time bigint
+  type varchar(100)
+  location varchar(1000)
+  note varchar(1000)
+  general_id integer
+  name text
+  is_deleted boolean
+  register_id integer
+  cap varchar(10)
+  quy_trinh_id integer
+  step_no integer
+  shcc varchar(10)
+  don_vi varchar(10)
+  render_assign_text varchar(500)
+  expect_assign integer
+  search_vector tsvector
+}
+
+Table schedule_general_assign {
+  id integer [pk, increment, not null]
+  item_id integer
+  shcc varchar(10)
+  full_name varchar(255)
+  short_name varchar(255)
+  chuc_vu varchar(10)
+  don_vi varchar(10)
+  vai_tro varchar(100)
+  priority integer
+}
+
+Table schedule_meeting_attendance {
+  id integer [pk, increment, not null]
+  item_id integer [not null]
+  assign_id integer
+  attended boolean
+  ly_do varchar(200)
+  created_by varchar(10)
+  created_by_don_vi varchar(10)
+  created_at bigint
+}
+
+Ref: mission_report_batch.mission_id > mission_general.id
+Ref: mission_report.mission_id > mission_general.id

@@ -1,488 +1,80 @@
-\section{Thiết kế Cơ sở Dữ liệu}
-\label{sec:thietke_csdl}
+\section{Thiết kế các thành phần hệ thống}
+\label{sec:thietke_kientruc_thanhphan}
 
-Trong đồ án chuyên ngành Hệ thống Thông tin (HTTT), việc thiết kế cơ sở dữ liệu đóng vai trò là hạt nhân cốt lõi của toàn bộ giải pháp. Phần này trình bày chi tiết lược đồ thực thể quan hệ, nguyên tắc chuẩn hóa và từ điển dữ liệu của 15 bảng cốt lõi phục vụ trực tiếp ứng dụng di động MyHCMUT và các luồng tích hợp đa dịch vụ.
+Mục này trình bày cách tổ chức ứng dụng MyHCMUT Mobile và các thành phần backend tham gia cung cấp chức năng cho ứng dụng. Nội dung tập trung vào cấu trúc mã nguồn, trách nhiệm của từng nhóm thành phần và phạm vi kế thừa, mở rộng các hệ thống hiện hữu nhằm phục vụ ứng dụng di động.
 
-\subsection{Lược đồ Thực thể Quan hệ Dữ liệu Tổng thể (Targeted Database ERD)}
-\label{subsec:erd_tongthe}
+\subsection{Thiết kế ứng dụng MyHCMUT Mobile}
+\label{subsec:kientruc_ung_dung_mobile}
 
-Mô hình dữ liệu của hệ thống được chuẩn hóa đạt \textbf{Dạng chuẩn 3 (3NF)} nhằm triệt tiêu các dị thường khi thêm, xóa, sửa (Insertion, Deletion, Update Anomalies). Toàn bộ các thuộc tính không khóa đều phụ thuộc trực tiếp vào khóa chính, không tồn tại phụ thuộc bắc cầu.
-
-Hình~\ref{fig:targeted_erd} thể hiện lược đồ quan hệ thực thể (Targeted Database ERD) bao quát các phân hệ nghiệp vụ mà ứng dụng di động trực tiếp tương tác:
+Ứng dụng MyHCMUT Mobile được phát triển bằng Flutter và tổ chức mã nguồn theo mô hình monorepo. Các chức năng được phân chia thành những module nghiệp vụ riêng, trong khi ứng dụng chính chịu trách nhiệm kết hợp các module và các package cung cấp thành phần dùng chung. Bên trong từng module, mã nguồn tiếp tục được tổ chức theo trách nhiệm như giao diện, quản lý trạng thái, mô hình dữ liệu và giao tiếp API.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\linewidth]{image/erd/targeted_system_erd.png}
-    \caption[\textit{Lược đồ thực thể quan hệ dữ liệu (Targeted Database ERD)}]{\textit{Lược đồ Thực thể Quan hệ Dữ liệu (Targeted Database ERD) Phục vụ Ứng dụng MyHCMUT}}
-    \label{fig:targeted_erd}
+    \includegraphics[width=0.92\linewidth,height=0.45\textheight,keepaspectratio]{image/architecture/chapter5-mobile-monorepo.png}
+    \caption[\textit{Cấu trúc monorepo của ứng dụng MyHCMUT Mobile}]{\textit{Cấu trúc monorepo của ứng dụng MyHCMUT Mobile}}
+    \label{fig:mobile_monorepo}
 \end{figure}
 
-\subsection{Phân hệ Dữ liệu Quản trị Nhân sự (HRM Database Schema)}
-\label{subsec:db_hrm}
-
-Phân hệ Nhân sự lưu trữ thông tin lý lịch cán bộ, các đề xuất cập nhật hồ sơ, đơn đăng ký nghỉ phép, quỹ phép năm, hồ sơ đi công tác và lịch làm việc cá nhân.
-
-\subsubsection{Bảng \texttt{staff\_ly\_lich} -- Hồ sơ Cán bộ}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.2cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.6cm}|p{2.6cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-shcc & VARCHAR(20) & PK, NOT NULL & Số hiệu công chức / Mã cán bộ duy nhất \\
-\hline
-user\_id & INT & FK, NOT NULL & Tham chiếu tài khoản \texttt{fw\_user.id} \\
-\hline
-ho\_ten & VARCHAR(100) & NOT NULL & Họ và tên đầy đủ của cán bộ \\
-\hline
-ngay\_sinh & DATE & NOT NULL & Ngày tháng năm sinh \\
-\hline
-gioi\_tinh & VARCHAR(10) & NOT NULL & Giới tính cán bộ (Nam, Nữ) \\
-\hline
-email & VARCHAR(100) & UNIQUE, NOT NULL & Email công vụ do Nhà trường cấp \\
-\hline
-dien\_thoai & VARCHAR(20) & NULL & Số điện thoại liên hệ cá nhân \\
-\hline
-ma\_don\_vi & VARCHAR(20) & FK, NOT NULL & Mã đơn vị / Khoa / Phòng ban công tác \\
-\hline
-chuc\_vu & VARCHAR(100) & NULL & Chức vụ hành chính hiện tại \\
-\hline
-hoc\_vi & VARCHAR(50) & NULL & Học vị cao nhất (TS, ThS, CN) \\
-\hline
-hoc\_ham & VARCHAR(50) & NULL & Học hàm (GS, PGS) \\
-\hline
-updated\_at & TIMESTAMP & DEFAULT NOW() & Thời điểm cập nhật dữ liệu gần nhất \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu hồ sơ cán bộ}]{\textit{Đặc tả Bảng Dữ liệu \texttt{staff\_ly\_lich}}}
-\label{tab:schema_staff_ly_lich}
-\end{table}
-
-\subsubsection{Bảng \texttt{staff\_ly\_lich\_request} -- Đề xuất Chỉnh sửa Lý lịch}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.2cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.6cm}|p{2.6cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã định danh yêu cầu cập nhật \\
-\hline
-shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ gửi đề xuất sửa hồ sơ \\
-\hline
-category & VARCHAR(50) & NOT NULL & Phân mục cập nhật (đào tạo, lương...) \\
-\hline
-old\_value & JSONB & NOT NULL & Dữ liệu cũ trước khi sửa (JSON snapshot) \\
-\hline
-new\_value & JSONB & NOT NULL & Dữ liệu mới đề xuất (JSON snapshot) \\
-\hline
-evidence\_file & VARCHAR(255) & NULL & Đường dẫn tệp tài liệu/ảnh minh chứng \\
-\hline
-trang\_thai & VARCHAR(30) & DEFAULT 'PENDING' & Trạng thái thẩm định (CHO\_DUYET, DA\_DUYET...) \\
-\hline
-approver\_shcc & VARCHAR(20) & FK, NULL & Chuyên viên TCCB thụ lý thẩm định \\
-\hline
-reject\_reason & TEXT & NULL & Lý do từ chối nếu không được duyệt \\
-\hline
-created\_at & TIMESTAMP & DEFAULT NOW() & Thời điểm tạo yêu cầu \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu đề xuất chỉnh sửa lý lịch}]{\textit{Đặc tả Bảng Dữ liệu \texttt{staff\_ly\_lich\_request}}}
-\label{tab:schema_staff_ly_lich_request}
-\end{table}
-
-\subsubsection{Bảng \texttt{tcns\_nghi\_phep\_dang\_ky} -- Đơn Đăng ký Nghỉ phép}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.4cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.5cm}|p{2.5cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã phiếu đăng ký nghỉ phép duy nhất \\
-\hline
-shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ nộp đơn xin nghỉ phép \\
-\hline
-loai\_nghi\_id & INT & FK, NOT NULL & Mã loại hình nghỉ phép \\
-\hline
-tu\_ngay & TIMESTAMP & NOT NULL & Thời điểm bắt đầu nghỉ (giờ, ngày) \\
-\hline
-den\_ngay & TIMESTAMP & NOT NULL & Thời điểm kết thúc nghỉ (giờ, ngày) \\
-\hline
-so\_ngay & NUMERIC(4,1) & NOT NULL & Tổng số ngày nghỉ (hỗ trợ tính nửa ngày) \\
-\hline
-ly\_do & TEXT & NOT NULL & Lý do xin nghỉ phép \\
-\hline
-noi\_nghi & VARCHAR(255) & NULL & Địa chỉ nơi nghỉ trong thời gian phép \\
-\hline
-ma\_quy\_trinh & VARCHAR(30) & NOT NULL & Trạng thái quy trình (NHAP, CHO\_DUYET...) \\
-\hline
-attachment\_url & VARCHAR(255) & NULL & Đường dẫn giấy khám bệnh / chỉ định bác sĩ \\
-\hline
-is\_late\_submission & BOOLEAN & DEFAULT FALSE & Đánh dấu nộp trễ hạn quy định \\
-\hline
-late\_reason & TEXT & NULL & Ý kiến giải trình lý do nộp trễ hạn \\
-\hline
-created\_at & TIMESTAMP & DEFAULT NOW() & Thời điểm tạo đơn \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu đăng ký nghỉ phép}]{\textit{Đặc tả Bảng Dữ liệu \texttt{tcns\_nghi\_phep\_dang\_ky}}}
-\label{tab:schema_tcns_nghi_phep_dang_ky}
-\end{table}
-
-\subsubsection{Bảng \texttt{tcns\_so\_nghi\_phep\_nam} -- Quỹ Phép năm Cán bộ}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.6cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.4cm}|p{2.4cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã định danh quỹ phép năm \\
-\hline
-shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ sở hữu quỹ phép \\
-\hline
-nam & INT & NOT NULL & Năm công tác tính phép (ví dụ: 2026) \\
-\hline
-so\_phep\_tieu\_chuan & NUMERIC(4,1) & NOT NULL & Số ngày phép tiêu chuẩn được hưởng \\
-\hline
-so\_phep\_da\_nghi & NUMERIC(4,1) & DEFAULT 0.0 & Tổng số ngày phép đã sử dụng và duyệt \\
-\hline
-so\_phep\_con\_lai & NUMERIC(4,1) & NOT NULL & Số ngày phép khả dụng còn lại trong năm \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu sổ phép năm}]{\textit{Đặc tả Bảng Dữ liệu \texttt{tcns\_so\_nghi\_phep\_nam}}}
-\label{tab:schema_tcns_so_nghi_phep_nam}
-\end{table}
-
-\subsubsection{Bảng \texttt{tcns\_qua\_trinh\_di\_cong\_tac} -- Hồ sơ Đi công tác}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.4cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.5cm}|p{2.5cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã hồ sơ chuyến đi công tác \\
-\hline
-shcc & VARCHAR(20) & FK, NOT NULL & Trưởng đoàn hoặc cán bộ lập hồ sơ \\
-\hline
-loai\_cong\_tac & VARCHAR(50) & NOT NULL & Loại hình công tác (Trong nước, Nước ngoài) \\
-\hline
-dia\_diem & VARCHAR(255) & NOT NULL & Địa điểm/quốc gia nơi đến công tác \\
-\hline
-tu\_ngay & DATE & NOT NULL & Ngày bắt đầu chuyến công tác \\
-\hline
-den\_ngay & DATE & NOT NULL & Ngày kết thúc chuyến công tác \\
-\hline
-muc\_dich & TEXT & NOT NULL & Mục đích, nội dung chương trình làm việc \\
-\hline
-kinh\_phi\_du\_toan & NUMERIC(15,2) & NULL & Dự toán tổng kinh phí chuyến đi (VND) \\
-\hline
-nguon\_kinh\_phi & VARCHAR(100) & NULL & Nguồn chi trả kinh phí chuyến đi \\
-\hline
-trang\_thai & VARCHAR(30) & DEFAULT 'NHAP' & Trạng thái luân chuyển hồ sơ \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu hồ sơ đi công tác}]{\textit{Đặc tả Bảng Dữ liệu \texttt{tcns\_qua\_trinh\_di\_cong\_tac}}}
-\label{tab:schema_tcns_qua_trinh_di_cong_tac}
-\end{table}
-
-\subsubsection{Bảng \texttt{tcns\_lich\_ca\_nhan} -- Thời gian biểu Cá nhân Cán bộ}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.2cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.6cm}|p{2.6cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã sự kiện thời gian biểu duy nhất \\
-\hline
-shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ sở hữu sự kiện lịch \\
-\hline
-loai\_su\_kien & VARCHAR(50) & NOT NULL & Loại sự kiện (NGHI\_PHEP, DI\_CONG\_TAC...) \\
-\hline
-ref\_id & INT & NOT NULL & Khóa ngoại mềm tham chiếu bảng nghiệp vụ \\
-\hline
-bat\_dau & TIMESTAMP & NOT NULL & Thời điểm bắt đầu sự kiện \\
-\hline
-ket\_thuc & TIMESTAMP & NOT NULL & Thời điểm kết thúc sự kiện \\
-\hline
-tieu\_de & VARCHAR(255) & NOT NULL & Tiêu đề tóm tắt mô tả sự kiện \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu thời gian biểu cá nhân}]{\textit{Đặc tả Bảng Dữ liệu \texttt{tcns\_lich\_ca\_nhan}}}
-\label{tab:schema_tcns_lich_ca_nhan}
-\end{table}
-
-\subsection{Phân hệ Dữ liệu Văn phòng số và Nhiệm vụ (iOffice Database Schema)}
-\label{subsec:db_ioffice}
-
-Phân hệ iOffice quản lý luồng văn bản đến, phân phối chỉ đạo, điều hành nhiệm vụ theo cấu trúc cây phân cấp và các đợt nộp báo cáo tiến độ.
-
-\subsubsection{Bảng \texttt{van\_ban\_den\_general} -- Sổ Văn bản đến}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.4cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.5cm}|p{2.5cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã định danh văn bản đến duy nhất \\
-\hline
-so\_hieu & VARCHAR(50) & NOT NULL & Số và ký hiệu văn bản chính thức \\
-\hline
-trich\_yeu & TEXT & NOT NULL & Nội dung tóm tắt trích yếu của văn bản \\
-\hline
-co\_quan\_ban\_hanh & VARCHAR(150) & NOT NULL & Tên cơ quan, đơn vị ban hành văn bản \\
-\hline
-ngay\_ban\_hanh & DATE & NOT NULL & Ngày ban hành văn bản chính thức \\
-\hline
-do\_khan & VARCHAR(30) & DEFAULT 'THUONG' & Mức độ khẩn (Thường, Khẩn, Hỏa tốc) \\
-\hline
-file\_pdf\_url & VARCHAR(255) & NOT NULL & Đường dẫn tệp PDF để xem trên thiết bị \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu sổ văn bản đến}]{\textit{Đặc tả Bảng Dữ liệu \texttt{van\_ban\_den\_general}}}
-\label{tab:schema_van_ban_den_general}
-\end{table}
-
-\subsubsection{Bảng \texttt{van\_ban\_den\_distribution} -- Phân phối \& Chỉ đạo Văn bản}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.4cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.5cm}|p{2.5cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã lượt phân phối văn bản \\
-\hline
-van\_ban\_id & INT & FK, NOT NULL & Tham chiếu \texttt{van\_ban\_den\_general.id} \\
-\hline
-assignee\_shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ được phân công trực tiếp xử lý \\
-\hline
-but\_phe\_lanh\_dao & TEXT & NULL & Ý kiến chỉ đạo/bút phê của Lãnh đạo \\
-\hline
-han\_xu\_ly & DATE & NULL & Hạn chót hoàn thành xử lý văn bản \\
-\hline
-trang\_thai\_xu\_ly & VARCHAR(30) & DEFAULT 'CHUA\_XU\_LY' & Trạng thái (CHUA\_XU\_LY, DA\_HOAN\_THANH...) \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu phân phối văn bản}]{\textit{Đặc tả Bảng Dữ liệu \texttt{van\_ban\_den\_distribution}}}
-\label{tab:schema_van_ban_den_distribution}
-\end{table}
-
-\subsubsection{Bảng \texttt{mission\_general} -- Nhiệm vụ Điều hành}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.4cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.5cm}|p{2.5cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã định danh nhiệm vụ điều hành \\
-\hline
-ten\_nhiem\_vu & VARCHAR(255) & NOT NULL & Tên tiêu đề của nhiệm vụ \\
-\hline
-loai\_nhiem\_vu & VARCHAR(50) & NOT NULL & Phân loại (Trọng tâm trường, Giao việc...) \\
-\hline
-host\_shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ chủ trì chịu trách nhiệm chính \\
-\hline
-han\_hoan\_thanh & DATE & NOT NULL & Thời hạn chót hoàn thành nhiệm vụ \\
-\hline
-tien\_do\_phan\_tram & INT & DEFAULT 0 & Tiến độ thực hiện nhiệm vụ (0 đến 100\%) \\
-\hline
-trang\_thai & VARCHAR(30) & NOT NULL & Trạng thái (CHUA\_BAT\_DAU, DANG\_THUC\_HIEN...) \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu nhiệm vụ điều hành}]{\textit{Đặc tả Bảng Dữ liệu \texttt{mission\_general}}}
-\label{tab:schema_mission_general}
-\end{table}
-
-\subsubsection{Bảng \texttt{mission\_outlined} -- Cây Đầu việc Phân cấp}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.2cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.6cm}|p{2.6cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã định danh đầu việc trong cây \\
-\hline
-mission\_id & INT & FK, NOT NULL & Tham chiếu nhiệm vụ gốc \texttt{mission\_general} \\
-\hline
-parent\_id & INT & FK, NULL & Tham chiếu đầu việc cha (NULL nếu là Level 1) \\
-\hline
-title & VARCHAR(255) & NOT NULL & Tiêu đề mô tả đầu việc \\
-\hline
-order\_index & INT & DEFAULT 0 & Thứ tự sắp xếp hiển thị trên cây giao diện \\
-\hline
-is\_completed & BOOLEAN & DEFAULT FALSE & Cờ đánh dấu hoàn thành đầu việc \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu cây đầu việc phân cấp}]{\textit{Đặc tả Bảng Dữ liệu \texttt{mission\_outlined}}}
-\label{tab:schema_mission_outlined}
-\end{table}
-
-\subsubsection{Bảng \texttt{mission\_task\_general} -- Công việc Chi tiết}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.2cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.6cm}|p{2.6cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã công việc chi tiết \\
-\hline
-outlined\_id & INT & FK, NOT NULL & Tham chiếu nút đầu việc \texttt{mission\_outlined} \\
-\hline
-assignee\_shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ được phân công thực hiện \\
-\hline
-noi\_dung & TEXT & NOT NULL & Chi tiết các hạng mục cần thực thi \\
-\hline
-deadline & TIMESTAMP & NOT NULL & Thời hạn chót nộp kết quả công việc \\
-\hline
-trang\_thai & VARCHAR(30) & NOT NULL & Trạng thái thực hiện công việc \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu công việc chi tiết}]{\textit{Đặc tả Bảng Dữ liệu \texttt{mission\_task\_general}}}
-\label{tab:schema_mission_task_general}
-\end{table}
-
-\subsubsection{Bảng \texttt{mission\_report\_batch} -- Đợt Báo cáo Tiến độ}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.2cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.6cm}|p{2.6cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã đợt báo cáo tiến độ \\
-\hline
-mission\_id & INT & FK, NOT NULL & Tham chiếu nhiệm vụ gốc \texttt{mission\_general} \\
-\hline
-dot\_bao\_cao\_so & INT & NOT NULL & Số thứ tự đợt báo cáo (1, 2, 3...) \\
-\hline
-noi\_dung\_bao\_cao & TEXT & NOT NULL & Tóm tắt khối lượng kết quả đạt được \\
-\hline
-file\_minh\_chung & VARCHAR(255) & NULL & Đường dẫn tệp đính kèm minh chứng \\
-\hline
-reporter\_shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ lập báo cáo đợt \\
-\hline
-created\_at & TIMESTAMP & DEFAULT NOW() & Thời điểm gửi báo cáo \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu đợt báo cáo tiến độ}]{\textit{Đặc tả Bảng Dữ liệu \texttt{mission\_report\_batch}}}
-\label{tab:schema_mission_report_batch}
-\end{table}
-
-\subsection{Phân hệ Dữ liệu Lịch công tác và Điểm danh Cuộc họp (Schedule Database Schema)}
-\label{subsec:db_schedule}
-
-\subsubsection{Bảng \texttt{schedule\_general\_item} -- Sự kiện Lịch tuần}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.4cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.5cm}|p{2.5cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã sự kiện lịch tuần duy nhất ($> 0$) \\
-\hline
-cap\_lich & VARCHAR(30) & NOT NULL & Cấp quản lý lịch (LICH\_TRUONG, LICH\_DON\_VI) \\
-\hline
-tieu\_de & VARCHAR(255) & NOT NULL & Nội dung tiêu đề cuộc họp / sự kiện \\
-\hline
-chu\_tri & VARCHAR(100) & NOT NULL & Họ tên và chức vụ người chủ trì cuộc họp \\
-\hline
-dia\_diem & VARCHAR(150) & NOT NULL & Phòng họp hoặc đường link họp trực tuyến \\
-\hline
-thoi\_gian\_bat\_dau & TIMESTAMP & NOT NULL & Thời điểm bắt đầu cuộc họp \\
-\hline
-thoi\_gian\_ket\_thuc & TIMESTAMP & NOT NULL & Thời điểm kết thúc cuộc họp \\
-\hline
-thanh\_phan & TEXT & NOT NULL & Danh sách đại biểu và đơn vị tham dự \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu sự kiện lịch tuần}]{\textit{Đặc tả Bảng Dữ liệu \texttt{schedule\_general\_item}}}
-\label{tab:schema_schedule_general_item}
-\end{table}
-
-\subsubsection{Bảng \texttt{schedule\_meeting\_attendance} -- Lưu vết Điểm danh}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.4cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.5cm}|p{2.5cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã bản ghi lượt điểm danh duy nhất \\
-\hline
-schedule\_id & INT & FK, NOT NULL & Tham chiếu cuộc họp \texttt{schedule\_general\_item} \\
-\hline
-shcc & VARCHAR(20) & FK, NOT NULL & Cán bộ tham dự cuộc họp \\
-\hline
-status & VARCHAR(20) & NOT NULL & Trạng thái (attended: Đã có mặt, absent: Báo vắng) \\
-\hline
-checkin\_time & TIMESTAMP & NULL & Thời điểm thực hiện bấm điểm danh trên mobile \\
-\hline
-absent\_reason & TEXT & NULL & Lý do báo vắng mặt được duyệt \\
-\hline
-ip\_address & VARCHAR(45) & NULL & Địa chỉ IP của thiết bị khi thực hiện điểm danh \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu lưu vết điểm danh cuộc họp}]{\textit{Đặc tả Bảng Dữ liệu \texttt{schedule\_meeting\_attendance}}}
-\label{tab:schema_schedule_meeting_attendance}
-\end{table}
-
-\subsection{Phân hệ Dữ liệu Hạ tầng \& Thiết bị Di động (Mobile Device Schema)}
-\label{subsec:db_mobile_device}
-
-\subsubsection{Bảng \texttt{fw\_user\_device\_token} -- Quản lý Thiết bị Di động}
-\begin{table}[H]
-\centering
-\small
-\begin{tabularx}{\textwidth}{|>{\ttfamily\RaggedRight\arraybackslash}p{3.2cm}|>{\ttfamily\RaggedRight\arraybackslash}p{2.6cm}|p{2.6cm}|Y|}
-\hline
-\textrm{\textbf{Tên Trường}} & \textrm{\textbf{Kiểu Dữ liệu}} & \textbf{Ràng buộc} & \textbf{Ý nghĩa Nghiệp vụ} \\
-\hline
-id & SERIAL & PK, NOT NULL & Mã định danh thiết bị di động duy nhất \\
-\hline
-user\_id & INT & FK, NOT NULL & Tham chiếu tài khoản người dùng \texttt{fw\_user.id} \\
-\hline
-device\_token & TEXT & UNIQUE, NOT NULL & Chuỗi mã Firebase FCM Token của thiết bị \\
-\hline
-platform & VARCHAR(20) & NOT NULL & Hệ điều hành của thiết bị (\texttt{android}, \texttt{ios}) \\
-\hline
-device\_name & VARCHAR(100) & NULL & Tên thiết bị (Google Pixel 6, iPhone 13...) \\
-\hline
-is\_active & BOOLEAN & DEFAULT TRUE & Cờ trạng thái sẵn sàng tiếp nhận thông báo \\
-\hline
-last\_used\_at & TIMESTAMP & DEFAULT NOW() & Thời điểm gần nhất ứng dụng mở và kích hoạt token \\
-\hline
-\end{tabularx}
-\caption[\textit{Bảng dữ liệu định danh thiết bị di động}]{\textit{Đặc tả Bảng Dữ liệu \texttt{fw\_user\_device\_token}}}
-\label{tab:schema_fw_user_device_token}
-\end{table}
-
-\subsection{Phân tích các Mô hình Lưu trữ Dữ liệu Chuyên sâu}
-\label{subsec:chuyensau_csdl}
-
-\subsubsection{Mô hình Máy Trạng thái Quy trình và Lưu vết Lịch sử (Workflow State Tracking)}
-Trong quản trị đại học, tính pháp lý và minh bạch của quy trình yêu cầu mọi hành động phê duyệt phải được kiểm toán (Audit Logging). Hệ thống thiết kế liên kết 3 cấp:
-\begin{center}
-\textbf{Phiếu Đăng ký (Source Entity)} $\longleftrightarrow$ \textbf{Cấu hình Bước (Workflow Step)} $\longleftrightarrow$ \textbf{Lịch sử Duyệt (Workflow History)}
-\end{center}
-Bảng lịch sử quy trình ghi nhận đầy đủ 5 chiều thông tin bất biến: *Ai thực hiện (actor), tại bước nào (step), vào thời điểm nào (timestamp), quyết định gì (APPROVED / REJECTED / REQUEST\_MODIFICATION) và nội dung ghi chú (notes)*. Cách tổ chức này cho phép tái hiện chính xác toàn bộ dòng chảy phê duyệt của một lá đơn từ lúc nộp đến khi hoàn tất.
-
-\subsubsection{Mô hình Cây Phân cấp Đệ quy (Adjacency List Tree Model)}
-Bảng \texttt{mission\_outlined} tổ chức cây đầu việc theo mô hình danh sách kề (*Adjacency List Model*) với cặp thuộc tính \texttt{(id, parent\_id)}. Nút cấp 1 có \texttt{parent\_id = NULL}. Mô hình này có ưu điểm:
+Cấu trúc mã nguồn gồm ba nhóm chính:
 \begin{itemize}
-    \item Mở rộng cấu trúc cây đến độ sâu tùy ý mà không làm thay đổi lược đồ cơ sở dữ liệu.
-    \item Cho phép di chuyển cả một nhánh công việc sang nút cha khác chỉ bằng một câu lệnh cập nhật khóa ngoại \texttt{UPDATE parent\_id}.
-    \item Hỗ trợ tính toán tiến độ dự án theo cơ chế Bottom-Up: khi tất cả các nút con hoàn thành, nút cha tự động được đánh dấu hoàn tất.
+    \item \textbf{Ứng dụng chính (\texttt{apps/myhcmut}):} Là điểm khởi chạy và kết hợp các module thành ứng dụng hoàn chỉnh. Thành phần này đảm nhiệm khởi tạo ứng dụng, cấu hình điều hướng, đăng ký các provider dùng chung và tổ chức các màn hình ở cấp ứng dụng.
+    \item \textbf{Các module nghiệp vụ (\texttt{modules}):} Được tổ chức thành các nhóm HRM, iOffice và thông báo. Module HRM cung cấp các chức năng hồ sơ cán bộ, nghỉ phép, đi công tác và phê duyệt liên quan. Module iOffice cung cấp các chức năng văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Module thông báo đảm nhiệm tiếp nhận, hiển thị thông báo và xử lý điều hướng đến chức năng tương ứng.
+    \item \textbf{Các package dùng chung (\texttt{packages}):} Cung cấp những thành phần được nhiều module sử dụng, bao gồm giao tiếp mạng, quản lý thông tin xác thực, thành phần giao diện và các tiện ích hỗ trợ.
 \end{itemize}
 
-\subsubsection{Mô hình Dữ liệu Bán cấu trúc JSONB cho Diff Viewer}
-Bảng \texttt{staff\_ly\_lich\_request} lưu trữ hai cột \texttt{old\_value} và \texttt{new\_value} dưới dạng kiểu dữ liệu bán cấu trúc \texttt{JSONB} của PostgreSQL. Thiết kế này giúp hệ thống linh hoạt lưu trữ snapshot sai khác cho bất kỳ danh mục lý lịch nào (từ thông tin cá nhân, học vị, chức vụ đến quá trình công tác) mà không cần phải tạo hàng chục bảng tạm tương ứng trong cơ sở dữ liệu.
+Cách tổ chức này giúp phân định phạm vi mã nguồn theo nhóm nghiệp vụ, đồng thời cho phép tái sử dụng các thành phần chung giữa nhiều module. Tuy nhiên, cấu trúc nội bộ không hoàn toàn giống nhau ở mọi chức năng; đề tài không áp đặt một chuỗi lớp xử lý cố định cho toàn bộ ứng dụng.
+
+\textbf{Luồng xử lý chức năng hồ sơ cán bộ:} Chức năng hồ sơ cán bộ được lựa chọn để minh họa cách các thành phần Flutter phối hợp trong một luồng xử lý thực tế. Màn hình \texttt{PersonalProfilePage} theo dõi trạng thái từ \texttt{profileInfoProvider}; provider này tổng hợp dữ liệu từ ba provider thành phần tương ứng với thông tin cá nhân, đào tạo và quá trình công tác. Mỗi provider thành phần sử dụng \texttt{fetchWithCacheFirst} để đọc dữ liệu cục bộ hoặc gọi HRM Backend thông qua \texttt{hrmDioProvider}. Kết quả được chuyển thành \texttt{ProfileModel}, hợp nhất và cung cấp lại cho giao diện.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.36\textheight,keepaspectratio]{image/architecture/chapter5-profile-cache.png}
+    \caption[\textit{Luồng tải và lưu đệm dữ liệu hồ sơ cán bộ}]{\textit{Luồng tải và lưu đệm dữ liệu hồ sơ cán bộ}}
+    \label{fig:profile_cache_flow}
+\end{figure}
+
+Luồng trên là ví dụ minh họa, không phải cấu trúc bắt buộc của mọi module. Tùy theo yêu cầu nghiệp vụ, các chức năng khác có thể tổ chức provider và thành phần xử lý dữ liệu theo cách khác nhau. Những quy tắc ảnh hưởng đến dữ liệu chính thức vẫn được kiểm tra tại backend.
+
+\textbf{Các thành phần dùng chung:} Ứng dụng sử dụng các Dio instance được cấu hình theo địa chỉ của Auth Service, HRM Backend và iOffice Backend. Các instance dùng chung cơ chế quản lý token và gắn thông tin xác thực vào yêu cầu. Trong phiên bản hiện tại, ba miền dịch vụ sử dụng cùng access token do Auth Service cấp. Riverpod quản lý trạng thái phục vụ giao diện, còn GoRouter tổ chức điều hướng giữa các màn hình, bao gồm điều hướng đến chức năng tương ứng từ thông báo. Cơ chế xác thực được trình bày chi tiết tại Mục~\ref{subsec:xac_thuc_da_he_thong}.
+
+\textbf{Bộ nhớ đệm và lưu trữ cục bộ:} Dữ liệu hồ sơ được lưu theo từng người dùng trong \texttt{SharedPreferences}. Mốc 12 giờ là ngưỡng đánh giá độ mới, không phải thời hạn tự động xóa dữ liệu. Khi cache còn mới, ứng dụng sử dụng dữ liệu cục bộ mà không gọi mạng. Khi cache quá ngưỡng, ứng dụng vẫn trả dữ liệu hiện có để hiển thị và thử cập nhật cache trong nền.
+
+Nếu cập nhật nền thất bại, dữ liệu cũ được giữ lại. Nếu thành công, dữ liệu mới được lưu để sử dụng ở lần đọc tiếp theo, nhưng tác vụ này không tự làm mới ngay giao diện đang hiển thị. Khi chưa có cache, ứng dụng cần kết nối đến HRM Backend để tải hồ sơ.
+
+Ngoài dữ liệu hồ sơ, một số danh mục tham chiếu của HRM được lưu trong SQLite. Khả năng xem dữ liệu khi mất mạng được hỗ trợ đối với hồ sơ đã có cache; ứng dụng không hỗ trợ tạo, gửi hoặc phê duyệt phiếu ngoại tuyến rồi đồng bộ về sau. Vì vậy, cơ chế này được xác định là bộ nhớ đệm và lưu trữ cục bộ, không phải kiến trúc \textit{offline-first}.
+
+\subsection{Các backend hiện hữu và phạm vi mở rộng}
+\label{subsec:backend_hien_huu_va_mo_rong}
+
+MyHCMUT Mobile tích hợp với Auth Service, HRM Backend và iOffice Backend. Đây là các hệ thống hiện hữu; đề tài không xây dựng lại toàn bộ kiến trúc backend hoặc cơ sở dữ liệu nghiệp vụ của chúng. Phần phát triển phía backend tập trung vào các API và cơ chế tích hợp cần thiết để hỗ trợ ứng dụng di động.
+
+\textbf{Auth Service:} Cung cấp chức năng đăng nhập và cấp token cho ứng dụng. Sau khi nhận token, ứng dụng gửi yêu cầu trực tiếp đến HRM Backend hoặc iOffice Backend tùy theo chức năng được sử dụng. Các backend tự xác thực yêu cầu và kiểm tra quyền truy cập nghiệp vụ. Trong phạm vi đề tài, nhóm tích hợp ứng dụng với dịch vụ xác thực hiện hữu, không xây dựng mới một hệ thống xác thực độc lập.
+
+\textbf{HRM Backend:} Cung cấp các module nghiệp vụ hồ sơ cán bộ, nghỉ phép, đi công tác và quy trình phê duyệt. Trong cấu trúc mã nguồn hiện hữu, middleware được gắn khi đăng ký route để xử lý các yêu cầu dùng chung như xác thực và phân quyền. Controller hoặc handler tiếp nhận yêu cầu và điều phối xử lý; tùy từng module, thành phần này có thể làm việc trực tiếp với model hoặc thông qua service/helper.
+
+Đề tài kế thừa các nghiệp vụ, quy trình và dữ liệu HRM hiện hữu, đồng thời bổ sung hoặc điều chỉnh một số điểm tích hợp phục vụ ứng dụng di động, bao gồm API hồ sơ, kiểm tra điều kiện nghỉ phép, đăng ký token thiết bị, metadata thông báo và cơ chế cấp, tiêu thụ vé SSO. Các phần mở rộng này hỗ trợ ứng dụng khai thác hệ thống HRM mà không chuyển quyền xử lý nghiệp vụ hoặc quản lý dữ liệu chính thức sang thiết bị di động.
+
+\textbf{iOffice Backend:} Cung cấp các module văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng di động khai thác API hiện hữu của các module này để truy xuất dữ liệu và thực hiện thao tác được phân quyền.
+
+Các điều chỉnh phục vụ ứng dụng di động tại iOffice gồm bổ sung metadata điều hướng cho thông báo và thành phần tiêu thụ vé SSO. Tuy nhiên, ứng dụng MyHCMUT Mobile hiện chưa hỗ trợ mở các chức năng iOffice thông qua WebView; người dùng truy cập các chức năng văn bản, nhiệm vụ, lịch công tác và điểm danh bằng giao diện Flutter thông qua API của iOffice.
+
+\begin{table}[H]
+\centering
+\caption[\textit{Phạm vi kế thừa và phát triển các thành phần hệ thống}]{\textit{Phạm vi kế thừa và phát triển các thành phần hệ thống}}
+\label{tab:component_ownership_scope}
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{4.2cm}|Y|}
+\hline
+\textbf{Thành phần} & \textbf{Phần kế thừa} & \textbf{Phần nhóm phát triển hoặc tích hợp} \\
+\hline
+MyHCMUT Mobile & Không áp dụng & Phát triển ứng dụng Flutter, các module nghiệp vụ, thành phần dùng chung, giao tiếp API, lịch tổng hợp, WebView và xử lý thông báo. \\
+\hline
+Auth Service & Chức năng đăng nhập và cấp token & Tích hợp ứng dụng di động với dịch vụ xác thực hiện hữu. \\
+\hline
+HRM Backend & Nghiệp vụ hồ sơ, nghỉ phép, đi công tác, quy trình phê duyệt và dữ liệu nhân sự & Bổ sung hoặc điều chỉnh API phục vụ mobile, kiểm tra nghỉ phép, đăng ký token thiết bị, metadata thông báo và One-Time Ticket SSO. \\
+\hline
+iOffice Backend & Nghiệp vụ văn bản, nhiệm vụ, lịch công tác, điểm danh và dữ liệu văn phòng số & Tích hợp API hiện hữu; bổ sung metadata thông báo và thành phần tiêu thụ vé SSO theo trạng thái hiện thực của phiên bản đồ án. \\
+\hline
+\end{tabularx}
+\end{table}
+
+Như vậy, ứng dụng Flutter là thành phần phát triển chính, còn các backend hiện hữu tiếp tục xử lý nghiệp vụ và dữ liệu. Các mở rộng phía backend đóng vai trò tích hợp, giúp ứng dụng khai thác hiệu quả hệ thống sẵn có.

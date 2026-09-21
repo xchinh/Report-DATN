@@ -1,0 +1,79 @@
+// DBML phục vụ ERD Chương 5, không dùng để sinh DDL.
+// Màu cam (#D97706): liên kết logic do HRM Backend duy trì, không phải FK vật lý.
+
+Project chapter5_business_trip {
+  database_type: 'PostgreSQL'
+  Note: 'Dữ liệu công tác thuộc CSDL HRM hiện hữu. Các Ref trong sơ đồ này đều là liên kết logic.'
+}
+
+TableGroup hrm_business_trip [color: #EA580C] {
+  tcns_dang_ky_cong_tac
+  tcns_dang_ky_cong_tac_tham_gia
+  tcns_dang_ky_cong_tac_ke_hoach
+  tcns_qua_trinh_di_cong_tac
+}
+
+
+
+Table tcns_dang_ky_cong_tac {
+  id integer [pk, increment, not null]
+  shcc text [note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  don_vi text
+  ngay_bat_dau numeric
+  ngay_ket_thuc numeric
+  dia_diem text
+  quoc_gia jsonb
+  noi_dung text
+  muc_tieu text
+  hinh_thuc text
+  phan_loai text
+  nguon_kinh_phi text
+  files jsonb
+  ma_quy_trinh text
+  trang_thai text
+  ngay_tao numeric
+  ket_qua_cong_tac text
+  Note: 'Phiếu đăng ký công tác và thông tin phục vụ lịch tổng hợp.'
+}
+
+Table tcns_dang_ky_cong_tac_tham_gia {
+  id integer [pk, increment, not null]
+  dang_ky_id numeric [note: 'Liên kết logic đến tcns_dang_ky_cong_tac.id.']
+  shcc text
+  don_vi text
+  chuc_vu text
+  is_truong_doan boolean
+  is_dang_vien boolean
+}
+
+Table tcns_dang_ky_cong_tac_ke_hoach {
+  id integer [increment, not null]
+  dang_ky_id integer [note: 'Liên kết logic đến tcns_dang_ky_cong_tac.id.']
+  stt integer
+  noi_dung text
+  ngay_bat_dau bigint
+  ngay_ket_thuc bigint
+  dia_diem text
+  Note: 'Schema hiện hữu không khai báo PK cho bảng này.'
+}
+
+Table tcns_qua_trinh_di_cong_tac {
+  id integer [pk, increment, not null]
+  dang_ky_id numeric [note: 'Liên kết logic đến tcns_dang_ky_cong_tac.id.']
+  shcc text
+  ngay_bat_dau numeric
+  ngay_ket_thuc numeric
+  dia_diem text
+  noi_dung text
+  muc_tieu text
+  hinh_thuc text
+  phan_loai text
+  ket_qua_cong_tac text
+  ngay_ve_thuc_te bigint
+}
+
+
+
+Ref logical_trip_participant: tcns_dang_ky_cong_tac_tham_gia.dang_ky_id > tcns_dang_ky_cong_tac.id [color: #D97706]
+Ref logical_trip_plan: tcns_dang_ky_cong_tac_ke_hoach.dang_ky_id > tcns_dang_ky_cong_tac.id [color: #D97706]
+Ref logical_trip_history: tcns_qua_trinh_di_cong_tac.dang_ky_id > tcns_dang_ky_cong_tac.id [color: #D97706]

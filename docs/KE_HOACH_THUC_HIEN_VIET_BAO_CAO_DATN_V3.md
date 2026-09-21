@@ -9,9 +9,9 @@ Kế hoạch này dùng để chuẩn bị và viết các phần:
 - Mục 3.2 — Công nghệ phía ứng dụng di động.
 - Mục 4.1 — Người dùng, phân quyền và Use Case tổng thể.
 - Đặc tả các nội dung do sinh viên Vũ Xuân Chính phụ trách (IN_CHINH_SCOPE):
-  - Tra cứu và hỗ trợ cập nhật hồ sơ cán bộ (11 danh mục thông tin).
+  - Tra cứu và hỗ trợ cập nhật các danh mục hồ sơ cán bộ do HRM cung cấp.
   - Quản lý nghỉ phép (Form Wizard 3 bước, kiểm định điều kiện đa giai đoạn, giải trình nộp trễ).
-  - Lịch công tác & Điểm danh cuộc họp thời gian thực qua WebSocket (Socket.IO, Geofencing).
+  - Lịch công tác và cập nhật trạng thái điểm danh qua WebSocket (Socket.IO, Geofencing).
   - Trung tâm thông báo đẩy và điều hướng nghiệp vụ sâu (FCM, NotificationRouteParser).
   - Cơ chế chuyển tiếp xác thực qua vé dùng một lần kết hợp In-App WebView.
   - Bộ thành phần dùng chung tái sử dụng (`AppBatchActionBar`, Design Tokens).
@@ -185,13 +185,13 @@ Mỗi requirement pack phải có: mục tiêu, phạm vi, actor, use case, lu�
 
 #### Nội dung phải khóa
 
-- 11 nhóm thông tin lý lịch được backend tổng hợp và cách nhóm trên ba tab Mobile.
+- Các danh mục thông tin lý lịch do HRM cung cấp và cách tổ chức chúng trên ba nhóm giao diện Mobile.
 - Phần xem hồ sơ bằng Flutter native.
 - Phần chỉnh sửa thông qua HRM Web trong In-App WebView.
 - Luồng tạo yêu cầu cập nhật và trạng thái `PENDING`.
 - Luồng thẩm định sai khác bằng `ReviewDiffCard`.
 - SQLite chỉ lưu 47 danh mục tham chiếu; dữ liệu hồ sơ dùng SWR cache trong `SharedPreferences`.
-- Phân tách cache theo `$userKey`, làm mới sau JS Bridge và xóa khi đăng xuất.
+- Phân tách cache theo `$userKey` và làm mới sau JS Bridge. Không khẳng định cache hồ sơ được xóa khi đăng xuất nếu chưa có bằng chứng gọi hàm xóa trong luồng này.
 - Hạn chế dữ liệu cache dạng rõ trên thiết bị root/trích xuất dữ liệu.
 
 #### Use Case dự kiến
@@ -205,7 +205,7 @@ Mỗi requirement pack phải có: mục tiêu, phạm vi, actor, use case, lu�
 #### Hình/bảng cần chuẩn bị
 
 - Activity Diagram tra cứu–chỉnh sửa–chờ duyệt.
-- Bảng 11 nhóm thông tin và ba tab giao diện.
+- Bảng các danh mục thông tin hồ sơ và ba nhóm giao diện.
 - Bảng phân biệt SQLite master data và SWR profile cache.
 - Ảnh Profile Page, WebView cập nhật và ReviewDiffCard.
 
@@ -224,7 +224,7 @@ Người đọc phân biệt được nội dung nào native, nội dung nào We
 - `/validate` là hỗ trợ nhập liệu; `PUT ... isSend=1` là chốt chặn backend có thẩm quyền.
 - Quy tắc 2/3 ngày làm việc lấy từ `tcns_setting`; không viện dẫn văn bản chưa có.
 - Loại trừ cuối tuần, ngày lễ/ngày làm bù theo dữ liệu backend.
-- Kiểm tra trùng lịch, giải trình nộp trễ, tệp đính kèm và cam kết.
+- Kiểm tra trùng lịch, thời hạn nộp, tệp đính kèm và cam kết. Khi quá hạn, Mobile chặn tạo đơn nghỉ phép thông thường và điều hướng đến điểm truy cập phân hệ Giải trình.
 - Quỹ phép chỉ được trừ có thẩm quyền ở bước phê duyệt cuối bằng stored procedure và `SELECT ... FOR UPDATE`.
 - Duyệt hàng loạt là `Per-Item Commit (Fail-Stop)`; Mobile phải refetch sau lỗi.
 - Bản nháp bị bỏ quên chưa có cleanup tự động (đề xuất Cron job trong Chương 7).
@@ -263,7 +263,7 @@ Người đọc phân biệt được nội dung nào native, nội dung nào We
 
 #### Hình/bảng cần chuẩn bị
 
-- Activity Diagram ba giai đoạn (bao gồm nhánh rẽ điều hướng sang Giải trình khi trễ hạn và nhánh dọn nháp khi thoát).
+- Activity Diagram ba giai đoạn (bao gồm nhánh rẽ điều hướng đến điểm truy cập Giải trình khi trễ hạn và nhánh dọn nháp khi thoát). Không mô tả việc tạo hoặc phê duyệt Giải trình như chức năng đã hiện thực.
 - State Diagram vòng đời đơn nghỉ phép đầy đủ (NHAP, GUI_DUYET, TRA_LAI, GUI_LAI, THU_HOI, TU_CHOI, KET_THUC).
 - Bảng client hint và authoritative backend check.
 - Bảng rule–config–source–test.

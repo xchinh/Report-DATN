@@ -74,11 +74,12 @@ Một nguyên tắc quan trọng trong nghiên cứu khoa học và kỹ nghệ 
 \subsection{Kiểm thử Luồng Nghiệp vụ Đầu-Cuối (End-to-End System Tests trên Staging)}
 Nhóm nghiên cứu đã thực hiện kiểm thử liên thông toàn diện trên môi trường Staging kết nối hai thiết bị thử nghiệm thực tế: \textbf{Google Pixel 6} (chạy Android 14) và \textbf{iPhone 13} (chạy iOS 17), hoàn thành 4 kịch bản E2E lớn:
 \begin{enumerate}
-    \item \textbf{Kịch bản 1 -- Đăng ký \& Phê duyệt Nghỉ phép 2 cấp liên thông:} Cán bộ nộp đơn trên Mobile $\rightarrow$ Nhận cảnh báo nộp trễ và tải giấy khám bệnh $\rightarrow$ Backend phát sự kiện Kafka sau commit $\rightarrow$ Lãnh đạo Đơn vị nhận push notification trên điện thoại, bấm vào thông báo mở thẳng màn hình duyệt $\rightarrow$ Duyệt đơn $\rightarrow$ Chuyên viên TCCB nhận thông báo tiếp theo và phê duyệt cấp trường $\rightarrow$ Cán bộ nhận thông báo kết quả cuối cùng.
+    \item \textbf{Kịch bản 1 -- Đăng ký \& Phê duyệt Nghỉ phép 2 cấp liên thông:} Cán bộ nộp đơn trên Mobile $\rightarrow$ Nhận cảnh báo nộp trễ và tải giấy khám bệnh $\rightarrow$ Sau khi ghi nhận đơn, backend khởi chạy quy trình gửi thông báo đẩy $\rightarrow$ Lãnh đạo Đơn vị nhận thông báo trên điện thoại, bấm vào thông báo mở thẳng màn hình duyệt $\rightarrow$ Duyệt đơn $\rightarrow$ Chuyên viên TCCB nhận thông báo tiếp theo và phê duyệt cấp trường $\rightarrow$ Cán bộ nhận thông báo kết quả cuối cùng.
     \item \textbf{Kịch bản 2 -- Đăng ký \& Phê duyệt Đi công tác:} Khởi tạo chuyến đi, đính kèm dự toán kinh phí và kế hoạch $\rightarrow$ Lãnh đạo Đơn vị thẩm định danh sách cán bộ và ký duyệt trên thiết bị di động.
     \item \textbf{Kịch bản 3 -- Phân phối Văn bản đến, Chỉ đạo Xử lý \& Cập nhật Tiến độ Nhiệm vụ:} Tiếp nhận văn bản khẩn $\rightarrow$ Lãnh đạo nhập bút phê chỉ đạo và giao việc $\rightarrow$ Cán bộ phụ trách nhận thông báo, mở cây đầu việc \texttt{outlined-tree} nộp báo cáo đợt kèm tài liệu minh chứng.
     \item \textbf{Kịch bản 4 -- Điểm danh Cuộc họp Thời gian thực qua WebSocket:} Đúng khung giờ mở điểm danh, cán bộ nhấn nút Điểm danh $\rightarrow$ Phát sự kiện qua \texttt{Socket.IO} $\rightarrow$ Màn hình Ban tổ chức cập nhật danh sách có mặt tức thời với độ trễ dưới 50ms.
 \end{enumerate}
+Riêng luồng chuyển tiếp phiên SSO, các thành phần cấp và tiêu thụ vé đã được kiểm thử riêng; toàn bộ luồng liên hệ thống từ ứng dụng di động qua HRM Web đến HRM Backend chưa được xác minh đầy đủ.
 
 \subsection{Đo lường Định lượng Hiệu năng Thực nghiệm (Performance Benchmarks)}
 
@@ -114,9 +115,9 @@ Nhóm nghiên cứu đã thực hiện kiểm thử liên thông toàn diện tr
 \hline
 \textbf{Giai đoạn trong Pipeline} & \textbf{Cơ chế Kỹ thuật} & \textbf{Độ trễ (ms)} & \textbf{Tỷ trọng} \\
 \hline
-1. Backend Trigger \& Post-Commit Publish & Gửi tin vào Kafka topic \texttt{SEND\_NOTIFY\_SERVICE} & \textbf{25 ms} & 2.5\% \\
+1. Backend Trigger \& Post-Commit Publish & Khởi chạy quy trình xử lý thông báo sau commit & \textbf{25 ms} & 2.5\% \\
 \hline
-2. Kafka Broker Queue & Hàng đợi cụm Kafka KRaft & \textbf{15 ms} & 1.5\% \\
+2. Notification Queue & Hàng đợi xử lý thông báo & \textbf{15 ms} & 1.5\% \\
 \hline
 3. Consumer DB Write & Ghi \texttt{fw\_notification} \& truy vấn Token & \textbf{45 ms} & 4.5\% \\
 \hline

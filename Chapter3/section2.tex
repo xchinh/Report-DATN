@@ -1,125 +1,127 @@
-\section{Công nghệ Frontend}
+\section{Công nghệ phía ứng dụng di động}
 \label{sec:frontend_tech}
 
-MyHCMUT Mobile tích hợp các chức năng được lựa chọn từ HRM và iOffice trên một ứng dụng di động đa nền tảng. Vì vậy, các công nghệ Frontend được lựa chọn dựa trên các yêu cầu chính: duy trì một codebase cho Android và iOS, tổ chức các miền chức năng có ranh giới rõ ràng, quản lý dữ liệu bất đồng bộ từ nhiều backend và hỗ trợ các hình thức tích hợp cần thiết với hệ thống hiện hữu.
+MyHCMUT Mobile là ứng dụng di động tích hợp các chức năng nghiệp vụ từ hệ thống Quản lý Nhân sự (HRM) và Văn phòng điện tử (iOffice) của Nhà trường. Nhóm sử dụng Flutter để phát triển ứng dụng theo hướng đa nền tảng, kết hợp với các công cụ tổ chức mã nguồn, quản lý trạng thái, điều hướng, giao tiếp mạng và lưu trữ dữ liệu cục bộ. Các công nghệ được lựa chọn dựa trên yêu cầu chức năng, đặc điểm tích hợp với hệ thống hiện hữu và điều kiện thực hiện đề tài.
 
-\subsection{Flutter và Dart}
+\subsection{Nền tảng Flutter SDK và ngôn ngữ Dart}
 \label{subsec:flutter_dart}
 
-Đối với yêu cầu phát triển trên cả Android và iOS, nhóm xem xét ba hướng chính: phát triển Native riêng cho từng nền tảng, React Native và Flutter. Bảng~\ref{tab:compare_mobile_platform} so sánh các tiêu chí chính giữa ba cách tiếp cận.
+Flutter là bộ công cụ phát triển giao diện đa nền tảng, mã nguồn mở do Google phát triển~\cite{flutter_doc}, sử dụng ngôn ngữ lập trình Dart~\cite{dart_doc}. Flutter cung cấp hệ thống widget và cơ chế dựng hình riêng để xây dựng giao diện ứng dụng~\cite{flutter_arch}. Dart hỗ trợ kiểm tra kiểu dữ liệu, \textit{sound null safety}~\cite{dart_null_safety} và lập trình bất đồng bộ thông qua \texttt{Future}, \texttt{Stream} cùng cú pháp \texttt{async/await}~\cite{dart_concurrency}.
+
+Đề tài hướng đến việc phát triển ứng dụng di động có khả năng hỗ trợ Android và iOS trong điều kiện thời gian và nguồn lực thực hiện có giới hạn. Vì vậy, nhóm xem xét các hướng phát triển ứng dụng dựa trên khả năng chia sẻ mã nguồn, công sức phát triển và mức độ đáp ứng các chức năng cần triển khai. Bảng~\ref{tab:compare_mobile_platform} trình bày một số đặc điểm của các hướng phát triển ứng dụng di động.
 
 \begin{table}[H]
 \centering
 \small
 \caption{So sánh các hướng phát triển ứng dụng di động}
 \label{tab:compare_mobile_platform}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{2.8cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{2.6cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
 \textbf{Tiêu chí} & \textbf{Native} & \textbf{React Native} & \textbf{Flutter} \\
 \hline
-Mã nguồn & Riêng cho Android và iOS & Phần lớn dùng chung & Phần lớn dùng chung \\
+Ngôn ngữ phát triển & Kotlin/Java cho Android; Swift/Objective-C cho iOS & JavaScript hoặc TypeScript & Dart \\
 \hline
-Công nghệ chính & Kotlin/Java, Swift & JavaScript/TypeScript & Dart \\
+Khả năng chia sẻ mã nguồn & Giao diện và mã nguồn ứng dụng thường được phát triển riêng cho từng nền tảng & Có thể chia sẻ phần lớn mã nguồn giao diện và logic giữa Android và iOS & Có thể chia sẻ phần lớn mã nguồn giao diện và logic giữa Android và iOS \\
 \hline
-Chi phí duy trì hai nền tảng & Cao hơn & Thấp hơn Native & Thấp hơn Native \\
+Cách xây dựng giao diện & Sử dụng các thành phần giao diện của từng nền tảng & Sử dụng các thành phần giao diện native thông qua kiến trúc của React Native & Xây dựng giao diện bằng hệ thống widget và cơ chế dựng hình của Flutter \\
 \hline
-Tích hợp đặc thù nền tảng & Trực tiếp & Native Module khi cần & Plugin hoặc Platform Channel \\
+Công sức phát triển đa nền tảng & Cần phát triển và duy trì các phần mã nguồn riêng cho Android và iOS & Có thể dùng chung phần lớn mã nguồn nhưng vẫn cần xử lý các khác biệt giữa hai nền tảng & Có thể dùng chung phần lớn mã nguồn nhưng vẫn cần xử lý các khác biệt giữa hai nền tảng \\
 \hline
-Đánh đổi chính & Kiểm soát nền tảng tốt nhưng tăng chi phí phát triển & Chia sẻ mã nguồn nhưng vẫn cần xử lý khác biệt native & Codebase và UI thống nhất nhưng phụ thuộc một phần vào hệ sinh thái plugin \\
+Điểm cần cân nhắc & Cần phối hợp quá trình phát triển và duy trì ứng dụng trên hai nền tảng & Cần làm việc với hệ sinh thái React Native và các thành phần tích hợp tương ứng & Cần làm việc với hệ sinh thái Flutter và các thành phần tích hợp tương ứng \\
 \hline
 \end{tabularx}
 \end{table}
 
-Cả React Native và Flutter đều có khả năng đáp ứng yêu cầu đa nền tảng của đề tài. Flutter được lựa chọn vì phù hợp với nền tảng kỹ thuật của dự án và cho phép nhóm duy trì phần lớn giao diện và logic phía client trong một codebase thống nhất~\cite{flutter_doc}.
+Trong phạm vi đề tài, nhóm lựa chọn Flutter do khả năng phát triển giao diện và logic ứng dụng cho Android và iOS từ một cơ sở mã nguồn chung. Nhóm sử dụng Flutter và Dart để xây dựng giao diện cùng các luồng tương tác của MyHCMUT Mobile. Trong quá trình thực hiện đồ án, nhóm tập trung triển khai và kiểm thử ứng dụng trên nền tảng Android. Khả năng vận hành trên iOS chưa được kiểm chứng và cần được đánh giá bổ sung, đặc biệt đối với các chức năng phụ thuộc nền tảng như thông báo đẩy, WebView và xử lý tệp.
 
-Flutter xây dựng giao diện theo mô hình Widget, trong khi Dart cung cấp null safety và các cơ chế lập trình bất đồng bộ như \texttt{Future}, \texttt{Stream} và \texttt{async}/\texttt{await}~\cite{dart_null_safety,dart_concurrency}. Những đặc điểm này phù hợp với ứng dụng có nhiều biểu mẫu, danh sách và dữ liệu được tải bất đồng bộ từ backend. Đối với các chức năng phụ thuộc nền tảng, Flutter hỗ trợ tích hợp thông qua plugin hoặc Platform Channel; đổi lại, dự án cần kiểm tra khả năng tương thích của các plugin trên thiết bị và hệ điều hành mục tiêu.
-
-\subsection{Modular Monorepo và Melos}
+\subsection{Tổ chức mã nguồn với Melos Monorepo}
 \label{subsec:melos_monorepo}
 
-MyHCMUT Mobile gồm nhiều nhóm chức năng thuộc các miền khác nhau nhưng đồng thời chia sẻ một số thành phần hạ tầng và giao diện dùng chung. Vì vậy, cách tổ chức repository cần vừa duy trì ranh giới giữa các module, vừa hỗ trợ tái sử dụng những thành phần chung. Bảng~\ref{tab:compare_melos} so sánh các phương án tổ chức mã nguồn được xem xét.
+Monorepo là cách tổ chức nhiều ứng dụng hoặc package có liên quan trong cùng một kho mã nguồn. Trong hệ sinh thái Dart và Flutter, Melos hỗ trợ quản lý workspace gồm nhiều package, liên kết các package nội bộ và thực thi các tác vụ phát triển trên toàn workspace~\cite{melos_doc}.
+
+MyHCMUT Mobile bao gồm nhiều nhóm chức năng như hồ sơ cá nhân, nghỉ phép, công tác, văn phòng số và lịch làm việc. Các nhóm chức năng này có luồng nghiệp vụ riêng nhưng cùng sử dụng những thành phần như giao diện dùng chung, giao tiếp mạng và mô hình dữ liệu. Nhóm xem xét các phương án tổ chức mã nguồn nhằm quản lý các thành phần dùng chung và quan hệ phụ thuộc giữa các nhóm chức năng. Bảng~\ref{tab:compare_melos} trình bày ưu điểm và hạn chế của các phương án.
 
 \begin{table}[H]
 \centering
 \small
 \caption{So sánh các phương án tổ chức mã nguồn}
 \label{tab:compare_melos}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{3.2cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{3cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
 \textbf{Phương án} & \textbf{Ưu điểm} & \textbf{Hạn chế} \\
 \hline
-Dự án Flutter đơn & Đơn giản, ít cấu hình & Ranh giới giữa các miền dễ bị mờ khi dự án mở rộng \\
+Dự án đơn (\textit{Single App}) & Cấu hình đơn giản, thuận tiện khi khởi tạo và quản lý một ứng dụng & Cần quy ước tổ chức mã nguồn để kiểm soát quan hệ phụ thuộc giữa các nhóm chức năng khi dự án phát triển \\
 \hline
-Polyrepo & Cô lập từng repository & Tăng chi phí đồng bộ dependency và thay đổi liên repository \\
+Đa kho mã nguồn (\textit{Polyrepo}) & Cho phép quản lý và phát triển từng kho mã nguồn riêng biệt & Cần phối hợp phiên bản và quá trình tích hợp khi các kho mã nguồn sử dụng chung thư viện hoặc phụ thuộc lẫn nhau \\
 \hline
-Modular Monorepo & Quản lý module và package dùng chung trong cùng workspace & Yêu cầu kiểm soát dependency và cấu hình workspace \\
+\textit{Modular Monorepo} với Melos & Quản lý các package chức năng và package dùng chung trong cùng một workspace; hỗ trợ thực thi tác vụ trên nhiều package & Cần cấu hình workspace và kiểm soát quan hệ phụ thuộc giữa các package \\
 \hline
 \end{tabularx}
 \end{table}
 
-Đề tài lựa chọn Modular Monorepo nhằm quản lý các module trong cùng repository nhưng vẫn duy trì ranh giới ở cấp package. Melos được sử dụng để hỗ trợ quản lý workspace, liên kết dependency nội bộ và thực thi các tác vụ trên nhiều package~\cite{melos_doc}.
-
-Melos chỉ là công cụ hỗ trợ vận hành monorepo và không tự bảo đảm tính module hóa. Chất lượng kiến trúc vẫn phụ thuộc vào việc xác định trách nhiệm và kiểm soát quan hệ phụ thuộc giữa các module. Cấu trúc thư mục, ranh giới package và hướng phụ thuộc cụ thể của MyHCMUT Mobile được trình bày tại Chương 5.
+Nhóm tổ chức mã nguồn MyHCMUT Mobile thành các package theo nhóm chức năng kết hợp với các package dùng chung. Việc phân chia này giúp xác định phạm vi của từng package và các thành phần được chia sẻ giữa chúng. Melos được sử dụng để quản lý các package trong cùng một workspace, hỗ trợ nhóm phát triển và tích hợp các chức năng trên một kho mã nguồn thống nhất. Cấu trúc package và quan hệ phụ thuộc cụ thể được trình bày tại Chương 5.
 
 \subsection{Quản lý trạng thái với Riverpod}
 \label{subsec:riverpod_state}
 
-Ứng dụng thường xuyên xử lý dữ liệu bất đồng bộ từ backend, trong đó một màn hình có thể lần lượt ở các trạng thái đang tải, có dữ liệu hoặc gặp lỗi. Ngoài ra, một số trạng thái như phiên đăng nhập cần được sử dụng tại nhiều vị trí trong ứng dụng. Vì vậy, việc quản lý toàn bộ các trạng thái này trực tiếp trong Widget sẽ làm tăng sự phụ thuộc giữa giao diện và logic xử lý.
+Riverpod là thư viện quản lý trạng thái và phụ thuộc trong ứng dụng Dart và Flutter~\cite{riverpod_doc}. Thông qua các provider, thư viện cho phép tổ chức dữ liệu và trạng thái xử lý tách khỏi mã xây dựng giao diện. Các thành phần giao diện có thể theo dõi provider và cập nhật khi trạng thái liên quan thay đổi.
 
-Nhóm xem xét các hướng như \texttt{setState}, Provider/ChangeNotifier, BLoC/Cubit và Riverpod. \texttt{setState} phù hợp với trạng thái cục bộ nhưng hạn chế khi dữ liệu cần chia sẻ; BLoC cung cấp luồng trạng thái tường minh nhưng yêu cầu nhiều cấu trúc bổ sung; Riverpod hỗ trợ quản lý dependency và trạng thái bất đồng bộ mà không phụ thuộc trực tiếp vào Widget tree~\cite{riverpod_doc,riverpod_notifier}.
+Trong MyHCMUT Mobile, các nhóm chức năng cần hiển thị dữ liệu nhận từ backend và phản ánh những trạng thái như đang tải dữ liệu, tải thành công hoặc xảy ra lỗi. Một số dữ liệu và trạng thái cũng được sử dụng bởi nhiều màn hình trong cùng một luồng nghiệp vụ. Nhóm lựa chọn Riverpod để quản lý các trạng thái này và phối hợp giữa giao diện với các thành phần truy cập dữ liệu.
 
-Riverpod được lựa chọn do phù hợp với các luồng dữ liệu bất đồng bộ và nhu cầu chia sẻ dependency của ứng dụng. Các trạng thái chỉ có ý nghĩa cục bộ trong một Widget vẫn có thể được quản lý tại Widget thay vì đưa toàn bộ trạng thái giao diện vào Provider. Cách này hạn chế việc mở rộng phạm vi state không cần thiết.
+Ứng dụng sử dụng Riverpod 3 kết hợp với \texttt{riverpod\_generator} để hỗ trợ khai báo và sinh mã cho các provider~\cite{riverpod_codegen}. \texttt{AsyncValue} được sử dụng để biểu diễn trạng thái của quá trình xử lý bất đồng bộ, trong khi \texttt{autoDispose} hỗ trợ quản lý vòng đời của provider khi không còn được sử dụng~\cite{riverpod_notifier}. Cách tổ chức provider và luồng dữ liệu giữa giao diện với các thành phần nghiệp vụ được trình bày tại Chương 5.
 
-\subsection{Điều hướng với GoRouter}
+\subsection{Điều hướng khai báo với GoRouter}
 \label{subsec:gorouter_nav}
 
-Ứng dụng có nhiều màn hình thuộc các miền chức năng khác nhau và một số đích điều hướng có thể được truy cập từ nhiều ngữ cảnh. GoRouter được lựa chọn để cung cấp cơ chế định tuyến khai báo, hỗ trợ path, nested route và redirect trên nền hệ thống điều hướng của Flutter~\cite{gorouter_doc}.
+GoRouter là thư viện hỗ trợ tổ chức điều hướng khai báo trong ứng dụng Flutter, cho phép định nghĩa các tuyến điều hướng, truyền thông tin đến màn hình đích và xử lý việc chuyển trang theo trạng thái ứng dụng~\cite{gorouter_doc}.
 
-Việc sử dụng một schema route thống nhất giúp ứng dụng quản lý điều hướng giữa các chức năng và xử lý các trường hợp chuyển hướng dựa trên trạng thái phía client. Tuy nhiên, redirect của GoRouter chỉ phục vụ điều phối trải nghiệm người dùng, không thay thế kiểm tra xác thực và phân quyền tại backend.
+MyHCMUT Mobile gồm nhiều nhóm màn hình chính, các màn hình chi tiết nghiệp vụ và những luồng điều hướng phát sinh khi người dùng chọn thông báo đẩy. Nhóm sử dụng GoRouter để tổ chức các tuyến điều hướng, duy trì trạng thái các nhánh màn hình chính và hỗ trợ mở màn hình nghiệp vụ tương ứng từ dữ liệu thông báo.
+
+Cơ chế \texttt{redirect} được sử dụng để điều hướng theo trạng thái đăng nhập. Việc kiểm tra quyền truy cập dữ liệu và quyền thực hiện các thao tác nghiệp vụ thuộc trách nhiệm của các dịch vụ backend tương ứng. Cấu trúc điều hướng và cách xử lý các luồng chuyển trang của ứng dụng được trình bày tại Chương 5.
 
 \subsection{Giao tiếp mạng với Dio}
 \label{subsec:dio_network}
 
-MyHCMUT Mobile giao tiếp với nhiều backend và cần xử lý nhất quán các vấn đề dùng chung như thông tin xác thực, timeout, lỗi mạng và gửi tệp đính kèm. Dio được lựa chọn thay cho HTTP client cơ bản nhờ hỗ trợ interceptor, cấu hình timeout và FormData, phù hợp với các yêu cầu tích hợp này~\cite{dio_doc}.
+Dio là thư viện HTTP client dành cho Dart, hỗ trợ gửi yêu cầu đến các dịch vụ backend và xử lý phản hồi~\cite{dio_doc}. Thư viện cung cấp cơ chế interceptor để thực hiện các thao tác dùng chung trước khi gửi yêu cầu, sau khi nhận phản hồi hoặc khi phát sinh lỗi. Dio cũng hỗ trợ gửi dữ liệu dạng \texttt{FormData} và theo dõi tiến trình truyền tệp.
 
-Interceptor cho phép tập trung một số xử lý dùng chung ở tầng giao tiếp mạng thay vì lặp lại tại từng module. Tuy nhiên, Dio chỉ đảm nhiệm trách nhiệm giao tiếp HTTP. Các kiểm tra phía Mobile có thể hỗ trợ trải nghiệm người dùng, còn quyền truy cập và kết quả xử lý nghiệp vụ cuối cùng vẫn được backend tương ứng xác minh.
+MyHCMUT Mobile cần giao tiếp với các dịch vụ backend của HRM và iOffice để truy xuất dữ liệu và thực hiện các nghiệp vụ. Các yêu cầu này cần được bổ sung thông tin xác thực và xử lý phản hồi lỗi theo cách thống nhất. Bên cạnh đó, một số nghiệp vụ cho phép người dùng gửi tệp đính kèm hoặc tệp minh chứng.
 
-\subsection{Lưu trữ cục bộ}
+Nhóm sử dụng Dio để tổ chức các lời gọi API đến HRM và iOffice. Cơ chế interceptor hỗ trợ bổ sung thông tin xác thực và xử lý lỗi dùng chung; \texttt{FormData} được sử dụng cho các yêu cầu gửi dữ liệu có tệp đính kèm. Cách tổ chức các HTTP client và cơ chế tích hợp với từng dịch vụ backend được trình bày tại Chương 5.
+
+\subsection{Lưu trữ dữ liệu cục bộ}
 \label{subsec:local_storage}
 
-Ứng dụng sử dụng SQLite cho các dữ liệu tham chiếu có cấu trúc cần truy vấn cục bộ~\cite{sqflite_doc} và SharedPreferences cho một số giá trị key--value hoặc trạng thái đơn giản~\cite{shared_preferences_doc}. Các dữ liệu lưu cục bộ này không được xem là nguồn dữ liệu nghiệp vụ có thẩm quyền; khi cần xác nhận trạng thái mới nhất, ứng dụng vẫn lấy dữ liệu từ backend tương ứng.
+Lưu trữ dữ liệu cục bộ cho phép ứng dụng giữ lại một số thông tin trên thiết bị để phục vụ các lần truy cập tiếp theo. Tùy theo đặc điểm dữ liệu và nhu cầu sử dụng, MyHCMUT Mobile sử dụng hai cơ chế lưu trữ cục bộ: SQLite và SharedPreferences.
 
-SharedPreferences không phải cơ chế lưu trữ bảo mật chuyên dụng. Trong phiên bản hiện tại, một số dữ liệu xác thực vẫn được lưu bằng cơ chế này. Việc chuyển các thông tin nhạy cảm sang cơ chế dựa trên Android Keystore~\cite{android_keystore_doc} hoặc iOS Keychain~\cite{ios_keychain_doc} được xem là hướng hoàn thiện về bảo mật, không phải khả năng đã được hiện thực trong phiên bản hiện tại.
+\textbf{SQLite:} SQLite là hệ quản trị cơ sở dữ liệu quan hệ nhúng, cho phép lưu trữ và truy vấn dữ liệu trực tiếp trên thiết bị~\cite{sqflite_doc}. Nhóm sử dụng SQLite thông qua thư viện \texttt{sqflite} để lưu trữ 47 danh mục tham chiếu của hệ thống HRM, bao gồm các danh mục như quốc gia, tỉnh thành, dân tộc, học vị, chức danh và đơn vị. Các danh mục này được sử dụng trong nhiều biểu mẫu và bộ chọn của ứng dụng. Việc lưu trữ cục bộ giúp ứng dụng truy xuất các danh mục đã có trên thiết bị mà không cần gửi yêu cầu mạng mỗi lần hiển thị.
 
-\subsection{Các thư viện tích hợp}
+\textbf{SharedPreferences:} SharedPreferences cung cấp cơ chế lưu trữ cục bộ dạng khóa--giá trị, phù hợp với các dữ liệu có cấu trúc đơn giản như tùy chọn giao diện và một số dữ liệu lưu đệm của ứng dụng~\cite{shared_preferences_doc}. Nhóm sử dụng SharedPreferences để lưu một số tùy chọn giao diện và lưu đệm dữ liệu hồ sơ cá nhân đã tải từ backend. Khi người dùng truy cập hồ sơ, ứng dụng có thể hiển thị dữ liệu đã lưu trước khi nhận dữ liệu cập nhật từ hệ thống nguồn. Dữ liệu lưu đệm cũng hỗ trợ người dùng xem lại thông tin hồ sơ khi thiết bị tạm thời không có kết nối mạng.
+
+Dữ liệu lưu trữ cục bộ phục vụ việc hiển thị và sử dụng ứng dụng; dữ liệu nghiệp vụ chính thức cùng kết quả xử lý, phê duyệt tiếp tục được quản lý tại các hệ thống backend tương ứng. Phạm vi dữ liệu lưu trữ, cách cập nhật dữ liệu và xử lý bộ nhớ đệm được trình bày tại Chương 5.
+
+\subsection{WebView và các thư viện tích hợp}
 \label{subsec:integrated_libraries}
 
-Bên cạnh các công nghệ chính, ứng dụng sử dụng một số thư viện chuyên biệt để hỗ trợ các yêu cầu tích hợp, được tổng hợp trong Bảng~\ref{tab:integrated_libraries}.
+Bên cạnh các công nghệ chính, MyHCMUT Mobile sử dụng một số thư viện để tích hợp các chức năng từ hệ thống hiện hữu và hỗ trợ tương tác trên thiết bị di động. Bảng~\ref{tab:integrated_libraries} tổng hợp các thư viện tích hợp chính và vai trò của chúng trong đề tài.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Một số thư viện tích hợp trên MyHCMUT Mobile}
+\caption{Một số thư viện tích hợp trong MyHCMUT Mobile}
 \label{tab:integrated_libraries}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{3.8cm}|>{\raggedright\arraybackslash}X|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash\bfseries}p{4cm}|>{\raggedright\arraybackslash}X|}
 \hline
-\textbf{Thư viện} & \textbf{Vai trò} \\
+\textbf{Thư viện} & \textbf{Vai trò trong hệ thống} \\
 \hline
-\texttt{flutter\_inappwebview} & Tái sử dụng các chức năng Web phù hợp trong ứng dụng~\cite{inappwebview_doc} \\
+\texttt{flutter\_inappwebview} & Hiển thị và hỗ trợ tương tác với các biểu mẫu, chức năng Web hiện hữu bên trong ứng dụng di động~\cite{inappwebview_doc}. \\
 \hline
-\texttt{freezed} & Hỗ trợ xây dựng các lớp dữ liệu bất biến và sinh mã~\cite{freezed_doc} \\
+\texttt{firebase\_messaging} & Tiếp nhận thông báo đẩy qua Firebase Cloud Messaging và cung cấp dữ liệu thông báo để ứng dụng xử lý, điều hướng đến nội dung nghiệp vụ liên quan~\cite{fcm_doc}. \\
 \hline
-\texttt{firebase\_messaging} & Tiếp nhận thông báo đẩy và metadata hỗ trợ điều hướng~\cite{fcm_doc} \\
+\texttt{freezed} và \texttt{json\_serializable} & Hỗ trợ sinh mã cho các lớp dữ liệu và chuyển đổi giữa đối tượng Dart với dữ liệu JSON~\cite{freezed_doc}. \\
 \hline
-\texttt{sqflite} & Truy cập cơ sở dữ liệu SQLite trên thiết bị~\cite{sqflite_doc} \\
-\hline
-\texttt{shared\_preferences} & Lưu dữ liệu key--value đơn giản~\cite{shared_preferences_doc} \\
-\hline
-\texttt{socket\_io\_client} & Giao tiếp với các luồng iOffice sử dụng Socket.IO~\cite{socketio_doc} \\
+\texttt{socket\_io\_client} & Hỗ trợ trao đổi sự kiện giữa ứng dụng và dịch vụ backend trong các chức năng cần cập nhật trạng thái theo thời gian thực, chẳng hạn điểm danh cuộc họp~\cite{socketio_doc}. \\
 \hline
 \end{tabularx}
 \end{table}
 
-Các thư viện trên giải quyết những nhu cầu kỹ thuật cụ thể của client nhưng không thay thế trách nhiệm của backend. Chẳng hạn, thông báo FCM giúp người dùng nhận biết sự kiện nhưng không được xem là nguồn xác nhận trạng thái nghiệp vụ; khi người dùng truy cập chức năng tương ứng, dữ liệu và quyền truy cập vẫn cần được backend kiểm tra.
-
-Việc sử dụng thư viện bên ngoài giúp giảm khối lượng hiện thực các cơ chế phổ biến, nhưng đồng thời tạo phụ thuộc vào khả năng tương thích và vòng đời bảo trì của các package. Vì vậy, các dependency cần được lựa chọn và cập nhật phù hợp với phiên bản Flutter được sử dụng trong dự án.
+Trong đó, WebView được sử dụng để tái sử dụng một số biểu mẫu kê khai lý lịch mở rộng đã có trên hệ thống Web của Nhà trường. Thay vì xây dựng lại toàn bộ các biểu mẫu này trên Flutter, ứng dụng mở giao diện Web tương ứng và kết hợp với cơ chế chuyển tiếp phiên đăng nhập để hỗ trợ người dùng tiếp tục thao tác trên thiết bị di động. Cách tổ chức cơ chế chuyển tiếp phiên, luồng tiếp nhận thông báo và xử lý các sự kiện cập nhật trạng thái được trình bày tại Chương 5.

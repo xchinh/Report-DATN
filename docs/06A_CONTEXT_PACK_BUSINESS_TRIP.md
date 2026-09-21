@@ -13,7 +13,7 @@
 | :--- | :--- | :--- |
 | **Phạm vi Sản phẩm MyHCMUT Mobile** | `IN_SYSTEM_SCOPE` | Ứng dụng di động thực tế có tích hợp đầy đủ phân hệ Công tác trên giao diện và điều hướng GoRouter. |
 | **Phạm vi Đề tài Nhóm (Team Project)** | `TEAM_SCOPE` | Đề tài CO4337 của nhóm 2 sinh viên bao quát toàn bộ cổng nghiệp vụ nhân sự - điều hành của Nhà trường. |
-| **Phạm vi Đóng góp Cá nhân Vũ Xuân Chính** | `OUT_OF_CHINH_SCOPE` | **Không nhận là đóng góp cá nhân của Vũ Xuân Chính** ở các phần đặc tả ca sử dụng chi tiết (Ch. 5), phân tích thiết kế CSDL (Ch. 6) hay hiện thực/kiểm thử chuyên sâu (Ch. 7). |
+| **Phạm vi Đóng góp Cá nhân Vũ Xuân Chính** | `OUT_OF_CHINH_SCOPE` | **Không nhận là đóng góp cá nhân của Vũ Xuân Chính** ở các phần đặc tả use case chi tiết (Ch. 5), phân tích thiết kế CSDL (Ch. 6) hay hiện thực/kiểm thử chuyên sâu (Ch. 7). |
 | **Sinh viên Phụ trách Chính (Primary Owner)** | **Tống Duy Khang (MSSV: 2211467)** | Tác giả chính của toàn bộ Domain Models, Form Wizard 5 bước và các luồng duyệt đơn ban đầu (xác thực qua Git commits). |
 | **Vai trò Phối hợp của Vũ Xuân Chính** | `CROSS_MODULE_UI_REFACTOR` | Tái cấu trúc chuẩn hóa giao diện màn hình duyệt theo Design Tokens (`global_system`), phát triển `AppBatchActionBar` dùng chung, hỗ trợ `MultiLanguage` resolution. |
 

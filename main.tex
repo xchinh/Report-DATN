@@ -43,6 +43,7 @@
 \usepackage[plainpages=false,pdfpagelabels]{hyperref}
 \hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
 \makeatletter
+\def\UrlBigBreaks{\do\/}
 \g@addto@macro\UrlBreaks{\do\-\do\_}
 \makeatother 
 \usepackage{comment}
@@ -201,6 +202,14 @@
   \small%
   \setlength{\tabcolsep}{5pt}%
   \renewcommand{\arraystretch}{1.1}%
+  \renewcommand{\_}{\textunderscore\allowbreak}%
+}
+\AtBeginEnvironment{xltabular}{%
+  \setstretch{1.05}%
+  \small%
+  \setlength{\tabcolsep}{5pt}%
+  \renewcommand{\arraystretch}{1.1}%
+  \renewcommand{\_}{\textunderscore\allowbreak}%
 }
 
 % Macro usecasespec
@@ -331,8 +340,8 @@
 \begin{tabular}[H]{r l l}
      \large \textbf{HỘI ĐỒNG} &: \large KHOA HỌC MÁY TÍNH\\
      \large \textbf{GVHD} & : \large ThS. NGUYỄN THANH TÙNG\\
-     \large \textbf{CTHĐ} & : \large TS. NGUYỄN LÊ DUY LAI\\
-     \large \textbf{TKHĐ} & : \large ThS. TRẦN HỒNG TÀI\\
+     \large \textbf{CTHĐ} & : \large PGS. TS. Lê Hồng Trang\\
+     \large \textbf{TKHĐ} & : \large ThS. Trương Quỳnh Chi\\
      \multicolumn{2}{c}{\textbf{\large ————o0o———–}}\\
      \large \textbf{SVTH}& : \large VŨ XUÂN CHÍNH - 2210392\\
                          & : \large TỐNG DUY KHANG - 2211467\\

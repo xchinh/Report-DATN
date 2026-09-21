@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    actor User as Cán bộ/Giảng viên
+    participant App as MyHCMUT Mobile
+    participant HRM as Hệ thống HRM
+    participant DB as CSDL HRM
+    participant Reviewer as Chuyên viên TCCB
+
+    User->>App: Chọn cập nhật hồ sơ
+    App->>HRM: Mở biểu mẫu qua SSO
+    HRM-->>App: Biểu mẫu đã xác thực
+    User->>HRM: Gửi thay đổi và minh chứng
+    HRM->>DB: Kiểm tra quyền, dữ liệu hiện tại và thay đổi
+    alt Trường được cập nhật trực tiếp
+        HRM->>DB: Cập nhật hồ sơ và lưu vết
+        HRM-->>App: Trả kết quả cập nhật
+    else Trường cần thẩm định
+        HRM->>DB: Tạo đề xuất chờ thẩm định
+        HRM-->>App: Trả trạng thái chờ xử lý
+        Reviewer->>HRM: Xem sai khác và minh chứng
+        alt Chấp thuận
+            HRM->>DB: Cập nhật dữ liệu và lưu vết
+        else Từ chối
+            HRM->>DB: Ghi nhận lý do từ chối
+        end
+    else Dữ liệu hoặc minh chứng không hợp lệ
+        HRM-->>App: Trả lỗi để người dùng bổ sung
+    end
+    App-->>User: Hiển thị kết quả xử lý

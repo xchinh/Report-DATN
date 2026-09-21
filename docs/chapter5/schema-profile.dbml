@@ -1,0 +1,82 @@
+// DBML phục vụ ERD Chương 5, không dùng để sinh DDL.
+// Màu cam (#D97706): liên kết logic do HRM Backend duy trì, không phải FK vật lý.
+
+Project chapter5_profile {
+  database_type: 'PostgreSQL'
+  Note: 'Dữ liệu hồ sơ thuộc CSDL HRM hiện hữu. Các Ref trong sơ đồ này đều là liên kết logic.'
+}
+
+TableGroup hrm_profile [color: #2563EB] {
+  staff_ly_lich
+  staff_ly_lich_request
+  staff_ly_lich_request_detail
+  staff_ly_lich_request_file
+}
+
+
+
+Table staff_ly_lich {
+  shcc varchar(20) [pk, not null]
+  ho varchar(150)
+  ten varchar(50)
+  email varchar(70)
+  email_ca_nhan varchar(70)
+  sdt varchar(20)
+  ngay_sinh bigint
+  gioi_tinh varchar(15)
+  cccd varchar(20)
+  don_vi varchar(10)
+  chuc_vu_chinh varchar(10)
+  chuc_danh text
+  hoc_ham varchar(20)
+  hoc_vi varchar(20)
+  ngach varchar(20)
+  cdnn varchar(20)
+  vtvl varchar(20)
+}
+
+Table staff_ly_lich_request {
+  id integer [pk, increment, not null]
+  shcc varchar(20) [note: 'Liên kết logic đến staff_ly_lich.shcc.']
+  phan_loai varchar(20)
+  previous_data jsonb
+  changes jsonb
+  trang_thai varchar(20)
+  ly_do text
+  created_at bigint
+  created_by varchar(20)
+  updated_at bigint
+  updated_by varchar(20)
+  is_phan_hoi boolean
+  ly_do_tu_choi text
+  Note: 'Một đề xuất thay đổi hồ sơ; previous_data và changes lưu các thuộc tính thay đổi linh hoạt.'
+}
+
+Table staff_ly_lich_request_detail {
+  id integer [pk, increment, not null]
+  request_id integer [note: 'Liên kết logic đến staff_ly_lich_request.id.']
+  action varchar(20)
+  field text
+  trang_thai varchar(20)
+  ly_do text
+  previous_data jsonb
+  changes jsonb
+  reviewed_at bigint
+  reviewed_by varchar(20)
+  created_at bigint
+  updated_at bigint
+}
+
+Table staff_ly_lich_request_file {
+  file_id uuid [pk, not null]
+  request_detail_id integer [note: 'Liên kết logic đến staff_ly_lich_request_detail.id.']
+  file_path text
+  file_name text
+  request_phan_hoi_id integer
+}
+
+
+
+Ref logical_profile_owner: staff_ly_lich_request.shcc > staff_ly_lich.shcc [color: #D97706]
+Ref logical_profile_request_detail: staff_ly_lich_request_detail.request_id > staff_ly_lich_request.id [color: #D97706]
+Ref logical_profile_detail_file: staff_ly_lich_request_file.request_detail_id > staff_ly_lich_request_detail.id [color: #D97706]

@@ -1,10 +1,12 @@
 \section{Cơ sở lý thuyết}
 \label{sec:coso_lythuyet}
 
-\subsection{Mô hình kiến trúc MVC}
+\subsection{Kiến trúc phân tầng và mô hình MVC}
 \label{subsec:mvc}
 
-Model--View--Controller (MVC) là mô hình tổ chức phần mềm dựa trên nguyên lý phân tách mối quan tâm (\textit{Separation of Concerns}). Theo mô hình này, \textbf{Model} quản lý dữ liệu và trạng thái; \textbf{View} chịu trách nhiệm trình bày; còn \textbf{Controller} tiếp nhận yêu cầu và điều phối quá trình xử lý giữa các thành phần. Mối quan hệ giữa ba thành phần của mô hình MVC được minh họa trong Hình~\ref{fig:mvc_architecture}.
+Kiến trúc phân tầng là cách tổ chức phần mềm thành các thành phần có trách nhiệm khác nhau, chẳng hạn tiếp nhận yêu cầu, xử lý nghiệp vụ và truy xuất dữ liệu. Việc phân chia trách nhiệm giúp làm rõ luồng xử lý và hạn chế sự phụ thuộc trực tiếp giữa giao diện với các thao tác dữ liệu.
+
+Model--View--Controller (MVC) là mô hình tổ chức phần mềm phân tách ba trách nhiệm chính: \textbf{Model} biểu diễn cấu trúc dữ liệu và các thao tác liên quan đến dữ liệu; \textbf{View} đảm nhiệm việc trình bày thông tin và nhận tương tác từ người dùng; \textbf{Controller} tiếp nhận các yêu cầu điều khiển và điều phối hoạt động giữa Model và View. Mối quan hệ tương tác giữa ba thành phần này được minh họa trong Hình~\ref{fig:mvc_architecture}.
 
 \begin{figure}[H]
     \centering
@@ -13,14 +15,19 @@ Model--View--Controller (MVC) là mô hình tổ chức phần mềm dựa trên
     \label{fig:mvc_architecture}
 \end{figure}
 
-Trong các ứng dụng Web phía máy chủ, MVC có thể được mở rộng thêm \textit{Service Layer} để tiếp tục phân tách trách nhiệm. Luồng xử lý thường được tổ chức theo dạng Route/Middleware $\rightarrow$ Controller $\rightarrow$ Service $\rightarrow$ Model. Route và Middleware tiếp nhận yêu cầu HTTP và xử lý các mối quan tâm dùng chung; Controller điều phối yêu cầu; Service tập trung xử lý logic nghiệp vụ; còn Model đảm nhiệm truy xuất và ánh xạ dữ liệu. Service không phải thành phần của MVC kinh điển mà là lớp bổ sung nhằm hạn chế việc tập trung logic nghiệp vụ tại Controller.
+Trong các ứng dụng backend, mô hình này có thể được kết hợp với các lớp bổ sung như middleware và service để tổ chức các trách nhiệm xác thực, kiểm tra quyền truy cập và xử lý nghiệp vụ phức tạp. Đối với các backend hiện hữu mà MyHCMUT Mobile tích hợp, luồng xử lý được tổ chức theo hướng:
+\begin{equation}
+\text{Route / Middleware} \longrightarrow \text{Controller} \longrightarrow \text{Service} \longrightarrow \text{Model}
+\label{eq:backend_layered_architecture}
+\end{equation}
+Trong đó, Route và middleware tiếp nhận yêu cầu HTTP, thực hiện các bước kiểm tra dùng chung (như xác thực danh tính, kiểm tra quyền truy cập); controller điều phối yêu cầu; service thực thi các quy tắc nghiệp vụ; model hỗ trợ tương tác và truy xuất cơ sở dữ liệu.
 
-Trong kiến trúc tổng thể của đề tài, MyHCMUT Mobile không được xem là View nằm trực tiếp trong MVC của các backend. Ứng dụng là một client độc lập, giao tiếp với các hệ thống backend thông qua API và xây dựng giao diện riêng trên thiết bị di động. Các WebApp hiện hữu vẫn được duy trì đối với những chức năng phù hợp với môi trường Web.
+Ứng dụng MyHCMUT Mobile không áp dụng nguyên dạng mô hình MVC của backend cho giao diện Flutter. Thay vào đó, phần ứng dụng di động được tổ chức thành các thành phần giao diện (Presentation / Widget), quản lý trạng thái (State Management) và truy cập dữ liệu (Data Access / Repository). Cách tổ chức cụ thể của từng phía được trình bày tại Chương 5.
 
 \subsection{Kiến trúc hướng phân hệ}
 \label{subsec:modular_architecture}
 
-Khi số lượng chức năng của ứng dụng tăng, việc tổ chức mã nguồn chỉ theo các lớp kỹ thuật như giao diện, model và service có thể làm tăng mức phụ thuộc giữa các miền nghiệp vụ. Kiến trúc hướng phân hệ (\textit{Modular Architecture}) giải quyết vấn đề này bằng cách chia hệ thống thành các module có trách nhiệm và ranh giới tương đối độc lập. Sự khác biệt giữa cách tổ chức mã nguồn theo tầng kỹ thuật và theo phân hệ được minh họa trong Hình~\ref{fig:layered_vs_modular}.
+Kiến trúc hướng phân hệ (\textit{Modular Architecture}) tổ chức mã nguồn theo các nhóm chức năng hoặc miền nghiệp vụ. Mỗi phân hệ tập hợp những thành phần liên quan đến một nhóm chức năng, đồng thời sử dụng các thành phần dùng chung khi cần thiết. Sự khác biệt giữa cách tổ chức mã nguồn theo tầng kỹ thuật và theo phân hệ được minh họa trong Hình~\ref{fig:layered_vs_modular}.
 
 \begin{figure}[H]
     \centering
@@ -29,36 +36,38 @@ Khi số lượng chức năng của ứng dụng tăng, việc tổ chức mã 
     \label{fig:layered_vs_modular}
 \end{figure}
 
-Hai nguyên lý quan trọng của cách tổ chức này là tính kết dính cao (\textit{High Cohesion}) và mức phụ thuộc thấp (\textit{Loose Coupling}). Các thành phần phục vụ cùng một miền chức năng được đặt gần nhau, trong khi phụ thuộc giữa các module được giới hạn thông qua các giao diện hoặc thành phần dùng chung có ranh giới rõ ràng. Nhờ đó, thay đổi trong một module có thể hạn chế ảnh hưởng đến các phần còn lại của hệ thống.
+Đối với MyHCMUT Mobile, các nhóm chức năng như hồ sơ cá nhân, nghỉ phép, công tác, văn phòng số và lịch làm việc có dữ liệu và luồng tương tác khác nhau. Việc tổ chức mã nguồn theo phân hệ giúp xác định rõ phạm vi trách nhiệm của từng nhóm chức năng, trong khi các thành phần dùng chung phục vụ những nhu cầu xuyên suốt như giao tiếp mạng, điều hướng và quản lý phiên đăng nhập.
 
-Tuy nhiên, module hóa không đồng nghĩa với việc chia hệ thống thành càng nhiều package càng tốt. Việc phân rã quá nhỏ có thể làm tăng chi phí quản lý dependency và độ phức tạp của dự án. Do đó, ranh giới module cần được xác định dựa trên trách nhiệm và mức độ liên quan giữa các chức năng. Nguyên lý này là cơ sở cho cách tổ chức mã nguồn MyHCMUT Mobile được trình bày cụ thể ở phần thiết kế hệ thống.
+Kiến trúc hướng phân hệ không đồng nghĩa với việc mỗi phân hệ phải là một dịch vụ triển khai độc lập. Trong phạm vi ứng dụng di động, các phân hệ có thể được tổ chức thành những module mã nguồn và cùng hoạt động trong một ứng dụng thống nhất.
 
 \subsection{RESTful API và giao thức HTTPS}
 \label{subsec:client_server_http_https}
 \label{subsec:rest_https}
 
-MyHCMUT Mobile hoạt động như một client độc lập và trao đổi dữ liệu với các backend thông qua HTTP API. Trong đó, cần phân biệt REST và HTTPS: REST mô tả cách tổ chức giao diện dịch vụ ở tầng ứng dụng, trong khi HTTPS bảo vệ dữ liệu trên đường truyền.
+Representational State Transfer (REST) là một phong cách kiến trúc được sử dụng trong thiết kế các hệ thống giao tiếp qua mạng~\cite{fielding_rest}. Trong các API theo hướng REST, tài nguyên được xác định thông qua địa chỉ truy cập (URI) và được thao tác bằng những phương thức HTTP phù hợp, chẳng hạn \texttt{GET} để truy xuất dữ liệu, \texttt{POST} để gửi dữ liệu, \texttt{PUT} hoặc \texttt{PATCH} để cập nhật dữ liệu và \texttt{DELETE} để xóa dữ liệu~\cite{rfc9110}. Một đặc tính quan trọng của REST là phi trạng thái (\textit{stateless}): mỗi yêu cầu cần chứa đủ thông tin cần thiết để máy chủ xử lý độc lập.
 
-REST (\textit{Representational State Transfer}) là một phong cách kiến trúc cho hệ thống phân tán~\cite{fielding_rest}, trong đó tài nguyên được định danh thông qua URI và được thao tác bằng các phương thức HTTP như \texttt{GET}, \texttt{POST}, \texttt{PUT}, \texttt{PATCH} và \texttt{DELETE}~\cite{rfc9110}. Một đặc tính quan trọng của REST là \textit{stateless}: mỗi request cần chứa đủ thông tin cần thiết để server xử lý mà không phụ thuộc vào trạng thái hội thoại của request trước đó. JSON thường được sử dụng làm định dạng trao đổi dữ liệu nhờ cấu trúc gọn và thuận tiện cho việc ánh xạ dữ liệu giữa client và server.
+Ứng dụng MyHCMUT Mobile giao tiếp với các dịch vụ backend thông qua API sử dụng HTTP và dữ liệu trao đổi theo định dạng phù hợp với từng dịch vụ, chủ yếu là JSON. Phản hồi từ backend cung cấp dữ liệu hoặc kết quả xử lý để ứng dụng cập nhật trạng thái và hiển thị cho người dùng.
 
-HTTPS là HTTP hoạt động trên giao thức TLS~\cite{rfc8446}, giúp bảo vệ tính bí mật và tính toàn vẹn của dữ liệu trong quá trình truyền, đồng thời hỗ trợ client xác thực server thông qua chứng thư số. Tuy nhiên, HTTPS chỉ bảo vệ kênh truyền và không thay thế cơ chế xác thực người dùng hoặc phân quyền nghiệp vụ tại backend.
+HTTPS sử dụng giao thức TLS~\cite{rfc8446} để bảo vệ tính bí mật và tính toàn vẹn của dữ liệu trong quá trình truyền giữa ứng dụng và máy chủ. Việc sử dụng HTTPS giúp giảm nguy cơ nội dung trao đổi bị đọc trộm hoặc sửa đổi bởi bên thứ ba trên đường truyền. Tuy nhiên, HTTPS chỉ bảo vệ kênh truyền và không thay thế các cơ chế xác thực, phân quyền và kiểm tra dữ liệu tại backend.
 
-\subsection{Xác thực dựa trên thẻ bài JWT}
+Trong đề tài, REST API và HTTPS là cơ sở cho việc tích hợp ứng dụng di động với các hệ thống HRM, iOffice và dịch vụ xác thực hiện hữu. Cách tổ chức lời gọi API và xử lý phản hồi được trình bày tại Chương 5.
+
+\subsection{Xác thực dựa trên JWT}
 \label{subsec:session_jwt}
 
-Do HTTP là giao thức phi trạng thái, hệ thống cần một cơ chế để nhận biết người dùng giữa các request sau khi đăng nhập. Bên cạnh mô hình lưu phiên phía server, một hướng phổ biến là sử dụng token để client gửi kèm thông tin xác thực trong các request tiếp theo (thường thông qua HTTP header \texttt{Authorization: Bearer <token>}).
-
-JSON Web Token (JWT), được định nghĩa trong RFC 7519~\cite{jwt_rfc}, là một định dạng thẻ bài gồm ba thành phần: \textbf{Header}, \textbf{Payload} và \textbf{Signature}, như minh họa trong Hình~\ref{fig:jwt_structure}.
+JSON Web Token (JWT), được định nghĩa trong chuẩn RFC 7519~\cite{jwt_rfc}, là một định dạng token cho phép biểu diễn các thông tin dưới dạng tập hợp các claim. Một JWT thông dụng gồm ba phần: \textbf{Header}, \textbf{Payload} và \textbf{Signature}, như minh họa trong Hình~\ref{fig:jwt_structure}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\linewidth]{image/theory/jwt.jpeg}
+    \includegraphics[width=0.62\linewidth]{image/theory/jwt.jpeg}
     \caption{Cấu trúc JSON Web Token (JWT)}
     \label{fig:jwt_structure}
 \end{figure}
 
-Header mô tả loại token và thuật toán ký; Payload chứa các claim như định danh chủ thể và thời điểm hết hạn; còn Signature cho phép phía nhận kiểm tra tính toàn vẹn và nguồn phát hành của token.
+Header mô tả thông tin liên quan đến token (chẳng hạn loại token và thuật toán ký); payload chứa các claim (như định danh người dùng, thời điểm phát hành và hạn hết hiệu lực); signature được sử dụng để kiểm tra tính toàn vẹn và nguồn phát hành của token theo cơ chế ký tương ứng.
 
-Payload của JWT thông thường chỉ được biểu diễn bằng Base64URL, không phải được mã hóa để giữ bí mật. Vì vậy, dữ liệu nhạy cảm không nên được đặt trong Payload với giả định rằng người giữ token không thể đọc được nội dung. Khi sử dụng thuật toán ký như HMAC-SHA256, chữ ký giúp phát hiện việc nội dung token bị thay đổi và xác minh token được phát hành bởi bên nắm giữ khóa tương ứng.
+Trong mô hình xác thực dựa trên token, người dùng đăng nhập để nhận thông tin xác thực. Ứng dụng gửi token trong những yêu cầu tiếp theo đến dịch vụ tương ứng, thông thường qua tiêu đề HTTP \texttt{Authorization: Bearer <token>}. Backend có trách nhiệm kiểm tra tính hợp lệ của token và xác định người dùng có được phép thực hiện thao tác nghiệp vụ hay không.
 
-Xác thực bằng JWT giảm nhu cầu duy trì trạng thái phiên cho từng request tại server nhưng có các đánh đổi như khó thu hồi ngay một token đã phát hành nếu không bổ sung cơ chế quản lý trạng thái, cũng như yêu cầu kiểm soát thời hạn và bảo vệ token phía client. Trong đề tài, JWT được sử dụng cho giao tiếp API giữa Mobile và các backend tương ứng; cơ chế chuyển tiếp xác thực từ Mobile sang Web là một bài toán riêng và được trình bày tại phần thiết kế hệ thống.
+JWT không mặc nhiên mã hóa nội dung payload (chuỗi payload thông thường chỉ được mã hóa dạng Base64URL). Vì vậy, không nên đưa thông tin bí mật vào payload chỉ với giả định rằng người khác không thể đọc được token. Việc sử dụng JWT cũng không đồng nghĩa mọi dịch vụ đều chấp nhận cùng một token hoặc có cùng phạm vi phân quyền.
+
+Trong MyHCMUT Mobile, cơ chế xác thực bằng token được sử dụng khi ứng dụng giao tiếp với các dịch vụ hiện hữu. Việc lựa chọn token phù hợp cho từng miền dịch vụ và cơ chế chuyển tiếp phiên làm việc sang giao diện Web được trình bày riêng tại Chương 5.

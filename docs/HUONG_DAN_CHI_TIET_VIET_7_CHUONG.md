@@ -1,4 +1,6 @@
 # HƯỚNG DẪN CHI TIẾT ĐỀ MỤC VÀ NỘI DUNG CẦN THỰC HIỆN CHO 7 CHƯƠNG ĐATN
+
+> **Trạng thái tài liệu:** Bản hướng dẫn lịch sử. Cấu trúc báo cáo hiện hành được xác định bởi các tệp `Chapter1`--`Chapter7` và `docs/KE_HOACH_THUC_HIEN_VIET_BAO_CAO_DATN_V3.md`; không sử dụng các số liệu, phạm vi module hoặc claim kỹ thuật trong tài liệu này làm nguồn trực tiếp cho luận văn.
 **Đề tài:** Phát triển Ứng dụng Di động Phục vụ Nhân sự Trường Đại học (MyHCMUT)  
 **Tỷ trọng Luận văn:** 70% Ứng dụng Di động (Mobile Client) – 30% Backend & Kiến trúc Tích hợp  
 **Cơ chế Module hóa:** Tích hợp trực tiếp Use Case, Activity Diagram và Sequence Diagram vào **Chapter 4 Section 2** theo từng thư mục module (`auth/`, `hrm/`, `ioffice/`, `notification/`, `khcn/`).
@@ -63,7 +65,7 @@
 *Tệp mã nguồn: `Chapter4/index.tex`, `Chapter4/section1.tex`, `Chapter4/section2/index.tex`, `Chapter4/section3.tex`*
 - **4.1 Xác định người dùng và Ma trận Phân quyền (RBAC Matrix):**
   - Bảng Ma trận phân quyền 5 tác nhân (Cán bộ/Giảng viên, Lãnh đạo Đơn vị, Ban Giám hiệu, Chuyên viên TCCB, Văn thư).
-  - Sơ đồ Ca sử dụng Tổng thể Toàn hệ thống (*Overall System Use Case Diagram*).
+  - Sơ đồ Đặc tả Use caseTổng thể Toàn hệ thống (*Overall System Use Case Diagram*).
 - **4.2 Yêu cầu Chức năng và Đặc tả Chi tiết theo Từng Phân hệ Nghiệp vụ (Cấu trúc Folder con):**
   - **`Chapter4/section2/auth/` (Phân hệ Xác thực & Quản lý Phiên):**
     - Mô tả nghiệp vụ đăng nhập CAS SSO, Mật khẩu, Dual-Token.
