@@ -70,6 +70,8 @@ Khi các nguồn xung đột, tài liệu kiểm kê phải ghi rõ xung đột 
 - Lệnh kiểm thử, kịch bản thủ công, log và ảnh trước–sau.
 - Giới hạn, sai khác và điều kiện phụ thuộc.
 
+GitNexus chỉ được dùng để tìm đầu mối symbol và luồng hiện thực. Mọi nhận định về phiên bản báo cáo phải được xác nhận lại trên commit đã khóa bằng `git show`, `git ls-tree` hoặc cách đọc tương đương. Khi chỉ mục GitNexus và commit đã khóa khác nhau, kết quả GitNexus không phải bằng chứng trực tiếp.
+
 ### 4.2. Tầng trình bày trong báo cáo
 
 Chương 6 ưu tiên:
@@ -110,6 +112,8 @@ Mỗi UC/FR được phân rã thành các hành vi quan sát được, ví dụ
 - Đơn không còn hợp lệ được xử lý theo quy tắc đã đặc tả.
 
 Việc phân rã chỉ làm rõ yêu cầu hiện có; không được bổ sung hành vi mới ngoài nguồn phạm vi. Mã hành vi nội bộ có dạng `<UC-hoặc-FR>-B01`, `<UC-hoặc-FR>-B02` và không trở thành mã yêu cầu mới trong báo cáo.
+
+Phải phân biệt **hành vi đã cam kết** với **kịch bản dùng để xác minh hành vi**. Một kịch bản lỗi, phân quyền hoặc tương tranh không trở thành yêu cầu mới. Nếu kịch bản không được nêu trực tiếp trong Chương 4, tài liệu phải chỉ ra hành vi gốc mà nó xác minh và hậu quả cụ thể nếu không kiểm tra.
 
 ### 5.4. Trạng thái bằng chứng
 
@@ -169,12 +173,14 @@ Mỗi hàng tương ứng với một hành vi đã cam kết, không phải m�
 | UC/FR | Yêu cầu gốc |
 | Mã hành vi | Mã nội bộ `<UC-hoặc-FR>-Bxx` |
 | Hành vi cần xác minh | Kết quả quan sát được theo yêu cầu |
+| Căn cứ lựa chọn kịch bản | Điều khoản Chương 4 hoặc hành vi gốc và hậu quả nếu không kiểm tra |
 | Bằng chứng hiện có | Test/log/kịch bản/ảnh hoặc “không có” |
 | Loại kiểm thử | Unit / Widget / API / Integration / Thủ công đầu–cuối |
 | Repository và commit | Phiên bản được kiểm tra |
 | Môi trường và thời điểm | Runtime, staging/test và ngày chạy nếu có |
 | Lệnh hoặc kịch bản | Cách tạo lại kết quả |
-| Kết quả | Pass / Fail / Blocked / Not Run / Invalid và phạm vi kết quả |
+| Kết quả | Pass / Fail / Blocked / Not Run / Invalid / Chưa xác định kết quả chạy |
+| Nguồn kết quả | Log/báo cáo/lần chạy và vị trí bằng chứng; mã test tồn tại không phải kết quả chạy |
 | Tính áp dụng | Trực tiếp cho phiên bản báo cáo / Baseline lịch sử |
 | Trạng thái bằng chứng | Đủ / Hạn chế / Chưa kiểm thử |
 | Rủi ro | Cao / Trung bình / Thấp, kèm lý do |
@@ -251,8 +257,11 @@ Thiếu một hoặc nhiều trường không làm bằng chứng biến mất, 
 | **Blocked** | Không thể thực hiện hoặc hoàn tất vì điều kiện tiên quyết chưa đáp ứng |
 | **Not Run** | Chưa thực hiện |
 | **Invalid** | Lần chạy hoặc bằng chứng không hợp lệ và phải thực hiện lại |
+| **Chưa xác định kết quả chạy** | Có thể có mã test hoặc mô tả kiểm thử nhưng chưa xác định được test đã từng chạy hay kết quả là gì |
 
 Mỗi kết quả Blocked hoặc Invalid phải ghi nguyên nhân. Không tự động chuyển Blocked hoặc Invalid thành Pass hay Fail. Lỗi môi trường, dữ liệu hoặc quyền tài khoản thử nghiệm phải được phân biệt với lỗi sản phẩm.
+
+Sự tồn tại của mã test chỉ chứng minh test đã được viết, không chứng minh test đã chạy hoặc Pass. `Not Run` chỉ dùng khi có căn cứ xác nhận test chưa được thực hiện; khi chỉ thiếu log hoặc không biết lịch sử chạy, dùng “Chưa xác định kết quả chạy”.
 
 ### 7.2. Quản lý dữ liệu kiểm thử
 
@@ -349,6 +358,7 @@ Bước kiểm kê hoàn thành khi:
 - Các số lượng test có đơn vị đếm, phạm vi, phiên bản và nguồn bằng chứng rõ ràng.
 - Không có chức năng được đánh dấu “hoàn thành” chỉ vì có ảnh giao diện.
 - Không có hành vi được đánh dấu “đủ bằng chứng” chỉ vì UC/FR có ít nhất một test thành công.
+- Mỗi UC/FR chính thức có một hàng dữ liệu thực tế với trạng thái hiện thực và bằng chứng hoặc lý do chờ xác minh; kiểm tra regex không thay thế đối chiếu thủ công này.
 - Không còn kết luận Chương 6–7 dự kiến vượt quá loại bằng chứng hiện có.
 
 Hoàn thành kiểm kê không đồng nghĩa được phép chạy test. Việc thực hiện kiểm thử chỉ bắt đầu sau khi tệp `04` đã được điền từ kết quả kiểm kê và được người dùng phê duyệt.

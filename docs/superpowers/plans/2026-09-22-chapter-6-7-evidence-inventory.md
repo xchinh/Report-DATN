@@ -17,6 +17,8 @@
 - Do not write, modify, or run tests during Stage A.
 - Do not create new UC/FR/business rules; behavior decomposition may only restate commitments already present in current Chapter 1/4.
 - Current Chapter 4 IDs override legacy mappings in `docs/02_SCOPE_CLAIM_TRACEABILITY.md`; legacy rows may be used only as evidence leads and must be remapped to current IDs.
+- Regex comparison is only a discovery aid; completion requires manual confirmation that every official requirement has an actual matrix row with implementation status and evidence or a reason for waiting.
+- GitNexus is only a lead-finding tool. Every report-version claim must be revalidated with `git show`, `git ls-tree`, or equivalent reads at the pinned commit.
 - Keep implementation paths, commits, APIs, and code details in the internal inventory; do not treat them as mandatory Chapter 6 content.
 - Keep evidence status separate from the decision to add testing.
 - Label Gate 0 results as historical unless evidence metadata applies directly to the report version.
@@ -31,6 +33,7 @@
 - Gate 0 counts `427 = 370 + 57` are historical evidence and must not be presented as a fresh unified run.
 - A WebView flow may be complete when current requirements explicitly commit to reuse of the existing Web function.
 - Missing environment, role, command, or artifact metadata must lower evidence status rather than being silently inferred.
+- Test source proves test existence only. Assign Pass/Fail solely from a preserved run result; use “Chưa xác định kết quả chạy” when run history is unknown and `Not Run` only when non-execution is confirmed.
 
 ---
 
@@ -63,6 +66,8 @@ git rev-parse HEAD
 ```
 
 Expected: no unrelated changes; branch and HEAD are copied into the “Mốc kiểm kê” section of all three documents.
+
+If `git status --short` shows pre-existing changes outside this plan, stop and report them to the user. Do not stash, reset, checkout, or overwrite them. Record the current HEAD as `Commit nền Stage A`; do not hard-code an older plan/spec commit.
 
 - [ ] **Step 2: Create the directory and the `01` document contract**
 
@@ -196,7 +201,20 @@ comm -13 /tmp/ch4_requirement_ids.txt /tmp/inventory_requirement_ids.txt
 
 Expected: the first command produces no missing IDs. Any extra ID must be a quoted legacy reference inside the conflict section, not a new inventory requirement; explicitly review and annotate each extra.
 
-- [ ] **Step 8: Commit the scope ledger**
+- [ ] **Step 8: Manually verify actual data rows, not mere text occurrences**
+
+For every line in `/tmp/ch4_requirement_ids.txt`, locate an anchored table row in `01` and read the full row:
+
+```bash
+while IFS= read -r requirement_id; do
+  rg -n "^\\| ${requirement_id} \\|" docs/chapter6-7-evidence/01_uc_fr_implementation_matrix.md \
+    || echo "MISSING DATA ROW: ${requirement_id}"
+done < /tmp/ch4_requirement_ids.txt
+```
+
+Expected: no `MISSING DATA ROW`. Manually confirm each matching row contains a scope value, implementation status, and internal evidence or a concrete “Chờ xác minh” reason. A code appearing only in prose, examples, or conflict notes does not count.
+
+- [ ] **Step 9: Commit the scope ledger**
 
 Run `git diff --check`, stage `01`, run GitNexus `detect_changes(scope="staged")`, then commit:
 
@@ -243,6 +261,8 @@ notification FCM deep link routing
 ```
 
 For every relevant result, use `context` on the selected symbol before citing file/function evidence. Record repository, pinned commit, symbol/file, and which committed behavior it supports.
+
+Treat every GitNexus result as a search lead only. Before recording evidence, confirm that the file and behavior exist at the pinned commit with `git ls-tree` and `git show`. If the indexed revision differs, do not cite the GitNexus flow as direct evidence.
 
 - [ ] **Step 4: Verify pinned-source content without checkout**
 
@@ -362,17 +382,29 @@ Record `427/427`, `370`, and `57` as Gate 0 historical results; record `53/53` a
 
 - [ ] **Step 3: Decompose each current UC/FR into committed behaviors**
 
-Use the acceptance statements in `01` and assign internal behavior IDs such as `UC-LEV-03-B01`. Include success, authorization, state, and error behaviors only when the current requirement specifies them or they directly protect its correctness.
+Use the acceptance statements in `01` and assign internal behavior IDs such as `UC-LEV-03-B01`. These rows describe committed behaviors only. Do not promote an inferred error, concurrency, security, or load scenario into a new behavior requirement.
+
+When a proposed scenario is not stated directly in Chapter 4, populate the mandatory “Căn cứ lựa chọn kịch bản” column with the committed behavior it verifies and the concrete consequence of leaving that behavior unchecked. A scenario without this trace is excluded from `02` and `03`.
 
 - [ ] **Step 4: Map each existing test or manual artifact to the behavior it actually proves**
 
 Inspect test source with `git show`; do not infer coverage from filenames. For manual scenarios, require version, environment, role, data, expected/actual result, and artifact location. When metadata is missing, classify the evidence as “Hạn chế”.
+
+Record result source separately:
+
+- Test code with no run artifact: test exists; result is “Chưa xác định kết quả chạy”.
+- Historical log: preserve its result and label it historical baseline.
+- Direct report-version run artifact: preserve its result and complete metadata.
+- Confirmed never run: use `Not Run`.
+
+Never assign `Pass` from test source alone.
 
 - [ ] **Step 5: Assign result, applicability, risk, and decision independently**
 
 For every behavior row:
 
 - Result: Pass, Fail, Blocked, Not Run, or Invalid.
+- Result may also be “Chưa xác định kết quả chạy” when run history is unknown.
 - Applicability: direct report version or historical baseline.
 - Evidence: Đủ, Hạn chế, or Chưa kiểm thử.
 - Risk: Cao, Trung bình, or Thấp with one-sentence consequence.
@@ -471,11 +503,13 @@ Run:
 
 ```bash
 rg -o --no-filename '((UC|FR)-[A-Z]+-[0-9]+|NFR-[0-9]+)' Chapter4 | sort -u > /tmp/ch4_requirement_ids.txt
-rg -o --no-filename '((UC|FR)-[A-Z]+-[0-9]+|NFR-[0-9]+)' docs/chapter6-7-evidence/01_uc_fr_implementation_matrix.md | sort -u > /tmp/inventory_requirement_ids.txt
-comm -23 /tmp/ch4_requirement_ids.txt /tmp/inventory_requirement_ids.txt
+while IFS= read -r requirement_id; do
+  rg -n "^\\| ${requirement_id} \\|" docs/chapter6-7-evidence/01_uc_fr_implementation_matrix.md \
+    || echo "MISSING DATA ROW: ${requirement_id}"
+done < /tmp/ch4_requirement_ids.txt
 ```
 
-Expected: no missing current requirement ID.
+Expected: no `MISSING DATA ROW`; then manually inspect every returned row for non-empty status and evidence/reason fields.
 
 - [ ] **Step 2: Check classification separation and evidence language**
 
@@ -504,10 +538,12 @@ Expected: no matches. Generic words such as “token” may appear only as archi
 Run:
 
 ```bash
-git diff 1987e94 --name-only
+stage_a_base=$(sed -n 's/^- Commit nền Stage A: `\([^`]*\)`.*/\1/p' docs/chapter6-7-evidence/01_uc_fr_implementation_matrix.md)
+test -n "$stage_a_base"
+git diff "$stage_a_base" --name-only
 ```
 
-Expected: the implementation plan and `docs/chapter6-7-evidence/01..03` only; no LaTeX, source, test, or `04` file.
+Expected: `docs/chapter6-7-evidence/01..03` only; no LaTeX, source, test, plan/spec, or `04` file after the recorded Stage A base.
 
 - [ ] **Step 5: Review final diff and commit corrections if necessary**
 
