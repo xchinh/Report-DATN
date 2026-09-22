@@ -47,3 +47,11 @@ Redis thường được sử dụng trong các vai trò:
     \item \textbf{Message broker / pub-sub}: Truyền dữ liệu thời gian thực giữa các service.
     \item \textbf{Hàng đợi}: Xử lý bất đồng bộ, job queue, delayed job.
 \end{itemize}
+
+\section{Các dịch vụ tích hợp}
+\subsection{Dịch vụ thông báo và truyền thông thời gian thực}
+\label{subsec:backend_notification_realtime}
+
+Firebase Cloud Messaging (FCM) là nền tảng điện toán đám mây do Google cung cấp~\cite{fcm_doc}, hỗ trợ gửi thông báo đẩy và thông điệp dữ liệu đến ứng dụng trên thiết bị người dùng một cách tin cậy và tối ưu năng lượng pin. Bên cạnh đó, Socket.IO là thư viện hỗ trợ giao tiếp hai chiều thời gian thực dựa trên giao thức WebSocket~\cite{socketio_doc}, bảo đảm độ trễ truyền thông thấp.
+
+Trong MyHCMUT Mobile, nhu cầu nhận biết các sự kiện phê duyệt đơn từ, văn bản mới và lịch họp đóng vai trò then chốt đối với trải nghiệm người dùng. Nhóm sử dụng FCM để tiếp nhận thông báo đẩy từ các dịch vụ backend và trích xuất siêu dữ liệu (metadata) đi kèm nhằm kích hoạt tính năng điều hướng sâu đến đúng màn hình nghiệp vụ liên quan. Đối với tính năng điểm danh cuộc họp trong phân hệ Lịch làm việc, nhóm khai thác Socket.IO để nhận các cập nhật trạng thái tức thời giữa thiết bị di động và phòng họp máy chủ.

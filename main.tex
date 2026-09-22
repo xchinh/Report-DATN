@@ -145,23 +145,26 @@
   parsep=0pt
 }
 
-% Định dạng tiêu đề chương hiển thị dạng: X. Tên Chương
+% Định dạng tiêu đề chương hiển thị dạng:
+% Chương X
+% Tên Chương
 \def\@makechapterhead#1{%
-  \vspace*{10\p@}%
+  \vspace*{20\p@}%
   {\parindent \z@ \raggedright \normalfont
     \ifnum \c@secnumdepth >\m@ne
-        \huge\bfseries \thechapter.\space #1\par\nobreak
-    \else
-        \huge\bfseries #1\par\nobreak
+        \huge\bfseries Chương \thechapter\par\nobreak
+        \vskip 15\p@
     \fi
-    \vskip 15\p@
+    \interlinepenalty\@M
+    \Huge\bfseries #1\par\nobreak
+    \vskip 20\p@
   }}
 \def\@makeschapterhead#1{%
-  \vspace*{10\p@}%
+  \vspace*{20\p@}%
   {\parindent \z@ \raggedright \normalfont
     \interlinepenalty\@M
-    \huge\bfseries #1\par\nobreak
-    \vskip 15\p@
+    \Huge\bfseries #1\par\nobreak
+    \vskip 20\p@
   }}
 \makeatother
 
@@ -290,13 +293,9 @@
 }
 \makeatother
 
-% Định nghĩa lời dẫn đầu mỗi chương: căn giữa, chữ nghiêng, thu hẹp 2 bên lề
+% Định nghĩa lời dẫn đầu mỗi chương: căn lề trái, chữ nghiêng
 \newcommand{\chapterintro}[1]{%
-    \begin{center}%
-    \begin{minipage}{0.88\textwidth}%
-        \centering\itshape #1%
-    \end{minipage}%
-    \end{center}%
+    \par\noindent{\itshape\RaggedRight #1\par}%
     \vspace{0.4cm}%
 }
 

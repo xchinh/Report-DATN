@@ -4,39 +4,38 @@
 \subsubsection{Mục tiêu}
 Công tác là một trong những nghiệp vụ quan trọng hỗ trợ người lao động toàn trường tối
 ưu quá trình quản lý thông tin quy trình các chuyến đi công tác. Quy trình quản lý thông tin công tác bắt đầu từ việc
-đăng ký công tác của cán bộ. Phiếu đăng ký công tác sẽ được gửi đến các bên liên quan để thẩm định và phê duyệt, người dùng cũng nắm bắt được thông tin về tiến độ các bước phê duyệt.
+đăng ký công tác của cán bộ. Đơn đăng ký công tác sẽ được gửi đến các bên liên quan để thẩm định và phê duyệt, người dùng cũng nắm bắt được thông tin về tiến độ các bước phê duyệt.
 Sau khi được phê duyệt, cán bộ sẽ thực hiện chuyến công tác và báo cáo kết quả (nếu có).
 
 
 \subsubsection{Yêu cầu chức năng}
-\begin{itemize}
-    \item \textbf{BT-01 -- Tạo phiếu đăng ký công tác:} Người dùng khởi tạo phiếu và điền thông tin thời gian, hệ thống sẽ kiểm tra lịch trình cá nhân của người dùng để rà soát xem có trùng lịch với các hoạt động khác không.
-    \item \textbf{BT-02 -- Cập nhật thông tin phiếu:} Phiếu ở trạng thái "Nháp" hoặc "Trả lại" cho phép người tạo cập nhật thông tin chuyến công tác, thêm/xóa thành viên, đính kèm tệp (thư mời, kế hoạch chi tiết đối với công tác nước ngoài).
-    \item \textbf{BT-03 -- Gửi phiếu:} Khi người dùng gửi phiếu từ trạng thái "Nháp" hoặc "Trả lại", hệ thống kiểm tra trùng lịch cá nhân của toàn bộ thành viên tham gia; đối với công tác nước ngoài, hệ thống bắt buộc kiểm tra đã đính kèm thư mời và kế hoạch chi tiết. Nếu hợp lệ, hệ thống khởi tạo quy trình phê duyệt tương ứng với loại phiếu và thêm vào lịch cá nhân của các thành viên tham gia.
-    \item \textbf{BT-04 -- Xóa phiếu đăng ký:} Người dùng có thể xóa phiếu đăng ký khi phiếu đang ở trạng thái "Nháp".
-    \item \textbf{BT-05 -- Xem thông tin chi tiết phiếu:} Người dùng có thể xem thông tin chi tiết phiếu, trạng thái phê duyệt, lịch sử thao tác, các tệp đính kèm và thông tin của các thành viên tham gia.
-\end{itemize}
 
-\begin{itemize}
-    \item \textbf{BT-06 -- Duyệt cấp đơn vị:} Trưởng/Phó đơn vị quản lý trực tiếp của thành viên tham gia thực hiện duyệt. Đối với đoàn liên đơn vị, hệ thống ghi nhận thao tác duyệt độc lập theo từng đơn vị và chỉ chuyển bước tiếp theo khi 100\% đơn vị liên quan đã đồng ý. Trưởng/Phó đơn vị không được duyệt phiếu do chính mình đứng tên. Hệ thống hỗ trợ cơ chế duyệt đại diện giữa một số đơn vị đặc thù (TC-NS đại diện Thanh tra, Văn phòng BGH đại diện đơn vị BGH).
-    \item \textbf{BT-07 -- Thẩm định Khoa học \& Công nghệ:} Áp dụng riêng cho phiếu loại \texttt{CONG TAC KHCN}; cán bộ Phòng KHCN thẩm định tính hợp lệ của đề tài và dự toán kinh phí trước khi chuyển sang Phòng TC\-NS.
-    \item \textbf{BT-08 -- Thẩm định hồ sơ (Chuyên viên TC\-NS):} Chuyên viên Phòng TC-NS kiểm tra tính đầy đủ và hợp lệ của hồ sơ (thư mời, kế hoạch, nguồn kinh phí, điều kiện đi nước ngoài) trước khi trình lãnh đạo phòng.
-    \item \textbf{BT-09 -- Phê duyệt tờ trình (Lãnh đạo TC\-NS):} Lãnh đạo Phòng TC-NS xem xét kết quả thẩm định của chuyên viên và phê duyệt về mặt quản lý nhân sự trước khi trình Ban Giám hiệu.
-    \item \textbf{BT-10 -- Tiếp nhận \& xếp lịch (Văn phòng BGH):} Văn phòng Ban Giám hiệu rà soát lịch công tác chung của Nhà trường trước khi trình Ban Giám hiệu quyết định.
-    \item \textbf{BT-11 -- Phê duyệt chính thức (Ban Giám hiệu):} Thành viên Ban Giám hiệu ra quyết định phê duyệt cuối cùng. Khi được duyệt, phiếu chuyển sang trạng thái "Kết thúc" và kích hoạt chuỗi tác vụ hoàn tất tự động của hệ thống.
-    \item \textbf{BT-12 -- Trả lại phiếu yêu cầu bổ sung:} Tại bất kỳ cột mốc phê duyệt nào, người duyệt có thể trả lại phiếu kèm ghi chú yêu cầu chỉnh sửa; hệ thống mở lại quyền chỉnh sửa cho người nộp mà không hủy phiếu.
-    \item \textbf{BT-13 -- Gửi lại phiếu sau khi được trả lại:} Sau khi chỉnh sửa theo yêu cầu, người nộp gửi lại phiếu; hệ thống chuyển phiếu về đúng bước duyệt vừa yêu cầu chỉnh sửa, không yêu cầu duyệt lại từ đầu.
-    \item \textbf{BT-14 -- Từ chối phiếu:} Người duyệt tại bất kỳ cột mốc nào có thể từ chối phiếu; nếu đơn vị chủ quản từ chối, hệ thống đóng phiếu vĩnh viễn và giải phóng toàn bộ lịch cá nhân đã khóa cho các thành viên tham gia.
-    \item \textbf{BT-15 -- Thu hồi phiếu:} Người nộp có thể tự thu hồi phiếu khi chưa hoàn tất phê duyệt. Cán bộ Phòng TC-NS hoặc Văn phòng BGH có quyền thu hồi đặc biệt ngay cả sau khi phiếu đã được duyệt xong. Khi thu hồi, hệ thống giải phóng lịch cá nhân và xóa bản ghi quá trình công tác đã ghi nhận.
-          % Để kiểm tra lại 16
-    \item \textbf{BT-16 -- Quy trình rút gọn cho phiếu có Ban Giám hiệu tham gia:} Khi đoàn công tác có thành viên Ban Giám hiệu tham gia, hệ thống tự động bỏ qua các bước duyệt cấp đơn vị và TC-NS, chuyển thẳng phiếu đến bước phê duyệt của Ban Giám hiệu.
-\end{itemize}
-
+\begin{table}[H]
+\centering
+\small
+\caption{Yêu cầu chức năng nhóm quản lý công tác}
+\label{tab:fr_business_trip}
+\begin{tabularx}{\textwidth}{|L{1.8cm}|L{3.5cm}|L{2.5cm}|Y|}
+\hline
+\textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả và ràng buộc nghiệp vụ} \\
+\hline
+FR-BTR-01 & Tra cứu đơn & Cán bộ, Giảng viên & Xem danh sách đơn công tác cá nhân, lọc theo trạng thái và xem chi tiết tiến trình duyệt. \\
+\hline
+FR-BTR-02 & Tạo và gửi đơn & Cán bộ, Giảng viên & Tạo phiếu đăng ký công tác, điền thông tin và gửi cho các bên liên quan phê duyệt. \\
+\hline
+FR-BTR-03 & Điều chỉnh & Cán bộ, Giảng viên & Chỉnh sửa khi chưa gửi đi phê duyệt và khi bị bị trả lại. \\
+\hline
+FR-BTR-04 & Xử lý đơn & Các bên liên quan & Xem xét thông tin đơn đăng ký, minh chứng và thực hiện các thao tác như: phê duyệt, từ chối hoặc trả lại đơn theo thẩm quyền. \\
+\hline
+Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng ký công tác ở bất kỳ bước nào trong quy trình. \\
+\hline
+\end{tabularx}
+\end{table}
 
 \subsubsection{Đặc tả Use Case}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{image/usecase/UC_BT.png}
+    \includegraphics[width=\linewidth]{image/usecase/UC_BT.png}
     \caption{\textit{Sơ đồ use-case quản lý công tác}}
     \label{fig:BT_UC}
 \end{figure}
@@ -71,16 +70,16 @@ Sau khi được phê duyệt, cán bộ sẽ thực hiện chuyến công tác 
             1. Người dùng nhấn nút gửi đơn đăng ký công tác. \newline
             2. Hệ thống kiểm tra tính hợp lệ của thông tin nhập vào. \newline
             3. Hệ thống kiểm tra lịch trình cá nhân để rà soát xem có trùng lịch với các hoạt động khác không. \newline
-            4. Hệ thống tạo quy trình phê duyệt tương ứng với loại công tác và thêm vào lịch cá nhân của các thành viên tham gia. \newline
+            4. Hệ thống tạo quy trình phê duyệt tương ứng với thông tin của đơn đăng ký công tác và thêm vào lịch cá nhân của các thành viên tham gia. \newline
             5. Hệ thống gửi đơn đăng ký công tác đến các bên liên quan để thẩm định và phê duyệt. \newline
-            6. Hệ thống ghi nhận đơn đăng ký công tác ở trạng thái Chờ duyệt (\texttt{PENDING}), khóa lịch trình cá nhân và thông báo cho các bên liên quan. \newline
+            6. Hệ thống khóa lịch trình cá nhân và thông báo cho các bên liên quan. \newline
             7. Người dùng truy cập đơn đăng ký công tác để xem thông tin chi tiết, trạng thái phê duyệt, lịch sử thao tác.
         },
     exflow={
-            2.1. Nếu thông tin nhập vào không hợp lệ, hệ thống thông báo lỗi và yêu cầu người dùng chỉnh sửa. \newline
-            3.1. Nếu có trùng lịch trình cá nhân, hệ thống thông báo lỗi và yêu cầu người dùng chỉnh sửa lại thời gian công tác. \newline
+            2.1. Tại bước 2, nếu thông tin nhập vào không hợp lệ, hệ thống thông báo lỗi và yêu cầu người dùng chỉnh sửa. \newline
+            3.1. Tại bước 3, nếu có trùng lịch trình cá nhân, hệ thống thông báo lỗi và yêu cầu người dùng chỉnh sửa lại thời gian công tác. \newline
         },
-    post={Đơn đăng ký công tác được ghi nhận vào hệ thống ở trạng thái Chờ duyệt (\texttt{PENDING}).},
+    post={Đơn đăng ký công tác được gửi đến các bên liên quan để thẩm định và phê duyệt.},
     label={tab:uc_bt_02}
 }
 
@@ -165,7 +164,15 @@ Sau khi được phê duyệt, cán bộ sẽ thực hiện chuyến công tác 
 \subsubsection{Sơ đồ hoạt động}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\linewidth]{image/uml/bt_activity.png}
+    \includegraphics[width=\linewidth]{image/uml/bt_activity.png}
     \caption{\textit{Sơ đồ hoạt động quản lý công tác}}
     \label{fig:BT_AC}
+\end{figure}
+
+\subsection{Sơ đồ tuần tự}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{image/uml/seq_trip_submit.png}
+    \caption{\textit{Sơ đồ tuần tự quản lý công tác}}
+    \label{fig:BT_SEQ}
 \end{figure}
