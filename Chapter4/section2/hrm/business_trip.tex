@@ -23,11 +23,11 @@ FR-BTR-01 & Tra cứu đơn & Cán bộ, Giảng viên & Xem danh sách đơn c�
 \hline
 FR-BTR-02 & Tạo và gửi đơn & Cán bộ, Giảng viên & Tạo phiếu đăng ký công tác, điền thông tin và gửi cho các bên liên quan phê duyệt. \\
 \hline
-FR-BTR-03 & Điều chỉnh & Cán bộ, Giảng viên & Chỉnh sửa khi chưa gửi đi phê duyệt và khi bị bị trả lại. \\
+FR-BTR-03 & Điều chỉnh & Cán bộ, Giảng viên & Chỉnh sửa khi chưa gửi đi phê duyệt và khi bị trả lại. \\
 \hline
 FR-BTR-04 & Xử lý đơn & Các bên liên quan & Xem xét thông tin đơn đăng ký, minh chứng và thực hiện các thao tác như: phê duyệt, từ chối hoặc trả lại đơn theo thẩm quyền. \\
 \hline
-Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng ký công tác ở bất kỳ bước nào trong quy trình. \\
+FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng ký công tác ở bất kỳ bước nào trong quy trình. \\
 \hline
 \end{tabularx}
 \end{table}
@@ -41,7 +41,7 @@ Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 \end{figure}
 
 \usecasespec{
-    id={UC\_BT\_01},
+    id={UC-BT-01},
     name={Soạn thảo đơn đăng ký công tác},
     actor={Cán bộ / Giảng viên},
     pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
@@ -61,7 +61,7 @@ Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 
 
 \usecasespec{
-    id={UC\_BT\_02},
+    id={UC-BT-02},
     name={Gửi đơn đăng ký công tác},
     actor={Cán bộ / Giảng viên},
     pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
@@ -84,7 +84,7 @@ Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 }
 
 \usecasespec{
-    id={UC\_BT\_03},
+    id={UC-BT-03},
     name={Xóa đơn đăng ký công tác},
     actor={Cán bộ / Giảng viên},
     pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
@@ -101,7 +101,7 @@ Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 }
 
 \usecasespec{
-    id={UC\_BT\_04},
+    id={UC-BT-04},
     name={Phê duyệt đơn đăng ký công tác},
     goal={Cho phép cán bộ có thẩm quyền tại từng cột mốc xem xét và đưa ra quyết định (Duyệt / Trả lại / Từ chối) đối với phiếu công tác đã được gửi, đưa phiếu đi qua chuỗi các cấp thẩm định phù hợp với loại công tác cho đến khi được Ban Giám hiệu phê duyệt chính thức hoặc bị chấm dứt.},
     actor={Lãnh đạo đơn vị, Lãnh đạo Phòng KH\&CN, Chuyên viên/ Lãnh đạo TC-NS, Văn phòng Ban Giám hiệu, Ban Giám hiệu},
@@ -134,7 +134,7 @@ Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 }
 
 \usecasespec{
-    id={UC\_BT\_05},
+    id={UC-BT-05},
     name={Thu hồi đơn đăng ký công tác},
     actor={Chuyên viên/Lãnh đạo Phòng TCNS, Văn phòng BGH},
     pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền thu hồi đơn đăng ký công tác.},
@@ -161,7 +161,7 @@ Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
     \item \textbf{BR-BT-06:} Khi phân loại công tác là "Đoàn công tác", quy trình phê duyệt sẽ được thực hiện độc lập theo từng đơn vị quản lý trực tiếp của các thành viên tham gia. Hệ thống chỉ chuyển bước tiếp theo khi 100\% đơn vị liên quan đã đồng ý.
 \end{itemize}
 
-\subsubsection{Sơ đồ hoạt động}
+\subsubsection{Biểu đồ hoạt động}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{image/uml/bt_activity.png}
@@ -169,7 +169,7 @@ Fr-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
     \label{fig:BT_AC}
 \end{figure}
 
-\subsection{Sơ đồ tuần tự}
+\subsubsection{Biểu đồ tuần tự}
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{image/uml/seq_trip_submit.png}

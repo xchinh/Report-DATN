@@ -22,11 +22,11 @@ Bảng~\ref{tab:fr_ioffice_schedule} tổng hợp các yêu cầu chức năng c
         \hline
         \textbf{Mã FR} & \textbf{Chức năng}                               & \textbf{Tác nhân}          & \textbf{Mô tả và ràng buộc nghiệp vụ}                                                                           \\
         \hline
-        FR-IOFF-01     & Tra cứu và theo dõi tiến độ văn bản đi           & Cán bộ                     & Hỗ trợ phân loại và lọc văn bản, cho phép xem chi tiết dòng thời gian tiến trình luân chuyển.                   \\
+        FR-IOFF-01     & Tra cứu văn bản và nhiệm vụ                      & Cán bộ                     & Hỗ trợ phân loại, lọc và tra cứu văn bản đến/đi, theo dõi dòng thời gian tiến trình luân chuyển.                   \\
         \hline
         FR-IOFF-02     & Phân công trách nhiệm                            & Lãnh đạo/văn thư P.HC, BGH & Tiến hành phân công các loại trách nhiệm, công việc tới các đơn vị hoặc đích danh cá nhân.                      \\
         \hline
-        FR-IOFF-03     & Xử lý quy trình văn bản đi                       & Cán bộ                     & Thực hiện các thao tác xử lý văn bản như: tham mưu, chỉ đạo, hoặc tiếp nhận các nhiệm vụ được giao.             \\
+        FR-IOFF-03     & Xử lý quy trình văn bản                          & Cán bộ có thẩm quyền       & Thực hiện các thao tác xử lý văn bản như: tham mưu, chỉ đạo, hoặc tiếp nhận các nhiệm vụ được giao.             \\
         \hline
         FR-IOFF-04     & Chi tiết thông tin nhiệm vụ đính kèm với văn bản & Cán bộ                     & Cho phép xem chi tiết nhiệm vụ được phân công, bao gồm trạng thái, tiến độ, báo cáo và các công việc liên quan. \\
         \hline
@@ -58,18 +58,24 @@ Bảng~\ref{tab:mapping_uc_ioffice} tổng hợp danh mục các use case thuộ
     \vspace{0.15cm}
     \begin{tabularx}{\textwidth}{|L{2.6cm}|L{4.5cm}|Y|}
         \hline
-        \textbf{Mã Use Case} & \textbf{Tên Use Case}            & \textbf{Mục tiêu Nghiệp vụ}                                                                                         \\
+        \textbf{Mã Use Case} & \textbf{Tên Use Case} & \textbf{Mục tiêu Nghiệp vụ} \\
         \hline
-        \textbf{UC-OFF-01}   & Tra cứu văn bản và nhiệm vụ      & Tra cứu văn bản đến/đi, xem tệp đính kèm và theo dõi thông tin các nhiệm vụ được giao trong phạm vi quyền truy cập. \\
+        \textbf{UC-OFF-01} & Phân công trách nhiệm & Phân công các vai trò trách nhiệm, công việc tới các đơn vị hoặc đích danh cá nhân trên Phiếu Giải Quyết. \\
         \hline
-        \textbf{UC-SCH-01}   & Điểm danh hoặc báo vắng cuộc họp & Ghi nhận có mặt hoặc báo vắng kèm lý do khi tham dự cuộc họp có cấu hình điểm danh.                                 \\
+        \textbf{UC-OFF-02} & Tham mưu văn bản đến & Lãnh đạo Phòng Hành chính nghiên cứu nội dung và ghi nhận ý kiến tham mưu đề xuất xử lý. \\
         \hline
-        \textbf{UC-SCH-02}   & Xem lịch công tác tổng hợp       & Xem các sự kiện từ 3 nguồn dữ liệu (lịch họp iOffice, lịch phép HRM, lịch công tác HRM).                            \\
+        \textbf{UC-OFF-03} & Chỉ đạo văn bản đến & Ban Giám hiệu xem xét hồ sơ, ghi nhận ý kiến chỉ đạo và phê duyệt phương án phân công. \\
+        \hline
+        \textbf{UC-OFF-04} & Tiếp nhận văn bản/nhiệm vụ & Đơn vị hoặc cá nhân được phân công xác nhận tiếp nhận văn bản và nhiệm vụ thụ lý. \\
+        \hline
+        \textbf{UC-SCH-01} & Điểm danh hoặc báo vắng cuộc họp & Ghi nhận có mặt hoặc báo vắng kèm lý do khi tham dự cuộc họp có cấu hình điểm danh. \\
+        \hline
+        \textbf{UC-SCH-02} & Xem lịch công tác tổng hợp & Xem các sự kiện từ 3 nguồn dữ liệu (lịch họp iOffice, lịch phép HRM, lịch công tác HRM). \\
         \hline
     \end{tabularx}
 \end{table}
 
-Đặc tả Use casecó nhiều điều kiện nghiệp vụ đáng chú ý là \textbf{UC-SCH-01} được đặc tả chi tiết tại Bảng~\ref{tab:uc_sch_01}. Các use case \textbf{UC-OFF-01} và \textbf{UC-SCH-02} được đặc tả tại Bảng~\ref{tab:uc_off_01} và Bảng~\ref{tab:uc_sch_02}.
+Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác được đặc tả chi tiết từ Bảng~\ref{tab:uc_off_01} đến Bảng~\ref{tab:uc_sch_02}.
 
 \usecasespec{
     id={UC-OFF-01},
@@ -98,7 +104,7 @@ Bảng~\ref{tab:mapping_uc_ioffice} tổng hợp danh mục các use case thuộ
     pre={Lãnh đạo phòng Hành chính đã đăng nhập vào hệ thống.},
     trigger={Người dùng mở màn hình chi tiết văn bản đến.},
     mainflow={
-            1. Người dùng xem chi tiết văn vản đến và các thông tin liên quan. \newline
+            1. Người dùng xem chi tiết văn bản đến và các thông tin liên quan. \newline
             2. Người dùng nhập ý kiến và gửi tham mưu. \newline
             3. Hệ thống cập nhật trạng thái văn bản và lưu trữ thông tin thao tác.
         },
@@ -118,12 +124,12 @@ Bảng~\ref{tab:mapping_uc_ioffice} tổng hợp danh mục các use case thuộ
     pre={Ban Giám Hiệu đã đăng nhập và có quyền chỉ đạo cho văn bản đến.},
     trigger={Người dùng mở màn hình chi tiết văn bản đến.},
     mainflow={
-            1. Người dùng xem chi tiết văn vản đến và các thông tin liên quan. \newline
+            1. Người dùng xem chi tiết văn bản đến và các thông tin liên quan. \newline
             2. Người dùng nhập ý kiến và gửi chỉ đạo. \newline
             3. Hệ thống cập nhật trạng thái nhiệm vụ và lưu trữ thông tin thao tác.
         },
     altflow={
-            - \textit{1a (Thực hiện phân công trách nhiệm):} Nếu chưa có thông tin phân công, người dùng tiến hành phân công trách nhiệm (nếu có quyền) (UC-ID-01). \newline
+            - \textit{1a (Thực hiện phân công trách nhiệm):} Nếu chưa có thông tin phân công, người dùng tiến hành phân công trách nhiệm (nếu có quyền) (UC-OFF-01). \newline
             - \textit{3a (Khởi tạo nhiệm vụ liên kết):} Tại bước 3, nếu văn bản là loại \textit{Triển khai nhiệm vụ}, hệ thống sẽ tự động tạo một nhiệm vụ tương ứng trong hệ thống quản lý nhiệm vụ. \newline
         },
     post={Trạng thái nhiệm vụ được cập nhật và thông tin thao tác được lưu trữ chính thức.},

@@ -3,9 +3,7 @@ Cơ sở dữ liệu là thành phần nền tảng có vai trò lưu trữ, qu�
 phục vụ các nghiệp vụ cốt lõi của ứng dụng. Việc triển khai hợp lý giúp đảm bảo tính
 toàn vẹn, nhất quán và an toàn dữ liệu.
 \subsection{PostgreSQL}
-PostgreSQL (thường gọi là Postgres) là một Hệ quản trị cơ sở dữ liệu quan hệ đối tượng (Object-Relational Database Management System - ORDBMS) mã nguồn mở mạnh mẽ, Express.js đã trở thành framework backend phổ biến
-nhất trong hệ sinh thái Node.js nhờ kiến trúc đơn giản, hiệu suất cao và khả
-năng mở rộng dễ dàng. Nó nổi tiếng về độ tin cậy, tính năng mạnh mẽ và hiệu suất cao.
+PostgreSQL (thường gọi là Postgres) là một Hệ quản trị cơ sở dữ liệu quan hệ đối tượng (Object-Relational Database Management System - ORDBMS) mã nguồn mở mạnh mẽ, nổi tiếng về độ tin cậy, tính toàn vẹn dữ liệu và hiệu suất cao.
 \begin{itemize}
     \item \textbf{Tuân thủ ACID:} Đảm bảo tính toàn vẹn dữ liệu ở mức cao nhất (Atomicity, Consistency, Isolation, Durability), rất quan trọng cho các ứng dụng yêu cầu giao dịch chính xác (tài chính, thương mại điện tử).
     \item \textbf{Hỗ trợ đa dạng kiểu dữ liệu:} Ngoài các kiểu dữ liệu quan hệ truyền thống, PostgreSQL hỗ trợ mạnh mẽ JSON/JSONB, cho phép lưu trữ dữ liệu phi cấu trúc (NoSQL) ngay trong database quan hệ.
@@ -25,7 +23,7 @@ Kiến trúc cốt lõi của PostgreSQL bao gồm các thành phần:
 \begin{itemize}
     \item \textbf{Các tiến trình (Processes):} Điều phối toàn bộ hoạt động của cơ sở dữ liệu. Nó tiếp nhận kết nối, cấp phát tiến trình xử lý truy vấn cho từng client và duy trì các tác vụ chạy ngầm (ghi dữ liệu, dọn dẹp rác, sao lưu nhật ký).
     \item \textbf{Shared Memory:} Giúp tối ưu hóa hiệu suất truy xuất và tính toán. Thành phần này dùng vùng nhớ chung để đệm dữ liệu (giảm tải đọc/ghi ổ cứng) và cấp phát vùng nhớ riêng cho từng tiến trình để thực hiện các phép toán phức tạp như sắp xếp hay gộp bảng.
-    \item \textbf{Storage Manager::} Lưu trữ vật lý và bảo vệ dữ liệu. Nó ghi lại dữ liệu thực tế của các bảng/chỉ mục vào ổ cứng và duy trì nhật ký giao dịch (Write-AHead Logs) để đảm bảo không mất mát dữ liệu và cho phép phục hồi khi hệ thống gặp sự cố.
+    \item \textbf{Storage Manager:} Lưu trữ vật lý và bảo vệ dữ liệu. Nó ghi lại dữ liệu thực tế của các bảng/chỉ mục vào ổ cứng và duy trì nhật ký giao dịch (Write-AHead Logs) để đảm bảo không mất mát dữ liệu và cho phép phục hồi khi hệ thống gặp sự cố.
 \end{itemize}
 
 PostgreSQL là lựa chọn tốt cho các ứng dụng cần độ tin cậy cao và tính năng
@@ -33,7 +31,7 @@ mạnh mẽ. Đối với các hệ thống đơn giản hơn hay có scale lớ
 nên cân nhắc sử dụng MySQL hoặc NoSQL thay cho Postgres.
 
 \subsection{Redis}
-Redis (Remote Dictionary Server) là một hệ quản trị cơ sở dữ liệu NoSQL mã nguồn mở, hoạt động theo cơ chế in-memory và lưu trữ dữ liệu dưới dạng cặp key–value. Các dặc điểm nổi bật có thể kể đến:
+Redis (Remote Dictionary Server) là một hệ quản trị cơ sở dữ liệu NoSQL mã nguồn mở, hoạt động theo cơ chế in-memory và lưu trữ dữ liệu dưới dạng cặp key–value. Các đặc điểm nổi bật có thể kể đến:
 \begin{itemize}
     \item \textbf{In-memory}: Dữ liệu được lưu chủ yếu trên RAM nên thời gian phản hồi thường ở mức microsecond, phù hợp cho các hệ thống real-time.
     \item \textbf{Key-Value}: Mỗi khóa trỏ tới một giá trị. Các giá trị không chỉ là chuỗi đơn thuần mà có thể là nhiều cấu trúc dữ liệu phức tạp.
