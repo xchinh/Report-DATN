@@ -12,7 +12,7 @@
 
 ### Hiệu chỉnh phạm vi ngày 23/09/2026 — phần có hiệu lực khi viết Chương 6
 
-Phần kiểm kê ở Mục 4 được lập theo Chương 4 cũ và giữ lại để truy vết lịch sử, **không còn là ma trận nghiệm thu hiện hành đối với LEV-03, UC-LEV-01, toàn bộ BTR và iOffice**. Bảng dưới đây thay thế các hàng đó; các UC/FR khác không đổi nhưng phiên bản nguồn phải đối chiếu với `06_locked_source_baseline_20260923.md`. Nguồn đặc tả là `main` tại `6ba92b6` cộng chỉnh sửa chưa commit ở `Chapter4/section2/leave/index.tex`; mã commit báo cáo cuối cùng còn chờ chốt.
+Phần kiểm kê ở Mục 4 được lập theo Chương 4 cũ và giữ lại để truy vết lịch sử, **không còn là ma trận nghiệm thu hiện hành đối với LEV-03, UC-LEV-01, toàn bộ BTR và iOffice**. Bảng dưới đây thay thế các hàng đó; các UC/FR khác không đổi nhưng phiên bản nguồn phải đối chiếu với `06_locked_source_baseline_20260923.md`. Nguồn đặc tả là nhánh `main` (commit `14fe1f6`) đã được đồng bộ vào nhánh `rewrite-chapter-6` tại commit `887439f`.
 
 | UC/FR hiện hành | Hành vi cam kết | Đối chiếu hiện thực ở nguồn hiện có | Trạng thái hiện thực / giới hạn cần nêu |
 | --- | --- | --- | --- |

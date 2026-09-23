@@ -26,7 +26,7 @@ Tài liệu chỉ là **kế hoạch chờ phê duyệt**. Việc tạo tệp n�
 
 ### 2.1. Nguồn và quy tắc hợp nhất
 
-- Nguồn yêu cầu: Chương 1 và Chương 4 trên `main` ngày 23/09/2026; riêng chỉnh sửa `Chapter4/section2/leave/index.tex` đang **chưa commit**, vì vậy phải ghi hash sau khi chốt báo cáo và đối chiếu lại trước khi chạy.
+- Nguồn yêu cầu: Chương 1 và Chương 4 trên `main` ngày 23/09/2026; các chỉnh sửa `Chapter4/section2/leave/index.tex` và sơ đồ sequence đã được commit tại `14fe1f6` và đồng bộ vào nhánh `rewrite-chapter-6` tại commit `887439f`.
 - Nguồn khoảng trống: `02_test_evidence_gap_matrix.md`.
 - Các số 51 hàng, 31 P0, 12 P1 và 8 P2 là thống kê của backlog cũ, **không còn là số lượng khoảng trống hiện hành** sau khi đổi đặc tả. Chỉ dùng mapping hiệu chỉnh ở Mục 5 để chọn lần chạy lại.
 - Các hành vi cùng một luồng, dùng chung tiền điều kiện và dữ liệu được hợp nhất vào một kịch bản. Một kịch bản có nhiều nhánh kiểm tra nhưng không tạo thêm UC/FR.
@@ -52,7 +52,7 @@ BTR-04, OFF-03 và UI-01 là kịch bản P2 độc lập. Không chạy chúng 
 
 | Thành phần | Commit khóa | Vai trò trong đợt kiểm thử |
 | --- | --- | --- |
-| Báo cáo | Chưa chốt: `main` tại `6ba92b6` cộng chỉnh sửa Chương 4 và sơ đồ chưa commit | Chỉ chốt sau khi đồng bộ sang nhánh viết Chương 6 |
+| Báo cáo | `887439f` (nhánh `rewrite-chapter-6`, đã tích hợp commit `14fe1f6` từ `main`) | Đã chốt sau khi đồng bộ toàn bộ chỉnh sửa Chương 4 và sơ đồ |
 | `myhcmut-mobile` | `7f90ac74b15ba59a1802c4021e35d793cd417096` | Ứng dụng Flutter và client tích hợp; đối chiếu build APK trước khi dùng ảnh làm bằng chứng |
 | `auth-be` | `7e687a6005ceb6264f3467072081c784a6f9c7bc` | Xác thực và JWT; ghi riêng cấu hình môi trường không commit |
 | `hrm-be` | `9e39ccc2515defab70c2f18ea88fb0a50b5fd1e0` | Snapshot HRM theo `06_locked_source_baseline_20260923.md` |
