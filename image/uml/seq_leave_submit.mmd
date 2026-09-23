@@ -5,26 +5,28 @@ sequenceDiagram
     participant HRM as Hệ thống HRM
     participant DB as CSDL HRM
 
-    User->>App: Khởi tạo đơn nghỉ phép
-    App->>App: Kiểm tra ngày đăng ký hợp lệ
-    alt Ngày đăng ký không hợp lệ
+    User->>App: Chọn thời gian và khởi tạo đơn nghỉ phép
+    App->>App: Kiểm tra ngày và số dư phép sơ bộ
+    alt Dữ liệu khởi tạo không hợp lệ
         App-->>User: Hiển thị cảnh báo
-    else Ngày đăng ký hợp lệ
+    else Dữ liệu khởi tạo hợp lệ
         App->>HRM: Yêu cầu tạo bản nháp
-        HRM->>DB: Kiểm tra quyền và khởi tạo nháp
+        HRM->>DB: Kiểm tra quyền, trùng lịch và tạo đơn Nháp cùng quy trình
         DB-->>HRM: Mã đơn nháp
         HRM-->>App: Trả thông tin đơn nháp
         User->>App: Nhập thời gian, lý do và minh chứng
-        App->>HRM: Gửi dữ liệu kiểm tra
-        HRM->>DB: Tính ngày làm việc, kiểm tra số dư và trùng lịch
-        alt Không đạt điều kiện
+        App->>App: Kiểm tra biểu mẫu và số dư phép tham khảo
+        User->>App: Xác nhận gửi duyệt
+        App->>HRM: Cập nhật đơn nháp (isSend=1)
+        HRM->>DB: Kiểm tra quyền, trạng thái, trùng lịch và điều kiện gửi
+        alt Không đạt điều kiện gửi
             HRM-->>App: Trả nguyên nhân cần điều chỉnh
             App-->>User: Hiển thị cảnh báo
-        else Đạt điều kiện
-        User->>App: Xác nhận gửi duyệt
-        App->>HRM: Nộp đơn
-        HRM->>DB: Cập nhật đơn và tạo bước quy trình
-        HRM-->>App: Trả trạng thái chờ duyệt
-        App-->>User: Thông báo gửi thành công
+        else Đạt điều kiện gửi
+            HRM->>DB: Cập nhật đơn và lịch sử chuyển bước quy trình
+            HRM-->>App: Xác nhận cập nhật
+            App->>HRM: Tải chi tiết đơn
+            HRM-->>App: Trả chi tiết và trạng thái mới
+            App-->>User: Hiển thị đơn đã gửi
         end
     end

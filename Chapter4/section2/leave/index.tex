@@ -23,12 +23,14 @@ FR-LEV-01 & Tra cứu quỹ phép và đơn & Cán bộ, Giảng viên & Xem s�
 \hline
 FR-LEV-02 & Lập và gửi đơn nghỉ phép & Cán bộ, Giảng viên & Nhập liệu qua wizard 3 bước, đính kèm minh chứng, lưu nháp hoặc gửi duyệt khi đáp ứng điều kiện nghiệp vụ. \\
 \hline
-FR-LEV-03 & Quản lý đơn đã tạo & Cán bộ, Giảng viên & Thu hồi đơn chờ duyệt, chỉnh sửa nộp lại đơn bị trả lại hoặc xóa bản ghi nháp khi hủy. \\
+FR-LEV-03 & Quản lý đơn đã tạo & Cán bộ, Giảng viên & Chỉnh sửa hoặc xóa đơn ở trạng thái Nháp; chỉnh sửa và gửi lại đơn Bị trả lại. Đơn đã gửi không mặc định có thao tác thu hồi cho người lập. \\
 \hline
 FR-LEV-04 & Phê duyệt theo thẩm quyền & Cấp phê duyệt & Xem xét nội dung, minh chứng và phê duyệt, từ chối hoặc trả lại đơn theo thẩm quyền được phân công. \\
 \hline
 \end{tabularx}
 \end{table}
+
+Trong quy trình hiện thực, thao tác lưu giữ đơn ở trạng thái Nháp, còn thao tác gửi mới chuyển đơn sang bước chờ duyệt. Quyền thu hồi của người có thẩm quyền thuộc luồng xử lý riêng, không đồng nhất với quyền xóa đơn Nháp của người lập.
 
 \subsubsection{Đặc tả Use Case}
 
@@ -53,7 +55,7 @@ Bảng~\ref{tab:mapping_uc_lev} tổng hợp danh mục các use case thuộc nh
 \hline
 \textbf{Mã Use Case} & \textbf{Tên Use Case} & \textbf{Mục tiêu Nghiệp vụ} \\
 \hline
-\textbf{UC-LEV-01} & Quản lý đơn nghỉ phép cá nhân & Theo dõi quỹ phép, tra cứu danh sách đơn, xem tiến trình duyệt, thu hồi hoặc sửa đơn. \\
+\textbf{UC-LEV-01} & Quản lý đơn nghỉ phép cá nhân & Theo dõi quỹ phép, tra cứu đơn và tiến trình duyệt; sửa hoặc xóa đơn Nháp, sửa và gửi lại đơn Bị trả lại. \\
 \hline
 \textbf{UC-LEV-02} & Lập và gửi đơn nghỉ phép & Khởi tạo đơn mới qua wizard 3 bước, kiểm tra điều kiện và gửi phê duyệt. \\
 \hline
@@ -69,22 +71,23 @@ Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-L
   name={Quản lý đơn nghỉ phép cá nhân},
   shortname={Quản lý đơn cá nhân},
   actor={Cán bộ / Giảng viên},
-  desc={Cho phép cán bộ theo dõi số dư quỹ phép năm, tra cứu danh sách đơn, xem tiến trình duyệt, thu hồi đơn chờ xử lý hoặc sửa đơn bị trả lại.},
+  desc={Cho phép cán bộ theo dõi số dư quỹ phép năm, tra cứu danh sách đơn và tiến trình duyệt; chỉnh sửa hoặc xóa đơn Nháp, chỉnh sửa và gửi lại đơn Bị trả lại.},
   pre={Cán bộ đã đăng nhập thành công vào ứng dụng MyHCMUT Mobile.},
   trigger={Người dùng chọn chức năng ``Nghỉ phép'' trên màn hình chính.},
   mainflow={
     1. Người dùng mở mục ``Nghỉ phép'' để xem số dư quỹ phép tham khảo và danh sách đơn đã lập. \newline
     2. Người dùng lọc danh sách hoặc chọn một đơn để xem trạng thái và tiến trình xử lý. \newline
-    3. Với đơn đang chờ xử lý, người dùng có thể yêu cầu thu hồi. \newline
-    4. HRM kiểm tra trạng thái hiện tại và ghi nhận kết quả thu hồi khi hợp lệ.
+    3. Với đơn Nháp, người dùng có thể tiếp tục chỉnh sửa hoặc xóa đơn. \newline
+    4. HRM kiểm tra người lập và trạng thái đơn trước khi ghi nhận thao tác hợp lệ.
   },
   altflow={
-    - \textit{Luồng 3a (Sửa đơn bị trả lại):} Với đơn ở trạng thái Bị trả lại, người dùng chọn chỉnh sửa để bổ sung thông tin và nộp lại.
+    - \textit{Luồng 3a (Sửa đơn bị trả lại):} Với đơn ở trạng thái Bị trả lại, người dùng chọn chỉnh sửa để bổ sung thông tin và gửi lại. \newline
+    - \textit{Luồng 3b (Theo dõi đơn đã gửi):} Với đơn đang chờ duyệt, người dùng xem trạng thái và lịch sử xử lý; ứng dụng không mặc định cung cấp thao tác thu hồi cho người lập.
   },
   exflow={
-    - \textit{Ngoại lệ 4a (Thu hồi không thành công):} Đơn đã được cấp quản lý tiếp nhận xử lý $\rightarrow$ hệ thống thông báo trạng thái mới và từ chối thu hồi.
+    - \textit{Ngoại lệ 4a (Trạng thái đã thay đổi):} Nếu đơn không còn ở trạng thái cho phép chỉnh sửa hoặc xóa, HRM từ chối thao tác và ứng dụng cập nhật trạng thái mới.
   },
-  post={Cán bộ nắm bắt đầy đủ thông tin quỹ phép và trạng thái các đơn; các thay đổi thu hồi được cập nhật đồng bộ.},
+  post={Cán bộ nắm bắt thông tin quỹ phép và trạng thái các đơn; những thay đổi hợp lệ đối với đơn Nháp hoặc đơn Bị trả lại được ghi nhận trên HRM.},
   label={tab:uc_lev_01}
 }
 
