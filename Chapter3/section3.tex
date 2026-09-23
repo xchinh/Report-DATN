@@ -1,4 +1,4 @@
-\section{Công nghệ backend và tích hợp}
+\section{Công nghệ backend}
 \label{sec:congnghe_backend_tichhop}
 
 MyHCMUT Mobile được phát triển theo định hướng ứng dụng di động tích hợp, kết nối trực tiếp với các hệ thống dịch vụ backend hiện hữu của Nhà trường. Việc tìm hiểu và nắm vững ngăn xếp công nghệ phía backend là cơ sở bắt buộc để nhóm thiết kế các giao diện tích hợp, phân giải giao thức và xử lý dữ liệu đồng bộ giữa thiết bị di động và máy chủ.
@@ -10,14 +10,57 @@ Các hệ thống backend của Nhà trường (HRM và iOffice) được xây d
 
 Trong phạm vi đề tài, nhóm không xây dựng lại hệ thống quản trị dữ liệu mới mà tích hợp trực tiếp vào các dịch vụ backend này. Nhóm nghiên cứu cấu trúc API hiện hữu, thực hiện kết nối với các route nghiệp vụ của HRM/iOffice và khai thác Redis để lưu trữ tạm thời vé xác thực một lần (One-Time Ticket SSO) phục vụ luồng chuyển tiếp phiên làm việc an toàn từ ứng dụng di động sang Web.
 
-\subsection{Dịch vụ thông báo và truyền thông thời gian thực}
-\label{subsec:backend_notification_realtime}
+\subsection{Môi trường thực thi: Node.js}
+Node.js là một môi trường runtime mã nguồn mở, đa nền tảng, cho phép thực thi JavaScript
+bên ngoài trình duyệt web, dựa trên \textbf{V8 JavaScript engine} của Chrome. Điểm khác biệt
+cốt lõi của Node.js so với các nền tảng máy chủ truyền thống nằm ở kiến trúc hướng sự kiện
+(Event-driven):
+\begin{itemize}
+    \item \textbf{Single-threaded:} Node.js sử dụng một luồng chính duy nhất để xử lý các kết nối, giúp tiết kiệm tài nguyên hệ thống (RAM, CPU) so với mô hình đa luồng truyền thống.
+    \item \textbf{Non-blocking I/O:} Khi gặp các tác vụ nặng về I/O (như đọc file, truy vấn Database), Node.js sẽ không dừng lại chờ đợi (block) mà đẩy tác vụ đó xuống hệ thống xử lý nền, sau đó tiếp tục xử lý các yêu cầu khác.
+\end{itemize}
 
-Firebase Cloud Messaging (FCM) là nền tảng điện toán đám mây do Google cung cấp~\cite{fcm_doc}, hỗ trợ gửi thông báo đẩy và thông điệp dữ liệu đến ứng dụng trên thiết bị người dùng một cách tin cậy và tối ưu năng lượng pin. Bên cạnh đó, Socket.IO là thư viện hỗ trợ giao tiếp hai chiều thời gian thực dựa trên giao thức WebSocket~\cite{socketio_doc}, bảo đảm độ trễ truyền thông thấp.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{image/theory/nodejs-architecture.jpg}
+    \caption{\textit{Mô hình hoạt động Event Loop của Node.js}}
+    \label{fig:nodejs_arch}
+\end{figure}
 
-Trong MyHCMUT Mobile, nhu cầu nhận biết các sự kiện phê duyệt đơn từ, văn bản mới và lịch họp đóng vai trò then chốt đối với trải nghiệm người dùng. Nhóm sử dụng FCM để tiếp nhận thông báo đẩy từ các dịch vụ backend và trích xuất siêu dữ liệu (metadata) đi kèm nhằm kích hoạt tính năng điều hướng sâu đến đúng màn hình nghiệp vụ liên quan. Đối với tính năng điểm danh cuộc họp trong phân hệ Lịch làm việc, nhóm khai thác Socket.IO để nhận các cập nhật trạng thái tức thời giữa thiết bị di động và phòng họp máy chủ.
+Đối với đề tài này, \textbf{Node.js} là một lựa chọn hiệu quả. Tuy nhiên đối với các
+hệ thống khác với những tác vụ tính toán nặng (AI, xử lý ảnh, data mining)
+sẽ khiến Event Loop bị nghẽn, làm chậm toàn bộ hệ thống.
 
-\section{Kết luận chương}
-\label{sec:ketluan_chuong3}
+\subsection{Ngôn ngữ lập trình: TypeScript}
+TypeScript là một ngôn ngữ lập trình mã nguồn mở được phát triển bởi Microsoft, đóng vai trò
+là một siêu tập (Superset) của JavaScript.
+\begin{itemize}
+    \item \textbf{Static Typing:} TypeScript bổ sung hệ thống kiểu dữ liệu tĩnh (Static Types) vào Java\-Script. Các kiểu dữ liệu được kiểm tra ngay tại thời điểm biên dịch (Compile\-time), giúp phát hiện sớm các lỗi sai lệch kiểu dữ liệu trước khi ứng dụng được chạy.
+    \item \textbf{Non-blocking I/O:} Cung cấp các cấu trúc lập trình hướng đối tượng nâng cao như
+          Interface, Class và Generics, giúp định nghĩa rõ ràng các DTO (Data Transfer Object) và
+          cấu trúc dữ liệu trả về từ API.
+\end{itemize}
 
-Chương 3 đã trình bày các cơ sở lý thuyết về kiến trúc phần mềm, giao thức truyền thông và cơ chế xác thực, cùng với các công nghệ then chốt được áp dụng trong quá trình phát triển MyHCMUT Mobile và tích hợp với các hệ thống backend hiện hữu của Nhà trường. Những nền tảng này là căn cứ kỹ thuật quan trọng để nhóm tiến hành phân tích chi tiết các yêu cầu chức năng, phi chức năng tại Chương 4 và trình bày các giải pháp thiết kế kiến trúc, dữ liệu và quy trình tích hợp tại Chương 5.
+\subsection{ExpressJS Framework}
+ExpressJS là một Framework ứng dụng web (Web Application Framework) tối giản và linh hoạt được xây dựng trên nền tảng Node.js. Nó cung cấp một bộ các tính năng mạnh mẽ để phát triển ứng dụng web và API. Express.js đã trở thành framework backend phổ biến
+nhất trong hệ sinh thái Node.js nhờ kiến trúc đơn giản, hiệu suất cao và khả
+năng mở rộng dễ dàng.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{image/theory/expressjs.jpg}
+    \caption{\textit{ExpressJS Framework}}
+    \label{fig:express}
+\end{figure}
+
+\subsubsection{Các thành phần cốt lõi}
+\begin{itemize}
+    \item \textbf{Middleware:} Là các hàm có quyền truy cập vào đối tượng yêu cầu (req), đối tượng phản hồi (res) và hàm middleware tiếp theo trong chu trình xử lý (next). Middleware dùng để xử lý logic, xác thực người dùng, log dữ liệu, v.v.
+    \item \textbf{Routing:} Cơ chế xác định cách ứng dụng phản hồi các yêu cầu từ client đến một endpoint cụ thể (URI) bằng các phương thức HTTP (GET, POST, PUT, DELETE).
+    \item \textbf{Template Engine:} Hỗ trợ tích hợp các template engine như EJS, Pug để render giao diện phía server (nếu cần).
+\end{itemize}
+
+\subsubsection{Vai trò trong hệ thống}
+Express.js đóng vai trò điều phối luồng dữ liệu, xử lý logic nghiệp vụ API (RESTful API) trước khi tương tác với cơ sở dữ liệu.
+
+
