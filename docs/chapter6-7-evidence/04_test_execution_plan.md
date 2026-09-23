@@ -4,13 +4,13 @@
 
 ### 1.1. Mục tiêu
 
-Kế hoạch này chuyển 51 khoảng trống bằng chứng trong `03_proposed_test_backlog.md` thành 21 kịch bản có thể thực hiện và tái lập. Kết quả của đợt kiểm thử sẽ được dùng để cập nhật ma trận bằng chứng trước khi chốt Chương 6–7; không dùng số lượng test để thay thế đánh giá theo hành vi.
+Kế hoạch gốc chuyển 51 khoảng trống bằng chứng thành 21 kịch bản. Bản hiệu chỉnh có **22 kịch bản** (thêm OFF-04) và giữ mã cũ để truy vết log, nhưng **không giữ nguyên mapping và kỳ vọng cũ** của LEV-03, BTR-02, OFF-01/02/03. Chỉ kết quả của lần chạy lại theo tiêu chí mới mới được dùng để đánh giá các hành vi mới.
 
 Tài liệu chỉ là **kế hoạch chờ phê duyệt**. Việc tạo tệp này không cho phép viết test, chạy test, sửa dữ liệu staging hoặc sửa LaTeX.
 
 ### 1.2. Phạm vi xác minh
 
-- Luồng trọng tâm: cập nhật và thẩm định hồ sơ; tạo, thu hồi, nộp lại và xử lý đơn nghỉ phép; tạo, thu hồi, nộp lại và phê duyệt hồ sơ công tác.
+- Luồng trọng tâm: cập nhật và thẩm định hồ sơ; tạo, sửa/xóa nháp, gửi, sửa–gửi lại đơn bị trả lại và xử lý nghỉ phép; tạo, sửa/xóa nháp, gửi, sửa–gửi lại hồ sơ công tác bị trả lại, phê duyệt và thu hồi theo thẩm quyền TCNS/BGH.
 - Ranh giới tích hợp: đăng nhập và phiên JWT, vé SSO một lần sang Web HRM, truy cập tệp iOffice, điểm danh lịch họp và lỗi tải lịch.
 - Yêu cầu phi chức năng có khoảng trống: timeout/lỗi mạng, phân quyền backend, tính nhất quán giao diện đại diện và khả năng tái lập các bộ test hiện có.
 - Không bổ sung yêu cầu mới, benchmark FPS/RAM/latency, kiểm thử tải lớn hoặc kiểm toán bảo mật toàn diện.
@@ -26,11 +26,11 @@ Tài liệu chỉ là **kế hoạch chờ phê duyệt**. Việc tạo tệp n�
 
 ### 2.1. Nguồn và quy tắc hợp nhất
 
-- Nguồn yêu cầu: Chương 1 và Chương 4 hiện hành.
+- Nguồn yêu cầu: Chương 1 và Chương 4 trên `main` ngày 23/09/2026; riêng chỉnh sửa `Chapter4/section2/leave/index.tex` đang **chưa commit**, vì vậy phải ghi hash sau khi chốt báo cáo và đối chiếu lại trước khi chạy.
 - Nguồn khoảng trống: `02_test_evidence_gap_matrix.md`.
-- Nguồn ưu tiên: 51 hàng mang quyết định **Cần bổ sung** trong `03_proposed_test_backlog.md`, gồm 31 P0, 12 P1 và 8 P2.
+- Các số 51 hàng, 31 P0, 12 P1 và 8 P2 là thống kê của backlog cũ, **không còn là số lượng khoảng trống hiện hành** sau khi đổi đặc tả. Chỉ dùng mapping hiệu chỉnh ở Mục 5 để chọn lần chạy lại.
 - Các hành vi cùng một luồng, dùng chung tiền điều kiện và dữ liệu được hợp nhất vào một kịch bản. Một kịch bản có nhiều nhánh kiểm tra nhưng không tạo thêm UC/FR.
-- P0 và P1 thuộc bộ tối thiểu. P2 chỉ bắt buộc khi đã được hợp nhất tự nhiên vào kịch bản tối thiểu; ba kịch bản P2 độc lập có thể hoãn.
+- P0/P1 chỉ là mức ưu tiên kiểm thử, không phải điều kiện bắt buộc để viết Chương 6. Kịch bản chưa chạy hoặc Fail sẽ giới hạn kết luận tương ứng. P2 độc lập có thể hoãn và phải ghi rõ chưa kiểm chứng.
 
 ### 2.2. Bộ tối thiểu theo nghiệp vụ
 
@@ -38,9 +38,9 @@ Tài liệu chỉ là **kế hoạch chờ phê duyệt**. Việc tạo tệp n�
 | --- | --- | --- |
 | Xác thực và phân quyền | AUTH-01, AUTH-02 | Cả hai Pass; có bằng chứng backend từ chối request trái quyền, không chỉ ẩn nút ở client |
 | Hồ sơ nhân sự | PRO-01, PRO-02 | Luồng WebView/SSO, chính sách cập nhật và xử lý đề xuất đều Pass |
-| Nghỉ phép | LEV-01 đến LEV-05 | Các chuyển trạng thái, hủy nháp, lý do từ chối và số dư cuối đều Pass |
-| Đi công tác | BTR-01 đến BTR-03 | Wizard/validation, thu hồi/nộp lại và luân chuyển phê duyệt đều Pass |
-| Văn bản iOffice | OFF-01, OFF-02 | Backend chặn trái quyền và người có quyền mở được tệp theo cơ chế thực tế |
+| Nghỉ phép | LEV-01 đến LEV-05 | Nháp sửa/xóa được, đơn đã gửi không bị người lập sửa/xóa trái phép, đơn bị trả lại sửa–gửi lại được; các nhánh duyệt, lý do từ chối và số dư chỉ kết luận nếu kịch bản tương ứng Pass |
+| Đi công tác | BTR-01 đến BTR-03 | Nháp sửa/xóa được, người lập không thu hồi phiếu đã gửi theo mặc định, phiếu bị trả lại sửa–gửi lại được; thu hồi TCNS/BGH và luân chuyển chỉ kết luận nếu kịch bản tương ứng Pass |
+| Văn bản iOffice | OFF-01, OFF-02, OFF-04; OFF-03 nếu cần kết luận danh sách | OFF-01 xác minh quyền truy cập tệp theo NFR-03; OFF-02/03 xác minh tra cứu FR-IOFF-01; OFF-04 kiểm tra UC-OFF-01..04 mới. Kịch bản nào Fail/Blocked thì giới hạn đúng kết luận của hành vi đó |
 | Lịch và điểm danh | SCH-01, SCH-02 | Người ngoài danh sách bị chặn; lỗi tải lịch được báo và có thể thử lại |
 | Yêu cầu phi chức năng | NET-01, TEST-01 | Xử lý timeout được xác minh; kết quả chạy bộ test hiện có có log gắn commit |
 
@@ -52,13 +52,14 @@ BTR-04, OFF-03 và UI-01 là kịch bản P2 độc lập. Không chạy chúng 
 
 | Thành phần | Commit khóa | Vai trò trong đợt kiểm thử |
 | --- | --- | --- |
-| Báo cáo | `efdb3a18c3920fddabbe42bb9b2ebce90fe9d3c3` | Mốc phê duyệt Stage A và lập kế hoạch Stage B |
-| `myhcmut-mobile` | `4fe5d9c` | Ứng dụng Flutter, widget/provider và client tích hợp |
-| `hrm-be` | `87e17bcd` | Snapshot thực thi HRM; commit này kế thừa baseline nghiệp vụ `38745a26` và bổ sung endpoint vé SSO |
-| `hrm-fe` | `83caf648` | Giao diện Web HRM cập nhật hồ sơ |
-| `ioffice-be` | `53f069a3` | API văn bản, lịch và điểm danh |
+| Báo cáo | Chưa chốt: `main` tại `6ba92b6` cộng chỉnh sửa Chương 4 và sơ đồ chưa commit | Chỉ chốt sau khi đồng bộ sang nhánh viết Chương 6 |
+| `myhcmut-mobile` | `7f90ac74b15ba59a1802c4021e35d793cd417096` | Ứng dụng Flutter và client tích hợp; đối chiếu build APK trước khi dùng ảnh làm bằng chứng |
+| `auth-be` | `7e687a6005ceb6264f3467072081c784a6f9c7bc` | Xác thực và JWT; ghi riêng cấu hình môi trường không commit |
+| `hrm-be` | `9e39ccc2515defab70c2f18ea88fb0a50b5fd1e0` | Snapshot HRM theo `06_locked_source_baseline_20260923.md` |
+| `hrm-fe` | `3ff464c9c1a3353bf7a7d53ded45c5c41b1b5a23` | Web HRM và cầu nối SSO |
+| `ioffice-be` | `4bfdb23a75f0bf665a0e3b97d39f3531009db161` | API văn bản, lịch và điểm danh |
 
-Không dùng HEAD hiện tại thay cho commit khóa. Trước khi chạy phải tạo worktree sạch hoặc checkout detached tại đúng commit và lưu `git rev-parse HEAD`, `git status --short` vào metadata. Nếu không dựng được đúng snapshot, kịch bản liên quan là **Blocked**, không tự đổi commit.
+Không dùng HEAD hiện tại thay cho commit khóa. Nếu lần chạy lại dùng nhánh hoặc working tree khác mốc trên, ghi **commit thực tế, trạng thái thay đổi và build hash** vào manifest; kết quả chỉ áp dụng trực tiếp cho phiên bản đó. Không gộp với log ở các commit cũ. Nếu không xác định được phiên bản đã chạy, kết quả là **Invalid** cho mục đích chứng minh phiên bản báo cáo.
 
 ### 3.2. Runtime và dịch vụ
 
@@ -95,8 +96,12 @@ Chỉ bắt đầu Stage C khi toàn bộ mục sau được xác nhận:
 | `BGH-A` | Cấp phê duyệt cuối cho luồng có yêu cầu | BTR-03 |
 | `IOF-IN` | Người nằm trong danh sách mời và có quyền xem văn bản mẫu | OFF-02, SCH-* |
 | `IOF-OUT` | Người không được mời/không có quyền xem văn bản mẫu | OFF-01, SCH-01 |
+| `IOF-CLERK` / `IOF-ADVISOR` / `IOF-DIRECTOR` | Lần lượt tài khoản có quyền phân công, lãnh đạo P.HC có quyền tham mưu, BGH có quyền chỉ đạo; quyền hiệu lực phải kiểm tra trước khi chạy | OFF-04 |
+| `IOF-RECIPIENT-A/B` | Hai người được phân công tiếp nhận cùng một văn bản thử nghiệm | OFF-04 |
 
 Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi trong tài liệu hoặc artifact. Bảng ánh xạ bí danh sang tài khoản được lưu ở nơi kiểm soát truy cập do người phụ trách kiểm thử quản lý.
+
+Có thể dùng chức năng quản trị để chuyển sang người dùng thử nghiệm, nhưng trước mỗi kịch bản phải xác nhận `shcc`/vai trò hiệu lực trong phiên hoặc JWT đúng với bí danh; **không dùng token admin để chứng minh người dùng thường có/không có quyền**. Các tài khoản thử nghiệm phải tồn tại ở đúng hệ thống/CSDL liên quan và chỉ có dữ liệu được phép dùng thử.
 
 ### 4.2. Quy tắc tạo và cô lập dữ liệu
 
@@ -112,11 +117,14 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 | --- | --- | --- |
 | `PRO-DIRECT` | Trường hồ sơ được cấu hình cập nhật trực tiếp | Giá trị đổi và được trả về khi đọc lại; khôi phục giá trị cũ |
 | `PRO-REVIEW` | Trường cần thẩm định, có PDF minh chứng giả | Tạo đề xuất chờ xử lý; sau PRO-02 khôi phục dữ liệu hồ sơ và đóng/xóa đề xuất bằng cơ chế test |
-| `LEV-PENDING` | Đơn của `CB-A` đang chờ duyệt, chưa bị xử lý | Dùng cho thu hồi/từ chối; tái tạo fixture sau mỗi nhánh |
+| `LEV-DRAFT` | Đơn Nháp do `CB-A` tạo | Sửa/lưu lại hoặc xóa được; tái tạo fixture riêng cho mỗi nhánh |
+| `LEV-PENDING` | Đơn của `CB-A` đã gửi và đang chờ duyệt | Người lập chỉ theo dõi; thử sửa/xóa trực tiếp phải bị backend từ chối, trạng thái không đổi; dùng fixture khác cho nhánh từ chối |
 | `LEV-RETURNED` | Đơn của `CB-A` bị trả lại | Nộp lại thành chờ duyệt; hủy bản ghi test sau chạy |
 | `LEV-BALANCE` | Số dư nhỏ hơn tổng số ngày của hai đơn chờ duyệt cuối | Số dư cuối không âm và khớp đơn được duyệt; phục hồi snapshot số dư |
 | `BTR-DOMESTIC` | Hồ sơ trong nước chờ duyệt | Luân chuyển Lãnh đạo đơn vị → TCCB |
 | `BTR-FOREIGN` | Hồ sơ nước ngoài có/không có minh chứng theo từng nhánh | Luân chuyển thêm BGH; bản thiếu minh chứng không được nộp |
+| `BTR-DRAFT` / `BTR-PENDING` / `BTR-RETURNED` | Ba hồ sơ thử nghiệm tách biệt: Nháp, đã gửi, Bị trả lại | Nháp sửa/xóa được; người lập không sửa/xóa/thu hồi phiếu đã gửi theo mặc định; phiếu trả lại sửa và gửi lại được |
+| `BTR-REVOKE-EARLY/LATE` | Hai hồ sơ thử nghiệm ở bước duyệt sớm và bước duyệt muộn; một tài khoản TCNS/BGH có quyền, một tài khoản đối chứng không quyền | Kiểm tra phạm vi “bất kỳ bước nào” của FR-BTR-05 bằng ít nhất hai bước khác nhau; xác minh trạng thái/lịch cá nhân trước–sau, không dùng phiếu thật |
 | `DOC-ALLOWED` / `DOC-DENIED` | Một tệp người thử được phép xem và một tệp không được phép xem | Không thay đổi dữ liệu; chỉ lưu mã phản hồi và hành vi client |
 | `MEETING-IN` / `MEETING-OUT` | Cuộc họp trong khung điểm danh; một người được mời, một người không được mời | `IOF-OUT` không tạo bản ghi điểm danh; xóa/rollback bản ghi của `IOF-IN` nếu phát sinh |
 
@@ -130,16 +138,17 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 | PRO-02 | P0 | FR-PRO-03-B02, UC-PRO-03-B02, UC-PRO-03-B03 | API/integration | Có |
 | LEV-01 | P0/P2 | FR-LEV-02-B01, UC-LEV-02-B02, UC-LEV-02-B03 | Widget/provider + integration | Có |
 | LEV-02 | P0 | FR-LEV-03-B03, UC-LEV-02-B04 | Integration | Có |
-| LEV-03 | P0 | FR-LEV-03-B01, FR-LEV-03-B02, UC-LEV-01-B02, UC-LEV-01-B03 | Mobile–API integration | Có |
+| LEV-03 | P0 | LEV-R01, LEV-R02, LEV-R03 | Mobile–API integration | Có |
 | LEV-04 | P0 | UC-LEV-03-B05 | Widget + API | Có |
 | LEV-05 | P0 | FR-LEV-04-B03 | Concurrency integration | Có |
-| BTR-01 | P0/P1/P2 | FR-BTR-02-B01, FR-BTR-02-B02, FR-BTR-02-B03, UC-BTR-02-B01, UC-BTR-02-B02, UC-BTR-02-B03, UC-BTR-02-B04, UC-BTR-02-B05 | Widget/provider + integration | Có |
-| BTR-02 | P0 | FR-BTR-03-B01, FR-BTR-03-B02, UC-BTR-01-B02, UC-BTR-01-B03 | Mobile–API integration | Có |
-| BTR-03 | P0 | FR-BTR-04-B01, FR-BTR-04-B02, UC-BTR-03-B02, UC-BTR-03-B03, UC-BTR-03-B04 | API/integration | Có |
+| BTR-01 | P0/P1/P2 | BTR-R05 (FR-BTR-02; UC-BT-01/02) | Widget/provider + integration | Có |
+| BTR-02 | P0 | BTR-R01, BTR-R02, BTR-R03 | Mobile–API integration | Có |
+| BTR-03 | P0 | BTR-R06 (FR-BTR-04/UC-BT-04), BTR-R04 (FR-BTR-05/UC-BT-05) | API/integration | Có |
 | BTR-04 | P2 | FR-BTR-01-B01, FR-BTR-01-B02 | Widget/provider | Không |
-| OFF-01 | P0 | UC-OFF-01-B05 | API authorization + client | Có |
-| OFF-02 | P1 | FR-OFF-01-B03, UC-OFF-01-B04 | Thủ công đầu–cuối | Có |
-| OFF-03 | P2 | FR-OFF-01-B01, UC-OFF-01-B01 | Widget/provider + API | Không |
+| OFF-01 | P0 | OFF-R06 / NFR-03 (quyền truy cập tệp iOffice theo bản ghi) | API authorization + client | Có |
+| OFF-02 | P1 | OFF-R01 (chi tiết/tệp văn bản) | Thủ công đầu–cuối | Có |
+| OFF-03 | P2 | OFF-R01 (danh sách/lọc văn bản, chi tiết nhiệm vụ FR-IOFF-04) | Widget/provider + API | Không |
+| OFF-04 | P0 | OFF-R02..R05 (FR-IOFF-02/03; UC-OFF-01..04) | Thủ công đầu–cuối + API | Có |
 | SCH-01 | P0 | UC-SCH-01-B05 | API authorization | Có |
 | SCH-02 | P1 | FR-SCH-02-B04 | Widget/provider + lỗi tích hợp có kiểm soát | Có |
 | NET-01 | P1 | NFR-01-B01 | Integration với lỗi mạng có kiểm soát | Có |
@@ -150,7 +159,7 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 
 ### AUTH-01 — Đăng nhập, gắn token và xử lý phiên không hợp lệ
 
-- **Tiền điều kiện:** build mobile `4fe5d9c`; Auth/HRM/iOffice sẵn sàng; `CB-A` hợp lệ; công cụ proxy/log đã che header bí mật.
+- **Tiền điều kiện:** build mobile được đối chiếu với commit `7f90ac74` hoặc ghi rõ sai khác; Auth/HRM/iOffice sẵn sàng; `CB-A` hợp lệ; công cụ proxy/log đã che header bí mật.
 - **Dữ liệu:** một API đọc HRM và một API đọc iOffice mà `CB-A` được phép gọi.
 - **Các bước:** (1) đăng xuất/xóa phiên thử nghiệm; xác nhận chức năng nghiệp vụ không truy cập được; (2) đăng nhập bằng `CB-A`; (3) gọi hai API qua ứng dụng; (4) làm token truy cập hết hạn hoặc dùng token test không hợp lệ theo cách được quản trị cho phép; (5) gọi lại API và quan sát xử lý phiên.
 - **Mong đợi:** chưa đăng nhập bị chặn; sau đăng nhập cả hai client gửi Bearer token qua cơ chế dùng chung; khi nhận 401, `MultiDomainAuthInterceptor` xóa token của `domainKey` và chuyển tiếp lỗi; request sau đó không tiếp tục dùng token đã bị loại bỏ. Artifact phải được redaction, không chứa token.
@@ -167,7 +176,7 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 
 ### PRO-01 — WebView SSO và cập nhật hồ sơ theo chính sách
 
-- **Tiền điều kiện:** mobile `4fe5d9c`, HRM backend `87e17bcd`, HRM frontend `83caf648`, Redis và WebView sẵn sàng; `PRO-DIRECT`, `PRO-REVIEW` đã được người quản trị xác nhận đúng chính sách tại commit khóa.
+- **Tiền điều kiện:** mobile `7f90ac74`, HRM backend `9e39ccc2`, HRM frontend `3ff464c9`, Redis và WebView sẵn sàng; `PRO-DIRECT`, `PRO-REVIEW` đã được người quản trị xác nhận đúng chính sách tại commit khóa.
 - **Các bước:** (1) từ mobile chọn cập nhật hồ sơ; (2) xác nhận `POST /api/auth/sso/generate-ticket` thành công và Web HRM mở không yêu cầu đăng nhập lại; (3) cập nhật `PRO-DIRECT`, gửi và đọc lại; (4) cập nhật `PRO-REVIEW` kèm PDF giả và gửi; (5) thử gửi cùng trường cần minh chứng nhưng bỏ tệp; (6) thử dùng lại vé đã consume hoặc dùng vé hết TTL.
 - **Mong đợi:** vé hợp lệ chỉ dùng một lần; trường trực tiếp được cập nhật; trường thẩm định tạo đề xuất chờ xử lý; thiếu minh chứng bị chặn với thông báo; vé dùng lại/hết hạn không tạo phiên. WebView không lộ vé trong artifact sau bước chuyển tiếp.
 - **Xác minh/bằng chứng:** video/ảnh các mốc, request/response đã redaction, ID đề xuất, dữ liệu trước/sau và log consume ticket. Chỉ kết luận trên nền tảng đã chạy.
@@ -187,7 +196,7 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 - **Các bước:** (1) đi qua ba bước wizard, quay lại bước trước và xác nhận dữ liệu còn giữ; (2) lưu nháp giữa quy trình, thoát và mở lại; (3) hoàn thiện thời gian, lý do, minh chứng và người duyệt; (4) nộp; (5) đọc lại danh sách/chi tiết từ backend.
 - **Mong đợi:** validation ngăn chuyển/gửi khi thiếu trường bắt buộc; nháp phục hồi được; payload cuối phản ánh dữ liệu ba bước; chỉ sau phản hồi backend thành công, UI hiển thị đơn chờ duyệt.
 - **Xác minh/bằng chứng:** ảnh/video từng bước đại diện, payload đã che dữ liệu, ID đơn và trạng thái backend trước/sau.
-- **Khôi phục:** thu hồi/xóa đơn test và tệp đính kèm theo API được phép.
+- **Khôi phục:** chỉ xóa Nháp qua API hợp lệ; đơn đã gửi được đóng/khôi phục theo cơ chế fixture thử nghiệm do người quản trị phê duyệt, không dùng API xóa Nháp để xóa phiếu đã gửi.
 
 ### LEV-02 — Hủy quy trình và dọn dữ liệu nháp
 
@@ -195,15 +204,15 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 - **Các bước:** (1) chọn hủy/thoát theo luồng UI; (2) xác nhận hộp thoại; (3) đọc lại nháp và lịch cá nhân; (4) tạo lại đơn cùng khoảng ngày.
 - **Mong đợi:** chỉ dữ liệu của run ID bị dọn; nháp/sự kiện giữ chỗ không còn; lần tạo lại không bị xung đột bởi dữ liệu mồ côi.
 - **Xác minh/bằng chứng:** ID và snapshot trước/sau, response hủy, kết quả tạo lại.
-- **Khôi phục:** xóa/thu hồi lần tạo lại.
+- **Khôi phục:** xóa lần tạo lại nếu còn `NHAP`; nếu đã gửi, dùng cơ chế fixture thử nghiệm được quản trị phê duyệt.
 
-### LEV-03 — Thu hồi, chỉnh sửa và nộp lại đơn
+### LEV-03 — Quản lý nháp, chặn sửa/xóa sau gửi và gửi lại đơn bị trả lại
 
-- **Tiền điều kiện:** `LEV-PENDING` và `LEV-RETURNED` thuộc `CB-A`.
-- **Các bước:** (1) thu hồi `LEV-PENDING` trên mobile; (2) đọc lại chi tiết/danh sách; (3) thử thu hồi lần hai; (4) mở `LEV-RETURNED`, xác nhận dữ liệu cũ được nạp; (5) sửa lý do/minh chứng và nộp lại; (6) đọc lại trạng thái và lịch sử.
-- **Mong đợi:** lần thu hồi đầu chuyển đúng trạng thái; lần lặp bị chặn; đơn bị trả lại nạp đúng dữ liệu và nộp lại thành chờ duyệt; UI chỉ cập nhật sau response server.
-- **Xác minh/bằng chứng:** ảnh UI, response, trạng thái/lịch sử trước-sau.
-- **Khôi phục:** hủy các fixture và tệp mới.
+- **Tiền điều kiện:** ba fixture riêng `LEV-DRAFT`, `LEV-PENDING`, `LEV-RETURNED` của `CB-A`; xác nhận quy trình của `LEV-PENDING` không cấp target thu hồi cho người lập.
+- **Các bước:** (1) mở Nháp, sửa một trường, lưu và đọc lại; (2) xóa một Nháp khác, đọc lại danh sách và API; (3) mở đơn đã gửi, xác nhận không có thao tác sửa/xóa/thu hồi mặc định; thử gọi API sửa/xóa bằng chính người lập, đọc lại trạng thái; (4) mở đơn Bị trả lại, sửa nội dung và gửi lại, đọc lại trạng thái/lịch sử.
+- **Mong đợi:** thay đổi Nháp được lưu, xóa chỉ tác động Nháp; request sửa/xóa phiếu đã gửi bị từ chối và dữ liệu không đổi; đơn Bị trả lại nhận dữ liệu sửa và chuyển theo target `GUI_LAI` của quy trình. Không yêu cầu người lập thu hồi phiếu Chờ duyệt thành công.
+- **Xác minh/bằng chứng:** ảnh nút theo trạng thái, request/response đã khử dữ liệu, nội dung và lịch sử trước–sau; ghi rõ target workflow của fixture.
+- **Khôi phục:** dùng API được phép dọn các fixture thử nghiệm; không xóa trực tiếp phiếu đã gửi để làm sạch.
 
 ### LEV-04 — Từ chối đơn bắt buộc có lý do
 
@@ -227,21 +236,21 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 - **Các bước:** (1) đi qua năm bước wizard và kiểm tra giữ dữ liệu khi quay lại; (2) thử ngày bắt đầu sau ngày kết thúc; (3) thử khoảng ngày trùng nghỉ phép/công tác đã duyệt; (4) lưu nháp giữa bước 3/4 rồi mở lại; (5) thử nộp hồ sơ nước ngoài thiếu minh chứng; (6) bổ sung minh chứng và nộp hồ sơ hợp lệ; (7) đọc lại chi tiết từ backend.
 - **Mong đợi:** ngày sai, xung đột và thiếu minh chứng bị chặn theo yêu cầu; nháp phục hồi được; hồ sơ hợp lệ chứa lịch trình, thành viên, kinh phí và tệp, chuyển sang chờ duyệt sau xác nhận backend.
 - **Xác minh/bằng chứng:** ảnh các lỗi, payload, ID nháp/hồ sơ và trạng thái trước/sau.
-- **Khôi phục:** thu hồi/xóa hồ sơ, nháp và tệp thuộc run ID.
+- **Khôi phục:** xóa Nháp và tệp test thuộc run ID qua API hợp lệ; hồ sơ đã gửi được đóng/khôi phục bằng cơ chế fixture được duyệt, không giả định người lập có quyền thu hồi.
 
-### BTR-02 — Thu hồi, chỉnh sửa và nộp lại hồ sơ công tác
+### BTR-02 — Quản lý nháp và hồ sơ công tác bị trả lại
 
-- **Tiền điều kiện:** một hồ sơ chờ duyệt và một hồ sơ bị trả lại của `CB-A`.
-- **Các bước:** (1) thu hồi hồ sơ chờ duyệt; (2) xác nhận danh sách/chi tiết cập nhật và thử thu hồi lại; (3) mở hồ sơ bị trả lại, sửa kế hoạch hoặc kinh phí; (4) nộp lại; (5) đọc trạng thái và lịch sử.
-- **Mong đợi:** thu hồi chỉ hợp lệ ở trạng thái cho phép và không lặp; dữ liệu cũ được nạp; hồ sơ nộp lại chuyển sang chờ duyệt và giữ nội dung đã sửa.
-- **Xác minh/bằng chứng:** response, ảnh UI, snapshot chi tiết/lịch sử.
-- **Khôi phục:** đóng/xóa fixture bằng API được phép.
+- **Tiền điều kiện:** `BTR-DRAFT`, `BTR-PENDING`, `BTR-RETURNED` của `CB-A` là ba hồ sơ độc lập.
+- **Các bước:** (1) sửa/lưu Nháp và xóa một Nháp khác; (2) mở hồ sơ đã gửi và thử sửa/xóa hoặc gọi hành động thu hồi bằng người lập, xác minh không có quyền/target phù hợp; (3) mở hồ sơ Bị trả lại, sửa kế hoạch hoặc kinh phí và gửi lại; (4) đọc trạng thái và lịch sử.
+- **Mong đợi:** chỉ Nháp được sửa/xóa tự do; người lập không thu hồi hồ sơ đã gửi theo mặc định, dữ liệu không bị thay đổi khi bị từ chối; hồ sơ Bị trả lại được sửa và chuyển theo target `GUI_LAI`.
+- **Xác minh/bằng chứng:** quyền/target workflow của fixture, response, ảnh UI và snapshot chi tiết/lịch sử trước–sau.
+- **Khôi phục:** đóng/dọn fixture bằng cơ chế test được phép; không dùng delete endpoint cho hồ sơ đã gửi.
 
 ### BTR-03 — Phê duyệt, trả lại, từ chối và luân chuyển đa cấp
 
 - **Tiền điều kiện:** fixture trong nước và nước ngoài; `LD-DV-A`, `TCCB-A`, `BGH-A`; thêm fixture cho nhánh trả lại và từ chối.
-- **Các bước:** (1) duyệt hồ sơ trong nước lần lượt bằng Lãnh đạo đơn vị và TCCB; (2) duyệt hồ sơ nước ngoài và xác nhận có thêm cấp BGH; (3) trả lại fixture với ý kiến; (4) thử từ chối fixture khác không có lý do, sau đó có lý do; (5) ở mỗi bước đọc lại cấp xử lý và trạng thái.
-- **Mong đợi:** luồng trong nước kết thúc sau Lãnh đạo đơn vị + TCCB; luồng nước ngoài/đối tượng lãnh đạo có thêm BGH theo cấu hình; trả lại lưu ý kiến và chuyển trạng thái phù hợp; thiếu lý do bị backend chặn; từ chối hợp lệ lưu lý do.
+- **Các bước:** (1) duyệt hồ sơ trong nước theo các bước mà cấu hình quy trình thực tế trả về; (2) duyệt hồ sơ nước ngoài, ghi các cấp bổ sung thực tế; (3) trả lại fixture với ý kiến; (4) thử từ chối fixture khác không có lý do, sau đó có lý do; (5) người không quyền thử thu hồi `BTR-REVOKE-EARLY`, xác nhận không đổi; người có quyền TCNS/BGH thu hồi fixture này; (6) người có quyền thu hồi `BTR-REVOKE-LATE` ở bước xử lý khác; (7) ở mỗi nhánh đọc lại trạng thái, lịch sử và lịch cá nhân.
+- **Mong đợi:** luân chuyển đúng cấu hình thực tế và các quy tắc BR-BT-01..06 trong Chương 4; trả lại lưu ý kiến; từ chối thiếu lý do bị chặn; người có thẩm quyền được thu hồi theo FR-BTR-05/UC-BT-05, người khác bị từ chối, lịch cá nhân được giải phóng theo quy tắc nghiệp vụ. Không suy diễn rằng mọi hồ sơ trong nước luôn chỉ có hai cấp.
 - **Xác minh/bằng chứng:** sơ đồ thực tế từ lịch sử xử lý, response từng cấp, trạng thái trước/sau và ý kiến/lý do.
 - **Khôi phục:** rollback/tái tạo toàn bộ fixture; không dùng hồ sơ công tác thật.
 
@@ -272,10 +281,18 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 ### OFF-03 — Danh sách văn bản và nhiệm vụ (P2)
 
 - **Tiền điều kiện:** dữ liệu phân trang có trạng thái/độ khẩn khác nhau và danh sách nhiệm vụ đọc được.
-- **Các bước:** tải trang đầu, cuộn trang tiếp theo, lọc/tìm kiếm, đổi giữa văn bản đến/đi/nhiệm vụ và đối chiếu API.
-- **Mong đợi:** không lặp/mất bản ghi giữa trang; bộ lọc khớp response; chuyển tab không làm lộ dữ liệu ngoài quyền.
-- **Bằng chứng:** request phân trang, ID kết quả và ảnh danh sách.
+- **Các bước:** tải trang đầu, cuộn trang tiếp theo, lọc/tìm kiếm, đổi giữa văn bản đến/đi/nhiệm vụ và đối chiếu API; mở một nhiệm vụ được giao để so trạng thái, tiến độ, báo cáo và việc liên quan với dữ liệu nguồn (FR-IOFF-04).
+- **Mong đợi:** không lặp/mất bản ghi giữa trang; bộ lọc khớp response; chuyển tab không làm lộ dữ liệu ngoài quyền; chi tiết nhiệm vụ phản ánh đúng dữ liệu nguồn trong các trường đã cam kết.
+- **Bằng chứng:** request phân trang, ID kết quả, response chi tiết đã khử dữ liệu và ảnh danh sách/chi tiết nhiệm vụ.
 - **Khôi phục:** chỉ đọc; không cần.
+
+### OFF-04 — Phân công, tham mưu, chỉ đạo và tiếp nhận văn bản đến
+
+- **Tiền điều kiện:** một văn bản đến giả lập ở bước cho phép phân công; `IOF-CLERK`, `IOF-ADVISOR`, `IOF-DIRECTOR`, `IOF-RECIPIENT-A/B` có quyền thực tế tương ứng trên iOffice. Nếu cấu hình quy trình không thể đi qua đủ bốn bước trên cùng một văn bản, dùng fixture riêng cho từng nhánh và ghi rõ quan hệ giữa chúng.
+- **Các bước:** (1) người có quyền phân công chọn loại trách nhiệm và hai người nhận, gửi từ giao diện mobile, đọc lại phiếu giải quyết; (2) người không có quyền thử cùng request trực tiếp qua API, xác nhận dữ liệu không đổi; (3) lãnh đạo P.HC gửi ý kiến tham mưu, đọc lại lịch sử; (4) BGH gửi chỉ đạo, đọc lại bước xử lý; (5) người nhận thứ nhất tiếp nhận rồi đọc trạng thái; (6) người nhận thứ hai tiếp nhận và kiểm tra điều kiện hoàn tất 100% theo Chương 4.
+- **Mong đợi:** dữ liệu phân công và ý kiến được lưu đúng người, đúng văn bản; request trái quyền bị từ chối; tham mưu/chỉ đạo chỉ chuyển bước khi actor có thẩm quyền; sau người nhận đầu tiên chưa đánh dấu hoàn thành nếu còn người chưa tiếp nhận, sau tất cả người nhận mới chuyển trạng thái theo quy trình. Không gán `Pass` chung nếu chỉ có màn hình hoặc một nhánh API thành công.
+- **Xác minh/bằng chứng:** ảnh giao diện đã khử dữ liệu, ID văn bản/phiếu/actor bí danh, request/response, trạng thái/lịch sử trước–sau từng bước, cấu hình quyền và workflow thực tế.
+- **Khôi phục:** chỉ dùng fixture có mã run ID; hoàn nguyên qua cơ chế nghiệp vụ/test được quản trị cho phép. Nếu thiếu role hoặc không có fixture hợp lệ, ghi `Blocked`, không dùng tài liệu thật.
 
 ### SCH-01 — Người ngoài danh sách mời không được điểm danh
 
@@ -313,7 +330,7 @@ Danh tính thật, mật khẩu, JWT, cookie và token FCM không được ghi t
 
 - **Tiền điều kiện:** fresh worktree ở commit khóa, dependency lock giữ nguyên, runtime đúng Mục 3; Redis test sẵn sàng cho suite HRM cần thiết.
 - **Các bước mobile:** sau bootstrap, chạy riêng `flutter test --no-pub` tại `modules/hrm`, `modules/notification`, `modules/ioffice`, `packages/shared/localization`, `packages/shared/auth`, `packages/core/global_system`; không dùng `melos run test` làm bằng chứng toàn workspace khi script chưa được sửa.
-- **Các bước backend:** tại `hrm-be:87e17bcd`, chạy Vitest cho `test/unit/sso_phase0.unit.test.ts`, `sso_phase1.unit.test.ts`, `sso_phase7.unit.test.ts`, `tcns_nghi_phep/acquire_leave_lock.unit.test.ts` và `tcns_nghi_phep/concurrency_race_condition.unit.test.ts`.
+- **Các bước backend:** tại `hrm-be:9e39ccc2`, chạy Vitest cho `test/unit/sso_phase0.unit.test.ts`, `sso_phase1.unit.test.ts`, `sso_phase7.unit.test.ts`, `tcns_nghi_phep/acquire_leave_lock.unit.test.ts` và `tcns_nghi_phep/concurrency_race_condition.unit.test.ts`; ghi số ca thực tế của từng lệnh, không mặc định là 57.
 - **Mong đợi:** ghi nguyên exit code và số test của từng lệnh. Chỉ cộng tổng các lệnh chạy trong cùng run manifest; không cộng với 370/53/57/427 lịch sử.
 - **Xác minh/bằng chứng:** log stdout/stderr nguyên trạng, runtime, commit, dependency lock checksum, thời gian và exit code.
 - **Khôi phục:** xóa worktree tạm theo quy trình được duyệt; không sửa test để làm kết quả Pass trong cùng lần chạy.
@@ -364,7 +381,7 @@ Mỗi `result.md` phải có: scenario ID; UC/FR và behavior ID; người thự
 
 Đợt kiểm thử có thể kết thúc khi:
 
-1. 18 kịch bản thuộc bộ tối thiểu đã có trạng thái hợp lệ và metadata; không bắt buộc tất cả Pass để kết thúc ghi nhận.
+1. 19 kịch bản thuộc bộ tối thiểu đã có trạng thái hợp lệ và metadata; không bắt buộc tất cả Pass để kết thúc ghi nhận.
 2. BTR-04, OFF-03 và UI-01 có quyết định Run/Not Run rõ ràng.
 3. Mọi bản ghi thay đổi dữ liệu có bằng chứng khôi phục hoặc sự cố khôi phục được báo cáo.
 4. Mọi Fail/Blocked/Invalid có nguyên nhân, phạm vi ảnh hưởng và hành vi liên quan.
@@ -383,9 +400,9 @@ Mỗi `result.md` phải có: scenario ID; UC/FR và behavior ID; người thự
 
 Trước Stage C, người dùng cần xác nhận:
 
-- [ ] 21 kịch bản và mapping 51 khoảng trống là đúng phạm vi.
-- [ ] 18 kịch bản tối thiểu và ba kịch bản P2 tùy chọn là chấp nhận được.
-- [ ] Các commit khóa và lựa chọn `hrm-be:87e17bcd` làm snapshot thực thi là đúng.
+- [ ] 22 kịch bản, mapping hiệu chỉnh trong `02` và các khoảng trống còn lại là đúng phạm vi; không dùng lại số 51 của backlog cũ.
+- [ ] 19 kịch bản tối thiểu và ba kịch bản P2 tùy chọn là chấp nhận được.
+- [ ] Hash báo cáo cuối cùng và các commit nguồn trong `06_locked_source_baseline_20260923.md` đã được đối chiếu với build thực sự sẽ chạy.
 - [ ] Có môi trường staging/test, tài khoản vai trò và cơ chế khôi phục dữ liệu được phép.
 - [ ] Ma trận thiết bị, đặc biệt phạm vi Android/iOS cho PRO-01 và OFF-02, được chốt.
 - [ ] Vị trí lưu artifact khử dữ liệu nhạy cảm và vùng lưu log thô được chấp thuận.

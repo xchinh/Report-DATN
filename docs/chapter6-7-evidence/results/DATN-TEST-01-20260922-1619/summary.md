@@ -1,5 +1,7 @@
 # TỔNG HỢP ĐỢT THỰC HIỆN KẾ HOẠCH KIỂM THỬ
 
+> Tài liệu này là ảnh chụp trạng thái ban đầu ngay sau `TEST-01`. Trạng thái Stage C mới nhất nằm tại `../DATN-STAGE-C-20260922/summary.md`.
+
 ## 1. Phạm vi đã thực hiện
 
 Đợt chạy ngày 22/09/2026 đã hoàn tất cổng sẵn sàng và thực hiện `TEST-01` trên các snapshot mã nguồn khóa. Không có kịch bản nghiệp vụ nào được chạy trên staging vì chưa có đủ điều kiện an toàn để xác thực vai trò và khôi phục dữ liệu.

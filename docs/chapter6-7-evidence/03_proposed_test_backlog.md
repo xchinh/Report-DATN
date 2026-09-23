@@ -5,10 +5,25 @@
 - Ngày kiểm kê: 22/09/2026.
 - Nhánh báo cáo: `rewrite-chapter-6`.
 - Commit nền Stage A: `dba03c507f8629a16e3f9a1fdd7a494b81c2d729`.
-- Nguồn duy nhất: các hàng trong `02_test_evidence_gap_matrix.md` có quyết định **Cần bổ sung**.
+- Nguồn Stage A: các hàng trong `02_test_evidence_gap_matrix.md` có quyết định **Cần bổ sung**. Nguồn hiện hành sau khi đổi Chương 4: bảng hiệu chỉnh hành vi `R` trong `02` và bảng ưu tiên hiệu chỉnh dưới đây.
 - Mỗi hàng là một khoảng trống bằng chứng, không mặc nhiên tương ứng với một test độc lập. Giai đoạn B phải hợp nhất các hàng có thể được xác minh bằng cùng một kịch bản đầu-cuối để tạo bộ kiểm thử tối thiểu theo rủi ro.
 - Các mã trạng thái, role kỹ thuật, endpoint, bảng dữ liệu và mã phản hồi chỉ được khóa trong `04` sau khi đối chiếu hợp đồng API hoặc mã nguồn tại commit báo cáo; tài liệu này chỉ dùng tên nghiệp vụ nếu chi tiết kỹ thuật chưa được xác minh.
-- Tài liệu này không cho phép chạy test; Giai đoạn B phải lập `04_test_execution_plan.md` và được người dùng duyệt trước.
+- Tài liệu này không cho phép chạy test; chỉ thực hiện các kịch bản trong `04_test_execution_plan.md` sau khi người dùng duyệt phiên bản hiệu chỉnh.
+
+### Backlog hiệu chỉnh theo Chương 4 `main` ngày 23/09/2026
+
+Các bảng P0/P1/P2 ở Mục 3–5 phía dưới là **backlog Stage A lịch sử**. Những hàng đòi người lập thu hồi phiếu nghỉ phép/công tác đã gửi, cho sửa phiếu đã Thu hồi, hoặc dùng `UC-BTR-01..03`/`FR-OFF-01..02`/`UC-OFF-01` với nghĩa cũ **không được dùng để chạy lại**. Thay vào đó, dùng ma trận hành vi `R` trong `02` và đặc tả kịch bản hiện hành của `04`; số lượng 51 hàng và cơ cấu ưu tiên cũ không còn giá trị nghiệm thu.
+
+| Ưu tiên | Hành vi hiện hành | Lý do kiểm thử | Kịch bản ở `04` |
+| --- | --- | --- | --- |
+| P0 | LEV-R01, LEV-R02, LEV-R03 | Ranh giới Nháp–đã gửi–Bị trả lại quyết định khả năng sửa/xóa; log cũ dùng kỳ vọng thu hồi sai | LEV-03 |
+| P0 | BTR-R01, BTR-R02, BTR-R03 | Tương tự công tác; tách quyền người lập khỏi quyền thu hồi quản trị | BTR-02 |
+| P0 | BTR-R04 | FR-BTR-05/UC-BT-05 mới giao quyền thu hồi cho TCNS/BGH; phải kiểm tra phân quyền và trạng thái/lịch | BTR-03 |
+| P0 | OFF-R06 | Log cũ ghi `Fail` truy cập tệp theo bản ghi; cần kiểm tra lại trên iOffice BE được chốt, nhưng không ánh xạ thành UC-OFF-01 mới | OFF-01 |
+| P0 | OFF-R02..R05 | UC-OFF-01..04 hiện là phân công, tham mưu, chỉ đạo, tiếp nhận; Gate 0 tra cứu không kiểm chứng các hành vi này | OFF-04 |
+| P1 | OFF-R01 | Tra cứu/xem tệp và chi tiết nhiệm vụ ở FR-IOFF-01/04; xác minh đúng ranh giới chức năng đọc | OFF-02; OFF-03 là P2 nếu cần chi tiết bộ lọc |
+
+Các `Fail` khác về lý do từ chối, số dư phép, phân quyền điểm danh vẫn giữ ưu tiên cũ; thay đổi nghiệp vụ Nháp/thu hồi không làm chúng biến mất. Chỉ đánh dấu `Pass` sau khi có lần chạy hợp lệ trên phiên bản đã ghi trong manifest.
 
 ## 2. Quy tắc ưu tiên
 
@@ -17,7 +32,7 @@
 - **P2:** khoảng trống rủi ro thấp, chỉ thực hiện khi còn thời gian.
 - Mỗi hàng phải truy vết đến một mã hành vi trong tệp `02` và không được tạo thêm yêu cầu.
 
-## 3. Danh sách P0
+## 3. Danh sách P0 của Stage A lịch sử — không dùng trực tiếp để chạy lại
 
 | Ưu tiên | UC/FR và hành vi | Lý do chọn | Kịch bản | Hình thức | Dữ liệu và vai trò | Môi trường | Kết quả mong đợi | Bằng chứng phải lưu | Điều kiện dừng |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -53,7 +68,7 @@
 | P0 | NFR-03 / NFR-03-B01: Bắt buộc xác thực tài khoản trước khi truy cập các chức năng nghiệp vụ; quản lý phiên làm việc qua JWT token | Rủi ro Cao: Người chưa xác thực có thể truy cập chức năng nghiệp vụ hoặc phiên hết hạn không được xử lý; thiếu kiểm thử trực tiếp trên phiên bản báo cáo | Gửi yêu cầu nghiệp vụ khi không có token, với token không hợp lệ hoặc hết hạn, rồi đăng nhập hợp lệ và gửi lại; đồng thời kiểm tra phản ứng của ứng dụng khi backend từ chối phiên. | API & Unit test | Token giả lập không chứa dữ liệu thật; tài khoản cán bộ thử nghiệm | myhcmut-mobile:4fe5d9c và các backend khóa tương ứng | Yêu cầu không có phiên hợp lệ bị từ chối; yêu cầu có phiên hợp lệ được tiếp nhận; ứng dụng xóa phiên không hợp lệ và yêu cầu xác thực lại theo hành vi hiện thực. Mã phản hồi cụ thể được khóa trong `04` | Phản hồi API và log interceptor/quản lý phiên | Ba nhánh không token, token không hợp lệ và token hợp lệ đạt kết quả mong đợi |
 | P0 | NFR-03 / NFR-03-B03: Backend là thành phần thẩm quyền duy nhất kiểm tra quyền hạn; client chỉ hiển thị giao diện theo vai trò | Rủi ro Cao: Người dùng có thể gọi trực tiếp thao tác vượt thẩm quyền nếu backend không kiểm tra độc lập; chưa có bằng chứng kiểm thử trực tiếp trên phiên bản báo cáo | Dùng tài khoản cán bộ không có quyền duyệt để gọi trực tiếp một thao tác phê duyệt thuộc phạm vi nghỉ phép hoặc công tác, sau đó lặp lại bằng tài khoản có quyền tương ứng. | API test | Một tài khoản cán bộ và một tài khoản cấp duyệt thử nghiệm; dữ liệu hồ sơ có thể khôi phục | hrm-be:38745a26, môi trường test HRM | Tài khoản không có quyền bị từ chối và dữ liệu không thay đổi; tài khoản có quyền được xử lý theo quy tắc nghiệp vụ. Route, quyền và mã phản hồi được khóa trong `04` | Phản hồi API, log kiểm tra quyền và trạng thái hồ sơ trước/sau | Hai nhánh không quyền/có quyền đạt kết quả mong đợi mà không mở rộng sang quyền quản trị ngoài phạm vi |
 
-## 4. Danh sách P1
+## 4. Danh sách P1 của Stage A lịch sử — không dùng trực tiếp để chạy lại
 
 | Ưu tiên | UC/FR và hành vi | Lý do chọn | Kịch bản | Hình thức | Dữ liệu và vai trò | Môi trường | Kết quả mong đợi | Bằng chứng phải lưu | Điều kiện dừng |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -70,7 +85,7 @@
 | P1 | NFR-03 / NFR-03-B02: Tự động gắn token xác thực dùng chung cho các client HRM và iOffice qua MultiDomainAuthInterceptor | Rủi ro Cao: Yêu cầu nghiệp vụ bị từ chối do interceptor không đọc hoặc gắn đúng token dưới `domainKey = 'auth'` | Tiền điều kiện: `MultiDomainTokenManager` chứa một token thử nghiệm tại khóa `auth` trong SharedPreferences giả lập. Tạo client HRM và iOffice với cùng domainKey, gửi request và mô phỏng phản hồi 401. | Unit test | Một `TokenPair` giả lập không chứa thông tin đăng nhập thật | packages/core/network và packages/shared/auth trong myhcmut-mobile:4fe5d9c, Dart 3.11.3 | Cả hai client gắn cùng Bearer token từ khóa `auth`; khi nhận 401, interceptor xóa token tương ứng theo hành vi hiện thực | Header request, lời gọi `getToken('auth')`/`removeToken('auth')` và log test | Kiểm tra gắn token cho hai client và xóa token khi 401 đạt Pass; không kiểm tra hành vi domain ngoài chưa được implementation cam kết |
 | P1 | NFR-05 / NFR-05-B03: Xây dựng và duy trì các bộ kiểm thử tự động (unit, widget, mapper test) trên monorepo di động và backend | Rủi ro Cao: Không tái lập được toàn bộ test suite bằng một lệnh duy nhất và thiếu kiểm thử tự động cho 2 phân hệ cốt lõi; melos test toàn workspace thất bại và thiếu tự động hóa phân hệ Đi công tác & Văn phòng số | Tiền điều kiện: Workspace sạch ở commit báo cáo. Bước 1: Chạy script kiểm thử toàn diện monorepo di động. Bước 2: Chạy test suite backend (Vitest). Bước 3: Thống kê tỷ lệ pass/fail và thời gian thực thi. | Test runner automation / CI test | Monorepo test suites (packages/core, modules/hrm, modules/ioffice, backend suites) | Flutter 3.41.5, Dart 3.11.3, Node.js v22 / Vitest, Linux CI runner | Lệnh chạy test thực thi tuần tự các package không bị crash giữa chừng; tổng hợp báo cáo test hiển thị rõ số lượng test pass/fail; quy trình chạy kiểm thử được chuẩn hóa | Log console toàn bộ quá trình chạy, tệp xuất báo cáo JUnit/LCOV coverage, mã thoát (exit code) | Lệnh thực thi kiểm thử tự động monorepo kết thúc thành công với mã thoát 0 và xuất báo cáo đầy đủ |
 
-## 5. Danh sách P2
+## 5. Danh sách P2 của Stage A lịch sử — không dùng trực tiếp để chạy lại
 
 | Ưu tiên | UC/FR và hành vi | Lý do chọn | Kịch bản | Hình thức | Dữ liệu và vai trò | Môi trường | Kết quả mong đợi | Bằng chứng phải lưu | Điều kiện dừng |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
