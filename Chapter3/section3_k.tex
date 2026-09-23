@@ -1,15 +1,6 @@
-\section{Công nghệ backend}
-\label{sec:congnghe_backend_tichhop}
-
-MyHCMUT Mobile được phát triển theo định hướng ứng dụng di động tích hợp, kết nối trực tiếp với các hệ thống dịch vụ backend hiện hữu của Nhà trường. Việc tìm hiểu và nắm vững ngăn xếp công nghệ phía backend là cơ sở bắt buộc để nhóm thiết kế các giao diện tích hợp, phân giải giao thức và xử lý dữ liệu đồng bộ giữa thiết bị di động và máy chủ.
-
-\subsection{Nền tảng dịch vụ và lưu trữ dữ liệu}
-\label{subsec:backend_dulieu}
-
-Các hệ thống backend của Nhà trường (HRM và iOffice) được xây dựng trên nền tảng Node.js kết hợp framework Express~\cite{nodejs_doc, express_doc}. Node.js cung cấp môi trường thực thi JavaScript bất đồng bộ hiệu năng cao phía máy chủ, trong khi Express hỗ trợ tổ chức hệ thống định tuyến (routing) và các middleware xử lý yêu cầu HTTP. Về lưu trữ dữ liệu, hệ thống sử dụng hệ quản trị cơ sở dữ liệu quan hệ PostgreSQL~\cite{postgresql_doc} kết hợp thư viện ORM Sequelize~\cite{sequelize_doc} để quản lý, ánh xạ và đảm bảo tính toàn vẹn của dữ liệu nghiệp vụ cán bộ và văn bản. Ngoài ra, Redis được sử dụng làm máy chủ lưu trữ bộ nhớ đệm phân tán cho các dữ liệu có vòng đời ngắn.
-
-Trong phạm vi đề tài, nhóm không xây dựng lại hệ thống quản trị dữ liệu mới mà tích hợp trực tiếp vào các dịch vụ backend này. Nhóm nghiên cứu cấu trúc API hiện hữu, thực hiện kết nối với các route nghiệp vụ của HRM/iOffice và khai thác Redis để lưu trữ tạm thời vé xác thực một lần (One-Time Ticket SSO) phục vụ luồng chuyển tiếp phiên làm việc an toàn từ ứng dụng di động sang Web.
-
+\section{Công nghệ Backend}
+Hệ thống Backend được xây dựng dựa trên nền tảng Node.js, sử dụng ngôn ngữ TypeScript để
+đảm bảo tính chặt chẽ của mã nguồn cùng với framework Express.js để xử lý các yêu cầu HTTP
 \subsection{Môi trường thực thi: Node.js}
 Node.js là một môi trường runtime mã nguồn mở, đa nền tảng, cho phép thực thi JavaScript
 bên ngoài trình duyệt web, dựa trên \textbf{V8 JavaScript engine} của Chrome. Điểm khác biệt
@@ -22,7 +13,7 @@ cốt lõi của Node.js so với các nền tảng máy chủ truyền thống 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{image/theory/nodejs-architecture.jpg}
+    \includegraphics[width=0.7\textwidth]{img/nodejs-architecture.jpg}
     \caption{\textit{Mô hình hoạt động Event Loop của Node.js}}
     \label{fig:nodejs_arch}
 \end{figure}
@@ -48,7 +39,7 @@ năng mở rộng dễ dàng.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\linewidth]{image/theory/expressjs.jpg}
+    \includegraphics[width=0.7\linewidth]{img/expressjs.jpg}
     \caption{\textit{ExpressJS Framework}}
     \label{fig:express}
 \end{figure}
@@ -62,5 +53,3 @@ năng mở rộng dễ dàng.
 
 \subsubsection{Vai trò trong hệ thống}
 Express.js đóng vai trò điều phối luồng dữ liệu, xử lý logic nghiệp vụ API (RESTful API) trước khi tương tác với cơ sở dữ liệu.
-
-

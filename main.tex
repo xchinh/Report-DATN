@@ -41,11 +41,11 @@
 
 \usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,calc,positioning,shapes.geometric}
 \usepackage[plainpages=false,pdfpagelabels]{hyperref}
-\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true}
 \makeatletter
 \def\UrlBigBreaks{\do\/}
 \g@addto@macro\UrlBreaks{\do\-\do\_}
-\makeatother 
+\makeatother
 \usepackage{comment}
 \usepackage{microtype}
 \usepackage[htt]{hyphenat}
@@ -70,7 +70,7 @@
 \newtheorem{lemma}[proposition]{{\bf Lemma}}
 
 %%% Setting document
-\renewcommand{\baselinestretch}{1.5} 
+\renewcommand{\baselinestretch}{1.5}
 
 \def\thesislayout{	% A4: 210 × 297
 	\newgeometry{
@@ -145,23 +145,26 @@
   parsep=0pt
 }
 
-% Định dạng tiêu đề chương hiển thị dạng: X. Tên Chương
+% Định dạng tiêu đề chương hiển thị dạng:
+% Chương X
+% Tên Chương
 \def\@makechapterhead#1{%
-  \vspace*{10\p@}%
+  \vspace*{20\p@}%
   {\parindent \z@ \raggedright \normalfont
     \ifnum \c@secnumdepth >\m@ne
-        \huge\bfseries \thechapter.\space #1\par\nobreak
-    \else
-        \huge\bfseries #1\par\nobreak
+        \huge\bfseries Chương \thechapter\par\nobreak
+        \vskip 15\p@
     \fi
-    \vskip 15\p@
+    \interlinepenalty\@M
+    \Huge\bfseries #1\par\nobreak
+    \vskip 20\p@
   }}
 \def\@makeschapterhead#1{%
-  \vspace*{10\p@}%
+  \vspace*{20\p@}%
   {\parindent \z@ \raggedright \normalfont
     \interlinepenalty\@M
-    \huge\bfseries #1\par\nobreak
-    \vskip 15\p@
+    \Huge\bfseries #1\par\nobreak
+    \vskip 20\p@
   }}
 \makeatother
 
@@ -257,36 +260,42 @@
   \uc@addrow{altflow}{Luồng thay thế}%
   \uc@addrow{exflow}{Luồng ngoại lệ}%
   \uc@addrow{post}{Hậu điều kiện}%
-  \begin{table}[H]
-  \centering
-  \setstretch{1.05}
+  \begingroup
+  \setlength{\LTleft}{0pt}%
+  \setlength{\LTright}{0pt}%
+  \setlength{\LTpre}{8pt plus 2pt minus 2pt}%
+  \setlength{\LTpost}{8pt plus 2pt minus 2pt}%
+  \setstretch{1.05}%
   \small
-  \setlength{\tabcolsep}{5pt}
-  \renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{5pt}%
+  \renewcommand{\arraystretch}{1.1}%
+  \begin{xltabular}{\textwidth}{|L{2.8cm}|Y|}
   \ifcsvoid{uc@shortname}{%
     \caption[\textit{\uc@id: \uc@name}]{\textit{Đặc tả trường hợp sử dụng \uc@id: \uc@name}}%
   }{%
     \caption[\textit{\uc@id: \uc@shortname}]{\textit{Đặc tả trường hợp sử dụng \uc@id: \uc@name}}%
   }%
-  \ifcsvoid{uc@label}{}{\label{\uc@label}}
-  \vspace{0.15cm}
-  \begin{tabularx}{\textwidth}{|L{2.8cm}|Y|}
+  \ifcsvoid{uc@label}{}{\label{\uc@label}} \\
   \hline
   \textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
   \hline
+  \endfirsthead
+%   \caption[]{\textit{Đặc tả trường hợp sử dụng \uc@id: \uc@name{} (tiếp theo)}} \\
+%   \hline
+%   \textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
+%   \hline
+%   \endhead
+  \endfoot
+  \endlastfoot
   \uc@rows
-  \end{tabularx}
-  \end{table}
+  \end{xltabular}%
+  \endgroup
 }
 \makeatother
 
-% Định nghĩa lời dẫn đầu mỗi chương: căn giữa, chữ nghiêng, thu hẹp 2 bên lề
+% Định nghĩa lời dẫn đầu mỗi chương: căn lề trái, chữ nghiêng
 \newcommand{\chapterintro}[1]{%
-    \begin{center}%
-    \begin{minipage}{0.88\textwidth}%
-        \centering\itshape #1%
-    \end{minipage}%
-    \end{center}%
+    \par\noindent{\itshape\RaggedRight #1\par}%
     \vspace{0.4cm}%
 }
 
@@ -325,9 +334,9 @@
 \end{tabular}
 \end{center}
 % Title
-\rule[0.3cm]{\linewidth}{0.3mm} 
+\rule[0.3cm]{\linewidth}{0.3mm}
 \centering
-{\Large \bfseries \MakeUppercase{Phát triển ứng dụng di động\\ phục vụ nhân sự trường đại học}}    
+{\Large \bfseries \MakeUppercase{Phát triển ứng dụng di động\\ phục vụ nhân sự trường đại học}}
 
 \rule{\linewidth}{0.2mm} \\[0.1cm]
 \begin{center}
@@ -345,7 +354,7 @@
      \multicolumn{2}{c}{\textbf{\large ————o0o———–}}\\
      \large \textbf{SVTH}& : \large VŨ XUÂN CHÍNH - 2210392\\
                          & : \large TỐNG DUY KHANG - 2211467\\
-\end{tabular}    
+\end{tabular}
 \end{center}
 \vfill
 \begin{center}

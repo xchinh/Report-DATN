@@ -36,7 +36,7 @@ Các use case của nhóm quản lý nghỉ phép mô tả trọn vẹn vòng đ
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox[c][5.5cm][c]{0.85\linewidth}{\centering \textbf{Sơ đồ Đặc tả Use case Quản lý nghỉ phép} \newline \textit{(Gồm tác nhân Cán bộ/Giảng viên, Lãnh đạo Đơn vị, Chuyên viên TCCB và các use case UC-LEV-01 đến UC-LEV-03)}}}
+\includegraphics[width=\linewidth]{image/usecase/UC_LEAVE.png}
 \caption{Sơ đồ Đặc tả Use case nhóm Quản lý nghỉ phép}
 \label{fig:uc_leave}
 \end{figure}
@@ -148,26 +148,16 @@ Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-L
 
 Trong nhóm chức năng quản lý nghỉ phép, hai quy trình có ý nghĩa quyết định đối với vòng đời hồ sơ là quy trình lập đơn của cán bộ và quy trình luân chuyển phê duyệt của cấp quản lý được mô tả bằng biểu đồ hoạt động.
 
-Hình~\ref{fig:act_leave_submit} mô tả quy trình lập và gửi đơn nghỉ phép (UC-LEV-02). Quy trình thể hiện các bước kiểm tra hỗ trợ người dùng: tự động tính số ngày làm việc, kiểm tra số dư phép, kiểm tra hạn nộp và kiểm tra minh chứng bắt buộc trước khi cho phép nộp đơn chính thức. Trường hợp quá hạn, ứng dụng không tiếp tục luồng tạo đơn nghỉ phép thông thường mà thông báo và điều hướng đến điểm truy cập phân hệ Giải trình; quy trình Giải trình được định hướng phát triển ở Chương~7.
+Quy trình thể hiện các bước kiểm tra hỗ trợ người dùng: tự động tính số ngày làm việc, kiểm tra số dư phép, kiểm tra hạn nộp và kiểm tra minh chứng bắt buộc trước khi cho phép nộp đơn chính thức. Trường hợp quá hạn, ứng dụng không tiếp tục luồng tạo đơn nghỉ phép thông thường mà thông báo và điều hướng đến điểm truy cập phân hệ Giải trình; quy trình Giải trình được định hướng phát triển ở Chương~7.
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering \textbf{Biểu đồ hoạt động: Quy trình lập và gửi đơn nghỉ phép} \newline \textit{(Chi tiết quy trình wizard 3 bước: Nhập thời gian $\rightarrow$ Tính ngày thực tế \& quỹ phép $\rightarrow$ Minh chứng $\rightarrow$ Gửi duyệt; quá hạn $\rightarrow$ điều hướng Giải trình)}}}
-\caption{Biểu đồ hoạt động Quy trình lập và gửi đơn nghỉ phép}
+\includegraphics[width=\linewidth]{image/uml/leave_activity.png}
+\caption{Biểu đồ hoạt động Quy trình nghỉ phép}
 \label{fig:act_leave_submit}
 \end{figure}
 
-Hình~\ref{fig:act_leave_approve} mô tả quy trình phê duyệt đơn nghỉ phép đa cấp (UC-LEV-03). Quy trình thể hiện hai cấp thẩm quyền (Lãnh đạo đơn vị bước 1 và Phòng TCCB bước 2), các nhánh quyết định (Phê duyệt, Từ chối kèm lý do, Trả lại bổ sung) và bước trừ quỹ phép có thẩm quyền tại bước duyệt cuối cùng.
-
-\begin{figure}[H]
-\centering
-\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering \textbf{Biểu đồ hoạt động: Quy trình phê duyệt đơn nghỉ phép đa cấp} \newline \textit{(Thể hiện hai làn bơi thẩm quyền: Lãnh đạo Đơn vị $\leftrightarrow$ Phòng Tổ chức Cán bộ; trừ quỹ phép tại bước cuối)}}}
-\caption{Biểu đồ hoạt động Quy trình phê duyệt đơn nghỉ phép đa cấp}
-\label{fig:act_leave_approve}
-\end{figure}
-
 \subsubsection{Biểu đồ tuần tự}
-
 Biểu đồ tuần tự mô tả sự tương tác logic giữa Người dùng, MyHCMUT Mobile và Hệ thống HRM trong kịch bản Lập và gửi đơn nghỉ phép (UC-LEV-02). Biểu đồ thể hiện trình tự khởi tạo nháp, kiểm tra các điều kiện dữ liệu cần thiết và ghi nhận đơn ở trạng thái Chờ duyệt.
 
 Hình~\ref{fig:seq_leave_submit} thể hiện biểu đồ tuần tự của use case Gửi yêu cầu nghỉ phép.
