@@ -21,7 +21,7 @@ Bảng~\ref{tab:fr_business_trip} tổng hợp các yêu cầu chức năng củ
 \hline
 FR-BTR-01 & Tra cứu hồ sơ & Cán bộ, Giảng viên & Xem danh sách hồ sơ công tác cá nhân, lọc theo trạng thái và xem chi tiết tiến trình duyệt. \\
 \hline
-FR-BTR-02 & Lập và nộp hồ sơ & Cán bộ, Giảng viên & Nhập liệu qua wizard 5 bước: thông tin chung, kế hoạch, thành phần, kinh phí, minh chứng; lưu nháp hoặc gửi duyệt. \\
+FR-BTR-02 & Lập và nộp hồ sơ & Cán bộ, Giảng viên & Nhập liệu theo biểu mẫu 5 bước: thông tin chung, kế hoạch, thành phần, kinh phí, minh chứng; lưu nháp hoặc gửi duyệt. \\
 \hline
 FR-BTR-03 & Điều chỉnh và thu hồi & Cán bộ, Giảng viên & Thu hồi hồ sơ khi chưa được tiếp nhận xử lý; chỉnh sửa và nộp lại hồ sơ bị trả lại. \\
 \hline
@@ -55,7 +55,7 @@ Bảng~\ref{tab:mapping_uc_btr} tổng hợp danh mục các use case thuộc nh
 \hline
 \textbf{UC-BTR-01} & Quản lý hồ sơ công tác cá nhân & Tra cứu danh sách, xem chi tiết tiến trình phê duyệt, thu hồi hoặc chỉnh sửa hồ sơ. \\
 \hline
-\textbf{UC-BTR-02} & Lập và gửi hồ sơ công tác & Khởi tạo hồ sơ qua wizard 5 bước, kiểm tra trùng lịch và gửi phê duyệt. \\
+\textbf{UC-BTR-02} & Lập và gửi hồ sơ công tác & Khởi tạo hồ sơ theo biểu mẫu 5 bước, kiểm tra trùng lịch và gửi phê duyệt. \\
 \hline
 \textbf{UC-BTR-03} & Xử lý hồ sơ công tác & Xem xét tờ trình, thẩm định kinh phí/minh chứng và phê duyệt, từ chối hoặc trả lại hồ sơ. \\
 \hline
@@ -145,11 +145,11 @@ Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-B
 
 Quy trình quản lý công tác bao gồm hai luồng xử lý chính: luồng lập và nộp hồ sơ của cán bộ và luồng luân chuyển phê duyệt đa cấp theo thẩm quyền.
 
-Hình~\ref{fig:act_trip_submit} mô tả quy trình lập và gửi hồ sơ công tác (UC-BTR-02). Quy trình thể hiện rõ các bước tuần tự qua wizard 5 bước: khai báo thông tin $\rightarrow$ kế hoạch $\rightarrow$ thành phần $\rightarrow$ tài chính/minh chứng $\rightarrow$ rà soát nộp.
+Hình~\ref{fig:act_trip_submit} mô tả quy trình lập và gửi hồ sơ công tác (UC-BTR-02). Quy trình thể hiện rõ năm bước tuần tự: khai báo thông tin $\rightarrow$ kế hoạch $\rightarrow$ thành phần $\rightarrow$ tài chính/minh chứng $\rightarrow$ rà soát nộp.
 
 \begin{figure}[H]
 \centering
-\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering \textbf{Biểu đồ hoạt động: Quy trình lập và gửi hồ sơ công tác} \newline \textit{(Chi tiết quy trình wizard 5 bước: Thông tin chung $\rightarrow$ Kế hoạch $\rightarrow$ Thành phần đoàn $\rightarrow$ Kinh phí \& Minh chứng $\rightarrow$ Nộp duyệt)}}}
+\fbox{\parbox[c][7cm][c]{0.85\linewidth}{\centering \textbf{Biểu đồ hoạt động: Quy trình lập và gửi hồ sơ công tác} \newline \textit{(Chi tiết quy trình 5 bước: Thông tin chung $\rightarrow$ Kế hoạch $\rightarrow$ Thành phần đoàn $\rightarrow$ Kinh phí \& Minh chứng $\rightarrow$ Nộp duyệt)}}}
 \caption{Biểu đồ hoạt động Quy trình lập và gửi hồ sơ công tác}
 \label{fig:act_trip_submit}
 \end{figure}

@@ -1,0 +1,26 @@
+# Đối chiếu chi tiết phiếu và thông báo trên Android (24/09/2026)
+
+Thiết bị Realme RMX2151 qua ADB; ứng dụng `vn.edu.hcmut.myhcmut`; tài khoản thử có quyền xem các phiếu dưới đây. Các thao tác ở đây là quan sát trên bản cài hiện tại và môi trường backend cục bộ, không phải kiểm thử mọi biến thể nghiệp vụ. Không lưu token, mật khẩu hoặc ảnh chứa tên nhân sự trong repository.
+
+| Mục | Thao tác và đối chứng | Kết luận trong phạm vi thử |
+| --- | --- | --- |
+| Chi tiết nghỉ phép | Từ danh sách mở phiếu `#264`; trang chi tiết hiển thị thời gian, số ngày đăng ký/thực nghỉ, đơn vị, lý do, địa điểm và trạng thái. | Đường mở trang chi tiết và các trường chính hoạt động trên phiếu được chọn. Không suy rằng mọi trường của mọi phiếu đã được đối chiếu. |
+| Chi tiết công tác | Từ danh sách mở phiếu `#1009`; trang chi tiết hiển thị thời gian, hình thức, mục đích, nội dung, kế hoạch, nhân sự, địa điểm, nguồn kinh phí và tệp. Bấm một thông báo công tác sẵn có trong Trung tâm mở đúng phiếu `#1063` và hiển thị phần lớn trường chính. | Đường danh sách/thông báo → chi tiết hoạt động với các phiếu được chọn. Phiếu `#1063` vẫn hiện ``Chưa cập nhật'' ở mục đích và một phần địa điểm. Truy vấn dữ liệu nguồn cho thấy `muc_tieu` có giá trị, còn `dia_diem` và `xa_phuong` trống; cần đối chiếu riêng quy tắc ánh xạ tên mục đích và dữ liệu địa điểm. |
+| Thông báo khi ứng dụng mở | Sau khi khởi động lại ứng dụng để đăng ký token cho tài khoản đang đăng nhập, gửi một thông báo thử đến chính tài khoản này qua `POST /api/notification`. Backend tạo bản ghi `#1230`; Android hiển thị thông báo cục bộ và Trung tâm thông báo có mục mới. | Đã quan sát giao nhận và hiển thị foreground cho thông báo thử. Thông báo thử không mang metadata nghiệp vụ, nên không dùng để kết luận về deep link từ banner. |
+| Thông báo khi ứng dụng ở nền | Đưa ứng dụng về màn hình Home, gửi thông báo thử thứ hai bằng cùng API. Backend tạo bản ghi `#1231`; logcat ghi nhận Firebase receiver, số chưa đọc được lưu trên thiết bị tăng, và mục mới hiện trong Trung tâm sau khi mở lại/làm mới. `dumpsys notification` không có banner hệ thống cho thông báo thứ hai. | Có bằng chứng nhận dữ liệu và truy xuất lại thông báo ở nền; chưa đạt hiển thị banner hệ thống trong lượt thử này. Mã nền hiện không gọi tạo local notification cho data-only push. |
+| Đăng ký token khi đổi tài khoản | Trước khi khởi động lại app, tài khoản hiện tại không có device token trong bảng `fw_user_device_token`, token của thiết bị còn gắn với tài khoản thử trước. Sau khi khởi động lại, app gọi `register-token` và token thuộc tài khoản hiện tại. | Đây là quan sát một lượt, cần kiểm tra việc đăng ký lại token ngay sau thao tác đổi tài khoản để bảo đảm nhận đúng người. Không dùng lượt thử sau khởi động lại để khẳng định mọi lần đổi tài khoản đều nhận push đúng. |
+| Điều hướng | Bấm thông báo công tác sẵn có trong Trung tâm mở đúng chi tiết phiếu `#1063`. Chạy lại `flutter test --no-pub test/utils/notification_route_parser_test.dart` tại module thông báo: 9/9 đạt, bao gồm metadata và URL cho các nhóm route được hỗ trợ. | Đã xác minh một đường điều hướng thật và bộ phân tích route; chưa thử nhận và bấm push ở hai trạng thái cho từng loại chức năng. |
+
+Hai thông báo `#1230` và `#1231` là dữ liệu thử được ghi vào cơ sở dữ liệu thử nghiệm theo ủy quyền của người dùng. Không coi chúng là sự kiện phê duyệt nghiệp vụ.
+
+## Kiểm tra lại banner FCM sau khi khôi phục handler nền
+
+Ngày 24/09/2026, bản debug mới của mobile được biên dịch và cài đè lên thiết bị Realme RMX2151 (Android 12, package `vn.edu.hcmut.myhcmut`); dữ liệu ứng dụng được giữ lại. Quyền notification ở trạng thái `authorized`, token thiết bị đăng ký thành công vào backend. Mã handler được kiểm tra thuộc worktree mobile tại `HEAD` `7f90ac7`, kèm thay đổi chưa commit ở `fcm_background_handler.dart` (SHA-256 `11763d06eb41963b256b1935450d161e5a5bf905ff9db4f8f105515f254e7d7e`).
+
+| Trạng thái ứng dụng | Thao tác và quan sát | Kết luận |
+| --- | --- | --- |
+| Foreground | Gửi một FCM data-only trực tiếp tới token thiết bị; Android ghi nhận local notification với tiêu đề thử nghiệm và nội dung tương ứng. | Banner foreground xuất hiện trên kênh `notification_center_channel`. |
+| Background | Đưa ứng dụng về Home rồi gửi FCM data-only trực tiếp; banner MyHCMUT xuất hiện trong notification shade. | Nhánh background handler đã tạo banner cục bộ trên thiết bị thật. |
+| Chạm banner | Chạm banner background; ứng dụng trở lại và mở màn hình chi tiết duyệt nghỉ phép theo metadata/`targetLink` của payload thử nghiệm. | Đã quan sát đường banner → màn hình nghiệp vụ cho loại payload nghỉ phép được thử. |
+
+Lượt kiểm tra này dùng Firebase Admin để gửi đúng cấu trúc data-only tới token vừa đăng ký; không tạo đơn nghiệp vụ và không ghi bản tin thử vào Trung tâm thông báo của backend. Notification consumer Kafka cục bộ không chạy trong lượt thử, vì vậy kết quả xác nhận handler, banner Android và điều hướng mobile, không xác nhận toàn tuyến từ sự kiện nghiệp vụ qua Kafka. Trước khi gửi trực tiếp, message thử đã được publish vào topic Kafka nhưng không có consumer nhận tại môi trường này; không dùng thao tác đó làm bằng chứng giao nhận. Ảnh minh họa chỉ giữ phần banner MyHCMUT, không chứa các thông báo khác trên thiết bị; tệp được lưu tại `image/chapter6/notification_background_banner.png`.

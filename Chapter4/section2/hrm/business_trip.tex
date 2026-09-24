@@ -23,7 +23,7 @@ FR-BTR-01 & Tra cứu đơn & Cán bộ, Giảng viên & Xem danh sách đơn c�
 \hline
 FR-BTR-02 & Tạo và gửi đơn & Cán bộ, Giảng viên & Tạo phiếu đăng ký công tác, điền thông tin và gửi cho các bên liên quan phê duyệt. \\
 \hline
-FR-BTR-03 & Điều chỉnh & Cán bộ, Giảng viên & Chỉnh sửa khi chưa gửi đi phê duyệt và khi bị trả lại. \\
+FR-BTR-03 & Quản lý nháp và điều chỉnh & Cán bộ, Giảng viên & Chỉnh sửa hoặc xóa phiếu Nháp; chỉnh sửa và gửi lại phiếu Bị trả lại. Người lập không tự thu hồi phiếu đã gửi. \\
 \hline
 FR-BTR-04 & Xử lý đơn & Các bên liên quan & Xem xét thông tin đơn đăng ký, minh chứng và thực hiện các thao tác như: phê duyệt, từ chối hoặc trả lại đơn theo thẩm quyền. \\
 \hline
@@ -87,16 +87,19 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
     id={UC-BT-03},
     name={Xóa đơn đăng ký công tác},
     actor={Cán bộ / Giảng viên},
-    pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
+    pre={Đã đăng nhập vào ứng dụng, là người lập đơn và đơn đang ở trạng thái Nháp.},
     trigger={Người dùng truy cập vào danh sách đơn đăng ký công tác.},
     mainflow={
             1. Người dùng chọn đơn đăng ký công tác có trạng thái là "Nháp" để xóa. \newline
             2. Người dùng nhấn nút "Xóa" để xóa đơn đăng ký công tác. \newline
             3. Hệ thống hiển thị hộp thoại xác nhận xóa đơn đăng ký công tác. \newline
             4. Người dùng xác nhận xóa đơn đăng ký công tác. \newline
-            5. Hệ thống xóa đơn đăng ký công tác khỏi hệ thống.
+            5. Hệ thống kiểm tra đơn vẫn ở trạng thái Nháp, sau đó xóa đơn đăng ký công tác.
         },
-    post={Đơn đăng ký công tác được xóa khỏi hệ thống.},
+    exflow={
+            5.1. Nếu đơn đã được gửi hoặc thay đổi trạng thái, hệ thống từ chối xóa và giữ nguyên dữ liệu.
+        },
+    post={Chỉ đơn Nháp hợp lệ được xóa khỏi hệ thống.},
     label={tab:uc_bt_03}
 }
 

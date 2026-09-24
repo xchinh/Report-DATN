@@ -9,7 +9,7 @@ Nhóm chức năng Văn phòng số, nhiệm vụ và lịch công tác hỗ tr�
 
 Đối với lịch công tác, MyHCMUT Mobile đóng vai trò là cổng hiển thị thống nhất (\textit{Unified Calendar}), tổng hợp các sự kiện có liên quan trực tiếp đến người dùng từ ba nguồn dữ liệu độc lập: lịch họp cơ quan từ iOffice, khoảng thời gian nghỉ phép từ HRM và các chuyến đi công tác từ HRM. Việc tổng hợp này giúp cán bộ có góc nhìn toàn diện về lịch trình cá nhân trên một giao diện duy nhất; trong đó dữ liệu nghiệp vụ gốc vẫn được quản lý và phân định thẩm quyền độc lập tại từng hệ thống nguồn.
 
-Đối với các cuộc họp có yêu cầu điểm danh, ứng dụng hỗ trợ đại biểu ghi nhận trạng thái có mặt hoặc gửi báo vắng có lý do giải trình. Hệ thống máy chủ iOffice đóng vai trò kiểm soát độc lập các điều kiện nghiệp vụ: đại biểu phải có tên trong danh sách mời, cuộc họp đã được kích hoạt tính năng điểm danh và thời điểm thao tác phải nằm trong khung thời gian hợp lệ do ban tổ chức cấu hình.
+Đối với cuộc họp có điểm danh, ứng dụng hỗ trợ ghi nhận có mặt, hoàn tác điểm danh hoặc báo vắng có lý do. iOffice kiểm tra phiên đăng nhập, quyền sử dụng lịch, cuộc họp và khung thời gian thao tác. Người có phân công cá nhân hoặc theo đơn vị điểm danh trên dòng phân công; cán bộ không có dòng phân công vẫn có thể tự điểm danh và được thống kê riêng trong nhóm khách tham dự. Vì vậy, không dùng điều kiện ``phải có tên trong danh sách mời'' làm tiêu chí từ chối mặc định.
 
 Bảng~\ref{tab:fr_ioffice_schedule} tổng hợp các yêu cầu chức năng của nhóm nghiệp vụ này.
 
@@ -30,7 +30,7 @@ Bảng~\ref{tab:fr_ioffice_schedule} tổng hợp các yêu cầu chức năng c
         \hline
         FR-IOFF-04     & Chi tiết thông tin nhiệm vụ đính kèm với văn bản & Cán bộ                     & Cho phép xem chi tiết nhiệm vụ được phân công, bao gồm trạng thái, tiến độ, báo cáo và các công việc liên quan. \\
         \hline
-        FR-SCH-01      & Điểm danh và báo vắng                            & Cán bộ (Đại biểu)          & Ghi nhận có mặt hoặc báo vắng có lý do trong khung thời gian và điều kiện hợp lệ.                               \\
+        FR-SCH-01      & Điểm danh và báo vắng                            & Cán bộ tham dự             & Ghi nhận có mặt, hoàn tác hoặc báo vắng có lý do trong khung thời gian hợp lệ; phân biệt người được phân công và khách tự điểm danh. \\
         \hline
         FR-SCH-02      & Xem lịch công tác tổng hợp                       & Cán bộ, Giảng viên         & Hiển thị lịch tuần tổng hợp từ 3 nguồn: lịch họp iOffice, lịch phép HRM và lịch công tác HRM.                   \\
         \hline
@@ -141,19 +141,19 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
     name={Tiếp nhận văn bản/nhiệm vụ},
     shortname={Tiếp nhận văn bản},
     actor={Nhân sự được phân công, Lãnh đạo của đơn vị được phân công},
-    desc={Thực hiện tiếp nhận văn bản hoặc nhiệm vụ được phân công.},
+    desc={Ghi nhận việc tiếp nhận văn bản hoặc nhiệm vụ được phân công; phân biệt thao tác tiếp nhận với hoàn thành phần việc được giao.},
     pre={Người dùng đăng nhập và có quyền tiếp nhận văn bản hoặc nhiệm vụ được phân công.},
     trigger={Người dùng mở màn hình chi tiết văn bản đến.},
     mainflow={
             1. Người dùng tiếp nhận văn bản hoặc nhiệm vụ được phân công. \newline
-            2. Hệ thống cập nhật trạng thái và thời gian tiếp nhận. \newline
-            3. Hệ thống kiểm tra 100\% người được phân công đã tiếp nhận hay chưa. \newline
-            4. Nếu tất cả đã tiếp nhận, hệ thống cập nhật trạng thái văn bản là \textit{Hoàn thành}.
+            2. Hệ thống ghi nhận người và thời gian tiếp nhận trên dòng phân công tương ứng. \newline
+            3. Hệ thống phản hồi trạng thái tiếp nhận để ứng dụng cập nhật thông tin hiển thị.
         },
     altflow={
-            - \textit{4a:} Tại bước 4, nếu chưa hoàn hoàn tất 100\% tiếp nhận, trạng thái văn bản không thay đổi \newline
+            - \textit{2a (Văn bản thông tin hoặc phân công để biết):} Khi tiếp nhận, hệ thống đồng thời ghi nhận hoàn thành dòng phân công tương ứng. \newline
+            - \textit{2b (Văn bản giao nhiệm vụ):} Việc tiếp nhận chỉ ghi nhận bắt đầu xử lý, không đồng nghĩa hoàn thành. Sau khi thực hiện công việc, người có quyền sử dụng thao tác \textit{Hoàn thành} riêng trên hệ thống iOffice; hệ thống ghi nhận kết quả hoàn thành theo quy trình. \newline
         },
-    post={Trạng thái phiếu phân công trên văn bản được cập nhật.},
+    post={Dòng phân công được ghi nhận đã tiếp nhận; trạng thái hoàn thành phần việc được ghi nhận ngay ở nhánh thông tin/để biết hoặc sau thao tác hoàn thành riêng đối với văn bản giao nhiệm vụ.},
     label={tab:uc_off_04}
 }
 
@@ -161,23 +161,24 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
     id={UC-SCH-01},
     name={Điểm danh hoặc báo vắng cuộc họp},
     shortname={Điểm danh cuộc họp},
-    actor={Cán bộ / Giảng viên có tên trong danh sách mời},
-    desc={Cho phép đại biểu ghi nhận có mặt hoặc báo vắng kèm lý do giải trình đối với cuộc họp có cấu hình điểm danh.},
-    pre={Người dùng đã đăng nhập, có tên trong danh sách mời và cuộc họp được cấu hình tính năng điểm danh.},
+    actor={Cán bộ / Giảng viên có quyền xem lịch, gồm người được phân công và khách tham dự},
+    desc={Cho phép người tham dự ghi nhận có mặt, hoàn tác điểm danh hoặc báo vắng có lý do đối với cuộc họp có cấu hình điểm danh.},
+    pre={Người dùng đã đăng nhập, có quyền sử dụng lịch và cuộc họp được cấu hình tính năng điểm danh.},
     trigger={Người dùng mở màn hình chi tiết cuộc họp trên ứng dụng di động.},
     mainflow={
             1. Người dùng mở xem chi tiết cuộc họp trên giao diện Lịch hoặc từ thông báo nhắc việc. \newline
             2. Ứng dụng hiển thị các thao tác điểm danh phù hợp với trạng thái cuộc họp. \newline
             3. Người dùng chọn điểm danh có mặt hoặc báo vắng và nhập lý do khi cần. \newline
-            4. Ứng dụng gửi yêu cầu đến iOffice; iOffice kiểm tra tính hợp lệ của đại biểu, cuộc họp và khung thời gian cho phép. \newline
-            5. iOffice ghi nhận kết quả và phản hồi trạng thái tham dự mới để ứng dụng cập nhật thông tin hiển thị.
+            4. Ứng dụng gửi yêu cầu đến iOffice; iOffice kiểm tra phiên, quyền sử dụng lịch và khung thời gian cho phép. \newline
+            5. iOffice ghi nhận theo dòng phân công nếu có; nếu không, ghi nhận khách tự điểm danh riêng. Ứng dụng cập nhật trạng thái tham dự từ phản hồi.
         },
     altflow={
-            - \textit{Luồng 3a (Chuyển đổi trạng thái):} Trong khung giờ hợp lệ, người dùng có thể cập nhật lại giữa trạng thái có mặt và báo vắng.
+            - \textit{Luồng 3a (Đổi trạng thái):} Người đã báo vắng có thể chuyển sang có mặt trong khung giờ điểm danh hợp lệ. \newline
+            - \textit{Luồng 3b (Hoàn tác):} Người đã điểm danh có mặt có thể hoàn tác trong khung giờ cho phép rồi thực hiện lại thao tác phù hợp.
         },
     exflow={
             - \textit{Ngoại lệ 4a (Ngoài khung thời gian):} Thao tác thực hiện ngoài khung giờ quy định $\rightarrow$ hệ thống từ chối và thông báo lý do. \newline
-            - \textit{Ngoại lệ 4b (Không thuộc danh sách mời):} Người dùng không có tên trong danh sách đại biểu $\rightarrow$ hệ thống từ chối thao tác.
+            - \textit{Ngoại lệ 4b (Không đủ quyền hoặc phiên không hợp lệ):} iOffice từ chối yêu cầu và không tạo bản ghi tham dự.
         },
     post={Trạng thái tham dự được ghi nhận và kết quả mới được phản hồi trên ứng dụng.},
     label={tab:uc_sch_01}
@@ -210,14 +211,12 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
 \subsubsection{Biểu đồ hoạt động}
 \subsubsubsection{Quy trình điểm danh và báo vắng cuộc họp}
 
-Quy trình điểm danh và báo vắng cuộc họp có nhiều điều kiện nghiệp vụ liên quan đến người tham dự, trạng thái cuộc họp và thời gian thực hiện, do đó được lựa chọn để mô tả bằng biểu đồ hoạt động.
-
-Hình~\ref{fig:act_attendance} mô tả quy trình điểm danh và báo vắng cuộc họp của UC-SCH-01.
+Quy trình điểm danh và báo vắng cuộc họp có điều kiện về phiên, quyền sử dụng lịch và thời gian thực hiện. Hình~\ref{fig:act_attendance} tập trung vào thao tác của người được phân công; nhánh khách tự điểm danh được nêu trong đặc tả \texttt{UC-SCH-01}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.95\linewidth]{image/uml/attendant_activity.png}
-    \caption{Biểu đồ hoạt động Điểm danh và báo vắng cuộc họp}
+    \caption{Biểu đồ hoạt động Điểm danh và báo vắng cuộc họp của người được phân công}
     \label{fig:act_attendance}
 \end{figure}
 

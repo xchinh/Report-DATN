@@ -1,5 +1,7 @@
 # Báo cáo tổng kết thực thi kiểm thử lại toàn diện (Re-run 23/09/2026)
 
+> **Lưu ý về hiệu lực:** Đây là bản tổng hợp ban đầu của đợt chạy lại, được giữ để truy vết lịch sử; các nhãn Pass/Fail và nhận định trong bảng dưới đây **không phải kết luận cuối cùng để viết Chương 6–7**. Ưu tiên `results/DATN-RERUN-20260923/summary.md` cùng `results/DATN-TARGETED-RECHECK-20260923/result.md` sau khi phân nhánh bằng chứng. Riêng `OFF-01` là mã **kịch bản kiểm thử quyền tệp theo chính sách người dùng xác nhận**, không phải `UC-OFF-01` của Chương 4 `main:14fe1f6` (Phân công trách nhiệm); Chương 4 chỉ nêu `NFR-03` khái quát về backend kiểm tra quyền dữ liệu.
+
 ## 1. Bối cảnh và Mục tiêu
 
 Đợt kiểm thử lại (Re-run) được triển khai vào ngày 23/09/2026 nhằm giải quyết toàn diện các hạn chế và khoảng trống bằng chứng từ đợt kiểm thử trước:

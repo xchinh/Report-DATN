@@ -1,5 +1,7 @@
 # DANH SÁCH KIỂM THỬ ĐỀ XUẤT
 
+> **Hiệu chỉnh nghiệp vụ ngày 24/09:** Hạng mục `UC-SCH-01-B05` yêu cầu chặn người ngoài danh sách mời ở phần lịch sử bên dưới đã bị thay thế. Nghiệp vụ hiện hành cho phép khách tự điểm danh; lần chạy tiếp theo cần xác minh nhánh khách, quyền sử dụng lịch và thời gian hợp lệ.
+
 ## 1. Nguồn tạo backlog
 
 - Ngày kiểm kê: 22/09/2026.
@@ -19,8 +21,8 @@ Các bảng P0/P1/P2 ở Mục 3–5 phía dưới là **backlog Stage A lịch 
 | P0 | LEV-R01, LEV-R02, LEV-R03 | Ranh giới Nháp–đã gửi–Bị trả lại quyết định khả năng sửa/xóa; log cũ dùng kỳ vọng thu hồi sai | LEV-03 |
 | P0 | BTR-R01, BTR-R02, BTR-R03 | Tương tự công tác; tách quyền người lập khỏi quyền thu hồi quản trị | BTR-02 |
 | P0 | BTR-R04 | FR-BTR-05/UC-BT-05 mới giao quyền thu hồi cho TCNS/BGH; phải kiểm tra phân quyền và trạng thái/lịch | BTR-03 |
-| P0 | OFF-R06 | Log cũ ghi `Fail` truy cập tệp theo bản ghi; cần kiểm tra lại trên iOffice BE được chốt, nhưng không ánh xạ thành UC-OFF-01 mới | OFF-01 |
-| P0 | OFF-R02..R05 | UC-OFF-01..04 hiện là phân công, tham mưu, chỉ đạo, tiếp nhận; Gate 0 tra cứu không kiểm chứng các hành vi này | OFF-04 |
+| P0 | OFF-R06 | Kiểm tra quyền tệp theo chính sách người dùng xác nhận, gắn với NFR-03 ở mức khái quát; Chương 4 `main:14fe1f6` chưa ghi rõ quy tắc theo từng văn bản. Không ánh xạ thành UC-OFF-01 hiện hành (phân công trách nhiệm) | OFF-01 |
+| P0 | OFF-R02..R05 | `OFF-04` cũ chỉ có biên bản, thiếu raw/snapshot; UC-OFF-01 còn thiếu phân công từ mobile, thông báo và recipient không hợp lệ; UC-OFF-03 thiếu nhiệm vụ liên kết; UC-OFF-04 có sai khác hậu điều kiện theo mã/biên bản. Chỉ bổ sung nhánh nào cần bảo vệ kết luận dự kiến, dùng fixture giả và phương án khôi phục | OFF-04 và addendum trong `04` (chờ duyệt trước khi chạy) |
 | P1 | OFF-R01 | Tra cứu/xem tệp và chi tiết nhiệm vụ ở FR-IOFF-01/04; xác minh đúng ranh giới chức năng đọc | OFF-02; OFF-03 là P2 nếu cần chi tiết bộ lọc |
 
 Các `Fail` khác về lý do từ chối, số dư phép, phân quyền điểm danh vẫn giữ ưu tiên cũ; thay đổi nghiệp vụ Nháp/thu hồi không làm chúng biến mất. Chỉ đánh dấu `Pass` sau khi có lần chạy hợp lệ trên phiên bản đã ghi trong manifest.

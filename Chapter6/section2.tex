@@ -1,156 +1,94 @@
-\section{Kiểm thử Hệ thống và Đánh giá Kết quả Thực nghiệm}
+\section{Kiểm thử và đánh giá hệ thống}
 \label{sec:kiemthu_danhgia}
 
-\subsection{Chiến lược Kiểm thử Toàn diện và Mô hình Kim tự tháp (Testing Pyramid)}
-Để đảm bảo ứng dụng vận hành ổn định trong môi trường thực tế của Nhà trường, nhóm xây dựng chiến lược kiểm thử đa tầng theo mô hình Kim tự tháp (Testing Pyramid) bao gồm: Kiểm thử Đơn vị (Unit Tests), Kiểm thử Giao diện (Widget Tests), Kiểm thử Tích hợp (Integration Tests) và Kiểm thử Đầu-cuối (End-to-End Tests).
+Quá trình kiểm thử được tổ chức theo hai mức. Trước hết, các bài kiểm thử tự động xác minh những quy tắc và thành phần có thể kiểm tra độc lập. Tiếp theo, nhóm thao tác các luồng nghiệp vụ đại diện trên thiết bị Android thật, rồi đối chiếu nội dung hiển thị và trạng thái tại hệ thống nguồn. Cách tổ chức này giúp phân biệt kết quả của một thành phần với kết quả của cả quy trình tích hợp.
 
-\subsection{Kết quả Thực thi Bộ Kiểm thử Tự động (Automated Test Suite)}
-\label{subsec:automated_test_results}
+\subsection{Chiến lược và môi trường kiểm thử}
 
-Toàn bộ hệ thống được bảo vệ bởi bộ kiểm thử tự động gồm \textbf{427 ca kiểm thử} độc lập, bao gồm 370 ca kiểm thử phía Mobile Client (thực thi qua \texttt{flutter test}) và 57 ca kiểm thử phía Backend (thực thi qua \texttt{vitest}). 100\% các ca kiểm thử đều vượt qua thành công trong môi trường tích hợp liên tục (CI).
+Các kịch bản được chọn theo nhóm chức năng đã hiện thực, tập trung vào luồng chính và một số điều kiện quan trọng như kiểm tra dữ liệu nhập, quyền xử lý, chuyển trạng thái, điểm danh và mở nội dung liên quan. Ở mức tự động, nhóm chạy unit test, widget test và handler test phù hợp với phần mobile hoặc backend có liên quan trực tiếp đến đề tài. Ở mức đầu--cuối, nhóm đăng nhập bằng các tài khoản có vai trò phù hợp, thực hiện thao tác trên ứng dụng, sau đó kiểm tra phản hồi trên giao diện và đối chiếu trạng thái ở HRM/iOffice. Với thao tác duyệt nhiều cấp, mỗi bước được đối chiếu riêng; kết quả một bước không được xem là bằng chứng cho cả chuỗi.
 
-Bảng \ref{tab:test_suite_breakdown} trình bày chi tiết phân bổ các ca kiểm thử theo từng phân hệ và module chức năng:
+Kiểm thử thủ công được thực hiện trên điện thoại Realme RMX2151 chạy Android 12, kết nối đến các dịch vụ thử nghiệm Auth, HRM và iOffice. Các hồ sơ dùng trong kiểm thử là dữ liệu thử nghiệm được cho phép. Nhóm ghi nhận trạng thái trước và sau thao tác cùng ảnh minh chứng; thông tin định danh trong ảnh dùng ở báo cáo đã được lược bỏ. Kết quả chỉ áp dụng cho cấu hình, tài khoản, hồ sơ và nhánh đã thực hiện.
 
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|>{\RaggedRight\arraybackslash\ttfamily\small}p{5.1cm}|>{\RaggedRight\arraybackslash\small}p{2.9cm}|c|>{\centering\arraybackslash}X|}
-\hline
-\textrm{\textbf{Phân hệ / Gói Mã nguồn}} & \textbf{Công cụ Thử nghiệm} & \textbf{Số lượng Tests} & \textbf{Tỷ lệ Vượt qua (Pass Rate)} \\
-\hline
-packages/core/global\_system & Flutter Test / Semantic Tokens & 3 ca kiểm thử & 100\% (3/3 Pass) \\
-\hline
-packages/shared/auth & Flutter Test / Mockito & 2 ca kiểm thử & 100\% (2/2 Pass) \\
-\hline
-packages/shared/\allowbreak localization & Flutter Test / l10n Runner & 8 ca kiểm thử & 100\% (8/8 Pass) \\
-\hline
-modules/hrm (leave, profile, btrip) & Flutter Test / Riverpod Test & 233 ca kiểm thử & 100\% (233/233 Pass) \\
-\hline
-modules/ioffice (doc, task, schedule) & Flutter Test / Widget \& Unit & 77 ca kiểm thử & 100\% (77/77 Pass) \\
-\hline
-modules/notification & Flutter Test / Fake Async & 47 ca kiểm thử & 100\% (47/47 Pass) \\
-\hline
-\textbf{Tổng Phân hệ Mobile Client} & \textbf{Flutter SDK Test Runner} & \textbf{370 ca kiểm thử} & \textbf{100\% (370/370 Pass)} \\
-\hline
-hrm-be (sso\_bridge, fw\_auth) & Vitest / Node.js & 46 ca kiểm thử & 100\% (46/46 Pass) \\
-\hline
-hrm-be (concurrency\_race\_condition) & Vitest / Sequelize Mock/Tx & 11 ca kiểm thử & 100\% (11/11 Pass) \\
-\hline
-\textbf{Tổng Phân hệ Backend Integration} & \textbf{Vitest Test Framework} & \textbf{57 ca kiểm thử} & \textbf{100\% (57/57 Pass)} \\
-\hline
-\textbf{TOÀN BỘ HỆ THỐNG ĐỒ ÁN} & \textbf{CI/CD Automated Suite} & \textbf{427 ca kiểm thử} & \textbf{100\% (427/427 Pass)} \\
-\hline
-\end{tabularx}
-\caption[\textit{Tổng hợp kết quả thực thi bộ kiểm thử tự động}]{\textit{Bảng Tổng hợp Kết quả Thực thi Bộ Kiểm thử Tự động Toàn hệ thống}}
-\label{tab:test_suite_breakdown}
-\end{table}
+\subsection{Kiểm thử tự động}
 
-\subsection{Minh bạch Học thuật: Tỷ lệ Vượt qua (Pass Rate) và Độ bao phủ Mã nguồn (Code Coverage)}
-\label{subsec:transparency_coverage}
-
-Một nguyên tắc quan trọng trong nghiên cứu khoa học và kỹ nghệ phần mềm là sự phân định rạch ròi giữa \textbf{Tỷ lệ Vượt qua Kiểm thử (Test Pass Rate)} và \textbf{Độ bao phủ Mã nguồn (Code Coverage)}:
-\begin{itemize}
-    \item \textbf{Tỷ lệ Vượt qua Kiểm thử (Pass Rate = 100\%):} Chỉ số 427/427 ca kiểm thử đạt kết quả Pass phản ánh rằng hệ thống thỏa mãn 100\% các kịch bản kiểm thử đã được nhóm nghiên cứu thiết kế và dự liệu trước. Tuy nhiên, theo nguyên lý Dijkstra, \textit{``Kiểm thử phần mềm chỉ có thể chứng minh sự hiện diện của lỗi chứ không thể chứng minh sự vắng mặt của lỗi''}. Do đó, con số 100\% Pass Rate không đồng nghĩa với việc hệ thống hoàn toàn không có lỗi (bug-free) trong mọi tình huống sử dụng thực tế.
-    
-    \item \textbf{Độ bao phủ Mã nguồn (Code Coverage):}
-    \begin{itemize}
-        \item Phía Mobile Client: Độ bao phủ dòng lệnh của các module nghiệp vụ lõi (HRM, Auth, Network, Notification) đạt xấp xỉ \textbf{70\%}. Nhóm chủ động tập trung viết kiểm thử cho toàn bộ logic nghiệp vụ, bộ chuyển đổi dữ liệu (Mappers), bộ giải mã đường dẫn (Parsers) và các State Notifiers, trong khi giảm tải kiểm thử tự động trên các widget giao diện tĩnh thuần túy.
-        \item Phía Backend (\texttt{hrm-be}): Độ bao phủ mã nguồn toàn repository đạt xấp xỉ \textbf{28.75\%}. Con số này phản ánh trung thực bối cảnh kỹ thuật thực tế: mã nguồn backend của Nhà trường là một hệ thống nguyên khối lớn (Monolith) tích lũy qua nhiều năm, chứa hàng trăm nghìn dòng mã của các phân hệ quản lý sinh viên, khảo thí, đào tạo đại học, quản lý tài chính cũ không thuộc phạm vi đề tài. Nhóm nghiên cứu tập trung bao phủ kiểm thử chuyên sâu cho 100\% các module trực tiếp phục vụ đề tài di động (module SSO Auth với 46 tests và module Concurrency Hardening với 11 tests).
-    \end{itemize}
-\end{itemize}
-
-\subsection{Kiểm thử Thực nghiệm Kiểm soát Tương tranh (Concurrency Hardening Verification)}
-\label{subsec:concurrency_test_cases}
-
-Để chứng minh tính hiệu quả của giải pháp PostgreSQL Advisory Lock (\texttt{pg\_advisory\_xact\_lock}) kết hợp lan truyền transaction, nhóm đã thiết kế bộ kiểm thử tương tranh chuyên sâu gồm 11 bài test mô phỏng 7 tình huống xung đột điển hình:
-\begin{enumerate}
-    \item \textbf{Tình huống 1 (Concurrent Overlapping Requests -- Same SHCC):} Hai yêu cầu đăng ký nghỉ phép có khoảng ngày trùng lặp của cùng một cán bộ được gửi tới máy chủ gần như đồng thời ($t_1 \approx t_2$). Khóa \texttt{pg\_advisory\_xact\_lock} đã tuần tự hóa quá trình xử lý: yêu cầu $R_1$ hoàn thành ghi bản ghi vào cơ sở dữ liệu, yêu cầu $R_2$ sau khi chờ giải phóng khóa đã gọi \texttt{checkTrungLich} trong cùng transaction, phát hiện lịch trùng và trả về mã lỗi \texttt{TRUNG\_LICH} an toàn. Hiện tượng đặt trùng lịch (Double-Booking Anomaly) được ngăn chặn hoàn toàn.
-    \item \textbf{Tình huống 2 (Concurrent Requests -- Different SHCC):} Hai yêu cầu của hai cán bộ khác nhau gửi tới đồng thời. Nhờ định danh khóa được băm theo \texttt{shcc}, cả hai giao dịch được cấp khóa độc lập và thực thi song song, không gây bất kỳ hiện tượng nghẽn tài nguyên chéo nào.
-    \item \textbf{Tình huống 3 (Atomic State Guard trên \texttt{PUT /dang-ky}):} Mô phỏng trường hợp cán bộ cố tình sửa đổi đơn khi đơn đã được nộp hoặc đang trong quá trình duyệt. Câu lệnh cập nhật với điều kiện \texttt{WHERE id = :id AND maQuyTrinh = 'NHAP'} từ chối cập nhật khi trạng thái không còn là \texttt{NHAP}.
-    \item \textbf{Tình huống 4 (Transaction Propagation \& Rollback Integrity):} Giả lập sự cố xảy ra ở bước ghi lịch cá nhân \texttt{tcns\_lich\_ca\_nhan}. Nhờ toàn bộ chuỗi ghi được bọc kín trong cùng một transaction $t$, toàn bộ bản ghi phiếu đăng ký \texttt{tcns\_nghi\_phep\_dang\_ky} trước đó được rollback sạch sẽ, không để lại bất kỳ bản ghi rác nào.
-    \item \textbf{Tình huống 5 (Atomic Cascade Delete):} Kiểm thử lệnh \texttt{DELETE /dang-ky/:id} với giao dịch bọc kín 5 bảng dữ liệu liên quan, xác nhận xóa sạch phiếu, lịch cá nhân và lịch sử quy trình một cách nguyên tử.
-    \item \textbf{Tình huống 6 \& 7 (Partial and Subset Interval Overlap):} Kiểm tra thuật toán phát hiện trùng lịch với các trường hợp khoảng ngày xin nghỉ giao nhau một phần hoặc nằm hoàn toàn bên trong một khoảng lịch công tác/nghỉ phép đã có sẵn.
-\end{enumerate}
-
-\subsection{Kiểm thử Luồng Nghiệp vụ Đầu-Cuối (End-to-End System Tests trên Staging)}
-Nhóm nghiên cứu đã thực hiện kiểm thử liên thông toàn diện trên môi trường Staging kết nối hai thiết bị thử nghiệm thực tế: \textbf{Google Pixel 6} (chạy Android 14) và \textbf{iPhone 13} (chạy iOS 17), hoàn thành 4 kịch bản E2E lớn:
-\begin{enumerate}
-    \item \textbf{Kịch bản 1 -- Đăng ký \& Phê duyệt Nghỉ phép 2 cấp liên thông:} Cán bộ nộp đơn trên Mobile $\rightarrow$ Nhận cảnh báo nộp trễ và tải giấy khám bệnh $\rightarrow$ Sau khi ghi nhận đơn, backend khởi chạy quy trình gửi thông báo đẩy $\rightarrow$ Lãnh đạo Đơn vị nhận thông báo trên điện thoại, bấm vào thông báo mở thẳng màn hình duyệt $\rightarrow$ Duyệt đơn $\rightarrow$ Chuyên viên TCCB nhận thông báo tiếp theo và phê duyệt cấp trường $\rightarrow$ Cán bộ nhận thông báo kết quả cuối cùng.
-    \item \textbf{Kịch bản 2 -- Đăng ký \& Phê duyệt Đi công tác:} Khởi tạo chuyến đi, đính kèm dự toán kinh phí và kế hoạch $\rightarrow$ Lãnh đạo Đơn vị thẩm định danh sách cán bộ và ký duyệt trên thiết bị di động.
-    \item \textbf{Kịch bản 3 -- Phân phối Văn bản đến, Chỉ đạo Xử lý \& Cập nhật Tiến độ Nhiệm vụ:} Tiếp nhận văn bản khẩn $\rightarrow$ Lãnh đạo nhập bút phê chỉ đạo và giao việc $\rightarrow$ Cán bộ phụ trách nhận thông báo, mở cây đầu việc \texttt{outlined-tree} nộp báo cáo đợt kèm tài liệu minh chứng.
-    \item \textbf{Kịch bản 4 -- Điểm danh Cuộc họp Thời gian thực qua WebSocket:} Đúng khung giờ mở điểm danh, cán bộ nhấn nút Điểm danh $\rightarrow$ Phát sự kiện qua \texttt{Socket.IO} $\rightarrow$ Màn hình Ban tổ chức cập nhật danh sách có mặt tức thời với độ trễ dưới 50ms.
-\end{enumerate}
-Riêng luồng chuyển tiếp phiên SSO, các thành phần cấp và tiêu thụ vé đã được kiểm thử riêng; toàn bộ luồng liên hệ thống từ ứng dụng di động qua HRM Web đến HRM Backend chưa được xác minh đầy đủ.
-
-\subsection{Đo lường Định lượng Hiệu năng Thực nghiệm (Performance Benchmarks)}
+Bảng~\ref{tab:ch6_automated_tests} tổng hợp các bộ kiểm thử liên quan trực tiếp đến ứng dụng và phần backend được đề tài tích hợp hoặc mở rộng. Các bộ kiểm thử có phạm vi khác nhau nên được báo cáo riêng, không cộng thành tỷ lệ đạt của toàn hệ thống.
 
 \begin{table}[H]
 \centering
-\setlength{\tabcolsep}{3.5pt}
-\begin{tabularx}{\textwidth}{|c|>{\RaggedRight\arraybackslash\footnotesize}X|c|c|c|c|c|}
+\small
+\caption{Kết quả kiểm thử tự động theo thành phần}
+\label{tab:ch6_automated_tests}
+\begin{tabularx}{\textwidth}{|L{2.8cm}|L{3.2cm}|L{1.7cm}|Y|}
 \hline
-\textbf{STT} & \textbf{API Endpoint} & \textbf{Method} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{Avg (ms)} & \textbf{P95 (ms)} \\
+\textbf{Thành phần} & \textbf{Loại kiểm thử} & \textbf{Kết quả} & \textbf{Phạm vi kiểm tra} \\
 \hline
-1 & \nolinkurl{/api/auth/login} & POST & 95 & 210 & \textbf{135} & \textbf{175} \\
+Ứng dụng mobile & Unit và widget test trên sáu gói chức năng & 371/371 đạt & Mô hình dữ liệu, trạng thái, giao diện thành phần và điều hướng. \\
 \hline
-2 & \nolinkurl{/api/state} & GET & 25 & 65 & \textbf{38} & \textbf{52} \\
+HRM Backend & Unit test cho các suite liên quan đến SSO, nghỉ phép và quy tắc từ chối & 59/59 đạt & Phiên làm việc, xử lý nghỉ phép, tương tranh và dữ liệu đầu vào của thao tác từ chối. \\
 \hline
-3 & \nolinkurl{/api/staff/ly-lich/mobile} & GET & 45 & 130 & \textbf{72} & \textbf{98} \\
-\hline
-4 & \nolinkurl{/api/tcns-nghi-phep/validate} & POST & 55 & 160 & \textbf{88} & \textbf{125} \\
-\hline
-5 & \nolinkurl{/api/tcns-nghi-phep/dang-ky/create} & POST & 70 & 220 & \textbf{115} & \textbf{160} \\
-\hline
-6 & \nolinkurl{/api/mission/general/page} & GET & 65 & 190 & \textbf{98} & \textbf{140} \\
-\hline
-7 & \nolinkurl{/api/schedule/general-item/:id/checkin} & POST & 50 & 145 & \textbf{82} & \textbf{110} \\
+iOffice Backend & Kiểm thử handler với mô hình giả & 4/4 đạt & Kiểm tra quyền truy cập tệp văn bản và các nhánh điểm danh. \\
 \hline
 \end{tabularx}
-\caption[\textit{Thời gian phản hồi của các API cốt lõi}]{\textit{Bảng đo lường Thời gian Phản hồi của các API Endpoints cốt lõi}}
-\label{tab:api_benchmarks}
 \end{table}
 
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|L{4.6cm}|Y|c|c|}
-\hline
-\textbf{Giai đoạn trong Pipeline} & \textbf{Cơ chế Kỹ thuật} & \textbf{Độ trễ (ms)} & \textbf{Tỷ trọng} \\
-\hline
-1. Backend Trigger \& Post-Commit Publish & Khởi chạy quy trình xử lý thông báo sau commit & \textbf{25 ms} & 2.5\% \\
-\hline
-2. Notification Queue & Hàng đợi xử lý thông báo & \textbf{15 ms} & 1.5\% \\
-\hline
-3. Consumer DB Write & Ghi \texttt{fw\_notification} \& truy vấn Token & \textbf{45 ms} & 4.5\% \\
-\hline
-4. Firebase Admin SDK Request & Gửi request HTTP v1 tới Google FCM Server & \textbf{280 ms} & 28.0\% \\
-\hline
-5. Google FCM $\rightarrow$ Client Device & Mạng viễn thông / Wi-Fi đẩy Push tới điện thoại & \textbf{635 ms} & 63.5\% \\
-\hline
-\multicolumn{2}{|l|}{\textbf{TỔNG THỜI GIAN ĐẦU-CUỐI (E2E Latency)}} & \textbf{$\approx$ 1.000 ms} & \textbf{100\%} \\
-\hline
-\end{tabularx}
-\caption[\textit{Phân rã độ trễ pipeline thông báo đẩy đầu-cuối}]{\textit{Bảng phân rã độ trễ của Pipeline Thông báo đẩy từ Backend tới Điện thoại}}
-\label{tab:fcm_latency}
-\end{table}
+Các kết quả trên xác nhận hành vi trong phạm vi từng bộ kiểm thử. Chúng không thay thế kiểm thử tích hợp với cơ sở dữ liệu và tài khoản thật; riêng các handler dùng mô hình giả cũng chưa xác nhận toàn bộ đường đi từ ứng dụng đến hệ thống nguồn.
 
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|L{4.8cm}|L{3.5cm}|c|Y|}
+\subsection{Kiểm thử đầu-cuối trên thiết bị thật}
+
+Nhóm kiểm tra các luồng nghiệp vụ trên giao diện mobile, kết hợp đối chiếu API và trạng thái tại hệ thống nguồn. Không phải mọi nhánh trong bảng dưới đây đều được thực hiện trọn vẹn qua giao diện: những bước kiểm tra quyền hoặc luân chuyển nhiều cấp được phân biệt theo cách thực hiện. Bảng~\ref{tab:ch6_e2e_source_state} trình bày kết quả theo phạm vi đã quan sát.
+
+\begin{xltabular}{\textwidth}{|L{2.0cm}|Y|Y|}
+\caption{Kết quả và phạm vi kiểm thử đầu-cuối trên thiết bị thật}\label{tab:ch6_e2e_source_state} \\
 \hline
-\textbf{Chỉ số Hiệu năng} & \textbf{Môi trường Thử nghiệm} & \textbf{Kết quả} & \textbf{Đánh giá Tiêu chuẩn} \\
+\textbf{Luồng} & \textbf{Kết quả đã xác nhận} & \textbf{Giới hạn của kết luận} \\
 \hline
-Thời gian Khởi động Nguội (Cold Start) & Android (Snapdragon 778G / 8GB) & \textbf{1.25 giây} & Tốt ($< 2.0$ giây) \\
+\endfirsthead
 \hline
-Thời gian Khởi động Nóng (Warm Start) & Android (Snapdragon 778G / 8GB) & \textbf{0.35 giây} & Rất tốt ($< 0.5$ giây) \\
+\textbf{Luồng} & \textbf{Kết quả đã xác nhận} & \textbf{Giới hạn của kết luận} \\
 \hline
-Tốc độ Khung hình (Frame Rate / FPS) & Cuộn danh sách Missions, Leave & \textbf{58 -- 60 FPS} & Mượt mà, không giật lag \\
+\endhead
+Hồ sơ cá nhân & Đã mở hồ sơ, xem nội dung đề xuất, đối chiếu phần thay đổi và duyệt một yêu cầu. Trạng thái yêu cầu hoàn tất và thay đổi được phản ánh ở hồ sơ nguồn. & Luồng tạo yêu cầu có tệp được kiểm tra qua Chrome trên cùng thiết bị; thao tác tạo qua WebView chưa được xác nhận do biểu mẫu tải lại sau khi chọn tệp. \\
 \hline
-Bộ nhớ RAM sử dụng (Trạng thái tĩnh) & Màn hình Dashboard sau đăng nhập & \textbf{$\approx$ 95 MB} & Rất nhẹ ($< 150$ MB) \\
+Nghỉ phép & Đã kiểm tra nội dung chi tiết, gửi và duyệt tuần tự qua các cấp đến kết thúc. Trên các phiếu độc lập, cấp đơn vị trả lại, người lập sửa và gửi lại trên Android (chuỗi gửi--trả lại--gửi lại được ghi nhận); API từ chối sửa đơn đã gửi. Nhánh từ chối đã xác nhận chặn lý do khoảng trắng, chuyển trạng thái từ chối khi có lý do hợp lệ, ghi nhận lịch sử và giải phóng lịch cá nhân. & Thao tác duyệt cuối đồng thời chưa có cơ chế khóa hàng chống vượt quỹ phép tại backend; kết quả chưa suy rộng sang mọi vai trò hoặc hồ sơ. \\
 \hline
-Bộ nhớ RAM sử dụng (Tải tối đa / PDF) & Xem tệp PDF lớn \& Danh sách Tasks & \textbf{$\approx$ 145 MB} & Ổn định, không memory leak \\
+Công tác & Trên Android, chi tiết phiếu hiển thị dữ liệu nguồn; một phiếu trong nước được lập qua năm bước, gửi, trả lại, sửa và gửi lại. Giao diện cũng hiển thị lịch sử của một phiếu đã hoàn tất nhiều cấp và chặn chọn ngày trùng. Trên các phiếu thử riêng, API và CSDL xác nhận nhánh từ chối, thu hồi theo quyền và luân chuyển phiếu nước ngoài qua năm cấp đến BGH, kèm điều kiện có thư mời và bản ghi quá trình công tác. & Các nhánh từ chối, thu hồi và duyệt phiếu nước ngoài chưa được xác nhận toàn bộ qua UI mobile. Quyền thu hồi mới được thử với những vai trò và trạng thái phiếu đã chọn. Backend còn chặn tạo chuyến mới khi chuyến trước chưa nộp báo cáo kết quả; ứng dụng không cung cấp thao tác nộp báo cáo trong phạm vi đề tài. \\
 \hline
-Dung lượng Cài đặt (APK Size) & Bản Release Android Split ABI & \textbf{$\approx$ 24.8 MB} & Nhẹ, tải nhanh ($< 50$ MB) \\
+Văn bản và nhiệm vụ & Đã tra cứu nội dung được phân quyền, mở tệp PDF trên thiết bị và theo dõi một số thông tin nhiệm vụ liên quan. & Chưa kiểm tra đầu--cuối toàn bộ vòng đời văn bản và nhiệm vụ trên mobile; một số thao tác xử lý tiếp tục thuộc iOffice Web theo phạm vi hiện tại. \\
 \hline
-\end{tabularx}
-\caption[\textit{Đo lường hiệu năng và tài nguyên ứng dụng MyHCMUT}]{\textit{Bảng đo lường Hiệu năng và Mức tiêu thụ Tài nguyên của Ứng dụng MyHCMUT}}
-\label{tab:mobile_perf}
-\end{table}
+Lịch và điểm danh & Trên cuộc họp đã chuẩn bị cho kiểm thử, người được mời điểm danh, hoàn tác và báo vắng kèm lý do; trạng thái sau thao tác được đối chiếu tại iOffice. & Chưa hoàn tất lượt đầu--cuối riêng cho khách ngoài danh sách mời vì tài khoản khách không truy cập được cuộc họp thử từ giao diện. Kiểm thử thành phần không thay thế bằng chứng này. \\
+\hline
+Thông báo & Đã quan sát banner khi ứng dụng ở foreground và background trên Android; chạm banner thử nghiệm mở đúng màn hình nghiệp vụ được gắn với loại thông báo đã thử. Một thông báo công tác trong Trung tâm cũng mở đúng chi tiết phiếu. & Chỉ xác nhận các loại thông báo và đường dẫn đã thử; chưa kiểm tra mọi loại thông báo, vai trò và tình huống điều hướng. \\
+\hline
+\end{xltabular}
+
+Nhìn chung, các luồng hồ sơ cá nhân, nghỉ phép và công tác được kiểm tra trong những trường hợp đã thực hiện: thông tin chi tiết phù hợp dữ liệu nguồn, các thao tác chuyển trạng thái được ghi nhận kèm lịch sử và lịch cá nhân được đồng bộ hoặc giải phóng tương ứng. Riêng nhánh từ chối nghỉ phép còn được thao tác qua giao diện với một phiếu thử độc lập: lý do chỉ gồm khoảng trắng bị chặn, còn lý do hợp lệ làm phiếu chuyển sang trạng thái từ chối và giải phóng lịch. Các giới hạn nêu trong bảng xác định ranh giới của kết luận, không mặc nhiên là lỗi ở những luồng đã đạt.
+
+Đối với nghỉ phép, kiểm tra cơ chế trừ quỹ phép cho thấy số dư được tính toán động tại thời điểm truy vấn. Do thủ tục ghi nhận duyệt cuối chưa áp dụng khóa hàng bi quan hoặc kiểm tra ngưỡng số dư còn lại, các thao tác duyệt cuối diễn ra đồng thời vượt tổng ngày phép có thể dẫn đến hiện tượng số dư âm như ghi nhận trong đợt thử nghiệm tải; đây là nội dung cần hoàn thiện cơ chế khóa hàng ở tầng backend. Đối với công tác, các giá trị ``Chưa cập nhật'' trên màn hình chi tiết được xác định là giá trị dự phòng hiển thị cho các trường thông tin tùy chọn không bắt buộc hoặc trường địa điểm không gắn mã danh mục đơn vị hành chính tại hệ thống nguồn, không phải lỗi sai lệch dữ liệu của ứng dụng di động. Tương tự, việc chưa kiểm tra được khách tự điểm danh qua giao diện là một khoảng trống bằng chứng E2E, trong khi quy tắc nghiệp vụ cho phép khách vẫn được giữ theo đặc tả.
+
+\subsection{Đánh giá yêu cầu phi chức năng}
+
+Bảng~\ref{tab:ch6_nfr_evaluation} tổng hợp phạm vi đã quan sát. Kết quả trên một thiết bị không được suy rộng thành chất lượng của mọi môi trường sử dụng.
+
+\begin{xltabular}{\textwidth}{|L{1.6cm}|Y|Y|}
+\caption{Phạm vi đánh giá yêu cầu phi chức năng}\label{tab:ch6_nfr_evaluation} \\
+\hline
+\textbf{Yêu cầu} & \textbf{Kết quả ghi nhận} & \textbf{Giới hạn} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Yêu cầu} & \textbf{Kết quả ghi nhận} & \textbf{Giới hạn} \\
+\hline
+\endhead
+NFR-01 & Danh sách nghỉ phép và lịch tải lại dữ liệu sau khi kết nối mạng được phục hồi. & Chưa kiểm tra trên mọi màn hình và mọi tình huống lỗi mạng. \\
+\hline
+NFR-02 & Biểu mẫu nghỉ phép, công tác và trạng thái xử lý được quan sát trên Android thật. & Chưa khảo sát người dùng hoặc thử trên nhiều kích thước thiết bị. \\
+\hline
+NFR-03 & Các vai trò thử nghiệm thực hiện được thao tác được phân công; một số kiểm tra quyền được bổ sung bằng kiểm thử tự động. & Chưa đối chứng toàn bộ ma trận phân quyền bằng nhiều phiên và thiết bị. \\
+\hline
+NFR-04 & Các đơn được duyệt tuần tự, trả lại, từ chối và thu hồi cập nhật đúng trạng thái và dữ liệu liên quan tại HRM. & Duyệt đồng thời nhiều yêu cầu vượt quỹ phép chưa có cơ chế khóa hàng ở backend. \\
+\hline
+NFR-05 & Mã nguồn được tổ chức theo nhóm chức năng và có bộ kiểm thử tự động tương ứng. & Chưa có phép đo định lượng về khả năng bảo trì hoặc mở rộng. \\
+\hline
+\end{xltabular}
+
+Nhóm chưa thực hiện đo định lượng độ trễ, dung lượng bộ nhớ, tốc độ khung hình hoặc thời gian khởi động. Báo cáo cũng chưa đánh giá khả năng sử dụng bằng khảo sát người dùng.

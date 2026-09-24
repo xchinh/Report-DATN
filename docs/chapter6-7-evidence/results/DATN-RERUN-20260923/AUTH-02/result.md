@@ -8,7 +8,7 @@
 | Thời điểm thực thi | 23/09/2026 (`Asia/Ho_Chi_Minh`) |
 | Đối tượng kiểm thử | HRM BE port 6023, Auth BE port 4000 |
 | Tester | `CB-B` (User ID `300` — Cán bộ thường, không có quyền quản lý/duyệt) |
-| Trạng thái | **Pass** |
+| Trạng thái | **Pass theo biên bản; bằng chứng lưu còn hạn chế** |
 
 ---
 
@@ -28,5 +28,5 @@
 
 ## 2. Kết luận
 
-- Kịch bản đạt trạng thái **Pass**.
-- Backend thực thi kiểm tra quyền nghiêm ngặt ở tầng API controller/middleware, độc lập với việc ẩn nút trên giao diện người dùng.
+- Biên bản ghi nhận các request trái quyền bị backend từ chối. Thư mục kịch bản hiện chỉ có `result.md`, chưa lưu raw response/status và ID fixture đã khử dữ liệu để kiểm chứng độc lập từng nhánh; bước 1 còn ghi mơ hồ `401/403`.
+- Chỉ kết luận backend đã **được quan sát là từ chối các thao tác đại diện theo biên bản**, không kết luận toàn bộ phân quyền hệ thống đã được xác minh đầy đủ. Cần bổ sung artifact nếu muốn nâng thành Pass toàn diện có thể tái lập.

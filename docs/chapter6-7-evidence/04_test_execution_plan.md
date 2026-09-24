@@ -1,5 +1,7 @@
 # KẾ HOẠCH THỰC HIỆN KIỂM THỬ CHƯƠNG 6–7
 
+> **Lưu vết lịch sử:** Tiêu chí `SCH-01` trong kế hoạch ngày 23/09 yêu cầu từ chối người ngoài danh sách mời. Đặc tả Chương 4 hiện hành đã xác nhận nghiệp vụ khách tự điểm danh (`assign_id = null`), nên không dùng tiêu chí cũ để nghiệm thu sản phẩm hiện tại. Khi chạy lại, kiểm tra riêng người được phân công, khách tự điểm danh, quyền truy cập và khung thời gian.
+
 ## 1. Mục tiêu và phạm vi
 
 ### 1.1. Mục tiêu
@@ -40,7 +42,7 @@ Tài liệu chỉ là **kế hoạch chờ phê duyệt**. Việc tạo tệp n�
 | Hồ sơ nhân sự | PRO-01, PRO-02 | Luồng WebView/SSO, chính sách cập nhật và xử lý đề xuất đều Pass |
 | Nghỉ phép | LEV-01 đến LEV-05 | Nháp sửa/xóa được, đơn đã gửi không bị người lập sửa/xóa trái phép, đơn bị trả lại sửa–gửi lại được; các nhánh duyệt, lý do từ chối và số dư chỉ kết luận nếu kịch bản tương ứng Pass |
 | Đi công tác | BTR-01 đến BTR-03 | Nháp sửa/xóa được, người lập không thu hồi phiếu đã gửi theo mặc định, phiếu bị trả lại sửa–gửi lại được; thu hồi TCNS/BGH và luân chuyển chỉ kết luận nếu kịch bản tương ứng Pass |
-| Văn bản iOffice | OFF-01, OFF-02, OFF-04; OFF-03 nếu cần kết luận danh sách | OFF-01 xác minh quyền truy cập tệp theo NFR-03; OFF-02/03 xác minh tra cứu FR-IOFF-01; OFF-04 kiểm tra UC-OFF-01..04 mới. Kịch bản nào Fail/Blocked thì giới hạn đúng kết luận của hành vi đó |
+| Văn bản iOffice | OFF-01, OFF-02, OFF-04; OFF-03 nếu cần kết luận danh sách | OFF-01 kiểm tra quyền tệp theo chính sách nghiệp vụ được xác nhận, liên quan NFR-03 khái quát nhưng không phải UC-OFF-01; OFF-02/03 xác minh tra cứu FR-IOFF-01; OFF-04 kiểm tra UC-OFF-01..04 trên `main`. Kịch bản nào Fail/Blocked thì giới hạn đúng kết luận của hành vi đó |
 | Lịch và điểm danh | SCH-01, SCH-02 | Người ngoài danh sách bị chặn; lỗi tải lịch được báo và có thể thử lại |
 | Yêu cầu phi chức năng | NET-01, TEST-01 | Xử lý timeout được xác minh; kết quả chạy bộ test hiện có có log gắn commit |
 
@@ -145,7 +147,7 @@ Có thể dùng chức năng quản trị để chuyển sang người dùng th�
 | BTR-02 | P0 | BTR-R01, BTR-R02, BTR-R03 | Mobile–API integration | Có |
 | BTR-03 | P0 | BTR-R06 (FR-BTR-04/UC-BT-04), BTR-R04 (FR-BTR-05/UC-BT-05) | API/integration | Có |
 | BTR-04 | P2 | FR-BTR-01-B01, FR-BTR-01-B02 | Widget/provider | Không |
-| OFF-01 | P0 | OFF-R06 / NFR-03 (quyền truy cập tệp iOffice theo bản ghi) | API authorization + client | Có |
+| OFF-01 | P0 | OFF-R06 / NFR-03 khái quát + chính sách quyền tệp đã xác nhận (không phải UC-OFF-01) | API authorization + client | Có |
 | OFF-02 | P1 | OFF-R01 (chi tiết/tệp văn bản) | Thủ công đầu–cuối | Có |
 | OFF-03 | P2 | OFF-R01 (danh sách/lọc văn bản, chi tiết nhiệm vụ FR-IOFF-04) | Widget/provider + API | Không |
 | OFF-04 | P0 | OFF-R02..R05 (FR-IOFF-02/03; UC-OFF-01..04) | Thủ công đầu–cuối + API | Có |
@@ -264,6 +266,7 @@ Có thể dùng chức năng quản trị để chuyển sang người dùng th�
 
 ### OFF-01 — Từ chối mở tệp văn bản không đủ quyền
 
+- **Căn cứ phạm vi:** `OFF-01` là mã kiểm thử. Chương 4 trên `main:14fe1f6` quy định backend kiểm tra quyền truy cập dữ liệu tại `NFR-03`, nhưng chưa phát biểu tường minh quyền tải tệp theo từng văn bản; tiêu chí cụ thể của kịch bản xuất phát từ chính sách nghiệp vụ người dùng xác nhận. `UC-OFF-01` trên `main` là phân công trách nhiệm, không phải kịch bản này.
 - **Tiền điều kiện:** `DOC-ALLOWED`, `DOC-DENIED`; `IOF-IN` và `IOF-OUT`.
 - **Các bước:** (1) `IOF-OUT` gọi trực tiếp endpoint xem/tải tệp bị giới hạn; (2) xác nhận response không chứa nội dung tệp; (3) mở cùng liên kết qua mobile; (4) `IOF-IN` truy cập `DOC-ALLOWED` để xác nhận fixture và dịch vụ hoạt động.
 - **Mong đợi:** backend từ chối người không có quyền và không trả nội dung tệp; client báo lỗi, không mở dữ liệu cache cũ; người có quyền mở được fixture cho phép.
@@ -288,11 +291,16 @@ Có thể dùng chức năng quản trị để chuyển sang người dùng th�
 
 ### OFF-04 — Phân công, tham mưu, chỉ đạo và tiếp nhận văn bản đến
 
+- **Bổ sung sau đối chiếu `UC-OFF-01` trên `main:14fe1f6` (chưa thuộc kết quả rerun cũ):** bước 3 của UC yêu cầu *lưu phân công và gửi thông báo đến người nhận*; ngoại lệ 3a yêu cầu từ chối *đối tượng nhận không hợp lệ*. Kết quả actor trái quyền HTTP 403 không thay thế kiểm thử ngoại lệ 3a. Các nhánh bổ sung bên dưới cần được duyệt cùng fixture và cách khôi phục trước khi thực hiện; không tự chuyển biên bản `OFF-04` cũ thành Pass cho chúng.
 - **Tiền điều kiện:** một văn bản đến giả lập ở bước cho phép phân công; `IOF-CLERK`, `IOF-ADVISOR`, `IOF-DIRECTOR`, `IOF-RECIPIENT-A/B` có quyền thực tế tương ứng trên iOffice. Nếu cấu hình quy trình không thể đi qua đủ bốn bước trên cùng một văn bản, dùng fixture riêng cho từng nhánh và ghi rõ quan hệ giữa chúng.
 - **Các bước:** (1) người có quyền phân công chọn loại trách nhiệm và hai người nhận, gửi từ giao diện mobile, đọc lại phiếu giải quyết; (2) người không có quyền thử cùng request trực tiếp qua API, xác nhận dữ liệu không đổi; (3) lãnh đạo P.HC gửi ý kiến tham mưu, đọc lại lịch sử; (4) BGH gửi chỉ đạo, đọc lại bước xử lý; (5) người nhận thứ nhất tiếp nhận rồi đọc trạng thái; (6) người nhận thứ hai tiếp nhận và kiểm tra điều kiện hoàn tất 100% theo Chương 4.
 - **Mong đợi:** dữ liệu phân công và ý kiến được lưu đúng người, đúng văn bản; request trái quyền bị từ chối; tham mưu/chỉ đạo chỉ chuyển bước khi actor có thẩm quyền; sau người nhận đầu tiên chưa đánh dấu hoàn thành nếu còn người chưa tiếp nhận, sau tất cả người nhận mới chuyển trạng thái theo quy trình. Không gán `Pass` chung nếu chỉ có màn hình hoặc một nhánh API thành công.
 - **Xác minh/bằng chứng:** ảnh giao diện đã khử dữ liệu, ID văn bản/phiếu/actor bí danh, request/response, trạng thái/lịch sử trước–sau từng bước, cấu hình quyền và workflow thực tế.
 - **Khôi phục:** chỉ dùng fixture có mã run ID; hoàn nguyên qua cơ chế nghiệp vụ/test được quản trị cho phép. Nếu thiếu role hoặc không có fixture hợp lệ, ghi `Blocked`, không dùng tài liệu thật.
+- **Nhánh bổ sung 1 — mobile và thông báo:** trên văn bản giả có ID được ghi nhận, `IOF-CLERK` chọn một recipient hợp lệ từ giao diện mobile và lưu; đọc lại PGQ để kiểm tra `vanBanDenId`, loại trách nhiệm và recipient. Ghi thời điểm gửi, ID phiếu; kiểm tra bản ghi thông báo hoặc hàng đợi/tác vụ và tài khoản recipient để xác nhận thông báo **thực sự đến người nhận**. Chỉ thấy `create-task` trong mã hoặc API POST 200 chưa đủ để ghi Pass nhánh thông báo. Ghi rõ nếu chỉ kiểm chứng tạo thông báo nội bộ mà chưa kiểm chứng FCM/thiết bị.
+- **Nhánh bổ sung 2 — recipient không hợp lệ:** tạo fixture riêng, dùng actor có quyền phân công nhưng chọn người/đơn vị **không có quyền nhận nhiệm vụ theo quy tắc nghiệp vụ đã xác nhận**. Xác định trước thế nào là không hợp lệ bằng cấu hình quyền của fixture; gửi từ mobile nếu UI cho chọn, hoặc gọi API trực tiếp để kiểm tra thẩm quyền backend. Kỳ vọng yêu cầu bị từ chối, không phát sinh PGQ/tác vụ/thông báo; lưu response đã khử dữ liệu và snapshot trước–sau. Không dùng một mã `shcc` giả không tồn tại để thay thế phép thử người nhận có thật nhưng không đủ quyền nếu hai trường hợp không tương đương.
+- **Nhánh bổ sung 3 — `UC-OFF-03` ngoại lệ 3a:** trên một văn bản giả loại *Triển khai nhiệm vụ*, actor BGH gửi chỉ đạo và xác nhận nhiệm vụ liên kết được tạo đúng `sourceId`/người nhận, không chỉ có sự kiện `create-task` trong mã. Lưu trạng thái văn bản, ID nhiệm vụ và quan hệ liên kết trước–sau; nếu bước xử lý bất đồng bộ thất bại, ghi Fail/Blocked đúng nguyên nhân. Dùng fixture riêng hoặc khôi phục theo quy tắc Mục 4.2.
+- **Điều kiện chạy hai nhánh bổ sung:** có tài khoản thử nghiệm đúng vai trò, văn bản giả cô lập, baseline PGQ/tác vụ/thông báo, quyền đọc lại và phương án khôi phục được quản trị chấp thuận. Nếu thiếu một điều kiện, ghi `Blocked`; không thử trên văn bản đang xử lý thật. Kết quả `OFF-04` gốc vẫn là một kịch bản lịch sử, không cộng nhánh bổ sung thành kết quả của cùng một lần chạy.
 
 ### SCH-01 — Người ngoài danh sách mời không được điểm danh
 

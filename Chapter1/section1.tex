@@ -34,7 +34,7 @@ Bên cạnh đó, các nghiệp vụ như cập nhật hồ sơ, nghỉ phép v�
 
 Cuối cùng, việc tập hợp dữ liệu từ nhiều nguồn, tiếp nhận thông báo và điều hướng đến nội dung liên quan đòi hỏi ứng dụng phải tổ chức các thành phần chức năng một cách rõ ràng. Thiết kế cần tạo điều kiện cho việc phát triển, kiểm thử và điều chỉnh từng nhóm nghiệp vụ trong quá trình thực hiện đề tài.
 
-Như vậy, trọng tâm kỹ thuật của đề tài là \textbf{thiết kế và hiện thực ứng dụng di động tích hợp các hệ thống nghiệp vụ hiện hữu}, trong đó chú trọng tổ chức giao diện, quản lý trạng thái, giao tiếp với backend và xử lý các luồng nghiệp vụ trên thiết bị di động.
+Như vậy, trọng tâm kỹ thuật của đề tài là \textbf{thiết kế và hiện thực ứng dụng di động tích hợp mở rộng các hệ thống nghiệp vụ hiện hữu}, trong đó chú trọng tổ chức giao diện, quản lý trạng thái, giao tiếp với backend và xử lý các luồng nghiệp vụ trên thiết bị di động.
 
 \section{Mục tiêu của đề tài}
 \label{sec:muctieu}
@@ -74,8 +74,8 @@ Trong phạm vi đồ án, nhóm tập trung phân tích, thiết kế và hiệ
   \item \textbf{Quản lý nghỉ phép:} Tra cứu số dư phép, đăng ký và theo dõi đơn nghỉ phép; hỗ trợ phê duyệt đơn theo quyền hạn của người dùng.
   \item \textbf{Quản lý công tác:} Đăng ký, theo dõi, thẩm định và phê duyệt hồ sơ đi công tác theo quy trình nghiệp vụ hiện hữu.
   \item \textbf{Văn phòng số:} Tra cứu văn bản đến, văn bản đi, xem tệp đính kèm và thực hiện các thao tác xử lý văn bản thuộc phạm vi tích hợp với iOffice.
-  \item \textbf{Quản lý nhiệm vụ:} Theo dõi cây nhiệm vụ phân cấp, xem danh sách người được phân công và nộp báo cáo tiến độ. Việc tạo mới và phân công nhiệm vụ được thực hiện trên hệ thống Web iOffice.
-  \item \textbf{Lịch làm việc:} Xem lịch tổng hợp từ lịch họp, lịch nghỉ phép và lịch công tác; hỗ trợ điểm danh hoặc báo vắng đối với các cuộc họp có áp dụng chức năng này.
+  \item \textbf{Quản lý nhiệm vụ:} Theo dõi cây nhiệm vụ phân cấp, xem danh sách người được phân công, tiến độ và các báo cáo tiến độ đã có.
+  \item \textbf{Lịch làm việc:} Xem lịch tổng hợp từ lịch họp, lịch nghỉ phép và lịch công tác;hỗ trợ thực hiện điểm danh hoặc báo vắng tại cuộc họp trên lịch làm việc.
 \end{itemize}
 
 Bên cạnh các nhóm chức năng trên, ứng dụng hỗ trợ đăng nhập, tiếp nhận thông báo đẩy, điều hướng đến nội dung nghiệp vụ liên quan và truy cập một số chức năng Web thông qua WebView.
@@ -104,7 +104,7 @@ Các chức năng được cung cấp theo quyền hạn của từng nhóm ngư
 \textbf{Tống Duy Khang} \newline (2211467) &
 \parbox{\linewidth}{\vspace{4pt}\begin{itemize}[leftmargin=*, nosep]
   \item \textbf{Văn phòng số iOffice:} Thiết kế và hiện thực chức năng tra cứu văn bản đến, văn bản đi, phân phối xử lý và xem tệp đính kèm.
-  \item \textbf{Quản lý nhiệm vụ:} Hiện thực chức năng theo dõi cây nhiệm vụ phân cấp, xem danh sách người được phân công và nộp báo cáo tiến độ.
+  \item \textbf{Quản lý nhiệm vụ:} Hiện thực chức năng theo dõi cây nhiệm vụ phân cấp, xem danh sách người được phân công, tiến độ và các báo cáo tiến độ đã có.
   \item \textbf{Quản lý công tác:} Thiết kế và hiện thực luồng đăng ký, thẩm định và phê duyệt hồ sơ đi công tác.
   \item \textbf{Kiểm thử tích hợp:} Xây dựng các kịch bản kiểm thử tích hợp giữa các phân hệ và tham gia kiểm thử toàn hệ thống.
 \end{itemize}\vspace{4pt}} & \textbf{50\%} \\

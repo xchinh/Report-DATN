@@ -75,5 +75,7 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
-*~
 .claude/
+
+## Test evidence logs
+!docs/chapter6-7-evidence/**/*.log

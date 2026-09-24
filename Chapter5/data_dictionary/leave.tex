@@ -1,0 +1,103 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của phân hệ nghỉ phép}]{\textit{Từ điển dữ liệu rút gọn của phân hệ nghỉ phép}}\label{tab:leave_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{tcns\_nghi\_phep\_dang\_ky} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{shcc} & text & -- & Mã số cán bộ đăng ký nghỉ phép. \\
+\cline{2-5}
+ & \mbox{\texttt{ma\_don\_vi}} & text & -- & Đơn vị công tác của cán bộ. \\
+\cline{2-5}
+ & \texttt{ngay\_bat\_dau} & bigint & -- & Thời điểm bắt đầu nghỉ (timestamp). \\
+\cline{2-5}
+ & \texttt{ngay\_ket\_thuc} & bigint & -- & Thời điểm kết thúc nghỉ (timestamp). \\
+\cline{2-5}
+ & \texttt{period} & text & -- & Buổi bắt đầu nghỉ (sáng, chiều hoặc cả ngày). \\
+\cline{2-5}
+ & \texttt{period\_ket\_thuc} & text & -- & Buổi kết thúc nghỉ phép. \\
+\cline{2-5}
+ & \texttt{so\_ngay\_thuc\_nghi} & numeric & -- & Tổng số ngày thực tế xin nghỉ. \\
+\cline{2-5}
+ & \texttt{hinh\_thuc} & text & -- & Hình thức nghỉ (phép năm, việc riêng,...). \\
+\cline{2-5}
+ & \texttt{ly\_do} & text & -- & Lý do xin nghỉ phép của cán bộ. \\
+\cline{2-5}
+ & \texttt{files} & jsonb & -- & Danh sách tệp minh chứng đính kèm. \\
+\cline{2-5}
+ & \texttt{ma\_quy\_trinh} & text & -- & Mã quy trình phê duyệt áp dụng. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái xử lý hiện tại của phiếu. \\
+\hline
+\texttt{tcns\_lich\_ca\_nhan} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi lịch cá nhân. \\
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{ngay\_bat\_dau} & bigint & -- & Thời điểm bắt đầu hiển thị trên lịch. \\
+\cline{2-5}
+ & \texttt{ngay\_ket\_thuc} & bigint & -- & Thời điểm kết thúc trên lịch. \\
+\cline{2-5}
+ & \texttt{period} & text & -- & Buổi bắt đầu trên lịch cá nhân. \\
+\cline{2-5}
+ & \texttt{period\_ket\_thuc} & text & -- & Buổi kết thúc trên lịch cá nhân. \\
+\hline
+\texttt{tcns\_quy\_trinh} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bước quy trình phê duyệt. \\
+\cline{2-5}
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{ma} & text & -- & Mã định danh của bước phê duyệt. \\
+\cline{2-5}
+ & \texttt{step\_no} & integer & -- & Thứ tự thực hiện của bước trong quy trình. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái xử lý của bước quy trình. \\
+\cline{2-5}
+ & \texttt{is\_initial} & boolean & -- & Cờ xác định bước khởi tạo đầu tiên. \\
+\cline{2-5}
+ & \texttt{is\_end} & boolean & -- & Cờ xác định bước kết thúc quy trình. \\
+\cline{2-5}
+ & \texttt{targets} & jsonb & -- & Cấu hình đối tượng thẩm quyền xử lý. \\
+\cline{2-5}
+ & \texttt{parallel\_group} & jsonb & -- & Cấu hình nhánh xử lý song song. \\
+\hline
+\texttt{tcns\_quy\_trinh\_user} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phân công xử lý. \\
+\cline{2-5}
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{shcc} & jsonb & -- & Danh sách cán bộ được phân công xử lý. \\
+\cline{2-5}
+ & \texttt{ma\_quy\_trinh} & text & -- & Mã bước quy trình được phân công. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái xử lý của cán bộ được phân công. \\
+\cline{2-5}
+ & \texttt{forward\_to} & text & -- & Thông tin người hoặc bước được chuyển tiếp. \\
+\hline
+\texttt{tcns\_quy\_trinh\_history} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh lịch sử xử lý (audit trail). \\
+\cline{2-5}
+ & \texttt{phieu\_id} & integer & -- & Liên kết logic đến phiếu nghỉ phép. \\
+\cline{2-5}
+ & \texttt{ma\_quy\_trinh} & text & -- & Bước quy trình tại thời điểm xử lý. \\
+\cline{2-5}
+ & \texttt{shcc} & text & -- & Mã cán bộ thực hiện thao tác. \\
+\cline{2-5}
+ & \texttt{trang\_thai} & text & -- & Trạng thái ghi nhận tại thời điểm xử lý. \\
+\cline{2-5}
+ & \texttt{thoi\_gian} & bigint & -- & Thời điểm thực hiện thao tác (timestamp). \\
+\cline{2-5}
+ & \texttt{data} & jsonb & -- & Dữ liệu vết và nội dung ghi nhận thao tác. \\
+\hline
+\texttt{tcns\_so\_nghi\_phep\_nam} & \texttt{nam} & numeric & PK ghép, NOT NULL & Năm quản lý hạn mức nghỉ phép. \\
+\cline{2-5}
+ & \texttt{shcc} & text & PK ghép, NOT NULL & Mã cán bộ được quản lý hạn mức phép. \\
+\cline{2-5}
+ & \texttt{tong\_so\_ngay} & numeric & -- & Tổng số ngày phép được nghỉ trong năm. \\
+\end{xltabular}

@@ -3,6 +3,8 @@
 
 Mục này trình bày cách tổ chức ứng dụng MyHCMUT Mobile và các thành phần backend tham gia cung cấp chức năng cho ứng dụng. Nội dung tập trung vào cấu trúc mã nguồn, trách nhiệm của từng nhóm thành phần và phạm vi kế thừa, mở rộng các hệ thống hiện hữu nhằm phục vụ ứng dụng di động.
 
+Khi đánh giá đóng góp của đề tài, cần phân biệt bốn phần: ứng dụng Flutter do nhóm xây dựng; API và cơ chế tích hợp được nhóm bổ sung hoặc điều chỉnh ở backend; nghiệp vụ và API hiện hữu được tái sử dụng; biểu mẫu HRM Web được mở lại từ ứng dụng. Bảng~\ref{tab:component_ownership_scope} cụ thể hóa ranh giới này theo từng thành phần.
+
 \subsection{Thiết kế ứng dụng MyHCMUT Mobile}
 \label{subsec:kientruc_ung_dung_mobile}
 
@@ -56,6 +58,8 @@ MyHCMUT Mobile tích hợp với Auth Service, HRM Backend và iOffice Backend. 
 
 \textbf{iOffice Backend:} Cung cấp các module văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng di động khai thác API hiện hữu của các module này để truy xuất dữ liệu và thực hiện thao tác được phân quyền.
 
+API chi tiết lịch trả riêng thông tin người được phân công và khách tham dự. Ứng dụng di động chuyển phản hồi này thành các nhóm hiển thị tương ứng; cách xử lý ở Mobile không làm thay đổi API đang phục vụ iOffice Web.
+
 Các điều chỉnh phục vụ ứng dụng di động tại iOffice gồm bổ sung metadata điều hướng cho thông báo và thành phần tiêu thụ vé SSO. Tuy nhiên, ứng dụng MyHCMUT Mobile hiện chưa hỗ trợ mở các chức năng iOffice thông qua WebView; người dùng truy cập các chức năng văn bản, nhiệm vụ, lịch công tác và điểm danh bằng giao diện Flutter thông qua API của iOffice.
 
 \begin{table}[H]
@@ -73,6 +77,8 @@ Auth Service & Chức năng đăng nhập và cấp token & Tích hợp ứng d�
 HRM Backend & Nghiệp vụ hồ sơ, nghỉ phép, đi công tác, quy trình phê duyệt và dữ liệu nhân sự & Bổ sung hoặc điều chỉnh API phục vụ mobile, kiểm tra nghỉ phép, đăng ký token thiết bị, metadata thông báo và One-Time Ticket SSO. \\
 \hline
 iOffice Backend & Nghiệp vụ văn bản, nhiệm vụ, lịch công tác, điểm danh và dữ liệu văn phòng số & Tích hợp API hiện hữu; bổ sung metadata thông báo và thành phần tiêu thụ vé SSO theo trạng thái hiện thực của phiên bản đồ án. \\
+\hline
+HRM Web & Biểu mẫu cập nhật lý lịch và quy tắc nhập liệu trên Web & Mở biểu mẫu từ Mobile qua WebView và vé SSO; không viết lại biểu mẫu bằng Flutter. \\
 \hline
 \end{tabularx}
 \end{table}

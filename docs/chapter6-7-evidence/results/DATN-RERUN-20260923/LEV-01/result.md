@@ -9,32 +9,31 @@
 | Thiết bị | Realme RMX2151, Android 12/API 31 |
 | Đối tượng kiểm thử | Mobile commit `7f90ac7`, HRM BE `9e39ccc2` |
 | Tester | `CB-A` (User ID `287`, SHCC `003009`, Phòng Hành chính) |
-| Trạng thái | **Pass** |
+| Trạng thái kịch bản | **Pass có giới hạn phạm vi (Pass nhánh tạo và nộp đơn trực tiếp qua wizard; Chưa chạy nhánh lưu nháp dở dang–mở lại)** |
 
 ---
 
-## 1. Các bước thực hiện & Kết quả thực tế
+## 1. Kết quả chi tiết theo từng nhánh kịch bản
 
-1. **Bước 1 (Thông tin cơ bản):** Chọn loại nghỉ phép trong nước, địa điểm "Thành phố Hà Nội", khoảng ngày hợp lệ (> 72h), nhập lý do. Bấm Next (`01_step1_info.png`).
-2. **Bước 2 (Minh chứng & Cam kết):** Giao diện hiển thị tính toán số dư ngày nghỉ (tổng 15 ngày, đơn này 1.5 ngày, còn lại 13.5 ngày). Bật công tắc cam kết. Bấm Next (`02_step2_attachment_commitment.png`).
-3. **Bước 3 (Rà soát & Nộp):** Rà soát thông tin tổng hợp, bấm "Save & Send" và xác nhận trong popup Confirm (`03_step3_review.png`).
-4. **Trang chi tiết & Danh sách:**
-   - Ứng dụng điều hướng sang chi tiết đơn với badge `Submitted` màu xanh, hiển thị đầy đủ thông tin (`04_detail_submitted.png`).
-   - Danh sách quản lý đơn trên Mobile cập nhật hiển thị đơn `#289` (`05_leave_list_updated.png`).
-   - API `GET /api/tcns-nghi-phep/dang-ky/all` xác nhận đơn `#289` ở trạng thái `GUI` (`LÃNH ĐẠO ĐƠN VỊ`), `soNgayNghi: 1.5`.
+| Nhánh kiểm thử | Kỳ vọng kế hoạch | Kết quả thực tế | Trạng thái nhánh |
+| --- | --- | --- | :---: |
+| **Nhánh 1: Nhập liệu wizard 3 bước và nộp đơn trực tiếp** | Đi qua 3 bước wizard (Thông tin -> Minh chứng/Cam kết -> Rà soát), tính số dư ngày phép, nộp đơn thành công và tạo bản ghi Chờ duyệt | Hoàn thành 3 bước trên máy thật Android; hệ thống tính đúng `1.5` ngày nghỉ; nộp đơn thành công tạo đơn `#289`; API backend xác nhận trạng thái `GUI` (`LÃNH ĐẠO ĐƠN VỊ`) | **Pass** |
+| **Nhánh 2: Xác thực ràng buộc dữ liệu đầu vào** | Ngăn chuyển bước khi thiếu ngày hoặc lý do; kiểm tra quỹ phép | Wizard bắt buộc nhập lý do, địa điểm và xác nhận công tắc cam kết trước khi cho phép nộp | **Pass** |
+| **Nhánh 3: Lưu nháp giữa quy trình, thoát và mở lại nháp** | Bấm lưu nháp ở bước 1 hoặc bước 2, thoát wizard; sau đó mở lại nháp để tiếp tục hoàn thiện và nộp | Đợt kiểm thử trên thiết bị thật **đi thẳng 3 bước và bấm nộp ngay**, chưa thực hiện thao tác lưu nháp giữa chừng, thoát ra màn hình chính rồi mở lại từ danh sách nháp | **Chưa chạy (Not Run)** |
 
 ---
 
 ## 2. Bằng chứng đính kèm
 
-- `01_step1_info.png`: Giao diện Bước 1
-- `02_step2_attachment_commitment.png`: Giao diện Bước 2
-- `03_step3_review.png`: Giao diện Bước 3
-- `04_detail_submitted.png`: Chi tiết đơn đã nộp
-- `05_leave_list_updated.png`: Danh sách cập nhật
+- `01_step1_info.png`: Bước 1 - Chọn loại nghỉ phép, địa điểm Hà Nội, khoảng ngày hợp lệ
+- `02_step2_attachment_commitment.png`: Bước 2 - Số dư tự động tính toán (1.5 ngày) và công tắc cam kết
+- `03_step3_review.png`: Bước 3 - Rà soát thông tin tổng hợp và xác nhận popup
+- `04_detail_submitted.png`: Trang chi tiết đơn `#289` hiển thị badge `Submitted` màu xanh
+- `05_leave_list_updated.png`: Danh sách đơn cập nhật đơn `#289` trên thiết bị
 
 ---
 
-## 3. Kết luận
+## 3. Ranh giới khẳng định & Kết luận
 
-- Kịch bản đạt trạng thái **Pass** (chuyển đổi từ Blocked sang Pass).
+- **Phạm vi đã chứng minh:** Luồng wizard tạo mới và nộp đơn nghỉ phép trực tiếp trên ứng dụng di động hoạt động hoàn chỉnh, liên kết chính xác với backend HRM và cập nhật danh sách ngay lập tức trên máy thật Android.
+- **Giới hạn kết luận:** Nhánh lưu nháp dở dang giữa các bước và mở lại từ danh sách nháp chưa được thực thi trong đợt chạy này, do đó kịch bản chỉ kết luận Pass trong phạm vi luồng tạo và nộp đơn trực tiếp.

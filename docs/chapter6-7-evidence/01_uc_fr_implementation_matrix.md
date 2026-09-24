@@ -1,5 +1,7 @@
 # MA TRẬN TRUY VẾT UC/FR – HIỆN THỰC
 
+> **Hiệu chỉnh nghiệp vụ ngày 24/09:** Các hàng lịch sử về `FR-SCH-01` và `UC-SCH-01` bên dưới còn dùng tiêu chí từ chối người ngoài danh sách mời. Đặc tả Chương 4 hiện hành cho phép khách tự điểm danh với `assignId = null`; xem [hồ sơ đối chiếu mới](09_workflow_accounts_and_retest_evidence.md). Không dùng các hàng lịch sử để nghiệm thu nhánh này.
+
 ## 1. Mốc kiểm kê và nguồn thẩm quyền
 
 - Ngày kiểm kê: 22/09/2026.
@@ -9,10 +11,13 @@
 - Nguồn thiết kế đối chiếu: Chương 5 hiện hành.
 - Nguồn hiện thực: các commit mã nguồn được xác nhận trong quá trình kiểm kê.
 - Quy tắc kiểm kê: GitNexus chỉ tìm đầu mối; bằng chứng trực tiếp phải được xác nhận lại tại commit đã khóa.
+- Quy tắc chọn đặc tả có hiệu lực: theo lệnh `\input` trong `Chapter4/section2/index.tex` trên `main`. Công tác dùng `Chapter4/section2/hrm/business_trip.tex` (`FR-BTR-01..05`, `UC-BT-01..05`); `Chapter4/section2/business_trip/index.tex` hiện không được nạp, chỉ là bản cũ. iOffice dùng `Chapter4/section2/ioffice_schedule/index.tex`; `ioffice/incomming_docs.tex` không được nạp.
 
 ### Hiệu chỉnh phạm vi ngày 23/09/2026 — phần có hiệu lực khi viết Chương 6
 
 Phần kiểm kê ở Mục 4 được lập theo Chương 4 cũ và giữ lại để truy vết lịch sử, **không còn là ma trận nghiệm thu hiện hành đối với LEV-03, UC-LEV-01, toàn bộ BTR và iOffice**. Bảng dưới đây thay thế các hàng đó; các UC/FR khác không đổi nhưng phiên bản nguồn phải đối chiếu với `06_locked_source_baseline_20260923.md`. Nguồn đặc tả là nhánh `main` (commit `14fe1f6`) đã được đồng bộ vào nhánh `rewrite-chapter-6` tại commit `887439f`.
+
+**Hiệu chỉnh phạm vi được người dùng duyệt sau mốc `main:14fe1f6`:** Chương 1 giới hạn nhiệm vụ trên mobile ở mức theo dõi tiến độ và **xem** các báo cáo tiến độ đã có; tạo/phân công nhiệm vụ và **nộp** báo cáo thuộc iOffice Web. `UC-OFF-04` phân biệt tiếp nhận với hoàn thành: dòng phân công thông tin/để biết có thể hoàn thành khi tiếp nhận, còn dòng giao nhiệm vụ cần thao tác hoàn thành riêng. Hai chỉnh sửa LaTeX này ở nhánh báo cáo hiện tại là nguồn yêu cầu mới; các hàng lịch sử bên dưới không được dùng để khôi phục tiêu chí “100% tiếp nhận là tự hoàn thành văn bản”.
 
 | UC/FR hiện hành | Hành vi cam kết | Đối chiếu hiện thực ở nguồn hiện có | Trạng thái hiện thực / giới hạn cần nêu |
 | --- | --- | --- | --- |
@@ -23,11 +28,11 @@ Phần kiểm kê ở Mục 4 được lập theo Chương 4 cũ và giữ lại
 | FR-BTR-04; UC-BT-04 | Người có thẩm quyền duyệt, trả lại hoặc từ chối theo quy trình | Mobile `approve_business_trip`; HRM BE `duyet.controller.ts` | Có hiện thực; chưa kết luận toàn bộ luồng đa cấp đã được kiểm chứng |
 | FR-BTR-05; UC-BT-05 | TCNS/BGH thu hồi hồ sơ theo thẩm quyền | HRM BE `duyet.controller.ts` có nhánh `THU_HOI` cho người có quyền | Có hiện thực backend; cần kiểm tra quyền, trạng thái/lịch sử và tác động lịch trước khi kết luận chức năng hoạt động đầu–cuối |
 | FR-IOFF-01 | Tra cứu văn bản đến/đi và nhiệm vụ | Mobile `incoming_document`, `outgoing_document`, `mission` | Đã có giao diện/API đọc; OFF-02/03 là kịch bản tra cứu, không phải bằng chứng cho UC-OFF-01 hiện hành |
-| FR-IOFF-02; UC-OFF-01 | Phân công trách nhiệm trên phiếu giải quyết | Mobile `incoming_docs_provider.dart` có `addResolutionForm`/`updateResolutionForm`; giao diện `assignment_card.dart` | Có mã cho thao tác; trạng thái đầu–cuối, phân quyền và kết quả thực tế cần xác minh riêng |
-| FR-IOFF-03; UC-OFF-02; UC-OFF-03; UC-OFF-04 | Tham mưu, chỉ đạo và tiếp nhận văn bản/nhiệm vụ theo quyền | Mobile `incoming_docs_provider.dart` có `adviseDocument`, `directDocument`, `receiveDocument`; UI `workflow_action_fab.dart` | Có mã cho các nhánh; chưa dùng Gate 0 tra cứu văn bản để kết luận các chuyển trạng thái này đã đạt |
-| FR-IOFF-04 | Xem chi tiết nhiệm vụ gắn với văn bản, trạng thái, tiến độ/báo cáo | Mobile `mission_detail_page.dart` và các tab chi tiết | Đã có phần hiển thị; cần đối chiếu dữ liệu nguồn và phạm vi chi tiết được cam kết |
+| FR-IOFF-02; UC-OFF-01 | Phân công trách nhiệm trên phiếu giải quyết; thông báo người nhận; từ chối đối tượng nhận không hợp lệ | Mobile `incoming_docs_provider.dart` có `addResolutionForm`/`updateResolutionForm`; giao diện `assignment_card.dart`; iOffice BE tạo PGQ và chỉ gửi `create-task` trong một số điều kiện | Có mã cho thao tác và biên bản API tạo PGQ; chưa có bằng chứng lưu từ mobile, thông báo đến người nhận hoặc nhánh 3a đối tượng nhận không hợp lệ. Không đồng nhất việc chặn **người thao tác** trái quyền với việc chặn **người nhận** không hợp lệ |
+| FR-IOFF-03; UC-OFF-02; UC-OFF-03; UC-OFF-04 | Tham mưu, chỉ đạo và tiếp nhận văn bản/nhiệm vụ theo quyền; UC-OFF-03 có nhánh tạo nhiệm vụ liên kết; UC-OFF-04 tách tiếp nhận khỏi hoàn thành riêng đối với văn bản giao nhiệm vụ | Mobile `incoming_docs_provider.dart` có `adviseDocument`, `directDocument`, `receiveDocument`; iOffice BE có hai API `tiep-nhan` và `hoan-thanh` cho dòng PGQ, nhánh thông tin/để biết ghi hoàn thành khi tiếp nhận | Có mã cho các nhánh; chưa có artifact trước–sau đủ để xác nhận chuyển trạng thái, nhiệm vụ liên kết, hoàn thành dòng thông tin/để biết hoặc thao tác hoàn thành riêng. Biên bản OFF-04 Fail ở tiêu chí tự hoàn thành theo 100% tiếp nhận thuộc đặc tả cũ, không tự chứng minh UC hiện hành Pass |
+| FR-IOFF-04 | Xem chi tiết nhiệm vụ gắn với văn bản, trạng thái, tiến độ và các báo cáo tiến độ đã có; không nộp báo cáo trên mobile | Mobile `mission_detail_page.dart`, các tab chi tiết và API GET đợt báo cáo; iOffice Web có thao tác nộp/cập nhật tiến độ | Đã có phần hiển thị; OFF-03 chưa chạy nên chưa kết luận toàn bộ luồng tra cứu nhiệm vụ đạt trên thiết bị |
 
-Các mã `UC-BTR-01..03` và `FR-OFF-01..02` dưới đây là mã của đặc tả cũ; **không dùng chúng để đếm mức bao phủ Chương 4 mới**. Kết quả `OFF-01` về quyền tệp được giữ dưới `NFR-03` (phân quyền backend), không tự gán cho UC-OFF-01 mới (phân công).
+Các mã `UC-BTR-01..03` và `FR-OFF-01..02` dưới đây là mã của đặc tả cũ; **không dùng chúng để đếm mức bao phủ Chương 4 mới**. Kết quả `OFF-01` là **mã kịch bản kiểm thử**, được xem xét trong phạm vi `NFR-03` (kiểm tra quyền truy cập dữ liệu ở backend), không phải kết quả của `UC-OFF-01` hiện hành (phân công trách nhiệm). Chương 4 trên `main:14fe1f6` chưa đặc tả tường minh quy tắc chỉ người được phân công/cấp quyền trên từng văn bản mới được tải tệp; đó là chính sách nghiệp vụ người dùng xác nhận khi kiểm thử. Vì vậy chỉ kết luận `OFF-01` sai khác với **tiêu chí kiểm thử theo chính sách đã xác nhận**, không viết rằng nó vi phạm một luồng của `UC-OFF-01` trên `main`.
 
 ### Mục tiêu đề tài (theo Chương 1, Mục 1.2)
 - **Mục tiêu tổng quát:** Phát triển ứng dụng MyHCMUT Mobile phục vụ cán bộ và giảng viên Trường Đại học Bách khoa – ĐHQG-HCM, cho phép người dùng tra cứu thông tin và thực hiện các nghiệp vụ quản lý, điều hành thuộc phạm vi đề tài trên thiết bị di động thông qua việc tích hợp với các hệ thống hiện hữu của Nhà trường.

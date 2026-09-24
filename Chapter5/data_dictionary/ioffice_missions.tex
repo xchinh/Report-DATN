@@ -1,0 +1,66 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\caption[\textit{Từ điển dữ liệu rút gọn của nhóm nhiệm vụ iOffice}]{\textit{Từ điển dữ liệu rút gọn của nhóm nhiệm vụ iOffice}}\label{tab:ioffice_mission_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{mission\_general} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh nhiệm vụ tổng quát. \\
+\cline{2-5}
+ & \texttt{title} & text & -- & Tiêu đề tên gọi của nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{start\_date} & bigint & -- & Thời điểm bắt đầu thực hiện (timestamp). \\
+\cline{2-5}
+ & \texttt{end\_date} & bigint & -- & Hạn chót hoàn thành nhiệm vụ (timestamp). \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái tiến độ thực hiện nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{progress} & integer & -- & Tỷ lệ phần trăm hoàn thành ($0 - 100\%$). \\
+\hline
+\texttt{mission\_outlined} & \texttt{id} & integer & PK, NOT NULL & Định danh đầu việc trong nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & -- & Liên kết logic đến nhiệm vụ tổng quát. \\
+\cline{2-5}
+ & \texttt{parent\_id} & integer & -- & Liên kết logic đệ quy đến đầu việc cha. \\
+\cline{2-5}
+ & \texttt{ten} & varchar & -- & Tên gọi cụ thể của đầu việc. \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái thực hiện của đầu việc. \\
+\hline
+\texttt{mission\_member} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh thành viên tham gia nhiệm vụ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & -- & Liên kết logic đến nhiệm vụ tổng quát. \\
+\cline{2-5}
+ & \texttt{shcc} & varchar & -- & Mã số cán bộ tham gia thực hiện. \\
+\cline{2-5}
+ & \texttt{is\_manage} & boolean & -- & Cờ xác định vai trò quản lý đầu việc. \\
+\hline
+\texttt{mission\_report\_batch} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh đợt báo cáo tiến độ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & FK đến \texttt{mission\_general.id} & Nhiệm vụ được yêu cầu báo cáo. \\
+\cline{2-5}
+ & \texttt{title} & text & -- & Tiêu đề hoặc nội dung yêu cầu báo cáo. \\
+\cline{2-5}
+ & \texttt{due\_date} & bigint & -- & Hạn chót nộp báo cáo (timestamp). \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái tiếp nhận của đợt báo cáo. \\
+\hline
+\texttt{mission\_report} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi báo cáo tiến độ. \\
+\cline{2-5}
+ & \texttt{mission\_id} & integer & FK đến \texttt{mission\_general.id} & Khóa ngoại đến nhiệm vụ được báo cáo. \\
+\cline{2-5}
+ & \texttt{report\_batch\_id} & integer & -- & Liên kết logic đến đợt báo cáo tương ứng. \\
+\cline{2-5}
+ & \texttt{status} & varchar & -- & Trạng thái phê duyệt của báo cáo tiến độ. \\
+\cline{2-5}
+ & \texttt{progress} & integer & -- & Tiến độ hoàn thành tự đánh giá ($\%$). \\
+\end{xltabular}

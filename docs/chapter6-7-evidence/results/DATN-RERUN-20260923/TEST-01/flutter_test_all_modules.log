@@ -1,0 +1,526 @@
+=== FLUTTER AUTOMATED UNIT & WIDGET TESTS EXECUTION ===
+Timestamp: 2026-09-23T17:25:50+07:00
+>>> RUNNING TESTS IN: packages/shared/auth
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_models_test.dart
+00:00 +0: Auth Package Models & DTO Tests AuthUser fromJson and toJson serialization
+00:00 +1: Auth Package Models & DTO Tests LoginResponse fromJson parses tokens and user correctly
+00:00 +2: All tests passed!
+Exit Code (packages/shared/auth): 0
+
+>>> RUNNING TESTS IN: packages/shared/localization
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests resolves text by language code accurately
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests falls back gracefully when requested language is empty
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests fromDynamic parses JSON string, Map, and plain string
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests isEmpty and isNotEmpty properties work as expected
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests resolves explicit known fields correctly
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests handles contextual overrides (nhomDaoTao & phanLoai)
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests smart lexical parser decomposes undeclared camelCase, snake_case & kebab-case with accurate Vietnamese diacritics
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests handles empty and null keys safely
+00:00 +8: All tests passed!
+Exit Code (packages/shared/localization): 0
+
+>>> RUNNING TESTS IN: packages/core/global_system
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/app_batch_action_bar_test.dart
+00:00 +0: AppBatchActionBar Widget Tests renders action buttons and triggers toggle and actions
+00:00 +1: AppBatchActionBar Widget Tests renders Deselect label when isAllSelected is true
+00:00 +2: AppBatchActionBar Widget Tests renders visible bar and buttons even when selectedCount is 0
+00:00 +3: All tests passed!
+Exit Code (packages/core/global_system): 0
+
+>>> RUNNING TESTS IN: modules/notification
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_item_widget_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_item_widget_test.dart: Widget Test: NotificationItemWidget TC-WDG-05: Renders title, subtitle and HRM source badge correctly
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/repositories/notification_repositories_test.dart: Notification Repositories Tests HrmNotificationRepository TC-REP-04a: fetchPage handles HTTP 500 error and throws Exception
+[ERROR] Lỗi khi tải thông báo: null
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/repositories/notification_repositories_test.dart: Notification Repositories Tests IOfficeNotificationRepository TC-REP-04b: iOffice error handling on HTTP 500
+[ERROR] Lỗi khi đánh dấu đã đọc iOffice: null
+00:00 +8: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_bell_widget_test.dart: Widget Test: NotificationBellWidget TC-WDG-01: Badge is hidden when unreadCount == 0
+00:00 +9: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:00 +10: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:00 +11: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:00 +12: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:00 +13: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +14: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +15: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +16: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +17: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +18: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +19: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +20: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +21: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +22: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +23: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +24: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +25: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +26: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +27: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +28: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+00:01 +29: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-10: Shows Loading Skeleton when fetching notifications
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+00:01 +30: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:01 +30: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-01: build() fetches page 1 from HRM & iOffice, merges and sorts descending by sendTime
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 3
+00:01 +30: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+00:01 +30: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-01: build() fetches page 1 from HRM & iOffice, merges and sorts descending by sendTime
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:01 +31: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:01 +31: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-02: fetchNextPage() appends new items and handles hasMore boundary
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:01 +32: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:01 +32: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-03: refresh() reloads list and resets page counter
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+00:01 +33: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:01 +33: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-03: refresh() reloads list and resets page counter
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:01 +33: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-04: markAsRead() optimistic update changes status and decrements unread count
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+00:01 +34: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:01 +34: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-04: markAsRead() optimistic update changes status and decrements unread count
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:01 +34: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-05: markAsRead() rollbacks on repository error
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+[ERROR] Lỗi khi đánh dấu đã đọc: Exception: Simulated markAsRead failure
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+00:02 +35: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +35: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-05: markAsRead() rollbacks on repository error
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +35: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-06: markAllAsRead() marks all unread items and separates HRM & iOffice ids
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 2
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +36: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +36: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_unread_count_test.dart: NotificationUnreadCount Provider Tests TC-CNT-02: increment increases count, clamps at 999, and persists to local storage
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 3
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 4
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 998
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 999
+00:02 +37: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +37: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_unread_count_test.dart: NotificationUnreadCount Provider Tests TC-CNT-02: increment increases count, clamps at 999, and persists to local storage
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +37: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_unread_count_test.dart: NotificationUnreadCount Provider Tests TC-CNT-03: decrement decreases count, clamps at 0, and persists to local storage
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 5
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 3
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+00:02 +38: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +38: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_unread_count_test.dart: NotificationUnreadCount Provider Tests TC-CNT-03: decrement decreases count, clamps at 0, and persists to local storage
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +38: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_unread_count_test.dart: NotificationUnreadCount Provider Tests TC-CNT-04: fetchUnreadCount aggregates unread counts from both HRM and iOffice
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 3
+00:02 +38: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-06: markAllAsRead() marks all unread items and separates HRM & iOffice ids
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+00:02 +39: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +39: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-06: markAllAsRead() marks all unread items and separates HRM & iOffice ids
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +40: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +40: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_unread_count_test.dart: NotificationUnreadCount Provider Tests TC-CNT-04: fetchUnreadCount aggregates unread counts from both HRM and iOffice
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +40: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-07: markSelectedAsRead() only updates selected ids
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 2
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+00:02 +41: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +41: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-07: markSelectedAsRead() only updates selected ids
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +41: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-08: deleteNotification() optimistic remove and undoDelete() restores item correctly
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+00:02 +42: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-11: Shows Error State and Retry button on error
+00:02 +42: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-08: deleteNotification() optimistic remove and undoDelete() restores item correctly
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +42: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-09: deleteNotification() executes backend call after 3s delay
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+[ERROR] Lỗi khi cập nhật System Badge: MissingPluginException(No implementation found for method updateBadge on channel app_badge_plus)
+00:02 +43: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-09: deleteNotification() executes backend call after 3s delay
+00:02 +43: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-12: Shows AppEmptyState when list is empty
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 0
+00:02 +44: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-09: deleteNotification() executes backend call after 3s delay
+00:02 +44: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-13: Renders notifications list and tabs correctly
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+00:02 +45: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-09: deleteNotification() executes backend call after 3s delay
+00:02 +45: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/widgets/notification_list_screen_test.dart: Widget Test: NotificationListScreen TC-WDG-14: Batch Selection Mode toggle and action bar
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+[DEBUG] [AppBadgePlus] Đang cập nhật số Badge hệ thống lên: 1
+00:02 +46: /home/xchinh/workspace/myhcmut-mobile/modules/notification/test/providers/notification_list_provider_test.dart: NotificationList StateNotifier Tests TC-LST-09: deleteNotification() executes backend call after 3s delay
+00:05 +47: All tests passed!
+Exit Code (modules/notification): 0
+
+>>> RUNNING TESTS IN: modules/hrm
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-01: Accepts valid HRM local origin (localhost:6022)
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-02: Accepts valid Android emulator HRM origin (10.0.2.2:6022)
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-03: Accepts valid 127.0.0.1 HRM origin (127.0.0.1:6022)
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-LAN: Accepts valid private LAN IP origins (192.168.1.11:6022, 10.0.0.5:3000)
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-04: Accepts valid HRM production origin (hrm.hcmut.edu.vn)
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-05: Accepts valid iOffice origins (localhost:3000, 10.0.2.2:3000, ioffice.hcmut.edu.vn)
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-06: Rejects malicious origins (evil.com, untrusted domains)
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-07: Rejects untrusted local ports (http://localhost:9999, 10.0.2.2:9999)
+00:00 +8: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-08: Rejects non-HTTP(S) schemes (javascript, file, data)
+00:00 +9: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-09: Rejects insecure HTTP for production domain
+00:00 +10: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-10: Rejects empty or malformed URLs
+00:00 +11: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-01: Successfully generates ticket and parses response
+00:00 +12: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-02: Generates ticket for ioffice targetSystem
+00:00 +13: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-03: Throws descriptive Exception when response missing ticket
+00:00 +14: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-04: Throws descriptive Exception on connection timeout
+00:00 +15: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-05: Throws descriptive Exception on server error response with message
+00:00 +16: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-06: Resolves ssoTicketServiceProvider via Riverpod ProviderContainer
+00:00 +17: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-01: Appends ?ticket= to clean URL without query parameters
+00:00 +18: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-02: Appends or updates ticket query param when other params exist
+00:00 +19: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-03: Replaces existing ticket query param with fresh ticket
+00:00 +20: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-04: Maps localhost:6022 to 10.0.2.2:6022 for Android emulator
+00:00 +21: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-05: Maps 127.0.0.1:6022 to 10.0.2.2:6022 for Android emulator
+00:00 +22: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-06: Maps localhost:3000 to 10.0.2.2:3000 for Android emulator
+00:00 +23: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-07: Maps 127.0.0.1:3000 to 10.0.2.2:3000 for Android emulator
+00:00 +24: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-08: Does not transform localhost when isEmulator is false
+00:00 +25: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-09: Does not transform production URLs on Android emulator
+00:00 +26: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-10: buildTargetUrl combines baseUrl, path, ticket, and applies emulator mapping
+00:00 +27: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-11: buildTargetUrl works without emulator mapping (desktop/iOS/web)
+00:00 +28: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-12: resolveInitialUrl handles both relative and absolute paths
+00:00 +29: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 1. SSO Cookie Manager (clearAllWebViewCookies) TC-CKM-01: Successfully calls deleteAllCookies on CookieManager instance
+[SsoCookieManager] Successfully cleared all WebView cookies.
+00:00 +30: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 1. SSO Cookie Manager (clearAllWebViewCookies) TC-CKM-02: Gracefully handles exceptions from CookieManager without throwing
+[SsoCookieManager] Error clearing WebView cookies: Exception: Native platform channel error
+#0      MockCookieManager.deleteAllCookies (file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart:16:7)
+#1      clearAllWebViewCookies (package:hrm/src/webview/sso_cookie_manager.dart:12:19)
+#2      main.<anonymous closure>.<anonymous closure> (file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart:48:27)
+#3      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#5      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:00 +31: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 1. SSO Cookie Manager (clearAllWebViewCookies) TC-CKM-03: Default invocation without parameter completes safely
+[SsoCookieManager] Error clearing WebView cookies: 'package:flutter_inappwebview_platform_interface/src/platform_cookie_manager.dart': Failed assertion: line 49 pos 7: 'InAppWebViewPlatform.instance != null': A platform implementation for `flutter_inappwebview` has not been set. Please ensure that an implementation of `InAppWebViewPlatform` has been set to `WebViewPlatform.instance` before use. For unit testing, `WebViewPlatform.instance` can be set with your own test implementation.
+#0      _AssertionError._doThrowNew (dart:core-patch/errors_patch.dart:67:4)
+#1      _AssertionError._throwNew (dart:core-patch/errors_patch.dart:49:5)
+#2      new PlatformCookieManager (package:flutter_inappwebview_platform_interface/src/platform_cookie_manager.dart:49:7)
+#3      new CookieManager.fromPlatformCreationParams (package:flutter_inappwebview/src/cookie_manager.dart:20:25)
+#4      new CookieManager (package:flutter_inappwebview/src/cookie_manager.dart:12:14)
+#5      CookieManager.instance (package:flutter_inappwebview/src/cookie_manager.dart:43:21)
+#6      clearAllWebViewCookies (package:hrm/src/webview/sso_cookie_manager.dart:11:52)
+#7      main.<anonymous closure>.<anonymous closure> (file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart:57:27)
+#8      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#10     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:00 +32: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-01: Correctly parses request_logout bridge message
+00:00 +33: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-02: Dispatches request_logout to onRequestLogout callback
+00:00 +34: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-03: handleEvent dispatches request_logout when origin is allowed
+00:00 +35: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-04: handleEvent rejects request_logout when origin is untrusted
+[Security] Bridge event rejected from untrusted origin: https://evil-untrusted-site.com/logout
+00:00 +36: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 3. Mobile Session Transition Listener (authStateProvider -> clearAllWebViewCookies) TC-AUTH-TRN-01: Triggers cookie cleanup when auth state transitions from non-null to null
+00:00 +37: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 3. Mobile Session Transition Listener (authStateProvider -> clearAllWebViewCookies) TC-AUTH-TRN-02: Does not trigger cookie cleanup on initial login (null to non-null)
+00:00 +38: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 3. Mobile Session Transition Listener (authStateProvider -> clearAllWebViewCookies) TC-AUTH-TRN-03: Does not trigger cookie cleanup when remaining authenticated (non-null to non-null)
+00:00 +39: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-01: Successfully parses valid Map with action, data, and timestamp
+00:00 +40: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-02: Successfully parses valid JSON string payload
+00:00 +41: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-03: Successfully parses payload without data field (profile_updated)
+00:00 +42: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-04: Safely parses timestamp from numbers and string numbers
+00:00 +43: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-05: Rejects null, empty map, and invalid types
+00:00 +44: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-06: Rejects malformed JSON strings
+00:00 +45: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-07: Rejects payloads missing action or empty action
+00:00 +46: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-08: Correctly serializes message to JSON
+00:00 +47: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-01: Allows valid local development origins (port 6022)
+00:00 +48: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-02: Allows valid iOffice development origins (port 3000)
+00:00 +49: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-03: Allows valid production HTTPS origins
+00:00 +50: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-04: Rejects untrusted domains
+00:00 +51: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-05: Rejects insecure HTTP on production host
+00:00 +52: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-06: Rejects untrusted local ports
+00:00 +53: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-07: Rejects null or non-HTTP(S) origins
+00:00 +54: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-08: parseAndValidate returns null when origin is untrusted
+[Security] Bridge event rejected from untrusted origin: https://evil.com/phishing
+00:00 +55: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-09: parseAndValidate returns SsoBridgeMessage when origin is trusted
+00:00 +56: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-01: Dispatches profile_updated action to onProfileUpdated callback
+00:00 +57: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-02: Dispatches close_webview action to onCloseWebView callback
+00:00 +58: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-03: Dispatches request_logout action to onRequestLogout callback
+00:00 +59: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-04: Returns false and triggers nothing for unrecognized action
+[Bridge] Unhandled bridge action: unrecognized_random_action
+00:00 +60: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-05: handleEvent blocks execution if origin is untrusted
+[Security] Bridge event rejected from untrusted origin: https://evil-hacker.com
+00:00 +61: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-06: handleEvent returns false if args list is empty
+00:00 +62: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-07: handleEvent successfully handles valid event from allowed origin
+00:01 +63: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.duyet (Đã duyệt) badge correctly
+00:01 +64: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.duyet (Đã duyệt) badge correctly
+00:01 +65: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.duyet (Đã duyệt) badge correctly
+00:01 +66: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.duyet (Đã duyệt) badge correctly
+00:01 +67: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.duyet (Đã duyệt) badge correctly
+00:01 +68: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.gui (Đã gửi) badge correctly
+00:01 +69: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.thuHoi (Đã thu hồi) badge correctly
+00:01 +70: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.traLai (Trả lại) badge correctly
+00:01 +71: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: calculateLeaveBalance & calculateRemainingDays Calculates balance accurately without other pending leaves
+00:01 +72: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.tuChoi (Từ chối) badge correctly
+00:01 +73: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.tuChoi (Từ chối) badge correctly
+00:01 +74: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.tuChoi (Từ chối) badge correctly
+00:01 +75: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: calculateLeaveBalance & calculateRemainingDays Detects quota exceeded (negative remaining days)
+00:01 +76: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +77: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +78: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +79: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +80: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +81: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +82: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +83: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:01 +84: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: checkIfTooLate (Late Registration Rule) Domestic leave >= 5 days requires 3 business days notice (Threshold 3)
+00:01 +85: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: checkIfTooLate (Late Registration Rule) International leave requires 3 business days notice regardless of duration
+00:01 +86: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: checkIfTooLate (Late Registration Rule) Boundary Hour: Exactly 8:00 AM shifts start period to Afternoon
+00:01 +87: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: checkIfTooLate (Late Registration Rule) Boundary Hour: 7:59 AM keeps start period as Morning
+00:01 +88: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: checkIfTooLate (Late Registration Rule) Boundary Hour: Exactly 11:00 AM pushes date by +1 workday Morning
+00:01 +89: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_balance_and_late_test.dart: checkIfTooLate (Late Registration Rule) Same Day Comparison: Same earliest day with Afternoon start vs Afternoon leave is NOT late
+00:02 +90: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +91: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +92: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +93: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +94: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +95: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +96: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +97: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +98: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +99: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +100: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +101: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +102: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +103: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +104: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +105: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +106: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +107: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +108: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +109: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +110: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +111: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +112: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +113: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +114: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +115: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders error message when hasError is true
+00:02 +116: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: VacationBalanceWidget Renders balance summary cards and limit exceeded warning when remaining < 0
+00:02 +117: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/riverpod_providers_test.dart: Riverpod Providers: SelectedYear & SelectedFilter SelectedYear initializes with current year and can be updated
+00:02 +118: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: FileCard Renders uploaded file information and delete action
+00:02 +119: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: FileCard Renders uploaded file information and delete action
+00:02 +120: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: FileCard Renders uploaded file information and delete action
+00:02 +121: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: FileCard Renders uploaded file information and delete action
+00:03 +122: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +123: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +124: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +125: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +126: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +127: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +128: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +129: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +130: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +131: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +132: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:03 +133: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:03 +134: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:03 +135: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:03 +136: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:03 +137: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +138: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +139: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +140: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +141: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +142: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +143: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders add action badge when action is add
+00:04 +144: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_time_off/popup_workflow_buttons_test.dart: PopupWorkflowButtons & LeaveCardWidget Null Safety & Rendering PopupWorkflowButtons renders SizedBox.shrink when user is null (no crash)
+00:04 +145: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +146: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +147: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +148: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +149: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +150: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +151: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +152: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +153: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +154: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +155: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:04 +156: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +157: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +158: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +159: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +160: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +161: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +162: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +163: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +164: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +165: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +166: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +167: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-02: renders resolved ChucVu and DonVi from MasterData
+00:05 +168: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-03: renders without crashing when all optional fields are null
+00:05 +169: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-04: triggers onOpenEdit callback when edit button tapped
+00:05 +170: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/training_group_test.dart: Training Group Parsing (7 nhóm đào tạo) TC-DT-01: lyLichHocVi parses as nhomDaoTao=CHUYEN_MON with correct fields
+00:05 +171: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +172: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +173: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +174: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +175: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +176: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +177: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +178: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +179: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-05: renders smoothly in dark theme without RenderFlex overflow
+00:05 +180: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/training_group_test.dart: Training Group Parsing (7 nhóm đào tạo) TC-DT-10: ngayHieuLuc prioritizes ngayHieuLuc over ngayCap over ngayKetThuc
+00:05 +181: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-01: two salary records are parsed, list length = 2
+00:05 +182: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-02: alias ngayVaoBac maps to ngayBatDau
+00:05 +183: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-03: alias bac maps to bacLuong stored as String
+00:05 +184: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-04: alias maNgach maps to ngach
+00:05 +185: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-05: heSoLuong int 3 is parsed as double 3.0
+00:05 +186: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-06: phanTramHuong 85 is parsed as int 85
+00:05 +187: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-07: key lyLichLuong is accepted as an alias
+00:05 +188: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Salary Parsing (lyLichQtLuong) TC-SL-08: empty lyLichQtLuong array results in empty list
+00:05 +189: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Allowances Parsing (lyLichPhuCap) TC-PC-01: direct key loaiPhuCap is parsed correctly
+00:05 +190: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Allowances Parsing (lyLichPhuCap) TC-PC-02: alias maPhuCap maps to loaiPhuCap
+00:05 +191: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Allowances Parsing (lyLichPhuCap) TC-PC-03: alias tyLe maps to phanTramHuong
+00:05 +192: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Allowances Parsing (lyLichPhuCap) TC-PC-04: heSo 0.25 is parsed as double
+00:05 +193: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart: Allowances Parsing (lyLichPhuCap) TC-PC-05: soTien 500000 is parsed as int
+00:06 +194: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-01: nhomQuanHe=BAN_THAN is parsed correctly
+00:06 +195: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-02: nhomQuanHe=VO_CHONG is parsed correctly
+00:06 +196: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-03: mix 2 BAN_THAN + 1 VO_CHONG yields correct count and classifications
+00:06 +197: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-04: isDangVien=true and soHieuDangVien parsed correctly
+00:06 +198: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-05: isDeceased=true parsed correctly
+00:06 +199: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-06: isNguoiPhuThuoc=true parsed correctly
+00:06 +200: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-07: ngaySinh with year only (int 1958) stays as int 1958
+00:06 +201: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-08: ngaySinh as timestamp ms is parsed without corruption
+00:06 +202: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-09: empty lyLichGiaDinh results in empty list
+00:06 +203: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart: Family Member Parsing (lyLichGiaDinh) TC-GD-10: minimal item with missing optional fields does not crash
+00:06 +204: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: sortWorkEvents TC-TL-01: sorts 3 events descending by ngayBatDau
+00:06 +205: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: sortWorkEvents TC-TL-02: event with ngayBatDau = 0 placed last
+00:06 +206: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: sortWorkEvents TC-TL-03: event with ngayBatDau = null placed last
+00:06 +207: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: sortWorkEvents TC-TL-04: empty list returns empty list
+00:06 +208: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: sortWorkEvents TC-TL-05: single event returns list with that event
+00:06 +209: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-01: 2 don-vi same meta, gap = 0 ms → merged into 1 event
+00:06 +210: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-02: 2 don-vi same meta, gap = exactly 1 day → merged into 1 event
+00:06 +211: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-03: 2 don-vi same meta, gap = 1 ms over 1 day → 2 separate events
+00:06 +212: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-04: 2 don-vi with DIFFERENT meta → NOT merged, 2 events remain
+00:06 +213: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-05: 3 consecutive same-unit don-vi → 1 merged event spanning full range
+00:06 +214: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-06: non-don-vi events (chuc-vu) are passed through unchanged
+00:06 +215: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-07: merged event id starts with merged-dv-
+00:06 +216: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeContinuousDonViEvents TC-MG-08: isChinh from first record (true) preserved in merged event
+00:06 +217: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeChucVuDonViEvents TC-CV-01: chuc-vu + don-vi same period and meta → merged, title contains •
+00:06 +218: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeChucVuDonViEvents TC-CV-02: chuc-vu + don-vi with DIFFERENT ngayBatDau → not merged, 2 events remain
+00:06 +219: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeChucVuDonViEvents TC-CV-03: chuc-vu alone with no matching don-vi → passed through unchanged
+00:06 +220: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeChucVuDonViEvents TC-CV-04: non-chuc-vu/non-don-vi event → passed through unchanged
+00:06 +221: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeWorkEvents — full pipeline TC-FP-01: empty input → empty output
+00:06 +222: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeWorkEvents — full pipeline TC-FP-02: 2 events with different timestamps → sorted descending in result
+00:06 +223: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: mergeWorkEvents — full pipeline TC-FP-03: chuc-vu + don-vi same period → merged result sorted correctly
+00:06 +224: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: extractRawWorkTimelineEvents — trích xuất 8 loại sự kiện TC-EXT-01: returns empty list when lyLichCongTac is null
+00:06 +225: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/timeline_merge_test.dart: extractRawWorkTimelineEvents — trích xuất 8 loại sự kiện TC-EXT-02: extracts congTac and quaTrinhDonVi correctly
+00:06 +226: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:06 +227: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:06 +228: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:06 +229: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:06 +230: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-02: lyLichCongTac with congTac record renders timeline item
+00:07 +231: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-03: lyLichCongTac with active event renders in HIỆN TẠI section
+00:07 +232: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-04: renders in dark theme without any RenderFlex overflow
+00:07 +233: All tests passed!
+Exit Code (modules/hrm): 0
+
+>>> RUNNING TESTS IN: modules/ioffice
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums MissionStatus returns appropriate labels and colors
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums MissionReportBatchStatus returns appropriate labels and colors
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums MissionReportStatus returns appropriate labels and colors
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums Mission deserialization from JSON works properly
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDate formats timestamp correctly
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDate returns fallback for null timestamp
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDateTime formats date and time correctly
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDateTime returns fallback for null timestamp
+00:00 +8: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDateRange formats range properly
+00:00 +9: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils isOverdue and overdueDays work correctly
+00:00 +10: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/custom_table_calendar_test.dart: CustomTableCalendar Tests renders calendar day with centered text layout
+00:01 +11: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/custom_table_calendar_test.dart: CustomTableCalendar Tests renders calendar day with centered text layout
+00:01 +12: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/attendance_widgets_test.dart: AttendanceStatusChip Component Tests TC-WGT-01a: Renders ATTEND status chip with check icon
+00:01 +13: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +14: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +15: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +16: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +17: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +18: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +19: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +20: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +21: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +22: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +23: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +24: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +25: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +26: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +27: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +28: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +29: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +30: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +31: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +32: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +33: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +34: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +35: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +36: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +37: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +38: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +39: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:01 +40: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:02 +41: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:02 +42: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:02 +43: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:02 +44: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:02 +45: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders empty state message when no events for day
+00:02 +46: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_event_card_widget_test.dart: ScheduleEventCardWidget Rendering Tests renders beach_access icon and Nghỉ phép badge for HRM_NGHI_PHEP
+00:02 +47: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor on left border for HRM_NGHI_PHEP
+00:02 +48: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor on left border for HRM_NGHI_PHEP
+00:02 +49: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor on left border for HRM_NGHI_PHEP
+00:02 +50: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/attendance_actions_provider_test.dart: AttendanceActions AsyncNotifier Provider Tests TC-PRV-01: checkin() successfully updates state and calls API
+00:02 +51: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/attendance_actions_provider_test.dart: AttendanceActions AsyncNotifier Provider Tests TC-PRV-01: checkin() successfully updates state and calls API
+00:02 +52: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor for HRM_CONG_TAC
+00:02 +53: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor for HRM_CONG_TAC
+00:02 +54: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor for HRM_CONG_TAC
+00:02 +55: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor for HRM_CONG_TAC
+00:02 +56: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor for HRM_CONG_TAC
+00:02 +57: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor for HRM_CONG_TAC
+00:02 +58: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon and preserves eventColor for HRM_CONG_TAC
+00:02 +59: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests renders arrow_forward_ios icon for default iOffice meeting events
+00:02 +60: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests keeps left border color as eventColor even when event is ended
+00:03 +61: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests CustomTableCalendar receives eventColor matching event.color
+00:03 +62: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/schedule_detail_provider_test.dart: ScheduleDetailProvider Tests TC-DET-01: Fetches and unwraps item wrapped in data property
+00:03 +63: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/schedule_detail_provider_test.dart: ScheduleDetailProvider Tests TC-DET-02: Fetches direct item payload when not wrapped in data
+00:03 +64: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/schedule_detail_provider_test.dart: ScheduleDetailProvider Tests TC-DET-03: Throws error when API fails with 404/500
+00:03 +65: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/schedule_create_provider_test.dart: ScheduleCreate AsyncNotifier Provider Tests TC-PRV-05a: createDonVi() posts to don-vi/create with correct payload
+00:03 +66: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/schedule_create_provider_test.dart: ScheduleCreate AsyncNotifier Provider Tests TC-PRV-05b: createRegister() posts to register/create
+00:03 +67: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/schedule_create_provider_test.dart: ScheduleCreate AsyncNotifier Provider Tests TC-PRV-05c: createDonVi() error transitions to AsyncError
+00:03 +68: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/providers/schedule_create_provider_test.dart: ScheduleCreate AsyncNotifier Provider Tests TC-PRV-05d: createRegister() error transitions to AsyncError
+00:03 +69: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_business_trip_mapper_test.dart: HrmBusinessTripItem parses JSON correctly with numeric and string timestamps
+00:03 +70: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_business_trip_mapper_test.dart: HrmBusinessTripItem isApproved is true for KET_THUC, DUYET, HOAN_THANH, APPROVED
+00:03 +71: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_business_trip_mapper_test.dart: HrmBusinessTripScheduleMapper only maps approved trips and ignores pending/rejected ones
+00:03 +72: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_business_trip_mapper_test.dart: HrmBusinessTripScheduleMapper correctly handles multi-day business trip spanning dates
+00:03 +73: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_leave_mapper_test.dart: HrmLeaveItem parses JSON correctly with numeric and string timestamps
+00:03 +74: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_leave_mapper_test.dart: HrmLeaveScheduleMapper only maps approved leaves and ignores pending or rejected ones
+00:03 +75: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_leave_mapper_test.dart: HrmLeaveScheduleMapper correctly handles half-day leaves
+00:03 +76: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/hrm_leave_mapper_test.dart: HrmLeaveScheduleMapper isEventOnDay checks multi-day span accurately
+00:03 +77: All tests passed!
+Exit Code (modules/ioffice): 0
+

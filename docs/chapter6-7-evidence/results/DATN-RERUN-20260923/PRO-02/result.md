@@ -6,25 +6,23 @@
 | Tiêu chí | `FR-PRO-03-B02`, `UC-PRO-03-B02`, `UC-PRO-03-B03` |
 | Đợt kiểm thử | `DATN-RERUN-20260923` |
 | Thời điểm thực thi | 23/09/2026 (`Asia/Ho_Chi_Minh`) |
-| Đối tượng kiểm thử | HRM BE port 6023 |
+| Đối tượng kiểm thử | HRM BE port 6023 (commit `9e39ccc2`) |
 | Tester | Admin / `TCCB-A` |
-| Trạng thái | **Pass** |
+| Trạng thái kịch bản | **Pass có giới hạn phạm vi (Pass kiểm soát quyền/tham số; Bằng chứng hạn chế cho đối chiếu trước–sau)** |
 
 ---
 
-## 1. Các bước thực hiện & Kết quả thực tế
+## 1. Kết quả chi tiết theo từng nhánh kịch bản
 
-1. **Từ chối không có `detailId` / thiếu tham số bắt buộc:**
-   - Gửi yêu cầu `PUT /api/staff/ly-lich/request/detail/reject` thiếu `detailId`.
-   - Kết quả: Backend từ chối với `status: 400`, `message: "Thiếu detailId"`.
-2. **Kiểm tra phân quyền xử lý đề xuất:**
-   - Cán bộ không có `TCNS_REQUEST_LY_LICH.WRITE` gọi duyệt đề xuất -> Backend từ chối với 401/403.
-3. **Xử lý nội dung hợp lệ:**
-   - Cấp có thẩm quyền duyệt nội dung chi tiết (`/detail/approve`) và từ chối nội dung chi tiết (`/detail/reject`) với lý do hợp lệ -> Backend cập nhật trạng thái chi tiết của từng trường trong đề xuất.
+| Nhánh kiểm thử | Kỳ vọng kế hoạch | Kết quả thực tế | Trạng thái nhánh |
+| --- | --- | --- | :---: |
+| **Nhánh 1: Kiểm soát phân quyền thẩm định** | Cán bộ không có quyền `TCNS_REQUEST_LY_LICH.WRITE` bị backend từ chối thao tác | Gọi endpoint duyệt/từ chối với tài khoản `CB-B` không đủ quyền -> Backend từ chối với HTTP 401/403 | **Pass** |
+| **Nhánh 2: Xác thực tham số bắt buộc** | Yêu cầu thiếu `detailId` hoặc thiếu lý do từ chối phải bị từ chối với mã lỗi hợp lệ | Gửi `PUT /api/staff/ly-lich/request/detail/reject` thiếu `detailId` -> Backend phản hồi `status: 400`, `message: "Thiếu detailId"` | **Pass** |
+| **Nhánh 3: Xử lý duyệt/từ chối từng trường độc lập** | Cấp thẩm quyền duyệt nội dung 1, từ chối nội dung 2 có lý do; trạng thái từng trường và hồ sơ được cập nhật tương ứng | Backend hỗ trợ cập nhật trạng thái chi tiết của từng trường trong đề xuất (`/detail/approve` và `/detail/reject`). **Tuy nhiên, biên bản chưa ghi nhận mã ID đề xuất cụ thể và thiếu snapshot đối chiếu trạng thái từng trường và hồ sơ chính thức trước–sau** | **Bằng chứng hạn chế** |
 
 ---
 
-## 2. Kết luận
+## 2. Ranh giới khẳng định & Kết luận
 
-- Kịch bản đạt trạng thái **Pass**.
-- Quá trình thẩm định đề xuất hồ sơ đảm bảo tính nguyên tử ở cấp độ trường thông tin và thực thi kiểm tra tham số nghiêm ngặt.
+- **Phạm vi đã chứng minh:** Backend HRM kiểm soát phân quyền chặt chẽ theo vai trò thẩm định hồ sơ và xác thực nghiêm ngặt các trường tham số đầu vào của API xử lý chi tiết.
+- **Giới hạn kết luận:** Do đợt chạy này thiếu metadata chi tiết (ID đề xuất, log đối chiếu trạng thái từng trường trước và sau khi xử lý), kết luận Pass của kịch bản được thu hẹp trong phạm vi kiểm soát quyền và tham số; chưa đủ căn cứ để khẳng định toàn diện quy trình đồng bộ hồ sơ chính thức sau thẩm định.

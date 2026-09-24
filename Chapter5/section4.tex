@@ -33,7 +33,7 @@ Trong phạm vi phiên bản hiện tại, WebView được sử dụng để m�
 \subsection{Tích hợp thông báo}
 \label{subsec:tich_hop_thong_bao}
 
-MyHCMUT Mobile sử dụng Firebase Cloud Messaging (FCM) để tiếp nhận thông báo đẩy từ các hệ thống nghiệp vụ. HRM và iOffice duy trì cơ chế tạo và xử lý thông báo riêng; thông báo đẩy từ hai hệ thống được chuyển đến thiết bị thông qua FCM. Phần này tập trung vào điểm tích hợp với ứng dụng; việc xử lý nghiệp vụ và lưu trữ thông báo tại từng hệ thống nguồn không được mô tả chi tiết. Sơ đồ điểm tích hợp và luồng xử lý điều hướng thông báo được thể hiện trong Hình~\ref{fig:notification_routing_flow}.
+Thông báo hỗ trợ người dùng nhận biết và mở nhanh nội dung nghiệp vụ cần xử lý. MyHCMUT Mobile tiếp nhận thông báo từ HRM và iOffice, hiển thị trên thiết bị và điều hướng đến màn hình tương ứng khi người dùng chọn thông báo. Quyền truy cập và dữ liệu vẫn do hệ thống nguồn quản lý. Điểm tích hợp được khái quát trong Hình~\ref{fig:notification_routing_flow}.
 
 \begin{figure}[H]
     \centering
@@ -42,20 +42,20 @@ MyHCMUT Mobile sử dụng Firebase Cloud Messaging (FCM) để tiếp nhận th
     \label{fig:notification_routing_flow}
 \end{figure}
 
-Khi người dùng mở thông báo, ứng dụng đọc thông tin điều hướng trong payload, gồm \texttt{source}, \texttt{entityType}, \texttt{entityId}, \texttt{isApproval} hoặc \texttt{targetLink}, để xác định chức năng và đối tượng nghiệp vụ. Nếu ánh xạ được đích điều hướng, ứng dụng dùng GoRouter để mở màn hình liên quan. Nếu payload không ánh xạ được đến route được hỗ trợ, ứng dụng không thực hiện điều hướng tự động.
+Khi người dùng chọn thông báo, ứng dụng mở màn hình nghiệp vụ tương ứng nếu có đường dẫn được hỗ trợ. Màn hình đích tiếp tục tuân theo quyền truy cập của hệ thống nguồn.
 
-FCM là kênh chuyển thông báo đẩy, không thay thế dữ liệu nghiệp vụ do backend quản lý. Việc gửi thông báo không đồng nghĩa với việc thiết bị chắc chắn đã nhận hoặc người dùng đã xem thông báo.
+Thông báo chỉ hỗ trợ điều hướng; trạng thái nghiệp vụ vẫn được tải từ hệ thống nguồn khi mở màn hình đích.
 
 \subsection{Tổng hợp lịch công tác và cập nhật điểm danh}
 \label{subsec:tich_hop_lich_da_nguon}
 
-\textbf{Tổng hợp lịch công tác.} Ứng dụng xây dựng lịch hiển thị chung từ dữ liệu của iOffice và HRM mà không tạo bảng lịch hợp nhất hoặc quan hệ trực tiếp giữa hai cơ sở dữ liệu. iOffice cung cấp danh sách lịch chính; dữ liệu nghỉ phép và đi công tác từ HRM được ánh xạ sang mô hình \texttt{ScheduleItem}. Flutter hợp nhất các danh sách và sắp xếp kết quả để hiển thị trên cùng giao diện.
+\textbf{Tổng hợp lịch công tác.} Ứng dụng hiển thị chung lịch họp từ iOffice và lịch nghỉ phép, công tác từ HRM. Các nguồn dữ liệu được tải riêng qua dịch vụ tương ứng rồi tổng hợp trên giao diện di động; dữ liệu vẫn thuộc quyền quản lý của từng hệ thống.
 
-Các yêu cầu lấy dữ liệu HRM được xử lý độc lập với nguồn lịch chính. Nếu API nghỉ phép hoặc đi công tác gặp lỗi, ứng dụng vẫn có thể hiển thị lịch lấy từ iOffice. Ngược lại, nếu API lịch chính của iOffice thất bại, provider hiện trả về trạng thái lỗi; ứng dụng chưa bảo đảm tiếp tục hiển thị lịch chỉ từ hai nguồn HRM trong trường hợp này. Để phân biệt các sự kiện HRM trong mô hình hiển thị, ứng dụng sử dụng quy ước định danh riêng, trong đó có ID âm. Quy ước này chỉ phục vụ xử lý tại Flutter, không làm thay đổi khóa chính hoặc cấu trúc dữ liệu của hệ thống nguồn.
+Nếu dữ liệu nghỉ phép hoặc công tác không tải được, lịch họp từ iOffice vẫn có thể hiển thị. Lịch cần dữ liệu từ iOffice để tải danh sách sự kiện chính; các hệ thống nguồn không dùng chung cơ sở dữ liệu.
 
-\textbf{Cập nhật điểm danh cuộc họp.} Các thao tác điểm danh, báo vắng và hoàn tác được ứng dụng gửi đến iOffice Backend thông qua REST API. Sau khi trạng thái điểm danh thay đổi, iOffice Backend phát sự kiện Socket.IO để thông báo cho các thiết bị đang theo dõi lịch. Trong implementation hiện tại, sự kiện \texttt{scheduleCheckin} được sử dụng cho thao tác điểm danh và hoàn tác điểm danh, còn \texttt{scheduleAbsence} được sử dụng cho thao tác báo vắng.
+\textbf{Cập nhật điểm danh cuộc họp.} Ứng dụng gửi thao tác điểm danh, hoàn tác hoặc báo vắng đến iOffice Backend. Khi trạng thái thay đổi, các thiết bị đang theo dõi lịch được thông báo để làm mới dữ liệu.
 
-Khi nhận được sự kiện, ứng dụng vô hiệu hóa trạng thái chi tiết lịch đang lưu và tải lại dữ liệu từ backend để cập nhật giao diện. REST API đảm nhiệm thực hiện thao tác nghiệp vụ, còn Socket.IO thông báo thay đổi trạng thái để các thiết bị đang theo dõi tải lại dữ liệu; trạng thái hiển thị được lấy từ phản hồi của backend. Hai cơ chế tích hợp lịch và điểm danh được tổng hợp trong Hình~\ref{fig:multi_source_schedule_flow}.
+Sau khi có thay đổi, ứng dụng làm mới dữ liệu từ backend để cập nhật giao diện trên các thiết bị đang theo dõi. Thao tác nghiệp vụ và trạng thái cuối cùng do iOffice Backend xử lý; các cơ chế tích hợp được tổng hợp trong Hình~\ref{fig:multi_source_schedule_flow}.
 
 \begin{figure}[H]
     \centering
