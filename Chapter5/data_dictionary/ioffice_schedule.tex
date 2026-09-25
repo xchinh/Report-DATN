@@ -1,54 +1,54 @@
-\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
 \caption[\textit{Từ điển dữ liệu rút gọn của nhóm lịch và điểm danh iOffice}]{\textit{Từ điển dữ liệu rút gọn của nhóm lịch và điểm danh iOffice}}\label{tab:ioffice_schedule_dictionary}\\
 \hline
-\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
 \hline
 \endfirsthead
-\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
 \hline
-\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
 \hline
 \endhead
 \hline
-\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
 \endfoot
 \hline
 \endlastfoot
-\texttt{schedule\_general} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh lịch tổng quát. \\
-\cline{2-5}
- & \texttt{name} & varchar & -- & Tên của lịch làm việc tổng quát. \\
+\texttt{schedule\_general} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh lịch tổng quát. \\
+\cline{2-4}
+ & \texttt{name} & varchar & Tên của lịch làm việc tổng quát. \\
 \hline
-\texttt{schedule\_general\_item} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh sự kiện hoặc cuộc họp. \\
-\cline{2-5}
- & \texttt{general\_id} & integer & -- & Liên kết logic đến lịch tổng quát. \\
-\cline{2-5}
- & \texttt{name} & text & -- & Tên hoặc nội dung sự kiện, cuộc họp. \\
-\cline{2-5}
- & \texttt{start\_time} & bigint & -- & Thời điểm bắt đầu sự kiện (timestamp). \\
-\cline{2-5}
- & \texttt{end\_time} & bigint & -- & Thời điểm kết thúc sự kiện (timestamp). \\
+\texttt{schedule\_general\_item} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh sự kiện hoặc cuộc họp. \\
+\cline{2-4}
+ & \texttt{general\_id} & integer & Liên kết logic đến lịch tổng quát. \\
+\cline{2-4}
+ & \texttt{name} & text & Tên hoặc nội dung sự kiện, cuộc họp. \\
+\cline{2-4}
+ & \texttt{start\_time} & bigint & Thời điểm bắt đầu sự kiện (timestamp). \\
+\cline{2-4}
+ & \texttt{end\_time} & bigint & Thời điểm kết thúc sự kiện (timestamp). \\
 \hline
-\texttt{schedule\_general\_assign} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phân công tham dự sự kiện. \\
-\cline{2-5}
- & \texttt{item\_id} & integer & -- & Liên kết logic đến sự kiện lịch tương ứng. \\
-\cline{2-5}
- & \texttt{shcc} & varchar & -- & Mã cán bộ được phân công tham dự. \\
-\cline{2-5}
- & \texttt{vai\_tro} & varchar & -- & Vai trò trong sự kiện (chủ trì, tham dự). \\
+\texttt{schedule\_general\_assign} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh phân công tham dự sự kiện. \\
+\cline{2-4}
+ & \texttt{item\_id} & integer & Liên kết logic đến sự kiện lịch tương ứng. \\
+\cline{2-4}
+ & \texttt{shcc} & varchar & Mã cán bộ được phân công tham dự. \\
+\cline{2-4}
+ & \texttt{vai\_tro} & varchar & Vai trò trong sự kiện (chủ trì, tham dự). \\
 \hline
-\texttt{schedule\_meeting\_attendance} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh kết quả điểm danh. \\
-\cline{2-5}
- & \texttt{item\_id} & integer & NOT NULL & Liên kết logic đến sự kiện cuộc họp. \\
-\cline{2-5}
- & \texttt{assign\_id} & integer & -- & Liên kết logic đến phân công tham dự. \\
-\cline{2-5}
- & \texttt{attended} & boolean & -- & Kết quả điểm danh (có mặt hoặc vắng mặt). \\
-\cline{2-5}
- & \texttt{ly\_do} & varchar & -- & Lý do xin vắng mặt cuộc họp nếu có. \\
-\cline{2-5}
- & \texttt{created\_by} & varchar & -- & Mã cán bộ ghi nhận điểm danh. \\
-\cline{2-5}
- & \texttt{created\_by\_}\mbox{\texttt{don\_vi}} & varchar & -- & Đơn vị của người ghi nhận điểm danh. \\
-\cline{2-5}
- & \texttt{created\_at} & bigint & -- & Thời điểm thực hiện điểm danh (timestamp). \\
+\texttt{schedule\_meeting\_attendance} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh kết quả điểm danh. \\
+\cline{2-4}
+ & \texttt{item\_id} & integer (NOT NULL) & Liên kết logic đến sự kiện cuộc họp. \\
+\cline{2-4}
+ & \texttt{assign\_id} & integer & Liên kết logic đến phân công tham dự. \\
+\cline{2-4}
+ & \texttt{attended} & boolean & Kết quả điểm danh (có mặt hoặc vắng mặt). \\
+\cline{2-4}
+ & \texttt{ly\_do} & varchar & Lý do xin vắng mặt cuộc họp nếu có. \\
+\cline{2-4}
+ & \texttt{created\_by} & varchar & Mã cán bộ ghi nhận điểm danh. \\
+\cline{2-4}
+ & \texttt{created\_by\_}\mbox{\texttt{don\_vi}} & varchar & Đơn vị của người ghi nhận điểm danh. \\
+\cline{2-4}
+ & \texttt{created\_at} & bigint & Thời điểm thực hiện điểm danh (timestamp). \\
 \end{xltabular}

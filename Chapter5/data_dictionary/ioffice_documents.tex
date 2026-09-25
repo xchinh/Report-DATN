@@ -1,56 +1,56 @@
-\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
 \caption[\textit{Từ điển dữ liệu rút gọn của nhóm văn bản iOffice}]{\textit{Từ điển dữ liệu rút gọn của nhóm văn bản iOffice}}\label{tab:ioffice_document_dictionary}\\
 \hline
-\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
 \hline
 \endfirsthead
-\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
 \hline
-\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
 \hline
 \endhead
 \hline
-\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
 \endfoot
 \hline
 \endlastfoot
-\texttt{eoffice\_van\_ban\_den} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh văn bản đến. \\
-\cline{2-5}
- & \texttt{so\_van\_ban} & varchar & -- & Số hiệu phát hành của văn bản đến. \\
-\cline{2-5}
- & \texttt{noi\_dung} & text & -- & Nội dung trích yếu, tóm tắt của văn bản. \\
-\cline{2-5}
- & \texttt{ngay\_van\_ban} & bigint & -- & Ngày ban hành văn bản (timestamp). \\
-\cline{2-5}
- & \texttt{ngay\_nhan} & bigint & -- & Ngày cơ quan tiếp nhận văn bản (timestamp). \\
-\cline{2-5}
- & \texttt{han\_hoan\_thanh} & bigint & -- & Hạn hoàn thành xử lý văn bản (timestamp). \\
-\cline{2-5}
- & \texttt{trang\_thai} & varchar & -- & Trạng thái xử lý văn bản hiện tại. \\
-\cline{2-5}
- & \texttt{mission\_id} & integer & -- & Liên kết logic đến nhiệm vụ phát sinh từ văn bản. \\
-\cline{2-5}
- & \texttt{created\_at} & bigint & NOT NULL & Thời điểm tạo bản ghi văn bản. \\
+\texttt{eoffice\_van\_ban\_den} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh văn bản đến. \\
+\cline{2-4}
+ & \texttt{so\_van\_ban} & varchar & Số hiệu phát hành của văn bản đến. \\
+\cline{2-4}
+ & \texttt{noi\_dung} & text & Nội dung trích yếu, tóm tắt của văn bản. \\
+\cline{2-4}
+ & \texttt{ngay\_van\_ban} & bigint & Ngày ban hành văn bản (timestamp). \\
+\cline{2-4}
+ & \texttt{ngay\_nhan} & bigint & Ngày cơ quan tiếp nhận văn bản (timestamp). \\
+\cline{2-4}
+ & \texttt{han\_hoan\_thanh} & bigint & Hạn hoàn thành xử lý văn bản (timestamp). \\
+\cline{2-4}
+ & \texttt{trang\_thai} & varchar & Trạng thái xử lý văn bản hiện tại. \\
+\cline{2-4}
+ & \texttt{mission\_id} & integer & Liên kết logic đến nhiệm vụ phát sinh từ văn bản. \\
+\cline{2-4}
+ & \texttt{created\_at} & bigint (NOT NULL) & Thời điểm tạo bản ghi văn bản. \\
 \hline
-\texttt{eoffice\_van\_ban\_di} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh văn bản đi. \\
-\cline{2-5}
- & \texttt{ky\_hieu} & varchar & -- & Ký hiệu phân loại của văn bản đi. \\
-\cline{2-5}
- & \texttt{so} & varchar & -- & Số hiệu cấp cho văn bản đi. \\
-\cline{2-5}
- & \texttt{trich\_yeu} & varchar & -- & Trích yếu nội dung văn bản phát hành. \\
-\cline{2-5}
- & \texttt{trang\_thai} & varchar & -- & Trạng thái phê duyệt của văn bản đi. \\
+\texttt{eoffice\_van\_ban\_di} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh văn bản đi. \\
+\cline{2-4}
+ & \texttt{ky\_hieu} & varchar & Ký hiệu phân loại của văn bản đi. \\
+\cline{2-4}
+ & \texttt{so} & varchar & Số hiệu cấp cho văn bản đi. \\
+\cline{2-4}
+ & \texttt{trich\_yeu} & varchar & Trích yếu nội dung văn bản phát hành. \\
+\cline{2-4}
+ & \texttt{trang\_thai} & varchar & Trạng thái phê duyệt của văn bản đi. \\
 \hline
-\texttt{eoffice\_distribution} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi phân phối văn bản. \\
-\cline{2-5}
- & \texttt{distributed\_id} & integer & -- & Khóa đa hình tham chiếu đến văn bản liên quan. \\
-\cline{2-5}
- & \texttt{distributed\_type} & varchar & -- & Loại đối tượng phân phối (văn bản đến, đi). \\
-\cline{2-5}
- & \texttt{shcc} & varchar & -- & Mã cán bộ được chỉ định nhận xử lý. \\
-\cline{2-5}
- & \mbox{\texttt{ma\_don\_vi}} & varchar & -- & Mã đơn vị được chỉ định xử lý văn bản. \\
-\cline{2-5}
- & \texttt{status} & varchar & -- & Trạng thái tiếp nhận và xử lý phân phối. \\
+\texttt{eoffice\_distribution} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh bản ghi phân phối văn bản. \\
+\cline{2-4}
+ & \texttt{distributed\_id} & integer & Khóa đa hình tham chiếu đến văn bản liên quan. \\
+\cline{2-4}
+ & \texttt{distributed\_type} & varchar & Loại đối tượng phân phối (văn bản đến, đi). \\
+\cline{2-4}
+ & \texttt{shcc} & varchar & Mã cán bộ được chỉ định nhận xử lý. \\
+\cline{2-4}
+ & \mbox{\texttt{ma\_don\_vi}} & varchar & Mã đơn vị được chỉ định xử lý văn bản. \\
+\cline{2-4}
+ & \texttt{status} & varchar & Trạng thái tiếp nhận và xử lý phân phối. \\
 \end{xltabular}

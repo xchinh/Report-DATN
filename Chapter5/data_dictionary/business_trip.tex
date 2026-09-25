@@ -1,86 +1,86 @@
-\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{1.8cm}|L{2.4cm}|Y|}
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
 \caption[\textit{Từ điển dữ liệu rút gọn của phân hệ công tác}]{\textit{Từ điển dữ liệu rút gọn của phân hệ công tác}}\label{tab:business_trip_dictionary}\\
 \hline
-\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
 \hline
 \endfirsthead
-\multicolumn{5}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
 \hline
-\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Ràng buộc vật lý} & \textbf{Vai trò} \\
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
 \hline
 \endhead
 \hline
-\multicolumn{5}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
 \endfoot
 \hline
 \endlastfoot
-\texttt{tcns\_dang\_ky\_cong\_tac} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh phiếu đăng ký công tác. \\
-\cline{2-5}
- & \texttt{shcc} & text & -- & Mã cán bộ đăng ký chuyến công tác. \\
-\cline{2-5}
- & \mbox{\texttt{don\_vi}} & text & -- & Đơn vị công tác của cán bộ đăng ký. \\
-\cline{2-5}
- & \texttt{ngay\_bat\_dau} & numeric & -- & Ngày bắt đầu chuyến công tác. \\
-\cline{2-5}
- & \texttt{ngay\_ket\_thuc} & numeric & -- & Ngày kết thúc chuyến công tác. \\
-\cline{2-5}
- & \texttt{dia\_diem} & text & -- & Địa điểm đến công tác. \\
-\cline{2-5}
- & \texttt{quoc\_gia} & jsonb & -- & Thông tin quốc gia (công tác nước ngoài). \\
-\cline{2-5}
- & \texttt{noi\_dung} & text & -- & Nội dung chi tiết của chuyến công tác. \\
-\cline{2-5}
- & \texttt{muc\_tieu} & text & -- & Mục tiêu đạt được của chuyến đi. \\
-\cline{2-5}
- & \texttt{nguon\_kinh\_phi} & text & -- & Nguồn kinh phí chi trả cho chuyến đi. \\
-\cline{2-5}
- & \texttt{files} & jsonb & -- & Danh sách tệp quyết định hoặc minh chứng. \\
-\cline{2-5}
- & \texttt{ma\_quy\_trinh} & text & -- & Mã quy trình phê duyệt công tác. \\
-\cline{2-5}
- & \texttt{trang\_thai} & text & -- & Trạng thái phê duyệt hiện tại của phiếu. \\
+\texttt{tcns\_dang\_ky\_cong\_tac} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh phiếu đăng ký công tác. \\
+\cline{2-4}
+ & \texttt{shcc} & text & Mã cán bộ đăng ký chuyến công tác. \\
+\cline{2-4}
+ & \mbox{\texttt{don\_vi}} & text & Đơn vị công tác của cán bộ đăng ký. \\
+\cline{2-4}
+ & \texttt{ngay\_bat\_dau} & numeric & Ngày bắt đầu chuyến công tác. \\
+\cline{2-4}
+ & \texttt{ngay\_ket\_thuc} & numeric & Ngày kết thúc chuyến công tác. \\
+\cline{2-4}
+ & \texttt{dia\_diem} & text & Địa điểm đến công tác. \\
+\cline{2-4}
+ & \texttt{quoc\_gia} & jsonb & Thông tin quốc gia (công tác nước ngoài). \\
+\cline{2-4}
+ & \texttt{noi\_dung} & text & Nội dung chi tiết của chuyến công tác. \\
+\cline{2-4}
+ & \texttt{muc\_tieu} & text & Mục tiêu đạt được của chuyến đi. \\
+\cline{2-4}
+ & \texttt{nguon\_kinh\_phi} & text & Nguồn kinh phí chi trả cho chuyến đi. \\
+\cline{2-4}
+ & \texttt{files} & jsonb & Danh sách tệp quyết định hoặc minh chứng. \\
+\cline{2-4}
+ & \texttt{ma\_quy\_trinh} & text & Mã quy trình phê duyệt công tác. \\
+\cline{2-4}
+ & \texttt{trang\_thai} & text & Trạng thái phê duyệt hiện tại của phiếu. \\
 \hline
-\texttt{tcns\_dang\_ky\_cong\_tac\_tham\_gia} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh thành viên tham gia đoàn. \\
-\cline{2-5}
- & \texttt{dang\_ky\_id} & numeric & -- & Liên kết logic đến phiếu đăng ký công tác. \\
-\cline{2-5}
- & \texttt{shcc} & text & -- & Mã số của cán bộ tham gia đoàn. \\
-\cline{2-5}
- & \mbox{\texttt{don\_vi}} & text & -- & Đơn vị công tác của cán bộ tham gia. \\
-\cline{2-5}
- & \texttt{chuc\_vu} & text & -- & Chức vụ của cán bộ tham gia. \\
-\cline{2-5}
- & \texttt{is\_truong\_doan} & boolean & -- & Cờ xác định cán bộ là trưởng đoàn. \\
-\cline{2-5}
- & \texttt{is\_dang\_vien} & boolean & -- & Thông tin Đảng viên phục vụ đối ngoại. \\
+\texttt{tcns\_dang\_ky\_cong\_tac\_tham\_gia} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh thành viên tham gia đoàn. \\
+\cline{2-4}
+ & \texttt{dang\_ky\_id} & numeric & Liên kết logic đến phiếu đăng ký công tác. \\
+\cline{2-4}
+ & \texttt{shcc} & text & Mã số của cán bộ tham gia đoàn. \\
+\cline{2-4}
+ & \mbox{\texttt{don\_vi}} & text & Đơn vị công tác của cán bộ tham gia. \\
+\cline{2-4}
+ & \texttt{chuc\_vu} & text & Chức vụ của cán bộ tham gia. \\
+\cline{2-4}
+ & \texttt{is\_truong\_doan} & boolean & Cờ xác định cán bộ là trưởng đoàn. \\
+\cline{2-4}
+ & \texttt{is\_dang\_vien} & boolean & Thông tin Đảng viên phục vụ đối ngoại. \\
 \hline
-\texttt{tcns\_dang\_ky\_cong\_tac\_ke\_hoach} & \texttt{id} & integer & Tự tăng, NOT NULL & Định danh kỹ thuật; chưa có PK vật lý. \\
-\cline{2-5}
- & \texttt{dang\_ky\_id} & integer & -- & Liên kết logic đến phiếu đăng ký công tác. \\
-\cline{2-5}
- & \texttt{stt} & integer & -- & Thứ tự mốc hoạt động trong kế hoạch. \\
-\cline{2-5}
- & \texttt{noi\_dung} & text & -- & Nội dung hoạt động tại mốc kế hoạch. \\
-\cline{2-5}
- & \texttt{ngay\_bat\_dau} & bigint & -- & Thời điểm bắt đầu hoạt động (timestamp). \\
-\cline{2-5}
- & \texttt{ngay\_ket\_thuc} & bigint & -- & Thời điểm kết thúc hoạt động (timestamp). \\
-\cline{2-5}
- & \texttt{dia\_diem} & text & -- & Địa điểm cụ thể của hoạt động kế hoạch. \\
+\texttt{tcns\_dang\_ky\_cong\_tac\_ke\_hoach} & \texttt{id} & integer (Tự tăng, NOT NULL) & Định danh kỹ thuật; chưa có PK vật lý. \\
+\cline{2-4}
+ & \texttt{dang\_ky\_id} & integer & Liên kết logic đến phiếu đăng ký công tác. \\
+\cline{2-4}
+ & \texttt{stt} & integer & Thứ tự mốc hoạt động trong kế hoạch. \\
+\cline{2-4}
+ & \texttt{noi\_dung} & text & Nội dung hoạt động tại mốc kế hoạch. \\
+\cline{2-4}
+ & \texttt{ngay\_bat\_dau} & bigint & Thời điểm bắt đầu hoạt động (timestamp). \\
+\cline{2-4}
+ & \texttt{ngay\_ket\_thuc} & bigint & Thời điểm kết thúc hoạt động (timestamp). \\
+\cline{2-4}
+ & \texttt{dia\_diem} & text & Địa điểm cụ thể của hoạt động kế hoạch. \\
 \hline
-\texttt{tcns\_qua\_trinh\_di\_cong\_tac} & \texttt{id} & integer & PK, tự tăng, NOT NULL & Định danh bản ghi quá trình công tác. \\
-\cline{2-5}
- & \texttt{dang\_ky\_id} & numeric & -- & Liên kết logic đến phiếu đăng ký công tác. \\
-\cline{2-5}
- & \texttt{shcc} & text & -- & Mã cán bộ thực hiện công tác. \\
-\cline{2-5}
- & \texttt{ngay\_bat\_dau} & numeric & -- & Ngày bắt đầu theo kế hoạch. \\
-\cline{2-5}
- & \texttt{ngay\_ket\_thuc} & numeric & -- & Ngày kết thúc theo kế hoạch. \\
-\cline{2-5}
- & \texttt{ngay\_ve\_thuc\_te} & bigint & -- & Thời điểm trở về thực tế của cán bộ. \\
-\cline{2-5}
- & \texttt{noi\_dung} & text & -- & Nội dung công việc đã thực hiện. \\
-\cline{2-5}
- & \texttt{ket\_qua\_cong\_tac} & text & -- & Kết quả và báo cáo sau chuyến công tác. \\
+\texttt{tcns\_qua\_trinh\_di\_cong\_tac} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh bản ghi quá trình công tác. \\
+\cline{2-4}
+ & \texttt{dang\_ky\_id} & numeric & Liên kết logic đến phiếu đăng ký công tác. \\
+\cline{2-4}
+ & \texttt{shcc} & text & Mã cán bộ thực hiện công tác. \\
+\cline{2-4}
+ & \texttt{ngay\_bat\_dau} & numeric & Ngày bắt đầu theo kế hoạch. \\
+\cline{2-4}
+ & \texttt{ngay\_ket\_thuc} & numeric & Ngày kết thúc theo kế hoạch. \\
+\cline{2-4}
+ & \texttt{ngay\_ve\_thuc\_te} & bigint & Thời điểm trở về thực tế của cán bộ. \\
+\cline{2-4}
+ & \texttt{noi\_dung} & text & Nội dung công việc đã thực hiện. \\
+\cline{2-4}
+ & \texttt{ket\_qua\_cong\_tac} & text & Kết quả và báo cáo sau chuyến công tác. \\
 \end{xltabular}

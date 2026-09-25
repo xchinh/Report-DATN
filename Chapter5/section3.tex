@@ -1,9 +1,16 @@
 \section{Mô hình dữ liệu phục vụ ứng dụng}
 \label{sec:thietke_csdl}
 
-Mục này trình bày các nhóm dữ liệu nghiệp vụ liên quan trực tiếp đến những chức năng của MyHCMUT Mobile. HRM và iOffice sử dụng hai cơ sở dữ liệu PostgreSQL riêng biệt đã tồn tại trước đề tài; nhóm không thiết kế mới toàn bộ cơ sở dữ liệu của hai hệ thống. Các lược đồ được rút gọn từ schema thực tế và chỉ giữ những thực thể, quan hệ chi phối các luồng trên ứng dụng. Các bảng từ điển dữ liệu được đặt ngay sau mô hình của từng phân hệ để thuận tiện đối chiếu trường dữ liệu với các thực thể tương ứng.
-
-Trong các lược đồ dữ liệu, đường màu xanh biểu diễn khóa ngoại vật lý đã được xác nhận từ schema, còn đường màu cam biểu diễn liên kết logic do backend duy trì. Ký hiệu khóa chính, duy nhất và không rỗng chỉ được sử dụng khi có constraint vật lý tương ứng. Các tệp DBML phục vụ trực quan hóa báo cáo, không được sử dụng để sinh migration hoặc thay thế schema của hệ thống đang vận hành.
+Mục này trình bày các nhóm dữ liệu nghiệp vụ liên quan trực tiếp đến những chức năng của MyHCMUT Mobile. HRM và iOffice sử dụng hai cơ sở dữ liệu PostgreSQL riêng biệt đã tồn tại trước đề tài; nhóm không thiết kế mới toàn bộ cơ sở dữ liệu của hai hệ thống. Các lược đồ được rút gọn từ schema thực tế và chỉ giữ những thực thể, quan hệ liên quan đến các tính năng trên ứng dụng.
+\subsection{Tổng quan sơ đồ erd}
+\label{subsec:tong_quan_erd}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{image/erd/erd.png}
+    \caption{\textit{Tổng quan sơ đồ ERD}}
+    \label{fig:chapter5_erd}
+\end{figure}
+\clearpage
 
 \subsection{Tổng quan mô hình dữ liệu}
 \label{subsec:tong_quan_csdl}
