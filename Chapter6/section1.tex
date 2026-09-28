@@ -3,12 +3,7 @@
 
 Mục này trình bày kết quả xây dựng ứng dụng theo các nhóm nghiệp vụ đã đặc tả ở Chương~4. Phần nhóm trực tiếp phát triển gồm các màn hình và luồng Flutter cùng những API hoặc cơ chế tích hợp được bổ sung ở backend; dữ liệu và quy tắc nghiệp vụ sẵn có của HRM/iOffice được tái sử dụng, còn biểu mẫu lý lịch của HRM Web được mở qua WebView. Ranh giới từng thành phần được nêu ở Bảng~\ref{tab:component_ownership_scope}. Một số ảnh giao diện đã được thay thông tin định danh; các ảnh này chỉ minh họa cách trình bày và thao tác. Mức độ hoạt động đúng trong môi trường tích hợp được đánh giá riêng ở Mục~\ref{sec:kiemthu_danhgia}.
 
-\subsection{Cấu trúc mã nguồn và ranh giới tích hợp}
-
-Mã nguồn ứng dụng được tổ chức trong một kho Flutter gồm ứng dụng chính \texttt{apps/myhcmut}, các gói dùng chung và các module theo nghiệp vụ. Hai module \texttt{hrm} và \texttt{ioffice} đảm nhiệm các giao diện nhân sự, văn phòng số và lịch; thành phần xác thực và thông báo hỗ trợ các luồng này. Cách phân chia đó tương ứng với thiết kế ứng dụng ở Chương~5 và cho phép các nhóm chức năng sử dụng chung cơ chế điều hướng, quản lý phiên và giao tiếp API.
-
-MyHCMUT Mobile không thay thế HRM hoặc iOffice. Ứng dụng cung cấp giao diện trên thiết bị di động, gửi yêu cầu đến backend tương ứng và hiển thị kết quả do hệ thống nguồn trả về. Riêng chức năng cập nhật hồ sơ sử dụng biểu mẫu HRM Web trong WebView; các chức năng iOffice được tích hợp bằng giao diện Flutter và API, không sử dụng iOffice WebView.
-
+\subsection{Trang chủ}
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.43\linewidth,height=0.53\textheight,keepaspectratio]{image/chapter6/schedule_home_vi_demo.png}
