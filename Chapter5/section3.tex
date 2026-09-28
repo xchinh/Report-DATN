@@ -30,8 +30,8 @@ Redis, token thiết bị và dữ liệu thông báo không thuộc lược đ�
             \includegraphics[width=\linewidth,height=0.25\textheight,keepaspectratio]{image/erd/chapter5-data-overview.png}%
         }{%
             \fbox{\parbox{0.90\linewidth}{\centering\vspace{1.2cm}
-            \textit{Xuất hình từ \texttt{docs/chapter5/schema-overview.dbml}}
-            \vspace{1.2cm}}}%
+                    \textit{Xuất hình từ \texttt{docs/chapter5/schema-overview.dbml}}
+                    \vspace{1.2cm}}}%
         }%
     }
     \caption[\textit{Lược đồ tổng quan các miền dữ liệu phục vụ MyHCMUT Mobile}]{\textit{Lược đồ tổng quan các miền dữ liệu phục vụ MyHCMUT Mobile}}
@@ -41,7 +41,7 @@ Redis, token thiết bị và dữ liệu thông báo không thuộc lược đ�
 \subsection{Dữ liệu quản lý hồ sơ cá nhân}
 \label{subsec:du_lieu_ho_so}
 
-Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính sách cập nhật của từng trường thông tin, HRM Backend có thể ghi trực tiếp một số thay đổi vào hồ sơ chính thức hoặc tiếp nhận đề xuất cần thẩm định. Với các đề xuất này, yêu cầu được lưu tại \texttt{staff\_ly\_lich\_request}, nội dung thay đổi theo từng trường tại \texttt{staff\_ly\_lich\_request\_detail} và tệp minh chứng tại \texttt{staff\_ly\_lich\_request\_file}; sau khi được xử lý theo quy trình, các thay đổi được chấp thuận mới được phản ánh vào hồ sơ chính thức. Các liên kết qua \texttt{shcc}, \texttt{request\_id} và \texttt{request\_detail\_id} là liên kết logic, chưa được khai báo thành khóa ngoại vật lý trong schema đối chiếu. Cấu trúc các bảng của phân hệ hồ sơ cá nhân được thể hiện trong Hình~\ref{fig:chapter5_profile_schema}.
+Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính sách cập nhật của từng trường thông tin, HRM Backend có thể ghi trực tiếp một số thay đổi vào hồ sơ chính thức hoặc tiếp nhận đề xuất cần thẩm định. Với các đề xuất này, yêu cầu được lưu tại \texttt{tcns\_ly\_lich\_request}, nội dung thay đổi theo từng trường tại \texttt{tcns\_ly\_lich\_request\_detail} và tệp minh chứng tại \texttt{tcns\_ly\_lich\_request\_file}; sau khi được xử lý theo quy trình, các thay đổi được chấp thuận mới được phản ánh vào hồ sơ chính thức. Các liên kết qua \texttt{shcc}, \texttt{request\_id} và \texttt{request\_detail\_id} là liên kết logic, chưa được khai báo thành khóa ngoại vật lý trong schema đối chiếu. Cấu trúc các bảng của phân hệ hồ sơ cá nhân được thể hiện trong Hình~\ref{fig:chapter5_profile_schema}.
 
 \begin{figure}[H]
     \centering
@@ -53,6 +53,78 @@ Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính s�
 \input{Chapter5/data_dictionary/profile}
 
 
+\subsubsection{Bảng thông tin lý lịch địa chỉ}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-lldc.png}
+    \caption[\textit{Bảng thông tin lý lịch địa chỉ}]{\textit{Bảng thông tin lý lịch địa chỉ}}
+    \label{fig:chapter5_profile_address}
+\end{figure}
+
+\subsubsection{Bảng thông tin lý lịch gia đình}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llgd.png}
+    \caption[\textit{Bảng thông tin lý lịch gia đình}]{\textit{Bảng thông tin lý lịch gia đình}}
+    \label{fig:chapter5_profile_family}
+\end{figure}
+
+\subsubsection{Bảng thông tin quá trình công tác}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llct.png}
+    \caption[\textit{Bảng thông tin quá trình công tác}]{\textit{Bảng thông tin quá trình công tác}}
+    \label{fig:chapter5_profile_work}
+\end{figure}
+
+\subsubsection{Bảng thông tin đào tạo}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-lldt.png}
+    \caption[\textit{Bảng thông tin đào tạo}]{\textit{Bảng thông tin đào tạo}}
+    \label{fig:chapter5_profile_education}
+\end{figure}
+
+\subsubsection{Bảng thông tin khen thưởng và kỷ luật}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llkt.png}
+    \caption[\textit{Bảng thông tin khen thưởng}]{\textit{Bảng thông tin khen thưởng}}
+    \label{fig:chapter5_profile_reward}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llkl.png}
+    \caption[\textit{Bảng thông tin kỷ luật}]{\textit{Bảng thông tin kỷ luật}}
+    \label{fig:chapter5_profile_disciplinary}
+\end{figure}
+
+\subsubsection{Bảng thông tin quá trình lương và phụ cấp}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llluong.png}
+    \caption[\textit{Bảng thông tin quá trình lương}]{\textit{Bảng thông tin quá trình lương}}
+    \label{fig:chapter5_profile_salary}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llpc.png}
+    \caption[\textit{Bảng thông tin phụ cấp}]{\textit{Bảng thông tin phụ cấp}}
+    \label{fig:chapter5_profile_allowance}
+\end{figure}
+
+\subsection{Dữ liệu về các quy trình phê duyệt đơn}
+\label{subsec:workflow}
+Dữ liệu về các loại quy trình phê duyệt được định danh trong bảng \texttt{fw\_quy\_trinh}.
+Các bước phê duyệt tương ứng với loại quy trình được lưu trong \texttt{fw\_quy\_trinh\_step}. Đơn vị, vai trò của những người có quyền xử lý cũng như bước thực hiện tiếp theo tương ứng với các thao tác xử lý được lưu trong \texttt{fw\_quy\_trinh\_target}. được thể hiện trong Hình~\ref{fig:chapter5_workflow_schema}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/schemas/work-flow.png}
+    \caption[\textit{Lược đồ dữ liệu các loại quy trình phê duyệt}]{\textit{Lược đồ dữ liệu các loại quy trình phê duyệt}}
+    \label{fig:chapter5_workflow_schema}
+\end{figure}
+
+\input{Chapter5/data_dictionary/workflow}
 
 \subsection{Dữ liệu quản lý nghỉ phép}
 \label{subsec:du_lieu_nghi_phep}

@@ -1,0 +1,52 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
+\caption[\textit{Từ điển dữ liệu về các quy trình phê duyệt đơn}]{\textit{Từ điển dữ liệu về các quy trình phê duyệt đơn}}\label{tab:workflow_dictionary}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+\hline
+\endfirsthead
+\multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+\hline
+\textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+\hline
+\endhead
+\hline
+\multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+\endfoot
+\hline
+\endlastfoot
+\texttt{fw\_quy\_trinh} & \texttt{ma} & text (PK, NOT NULL) & Định danh quy trình. \\
+\cline{2-4}
+ & \texttt{ten} & text & Tên quy trình. \\
+\hline
+\texttt{fw\_quy\_trinh\_buoc} & \texttt{ma} & text (PK) & Định danh bước quy trình. \\
+\cline{2-4}
+ & \texttt{ma\_quy\_trinh} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh}) & Liên kết logic đến quy trình. \\
+\cline{2-4}
+ & \texttt{is\_primary} & boolean  & Xác định bước có phải là bước chính hay không. \\
+\cline{2-4}
+ & \texttt{is\_initial} & boolean & Xác định bước có phải là bước đầu tiên trong 1 quy trình hay không. \\
+\cline{2-4}
+ & \texttt{is\_end} & boolean  & Xác định bước có phải là bước kết thúc trong 1 quy trình hay không. \\
+\cline{2-4}
+ & \texttt{ten} & text  & Tên bước trong quy trình. \\
+\cline{2-4}
+ & \texttt{trang\_thai} & text  & Trạng thái của bước quy trình. \\
+\cline{2-4}
+ & \texttt{step\_no} & integer  & Số thứ tự của bước trong quy trình. \\
+\hline
+\texttt{fw\_quy\_trinh\_target} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh mục tiêu trong quy trình. \\
+\cline{2-4}
+ & \texttt{quy\_trinh\_buoc} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh\_buoc}) & Mã bước quy trình. \\
+\cline{2-4}
+ & \texttt{ma\_quy\_trinh} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh}) & Mã quy trình. \\
+\cline{2-4}
+ & \texttt{role} & jsonb  & Danh sách vai trò có quyền xử lý. \\
+\cline{2-4}
+ & \texttt{ma\_don\_vi} & jsonb  & Danh sách đơn vị có quyền xử lý. \\
+\cline{2-4}
+ & \texttt{trang\_thai} & text  & Mã thao tác xử lý. \\
+\cline{2-4}
+ & \texttt{forward\_to} & text  & Khóa ngoại đến bước tiếp theo trong quy trình. \\
+\cline{2-4}
+ & \texttt{is\_create\_user} & boolean  & Xác định có phải là người tạo đơn xử lý bước này hay không. \\
+\end{xltabular}

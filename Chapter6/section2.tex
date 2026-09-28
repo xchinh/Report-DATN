@@ -1,17 +1,19 @@
 \section{Kiểm thử và đánh giá hệ thống}
 \label{sec:kiemthu_danhgia}
 
-Quá trình kiểm thử được tổ chức theo hai mức. Trước hết, các bài kiểm thử tự động xác minh những quy tắc và thành phần có thể kiểm tra độc lập. Tiếp theo, nhóm thao tác các luồng nghiệp vụ đại diện trên thiết bị Android thật, rồi đối chiếu nội dung hiển thị và trạng thái tại hệ thống nguồn. Cách tổ chức này giúp phân biệt kết quả của một thành phần với kết quả của cả quy trình tích hợp.
+Quá trình kiểm thử được thực hiện ở hai phạm vi. Trước hết, các bài kiểm thử tự động được sử dụng để kiểm tra những quy tắc và thành phần có thể xác minh độc lập. Tiếp theo, nhóm kiểm tra các luồng nghiệp vụ đại diện trên hệ thống tích hợp thông qua ứng dụng Android và đối chiếu kết quả với các hệ thống nguồn. Cách tổ chức này giúp phân biệt kết quả kiểm thử ở mức thành phần với kết quả khi các thành phần phối hợp trong một luồng nghiệp vụ.
 
 \subsection{Chiến lược và môi trường kiểm thử}
 
-Các kịch bản được chọn theo nhóm chức năng đã hiện thực, tập trung vào luồng chính và một số điều kiện quan trọng như kiểm tra dữ liệu nhập, quyền xử lý, chuyển trạng thái, điểm danh và mở nội dung liên quan. Ở mức tự động, nhóm chạy unit test, widget test và handler test phù hợp với phần mobile hoặc backend có liên quan trực tiếp đến đề tài. Ở mức đầu--cuối, nhóm đăng nhập bằng các tài khoản có vai trò phù hợp, thực hiện thao tác trên ứng dụng, sau đó kiểm tra phản hồi trên giao diện và đối chiếu trạng thái ở HRM/iOffice. Với thao tác duyệt nhiều cấp, mỗi bước được đối chiếu riêng; kết quả một bước không được xem là bằng chứng cho cả chuỗi.
+Các kịch bản được lựa chọn từ những chức năng đã hiện thực, tập trung vào các luồng nghiệp vụ chính và một số trường hợp quan trọng về kiểm tra dữ liệu đầu vào, phân quyền, chuyển trạng thái, điểm danh và điều hướng.
 
-Kiểm thử thủ công được thực hiện trên điện thoại Realme RMX2151 chạy Android 12, kết nối đến các dịch vụ thử nghiệm Auth, HRM và iOffice. Các hồ sơ dùng trong kiểm thử là dữ liệu thử nghiệm được cho phép. Nhóm ghi nhận trạng thái trước và sau thao tác cùng ảnh minh chứng; thông tin định danh trong ảnh dùng ở báo cáo đã được lược bỏ. Kết quả chỉ áp dụng cho cấu hình, tài khoản, hồ sơ và nhánh đã thực hiện.
+Ở mức thành phần, nhóm sử dụng unit test, widget test và handler test tùy theo đặc điểm của ứng dụng mobile và backend liên quan. Ở mức hệ thống tích hợp, nhóm sử dụng các tài khoản có vai trò phù hợp để thực hiện các luồng nghiệp vụ trên ứng dụng và đối chiếu kết quả với trạng thái tại HRM hoặc iOffice. Một số nhánh nghiệp vụ được kiểm tra bổ sung thông qua API và cơ sở dữ liệu khi cần xác định kết quả xử lý tại backend.
+
+Kiểm thử thủ công được thực hiện trên điện thoại Realme RMX2151 chạy Android 12, kết nối đến các dịch vụ thử nghiệm Auth, HRM và iOffice. Các hồ sơ sử dụng là dữ liệu thử nghiệm được cho phép. Nhóm ghi nhận trạng thái trước và sau thao tác cùng ảnh minh chứng, đồng thời lược bỏ thông tin định danh khi đưa vào báo cáo. Kết quả được trình bày trong phạm vi các tài khoản, dữ liệu và kịch bản đã thực hiện.
 
 \subsection{Kiểm thử tự động}
 
-Bảng~\ref{tab:ch6_automated_tests} tổng hợp các bộ kiểm thử liên quan trực tiếp đến ứng dụng và phần backend được đề tài tích hợp hoặc mở rộng. Các bộ kiểm thử có phạm vi khác nhau nên được báo cáo riêng, không cộng thành tỷ lệ đạt của toàn hệ thống.
+Các bộ kiểm thử tự động được thực hiện riêng cho ứng dụng mobile và những phần backend liên quan trực tiếp đến đề tài. Do mỗi bộ kiểm thử có mục tiêu và phạm vi khác nhau, kết quả được báo cáo riêng theo từng thành phần và không được cộng thành tỷ lệ đạt chung của toàn hệ thống.
 
 \begin{table}[H]
 \centering
@@ -26,69 +28,73 @@ Bảng~\ref{tab:ch6_automated_tests} tổng hợp các bộ kiểm thử liên q
 \hline
 HRM Backend & Unit test cho các suite liên quan đến SSO, nghỉ phép và quy tắc từ chối & 59/59 đạt & Phiên làm việc, xử lý nghỉ phép, tương tranh và dữ liệu đầu vào của thao tác từ chối. \\
 \hline
-iOffice Backend & Kiểm thử handler với mô hình giả & 4/4 đạt & Kiểm tra quyền truy cập tệp văn bản và các nhánh điểm danh. \\
+iOffice Backend & Handler test với mô hình giả & 4/4 đạt & Quyền truy cập tệp văn bản và các nhánh điểm danh. \\
 \hline
 \end{tabularx}
 \end{table}
 
-Các kết quả trên xác nhận hành vi trong phạm vi từng bộ kiểm thử. Chúng không thay thế kiểm thử tích hợp với cơ sở dữ liệu và tài khoản thật; riêng các handler dùng mô hình giả cũng chưa xác nhận toàn bộ đường đi từ ứng dụng đến hệ thống nguồn.
+Các kết quả trên xác nhận hành vi trong phạm vi của từng bộ kiểm thử. Chúng không thay thế việc kiểm tra các luồng nghiệp vụ trên hệ thống tích hợp với cơ sở dữ liệu và tài khoản thử nghiệm. Đặc biệt, các handler test sử dụng mô hình giả chỉ xác minh logic của thành phần được kiểm tra, chưa phản ánh toàn bộ quá trình từ ứng dụng đến hệ thống nguồn.
 
-\subsection{Kiểm thử đầu-cuối trên thiết bị thật}
+\subsection{Kiểm thử các luồng nghiệp vụ trên hệ thống tích hợp}
 
-Nhóm kiểm tra các luồng nghiệp vụ trên giao diện mobile, kết hợp đối chiếu API và trạng thái tại hệ thống nguồn. Không phải mọi nhánh trong bảng dưới đây đều được thực hiện trọn vẹn qua giao diện: những bước kiểm tra quyền hoặc luân chuyển nhiều cấp được phân biệt theo cách thực hiện. Bảng~\ref{tab:ch6_e2e_source_state} trình bày kết quả theo phạm vi đã quan sát.
+Nhóm thực hiện các luồng nghiệp vụ đại diện trên ứng dụng mobile và đối chiếu kết quả với API, cơ sở dữ liệu hoặc trạng thái tại hệ thống nguồn khi cần thiết. Kết quả được phân thành các trường hợp đạt và chưa đạt nhằm phản ánh đúng phạm vi kiểm thử thực tế.
 
 \begin{xltabular}{\textwidth}{|L{2.0cm}|Y|Y|}
-\caption{Kết quả và phạm vi kiểm thử đầu-cuối trên thiết bị thật}\label{tab:ch6_e2e_source_state} \\
+\caption{Kết quả kiểm thử các luồng nghiệp vụ trên hệ thống tích hợp}\label{tab:ch6_e2e_source_state} \\
 \hline
-\textbf{Luồng} & \textbf{Kết quả đã xác nhận} & \textbf{Giới hạn của kết luận} \\
+\textbf{Luồng} & \textbf{Kết quả đạt} & \textbf{Kết quả chưa đạt hoặc giới hạn} \\
 \hline
 \endfirsthead
 \hline
-\textbf{Luồng} & \textbf{Kết quả đã xác nhận} & \textbf{Giới hạn của kết luận} \\
+\textbf{Luồng} & \textbf{Kết quả đạt} & \textbf{Kết quả chưa đạt hoặc giới hạn} \\
 \hline
 \endhead
-Hồ sơ cá nhân & Đã mở hồ sơ, xem nội dung đề xuất, đối chiếu phần thay đổi và duyệt một yêu cầu. Trạng thái yêu cầu hoàn tất và thay đổi được phản ánh ở hồ sơ nguồn. & Luồng tạo yêu cầu có tệp được kiểm tra qua Chrome trên cùng thiết bị; thao tác tạo qua WebView chưa được xác nhận do biểu mẫu tải lại sau khi chọn tệp. \\
+Hồ sơ cá nhân & Xem hồ sơ, đối chiếu thay đổi và duyệt yêu cầu; dữ liệu sau duyệt được cập nhật tại hệ thống nguồn. & Tạo yêu cầu có tệp qua WebView chưa hoạt động đúng do biểu mẫu tải lại sau khi chọn tệp. \\
 \hline
-Nghỉ phép & Đã kiểm tra nội dung chi tiết, gửi và duyệt tuần tự qua các cấp đến kết thúc. Trên các phiếu độc lập, cấp đơn vị trả lại, người lập sửa và gửi lại trên Android (chuỗi gửi--trả lại--gửi lại được ghi nhận); API từ chối sửa đơn đã gửi. Nhánh từ chối đã xác nhận chặn lý do khoảng trắng, chuyển trạng thái từ chối khi có lý do hợp lệ, ghi nhận lịch sử và giải phóng lịch cá nhân. & Thao tác duyệt cuối đồng thời chưa có cơ chế khóa hàng chống vượt quỹ phép tại backend; kết quả chưa suy rộng sang mọi vai trò hoặc hồ sơ. \\
+Nghỉ phép & Gửi, trả lại, gửi lại, duyệt và từ chối hoạt động đúng; trạng thái, lịch sử và lịch cá nhân được cập nhật tương ứng. & Duyệt đồng thời nhiều yêu cầu có thể làm số ngày nghỉ vượt quỹ phép hiện có. \\
 \hline
-Công tác & Trên Android, chi tiết phiếu hiển thị dữ liệu nguồn; một phiếu trong nước được lập qua năm bước, gửi, trả lại, sửa và gửi lại. Giao diện cũng hiển thị lịch sử của một phiếu đã hoàn tất nhiều cấp và chặn chọn ngày trùng. Trên các phiếu thử riêng, API và CSDL xác nhận nhánh từ chối, thu hồi theo quyền và luân chuyển phiếu nước ngoài qua năm cấp đến BGH, kèm điều kiện có thư mời và bản ghi quá trình công tác. & Các nhánh từ chối, thu hồi và duyệt phiếu nước ngoài chưa được xác nhận toàn bộ qua UI mobile. Quyền thu hồi mới được thử với những vai trò và trạng thái phiếu đã chọn. Backend còn chặn tạo chuyến mới khi chuyến trước chưa nộp báo cáo kết quả; ứng dụng không cung cấp thao tác nộp báo cáo trong phạm vi đề tài. \\
+Công tác & Tạo, gửi, trả lại và gửi lại phiếu trên mobile hoạt động đúng; các nhánh từ chối, thu hồi theo quyền và duyệt phiếu nước ngoài qua nhiều cấp đã được xác nhận bổ sung tại backend trên các phiếu thử riêng. & Một số nhánh từ chối, thu hồi và duyệt phiếu nước ngoài chưa thực hiện được đầy đủ qua giao diện mobile. \\
 \hline
-Văn bản và nhiệm vụ & Đã tra cứu nội dung được phân quyền, mở tệp PDF trên thiết bị và theo dõi một số thông tin nhiệm vụ liên quan. & Chưa kiểm tra đầu--cuối toàn bộ vòng đời văn bản và nhiệm vụ trên mobile; một số thao tác xử lý tiếp tục thuộc iOffice Web theo phạm vi hiện tại. \\
+Văn bản và nhiệm vụ & Tra cứu nội dung được phân quyền, mở tệp PDF và xem thông tin nhiệm vụ hoạt động đúng. & Chưa hỗ trợ đầy đủ vòng đời xử lý văn bản và nhiệm vụ trên mobile. \\
 \hline
-Lịch và điểm danh & Trên cuộc họp đã chuẩn bị cho kiểm thử, người được mời điểm danh, hoàn tác và báo vắng kèm lý do; trạng thái sau thao tác được đối chiếu tại iOffice. & Chưa hoàn tất lượt đầu--cuối riêng cho khách ngoài danh sách mời vì tài khoản khách không truy cập được cuộc họp thử từ giao diện. Kiểm thử thành phần không thay thế bằng chứng này. \\
+Lịch và điểm danh & Người được mời có thể điểm danh, hoàn tác và báo vắng; trạng thái được cập nhật tại iOffice. & Khách ngoài danh sách mời chưa thực hiện được điểm danh qua giao diện trong môi trường kiểm thử. \\
 \hline
-Thông báo & Đã quan sát banner khi ứng dụng ở foreground và background trên Android; chạm banner thử nghiệm mở đúng màn hình nghiệp vụ được gắn với loại thông báo đã thử. Một thông báo công tác trong Trung tâm cũng mở đúng chi tiết phiếu. & Chỉ xác nhận các loại thông báo và đường dẫn đã thử; chưa kiểm tra mọi loại thông báo, vai trò và tình huống điều hướng. \\
+Thông báo & Nhận thông báo khi ứng dụng ở foreground/background và điều hướng đến đúng nội dung trong các trường hợp đã thử. & Chưa hỗ trợ hoặc kiểm tra đầy đủ mọi loại thông báo và trường hợp điều hướng. \\
 \hline
 \end{xltabular}
 
-Nhìn chung, các luồng hồ sơ cá nhân, nghỉ phép và công tác được kiểm tra trong những trường hợp đã thực hiện: thông tin chi tiết phù hợp dữ liệu nguồn, các thao tác chuyển trạng thái được ghi nhận kèm lịch sử và lịch cá nhân được đồng bộ hoặc giải phóng tương ứng. Riêng nhánh từ chối nghỉ phép còn được thao tác qua giao diện với một phiếu thử độc lập: lý do chỉ gồm khoảng trắng bị chặn, còn lý do hợp lệ làm phiếu chuyển sang trạng thái từ chối và giải phóng lịch. Các giới hạn nêu trong bảng xác định ranh giới của kết luận, không mặc nhiên là lỗi ở những luồng đã đạt.
+Kết quả cho thấy các luồng nghiệp vụ chính của hồ sơ cá nhân, nghỉ phép, công tác, văn bản và nhiệm vụ, lịch và điểm danh, cùng thông báo đã hoạt động trong phần lớn các trường hợp được lựa chọn kiểm thử. Tuy nhiên, quá trình kiểm thử cũng phát hiện một số trường hợp chưa đạt và chức năng chưa được hỗ trợ đầy đủ trên ứng dụng mobile.
 
-Đối với nghỉ phép, kiểm tra cơ chế trừ quỹ phép cho thấy số dư được tính toán động tại thời điểm truy vấn. Do thủ tục ghi nhận duyệt cuối chưa áp dụng khóa hàng bi quan hoặc kiểm tra ngưỡng số dư còn lại, các thao tác duyệt cuối diễn ra đồng thời vượt tổng ngày phép có thể dẫn đến hiện tượng số dư âm như ghi nhận trong đợt thử nghiệm tải; đây là nội dung cần hoàn thiện cơ chế khóa hàng ở tầng backend. Đối với công tác, các giá trị ``Chưa cập nhật'' trên màn hình chi tiết được xác định là giá trị dự phòng hiển thị cho các trường thông tin tùy chọn không bắt buộc hoặc trường địa điểm không gắn mã danh mục đơn vị hành chính tại hệ thống nguồn, không phải lỗi sai lệch dữ liệu của ứng dụng di động. Tương tự, việc chưa kiểm tra được khách tự điểm danh qua giao diện là một khoảng trống bằng chứng E2E, trong khi quy tắc nghiệp vụ cho phép khách vẫn được giữ theo đặc tả.
+Đáng chú ý, đối với phân hệ nghỉ phép, số dư ngày phép được tính toán động tại thời điểm truy vấn, trong khi thao tác duyệt cuối chưa thực hiện khóa hàng hoặc kiểm tra lại số dư trong một thao tác nguyên tử. Khi nhiều yêu cầu được duyệt cuối đồng thời, tổng số ngày nghỉ có thể vượt quá quỹ phép hiện có và dẫn đến số dư âm. Kết quả này cho thấy cơ chế bảo đảm tính nhất quán khi xử lý đồng thời tại backend cần được hoàn thiện.
+
+Đối với hồ sơ cá nhân, thao tác tạo yêu cầu có tệp qua WebView chưa hoạt động đúng do biểu mẫu tải lại sau khi người dùng chọn tệp. Đối với công tác, các nhánh từ chối, thu hồi và duyệt phiếu nước ngoài mới được xác nhận bổ sung ở backend, chưa được kiểm tra đầy đủ qua giao diện mobile. Phạm vi thử quyền thu hồi cũng chỉ gồm một số vai trò và trạng thái phiếu đã chọn. Ngoài ra, backend chặn tạo chuyến mới khi chuyến trước chưa nộp báo cáo kết quả, nhưng ứng dụng chưa cung cấp thao tác nộp báo cáo trong phạm vi đề tài. Với lịch và điểm danh, trường hợp khách ngoài danh sách mời chưa thực hiện được từ giao diện trong môi trường kiểm thử.
+
+Các trường hợp chưa đạt trên được ghi nhận làm cơ sở xác định những nội dung cần tiếp tục hoàn thiện, thay vì được sử dụng để suy rộng kết quả sang các chức năng hoặc kịch bản chưa được kiểm thử.
 
 \subsection{Đánh giá yêu cầu phi chức năng}
 
-Bảng~\ref{tab:ch6_nfr_evaluation} tổng hợp phạm vi đã quan sát. Kết quả trên một thiết bị không được suy rộng thành chất lượng của mọi môi trường sử dụng.
+Việc đánh giá yêu cầu phi chức năng được thực hiện dựa trên các kết quả quan sát trong quá trình kiểm thử. Do phạm vi thử nghiệm chủ yếu trên một thiết bị Android và tập dữ liệu thử nghiệm, kết quả chỉ phản ánh các trường hợp đã thực hiện.
 
 \begin{xltabular}{\textwidth}{|L{1.6cm}|Y|Y|}
-\caption{Phạm vi đánh giá yêu cầu phi chức năng}\label{tab:ch6_nfr_evaluation} \\
+\caption{Đánh giá yêu cầu phi chức năng}\label{tab:ch6_nfr_evaluation} \\
 \hline
-\textbf{Yêu cầu} & \textbf{Kết quả ghi nhận} & \textbf{Giới hạn} \\
+\textbf{Yêu cầu} & \textbf{Kết quả ghi nhận} & \textbf{Hạn chế} \\
 \hline
 \endfirsthead
 \hline
-\textbf{Yêu cầu} & \textbf{Kết quả ghi nhận} & \textbf{Giới hạn} \\
+\textbf{Yêu cầu} & \textbf{Kết quả ghi nhận} & \textbf{Hạn chế} \\
 \hline
 \endhead
-NFR-01 & Danh sách nghỉ phép và lịch tải lại dữ liệu sau khi kết nối mạng được phục hồi. & Chưa kiểm tra trên mọi màn hình và mọi tình huống lỗi mạng. \\
+NFR-01 & Danh sách nghỉ phép và lịch có thể tải lại dữ liệu sau khi kết nối mạng được phục hồi. & Chưa kiểm tra đầy đủ trên mọi màn hình và tình huống lỗi mạng. \\
 \hline
-NFR-02 & Biểu mẫu nghỉ phép, công tác và trạng thái xử lý được quan sát trên Android thật. & Chưa khảo sát người dùng hoặc thử trên nhiều kích thước thiết bị. \\
+NFR-02 & Các biểu mẫu nghỉ phép, công tác và trạng thái xử lý hiển thị và thao tác được trên thiết bị Android thử nghiệm. & Chưa thử nghiệm trên nhiều kích thước thiết bị và chưa đánh giá với người dùng thực tế. \\
 \hline
-NFR-03 & Các vai trò thử nghiệm thực hiện được thao tác được phân công; một số kiểm tra quyền được bổ sung bằng kiểm thử tự động. & Chưa đối chứng toàn bộ ma trận phân quyền bằng nhiều phiên và thiết bị. \\
+NFR-03 & Các tài khoản thử nghiệm thực hiện được thao tác tương ứng với vai trò trong những kịch bản đã chọn. & Chưa kiểm tra toàn bộ tổ hợp vai trò, trạng thái và quyền của hệ thống. \\
 \hline
-NFR-04 & Các đơn được duyệt tuần tự, trả lại, từ chối và thu hồi cập nhật đúng trạng thái và dữ liệu liên quan tại HRM. & Duyệt đồng thời nhiều yêu cầu vượt quỹ phép chưa có cơ chế khóa hàng ở backend. \\
+NFR-04 & Các trường hợp duyệt tuần tự, trả lại, từ chối và thu hồi cập nhật đúng trạng thái và dữ liệu liên quan. & Chưa bảo đảm tính nhất quán khi nhiều yêu cầu nghỉ phép được duyệt cuối đồng thời. \\
 \hline
-NFR-05 & Mã nguồn được tổ chức theo nhóm chức năng và có bộ kiểm thử tự động tương ứng. & Chưa có phép đo định lượng về khả năng bảo trì hoặc mở rộng. \\
+NFR-05 & Mã nguồn được tổ chức theo nhóm chức năng và có các bộ kiểm thử tự động tương ứng. & Chưa có phép đo định lượng về khả năng bảo trì và mở rộng. \\
 \hline
 \end{xltabular}
 
-Nhóm chưa thực hiện đo định lượng độ trễ, dung lượng bộ nhớ, tốc độ khung hình hoặc thời gian khởi động. Báo cáo cũng chưa đánh giá khả năng sử dụng bằng khảo sát người dùng.
+Nhóm chưa thực hiện các phép đo định lượng về độ trễ, mức sử dụng bộ nhớ, tốc độ khung hình hoặc thời gian khởi động. Khả năng sử dụng cũng chưa được đánh giá thông qua khảo sát hoặc thử nghiệm với nhóm người dùng đại diện. Vì vậy, báo cáo không đưa ra kết luận định lượng đối với các tiêu chí này.
