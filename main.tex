@@ -92,7 +92,7 @@
 \AtBeginDocument{\renewcommand*\contentsname{Mục lục}}
 \AtBeginDocument{\renewcommand*\refname{Tài liệu tham khảo}}
 \AtBeginDocument{\renewcommand*\bibname{Tài liệu tham khảo}}
-\AtBeginDocument{\renewcommand*\listfigurename{Danh sách hình}}
+\AtBeginDocument{\renewcommand*\listfigurename{Danh sách hình ảnh}}
 \AtBeginDocument{\renewcommand*\listtablename{Danh sách bảng}}
 
 \thesisheadlayout
@@ -271,16 +271,16 @@
   \renewcommand{\arraystretch}{1.1}%
   \begin{xltabular}{\textwidth}{|L{2.8cm}|Y|}
   \ifcsvoid{uc@shortname}{%
-    \caption[\textit{\uc@id: \uc@name}]{\textit{Đặc tả trường hợp sử dụng \uc@id: \uc@name}}%
+    \caption[\uc@id: \uc@name]{Đặc tả use case \uc@id: \uc@name}%
   }{%
-    \caption[\textit{\uc@id: \uc@shortname}]{\textit{Đặc tả trường hợp sử dụng \uc@id: \uc@name}}%
+    \caption[\uc@id: \uc@shortname]{Đặc tả use case \uc@id: \uc@name}%
   }%
   \ifcsvoid{uc@label}{}{\label{\uc@label}} \\
   \hline
   \textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
   \hline
   \endfirsthead
-%   \caption[]{\textit{Đặc tả trường hợp sử dụng \uc@id: \uc@name{} (tiếp theo)}} \\
+%   \caption[]{Đặc tả trường hợp sử dụng \uc@id: \uc@name{} (tiếp theo)} \\
 %   \hline
 %   \textbf{Thuộc tính} & \textbf{Nội dung đặc tả} \\
 %   \hline

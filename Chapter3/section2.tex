@@ -6,7 +6,7 @@ MyHCMUT Mobile là ứng dụng di động tích hợp các chức năng nghiệ
 \subsection{Nền tảng Flutter SDK và ngôn ngữ Dart}
 \label{subsec:flutter_dart}
 
-Flutter là bộ công cụ phát triển giao diện đa nền tảng, mã nguồn mở do Google phát triển~\cite{flutter_doc}, sử dụng ngôn ngữ lập trình Dart~\cite{dart_doc}. Flutter cung cấp hệ thống widget và cơ chế dựng hình riêng để xây dựng giao diện ứng dụng~\cite{flutter_arch}. Dart hỗ trợ kiểm tra kiểu dữ liệu, \textit{sound null safety}~\cite{dart_null_safety} và lập trình bất đồng bộ thông qua \texttt{Future}, \texttt{Stream} cùng cú pháp \texttt{async/await}~\cite{dart_concurrency}.
+Flutter là bộ công cụ phát triển giao diện đa nền tảng, mã nguồn mở do Google phát triển~\cite{flutter_doc}, sử dụng ngôn ngữ lập trình Dart~\cite{dart_doc}. Flutter cung cấp hệ thống widget và cơ chế dựng hình riêng để xây dựng giao diện ứng dụng. Dart hỗ trợ kiểm tra kiểu dữ liệu, \textit{sound null safety} và lập trình bất đồng bộ thông qua \texttt{Future}, \texttt{Stream} cùng cú pháp \texttt{async/await}.
 
 Đề tài hướng đến việc phát triển ứng dụng di động có khả năng hỗ trợ Android và iOS trong điều kiện thời gian và nguồn lực thực hiện có giới hạn. Vì vậy, nhóm xem xét các hướng phát triển ứng dụng dựa trên khả năng chia sẻ mã nguồn, công sức phát triển và mức độ đáp ứng các chức năng cần triển khai. Bảng~\ref{tab:compare_mobile_platform} trình bày một số đặc điểm của các hướng phát triển ứng dụng di động.
 
@@ -68,7 +68,7 @@ Riverpod là thư viện quản lý trạng thái và phụ thuộc trong ứng 
 
 Trong MyHCMUT Mobile, các nhóm chức năng cần hiển thị dữ liệu nhận từ backend và phản ánh những trạng thái như đang tải dữ liệu, tải thành công hoặc xảy ra lỗi. Một số dữ liệu và trạng thái cũng được sử dụng bởi nhiều màn hình trong cùng một luồng nghiệp vụ. Nhóm lựa chọn Riverpod để quản lý các trạng thái này và phối hợp giữa giao diện với các thành phần truy cập dữ liệu.
 
-Ứng dụng sử dụng Riverpod 3 kết hợp với \texttt{riverpod\_generator} để hỗ trợ khai báo và sinh mã cho các provider~\cite{riverpod_codegen}. \texttt{AsyncValue} được sử dụng để biểu diễn trạng thái của quá trình xử lý bất đồng bộ, trong khi \texttt{autoDispose} hỗ trợ quản lý vòng đời của provider khi không còn được sử dụng~\cite{riverpod_notifier}. Cách tổ chức provider và luồng dữ liệu giữa giao diện với các thành phần nghiệp vụ được trình bày tại Chương 5.
+Ứng dụng sử dụng Riverpod 3 kết hợp với \texttt{riverpod\_generator} để hỗ trợ khai báo và sinh mã cho các provider. \texttt{AsyncValue} được sử dụng để biểu diễn trạng thái của quá trình xử lý bất đồng bộ, trong khi \texttt{autoDispose} hỗ trợ quản lý vòng đời của provider khi không còn được sử dụng. Cách tổ chức provider và luồng dữ liệu giữa giao diện với các thành phần nghiệp vụ được trình bày tại Chương 5.
 
 \subsection{Điều hướng khai báo với GoRouter}
 \label{subsec:gorouter_nav}

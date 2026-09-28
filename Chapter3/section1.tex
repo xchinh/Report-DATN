@@ -44,11 +44,11 @@ Kiến trúc hướng phân hệ không đồng nghĩa với việc mỗi phân 
 \label{subsec:client_server_http_https}
 \label{subsec:rest_https}
 
-Representational State Transfer (REST) là một phong cách kiến trúc được sử dụng trong thiết kế các hệ thống giao tiếp qua mạng~\cite{fielding_rest}. Trong các API theo hướng REST, tài nguyên được xác định thông qua địa chỉ truy cập (URI) và được thao tác bằng những phương thức HTTP phù hợp, chẳng hạn \texttt{GET} để truy xuất dữ liệu, \texttt{POST} để gửi dữ liệu, \texttt{PUT} hoặc \texttt{PATCH} để cập nhật dữ liệu và \texttt{DELETE} để xóa dữ liệu~\cite{rfc9110}. Một đặc tính quan trọng của REST là phi trạng thái (\textit{stateless}): mỗi yêu cầu cần chứa đủ thông tin cần thiết để máy chủ xử lý độc lập.
+Representational State Transfer (REST) là một phong cách kiến trúc được sử dụng trong thiết kế các hệ thống giao tiếp qua mạng. Trong các API theo hướng REST, tài nguyên được xác định thông qua địa chỉ truy cập (URI) và được thao tác bằng những phương thức HTTP phù hợp, chẳng hạn \texttt{GET} để truy xuất dữ liệu, \texttt{POST} để gửi dữ liệu, \texttt{PUT} hoặc \texttt{PATCH} để cập nhật dữ liệu và \texttt{DELETE} để xóa dữ liệu. Một đặc tính quan trọng của REST là phi trạng thái (\textit{stateless}): mỗi yêu cầu cần chứa đủ thông tin cần thiết để máy chủ xử lý độc lập.
 
 Ứng dụng MyHCMUT Mobile giao tiếp với các dịch vụ backend thông qua API sử dụng HTTP và dữ liệu trao đổi theo định dạng phù hợp với từng dịch vụ, chủ yếu là JSON. Phản hồi từ backend cung cấp dữ liệu hoặc kết quả xử lý để ứng dụng cập nhật trạng thái và hiển thị cho người dùng.
 
-HTTPS sử dụng giao thức TLS~\cite{rfc8446} để bảo vệ tính bí mật và tính toàn vẹn của dữ liệu trong quá trình truyền giữa ứng dụng và máy chủ. Việc sử dụng HTTPS giúp giảm nguy cơ nội dung trao đổi bị đọc trộm hoặc sửa đổi bởi bên thứ ba trên đường truyền. Tuy nhiên, HTTPS chỉ bảo vệ kênh truyền và không thay thế các cơ chế xác thực, phân quyền và kiểm tra dữ liệu tại backend.
+HTTPS sử dụng giao thức TLS để bảo vệ tính bí mật và tính toàn vẹn của dữ liệu trong quá trình truyền giữa ứng dụng và máy chủ. Việc sử dụng HTTPS giúp giảm nguy cơ nội dung trao đổi bị đọc trộm hoặc sửa đổi bởi bên thứ ba trên đường truyền. Tuy nhiên, HTTPS chỉ bảo vệ kênh truyền và không thay thế các cơ chế xác thực, phân quyền và kiểm tra dữ liệu tại backend.
 
 Trong đề tài, REST API và HTTPS là cơ sở cho việc tích hợp ứng dụng di động với các hệ thống HRM, iOffice và dịch vụ xác thực hiện hữu. Cách tổ chức lời gọi API và xử lý phản hồi được trình bày tại Chương 5.
 
