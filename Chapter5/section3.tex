@@ -15,7 +15,7 @@ Mục này trình bày các nhóm dữ liệu nghiệp vụ liên quan trực ti
 \subsection{Tổng quan mô hình dữ liệu}
 \label{subsec:tong_quan_csdl}
 
-Dữ liệu nghiệp vụ được chia thành miền HRM và miền iOffice theo hệ thống sở hữu. Miền HRM bao gồm hồ sơ cán bộ, yêu cầu cập nhật hồ sơ, nghỉ phép, hạn mức phép năm và đi công tác. Miền iOffice bao gồm văn bản, nhiệm vụ, báo cáo tiến độ, lịch công tác và điểm danh cuộc họp. Ứng dụng chỉ trao đổi dữ liệu thông qua API của backend tương ứng và không truy cập trực tiếp cơ sở dữ liệu.
+Dữ liệu nghiệp vụ được chia thành miền HRM và miền iOffice theo hệ thống sở hữu. Miền HRM bao gồm hồ sơ nhân sự, yêu cầu cập nhật hồ sơ, nghỉ phép, hạn mức phép năm và đi công tác. Miền iOffice bao gồm văn bản, nhiệm vụ, báo cáo tiến độ, lịch công tác và điểm danh cuộc họp. Ứng dụng chỉ trao đổi dữ liệu thông qua API của backend tương ứng và không truy cập trực tiếp cơ sở dữ liệu.
 
 Hình~\ref{fig:chapter5_data_overview} kết hợp các bảng đại diện của hai miền để thể hiện phạm vi dữ liệu phục vụ ứng dụng. Đây là lược đồ tổng quan rút gọn, không phải một cơ sở dữ liệu hợp nhất. Giữa HRM và iOffice không có khóa ngoại chéo; lịch tổng hợp được tạo từ các phản hồi API độc lập tại phía ứng dụng thay vì sao chép dữ liệu nguồn sang một bảng chung.
 

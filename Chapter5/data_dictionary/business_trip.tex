@@ -16,9 +16,9 @@
 \endlastfoot
 \texttt{tcns\_dang\_ky\_cong\_tac} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh phiếu đăng ký công tác. \\
 \cline{2-4}
- & \texttt{shcc} & text & Mã cán bộ đăng ký chuyến công tác. \\
+ & \texttt{shcc} & text & Mã nhân sự đăng ký chuyến công tác. \\
 \cline{2-4}
- & \mbox{\texttt{don\_vi}} & text & Đơn vị công tác của cán bộ đăng ký. \\
+ & \mbox{\texttt{don\_vi}} & text & Đơn vị công tác của nhân sự đăng ký. \\
 \cline{2-4}
  & \texttt{ngay\_bat\_dau} & numeric & Ngày bắt đầu chuyến công tác. \\
 \cline{2-4}
@@ -44,13 +44,13 @@
 \cline{2-4}
  & \texttt{dang\_ky\_id} & numeric & Liên kết logic đến phiếu đăng ký công tác. \\
 \cline{2-4}
- & \texttt{shcc} & text & Mã số của cán bộ tham gia đoàn. \\
+ & \texttt{shcc} & text & Mã số của nhân sự tham gia đoàn. \\
 \cline{2-4}
- & \mbox{\texttt{don\_vi}} & text & Đơn vị công tác của cán bộ tham gia. \\
+ & \mbox{\texttt{don\_vi}} & text & Đơn vị công tác của nhân sự tham gia. \\
 \cline{2-4}
- & \texttt{chuc\_vu} & text & Chức vụ của cán bộ tham gia. \\
+ & \texttt{chuc\_vu} & text & Chức vụ của nhân sự tham gia. \\
 \cline{2-4}
- & \texttt{is\_truong\_doan} & boolean & Cờ xác định cán bộ là trưởng đoàn. \\
+ & \texttt{is\_truong\_doan} & boolean & Cờ xác định nhân sự là trưởng đoàn. \\
 \cline{2-4}
  & \texttt{is\_dang\_vien} & boolean & Thông tin Đảng viên phục vụ đối ngoại. \\
 \hline
@@ -72,13 +72,13 @@
 \cline{2-4}
  & \texttt{dang\_ky\_id} & numeric & Liên kết logic đến phiếu đăng ký công tác. \\
 \cline{2-4}
- & \texttt{shcc} & text & Mã cán bộ thực hiện công tác. \\
+ & \texttt{shcc} & text & Mã nhân sự thực hiện công tác. \\
 \cline{2-4}
  & \texttt{ngay\_bat\_dau} & numeric & Ngày bắt đầu theo kế hoạch. \\
 \cline{2-4}
  & \texttt{ngay\_ket\_thuc} & numeric & Ngày kết thúc theo kế hoạch. \\
 \cline{2-4}
- & \texttt{ngay\_ve\_thuc\_te} & bigint & Thời điểm trở về thực tế của cán bộ. \\
+ & \texttt{ngay\_ve\_thuc\_te} & bigint & Thời điểm trở về thực tế của nhân sự. \\
 \cline{2-4}
  & \texttt{noi\_dung} & text & Nội dung công việc đã thực hiện. \\
 \cline{2-4}

@@ -4,8 +4,8 @@
 \subsubsection{Mục tiêu}
 Công tác là một trong những nghiệp vụ quan trọng hỗ trợ người lao động toàn trường tối
 ưu quá trình quản lý thông tin quy trình các chuyến đi công tác. Quy trình quản lý thông tin công tác bắt đầu từ việc
-đăng ký công tác của cán bộ. Đơn đăng ký công tác sẽ được gửi đến các bên liên quan để thẩm định và phê duyệt, người dùng cũng nắm bắt được thông tin về tiến độ các bước phê duyệt.
-Sau khi được phê duyệt, cán bộ sẽ thực hiện chuyến công tác và báo cáo kết quả (nếu có).
+đăng ký công tác của nhân sự. Đơn đăng ký công tác sẽ được gửi đến các bên liên quan để thẩm định và phê duyệt, người dùng cũng nắm bắt được thông tin về tiến độ các bước phê duyệt.
+Sau khi được phê duyệt, nhân sự sẽ thực hiện chuyến công tác và báo cáo kết quả (nếu có).
 
 
 \subsubsection{Yêu cầu chức năng}
@@ -19,11 +19,11 @@ Sau khi được phê duyệt, cán bộ sẽ thực hiện chuyến công tác 
 \hline
 \textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả và ràng buộc nghiệp vụ} \\
 \hline
-FR-BTR-01 & Tra cứu đơn & Cán bộ, Giảng viên & Xem danh sách đơn công tác cá nhân, lọc theo trạng thái và xem chi tiết tiến trình duyệt. \\
+FR-BTR-01 & Tra cứu đơn & Nhân sự & Xem danh sách đơn công tác cá nhân, lọc theo trạng thái và xem chi tiết tiến trình duyệt. \\
 \hline
-FR-BTR-02 & Tạo và gửi đơn & Cán bộ, Giảng viên & Tạo phiếu đăng ký công tác, điền thông tin và gửi cho các bên liên quan phê duyệt. \\
+FR-BTR-02 & Tạo và gửi đơn & Nhân sự & Tạo phiếu đăng ký công tác, điền thông tin và gửi cho các bên liên quan phê duyệt. \\
 \hline
-FR-BTR-03 & Quản lý nháp và điều chỉnh & Cán bộ, Giảng viên & Chỉnh sửa hoặc xóa phiếu Nháp; chỉnh sửa và gửi lại phiếu Bị trả lại. Người lập không tự thu hồi phiếu đã gửi. \\
+FR-BTR-03 & Quản lý nháp và điều chỉnh & Nhân sự & Chỉnh sửa hoặc xóa phiếu Nháp; chỉnh sửa và gửi lại phiếu Bị trả lại. Người lập không tự thu hồi phiếu đã gửi. \\
 \hline
 FR-BTR-04 & Xử lý đơn & Các bên liên quan & Xem xét thông tin đơn đăng ký, minh chứng và thực hiện các thao tác như: phê duyệt, từ chối hoặc trả lại đơn theo thẩm quyền. \\
 \hline
@@ -43,7 +43,7 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 \usecasespec{
     id={UC-BT-01},
     name={Soạn thảo đơn đăng ký công tác},
-    actor={Cán bộ / Giảng viên},
+    actor={Nhân sự},
     pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
     trigger={Người dùng chọn biểu tượng tạo mới đơn đăng ký công tác trên ứng dụng.},
     mainflow={
@@ -63,7 +63,7 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 \usecasespec{
     id={UC-BT-02},
     name={Gửi đơn đăng ký công tác},
-    actor={Cán bộ / Giảng viên},
+    actor={Nhân sự},
     pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
     trigger={Người dùng chọn đơn đăng ký công tác có trạng thái là "Nháp" hoặc "Trả lại"},
     mainflow={
@@ -86,7 +86,7 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 \usecasespec{
     id={UC-BT-03},
     name={Xóa đơn đăng ký công tác},
-    actor={Cán bộ / Giảng viên},
+    actor={Nhân sự},
     pre={Đã đăng nhập vào ứng dụng, là người lập đơn và đơn đang ở trạng thái Nháp.},
     trigger={Người dùng truy cập vào danh sách đơn đăng ký công tác.},
     mainflow={
@@ -106,29 +106,29 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 \usecasespec{
     id={UC-BT-04},
     name={Phê duyệt đơn đăng ký công tác},
-    goal={Cho phép cán bộ có thẩm quyền tại từng cột mốc xem xét và đưa ra quyết định (Duyệt / Trả lại / Từ chối) đối với phiếu công tác đã được gửi, đưa phiếu đi qua chuỗi các cấp thẩm định phù hợp với loại công tác cho đến khi được Ban Giám hiệu phê duyệt chính thức hoặc bị chấm dứt.},
-    actor={Lãnh đạo đơn vị, Lãnh đạo Phòng KH\&CN, Chuyên viên/ Lãnh đạo TC-NS, Văn phòng Ban Giám hiệu, Ban Giám hiệu},
+    goal={Cho phép nhân sự có thẩm quyền tại từng cột mốc xem xét và đưa ra quyết định (Duyệt / Trả lại / Từ chối) đối với phiếu công tác đã được gửi, đưa phiếu đi qua chuỗi các cấp thẩm định phù hợp với loại công tác cho đến khi được Ban Giám hiệu phê duyệt chính thức hoặc bị chấm dứt.},
+    actor={Lãnh đạo đơn vị, Lãnh đạo Phòng KH\&CN, Chuyên viên/ Lãnh đạo TCNS, Văn phòng Ban Giám hiệu, Ban Giám hiệu},
     pre={
-            - Đơn đã được gửi và đang ở một trong các bước duyệt: \texttt{TRUONG\_DV}, \texttt{KHCN}, \texttt{CV\_TCNS}, \texttt{TP\_TCNS}, \texttt{CV\_BGH}, \texttt{BGH}. \newline
+            - Đơn đã được gửi và đang ở một trong các bước duyệt: \texttt{Lãnh đạo đơn vị}, \texttt{Lãnh đạo KHCN}, \texttt{Chuyên viên TCNS}, \texttt{Lãnh đạo TCNS}, \texttt{Chuyên viên BGH}, \texttt{BGH}. \newline
             - Người thực hiện có thẩm quyền duyệt tại đúng bước hiện tại của phiếu
         },
     trigger={Người duyệt mở phiếu đang chờ tại bước của mình và chọn một trong ba hành động: Duyệt, Trả lại, Từ chối.},
     mainflow={
-            1. Lãnh đạo đơn vị mở phiếu đang chờ duyệt tại bước \texttt{TRUONG\_DV}. \newline
+            1. Lãnh đạo đơn vị mở phiếu đang chờ duyệt tại bước \texttt{Lãnh đạo đơn vị}. \newline
             2. Người duyệt xem xét thông tin chuyến đi, thời gian vắng mặt, phương án phân công thay thế. \newline
             3. Người duyệt chọn "Duyệt". \newline
             4. Hệ thống chuyển phiếu sang bước tiếp theo và ghi nhật ký quy trình (người duyệt, thời gian duyệt). \newline
-            5. Hệ thống gửi thông báo đến cán bộ có thẩm quyền duyệt ở bước kế tiếp. \newline
+            5. Hệ thống gửi thông báo đến nhân sự có thẩm quyền duyệt ở bước kế tiếp. \newline
         },
     altflow={
-            5.1. Tại bước 5, nếu phiếu đang ở bước duyệt cuối cùng (\texttt{BGH}), hệ thống chuyển phiếu sang trạng thái \texttt{KET\_THUC}. \newline
+            5.1. Tại bước 5, nếu phiếu đang ở bước duyệt cuối cùng (\texttt{BGH}), hệ thống chuyển phiếu sang trạng thái \texttt{Kết thúc}. \newline
             A2 — Trả lại phiếu: \newline
             3.2. Người duyệt chọn "Trả lại" và nhập ghi chú yêu cầu chỉnh sửa. \newline
             4.2. Hệ thống sẽ trả lại phiếu cho người nộp và mở lại quyền chỉnh sửa cho người nộp. \newline
             5.2. Hệ thống gửi thông báo kèm ghi chú cho người nộp. \newline
             A3 — Từ chối phiếu: \newline
             3.3. Người duyệt chọn "Từ chối" và nhập ghi chú lý do từ chối. \newline
-            4.3. Hệ thống cập nhật trạng thái phiếu thành \texttt{TU\_CHOI}. \newline
+            4.3. Hệ thống cập nhật trạng thái phiếu thành \texttt{Từ chối}. \newline
             5.3. Hệ thống giải phóng toàn bộ lịch cá nhân đã khóa của các thành viên tham gia. \newline
             6.3. Hệ thống thông báo cho người nộp và mọi thành viên liên quan. \newline
         },
@@ -156,8 +156,8 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 
 \subsubsection{Quy tắc nghiệp vụ}
 \begin{itemize}
-    \item \textbf{BR-BT-01:} Quy trình phê duyệt công tác mặc định là: Duyệt cấp đơn vị → Chuyên viên TC-NS → Lãnh đạo TC-NS → Văn phòng BGH → Ban Giám hiệu.
-    \item \textbf{BR-BT-02:} Nếu thông tin phiếu có kinh phí là "Kinh phí KHCN", hệ thống sẽ thêm bước thẩm định của Phòng KHCN trước khi chuyển sang Phòng TC-NS.
+    \item \textbf{BR-BT-01:} Quy trình phê duyệt công tác mặc định là: Duyệt cấp đơn vị → Chuyên viên TCNS → Lãnh đạo TCNS → Văn phòng BGH → Ban Giám hiệu.
+    \item \textbf{BR-BT-02:} Nếu thông tin phiếu có kinh phí là "Kinh phí KHCN", hệ thống sẽ thêm bước thẩm định của Phòng KHCN trước khi chuyển sang Phòng TCNS.
     \item \textbf{BR-BT-03:} Khi đơn được Văn phòng BGH tạo thì hệ thống sẽ rút gọn quy trình phê duyệt còn: Ban Giám hiệu.
     \item \textbf{BR-BT-04:} Khi hình thức công tác là "Nước ngoài", người nộp phải đính kèm thư mời và kế hoạch chi tiết chuyến công tác.
     \item \textbf{BR-BT-05:} Khi phân loại công tác là "Đoàn công tác", người phải thêm các thành viên tham gia và chọn trưởng đoàn cho chuyến công tác.
