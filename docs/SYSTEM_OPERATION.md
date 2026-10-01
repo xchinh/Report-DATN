@@ -239,6 +239,8 @@ Lịch Trường trực tiếp được lưu ở `TONG_HOP`; mobile không tự 
 
 Khi upload/gửi phiếu lỗi sau khi đã nhận ID, notifier giữ bản ghi/tệp đã biết để thử lại trong phiên form. Nếu POST đã commit nhưng mất phản hồi, chưa có bảo đảm idempotency. Với bản demo, lịch Trường tạo trực tiếp gửi lời mời ngay sau lưu ở `TONG_HOP` và commit thành công, trước bước upload tệp riêng của mobile. API này dùng chung cho mobile/web; gửi phiếu/tiếp nhận không gửi lời mời sớm. Phát hành `HOAN_THANH` vẫn gửi thông báo theo luồng hiện có nên có thể phát sinh lần thông báo tiếp theo. Thay đổi demo đã commit và push tại iOffice `96b21cf`. Với đơn vị, gửi ngay sau lưu chỉ khi bước đầu là `HOAN_THANH`. Xem [đặc tả lịch](06B_REQUIREMENT_PACK_SCHEDULE.md).
 
+Mobile `61722ad` đồng bộ token FCM tới HRM và iOffice qua `POST /api/notification/register-token` riêng của từng backend; iOffice `4ca9249` đăng ký theo UUID phiên đăng nhập và chuyển token khi đổi tài khoản. Lỗi đăng ký một backend không chặn backend còn lại. Sender iOffice giữ token khi lỗi khóa/dịch vụ Firebase; chỉ xóa token bị xác nhận không hợp lệ. Push thật tại tổng hợp đã đến một điện thoại Android khi app mở/chạy nền; bấm mở Lịch biểu, chưa mở thẳng chi tiết cuộc họp. [Biên bản thiết bị](chapter6-7-evidence/12_school_schedule_push_device_verification.md) ghi cấu hình và giới hạn kiểm chứng.
+
 ---
 
 ## 6. Business Workflows & Concurrency Control (Các Luồng Nghiệp vụ Trọng tâm & Thiết kế Kiểm soát Tương tranh)

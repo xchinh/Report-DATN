@@ -7,8 +7,8 @@
 | Thành phần | Nhánh | HEAD | Trạng thái khi đối chiếu |
 | --- | --- | --- | --- |
 | `hrm-be` | `chinh-dev` | `250274cac7db8f2f4c2f188c9e4084b3e1e52308` | Còn thay đổi cục bộ `.env.local`; không dùng nội dung cấu hình này làm bằng chứng tính năng |
-| `ioffice-be` | `chinh-khang` | `96b21cf88b73a55a1debd33c3b45206309119bc0` | Có `AGENTS.md` chưa được theo dõi; không phải thay đổi nghiệp vụ |
-| `myhcmut-mobile` | `feat/leaveRequest` | `72e6c679f947c27b445d153a4ef49869b01e9013` | Working tree sạch |
+| `ioffice-be` | `chinh-khang` | `4ca9249c2ab4a478ee62ea3d53d961ca5de8e2fb` | Có `AGENTS.md` chưa theo dõi và cấu hình Firebase `.env.local` đã sửa cục bộ để demo; cấu hình không đưa vào commit |
+| `myhcmut-mobile` | `feat/leaveRequest` | `61722adcb66d0fb50deb6e529dd7a5a10103147d` | Working tree sạch |
 
 Commit mobile `2ebf898fcee05f039ae8bbdfbc4752c46670ec70` đã đưa bộ chỉnh sửa hồ sơ native và lịch sử hồ sơ vào nhánh, trước HEAD hiện tại. Khi viết về hồ sơ native, cần dẫn cả hiện thực này; không quy toàn bộ tính năng cho commit `72e6c67`.
 
@@ -20,6 +20,8 @@ Commit mobile `2ebf898fcee05f039ae8bbdfbc4752c46670ec70` đã đưa bộ chỉnh
 | iOffice `6803b7b` | Bổ sung lịch `TRUONG/TONG_HOP` vào lịch cá nhân khi `includePending=true`; kiểm soát người tạo, người mời đích danh và đơn vị được mời; cho mở chi tiết phù hợp, tránh lộ lịch riêng qua cảnh báo | Lịch chưa phát hành có thể hiển thị cho người liên quan; không đồng nghĩa mọi người đều thấy hoặc mọi trạng thái nháp đều được mở |
 | iOffice `6803b7b` | Gửi lời mời sau commit thành công khi chuyển sang `HOAN_THANH`; lịch đơn vị chỉ gửi ngay khi bước đầu thực sự là `HOAN_THANH`; khử trùng người nhận có SHCC và tài khoản hoạt động | Phải phân biệt lưu lịch, gửi đăng ký và phát hành; ở commit nền này, thông báo chưa gửi sớm chỉ vì đã lưu; commit `96b21cf` bổ sung gửi khi tạo trực tiếp để demo |
 | iOffice `96b21cf` | API tạo trực tiếp lịch Trường gửi lời mời ngay sau commit tại `TONG_HOP`, từ phân công thực sự đã lưu; không rollback lại transaction đã kết thúc; thêm bốn kiểm thử | Điều chỉnh thời điểm gửi để demo; lịch vẫn chưa phát hành, không thay luồng đăng ký. API chung cho mobile/web; phát hành vẫn gửi thêm thông báo |
+| iOffice `4ca9249` | Thêm đăng ký FCM token theo tài khoản phiên đăng nhập, chuyển token khi đổi tài khoản; giữ token khi lỗi khóa/dịch vụ Firebase, chỉ xóa token bị xác nhận không hợp lệ; log không chứa token | Sửa điểm đứt giữa đăng ký thiết bị ở HRM và sender iOffice; lỗi chuyển phát không được coi là thiết bị không còn hợp lệ |
+| Mobile `61722ad` | Đồng bộ FCM token sang cả HRM và iOffice; lỗi một backend không chặn backend còn lại; thêm ba test | Lời mời iOffice có địa chỉ thiết bị để gửi; không suy ra mọi lần gửi luôn được nhận |
 | Mobile `72e6c67` | Tạo lịch hỗ trợ chọn/tải tệp, giữ ID đã nhận và danh sách tệp đã tải để thử lại; kiểm tra dữ liệu tệp, chặn gửi đồng thời, làm mới danh sách | Bổ sung thiết kế và kiểm thử lỗi từng phần của luồng tạo cuộc họp native; không tuyên bố transaction xuyên suốt mọi request hay chống trùng tuyệt đối |
 | Mobile `72e6c67` | Lịch rút gọn và lịch danh sách dùng chung điều hướng: nghỉ phép/công tác mở chi tiết HRM, cuộc họp mở chi tiết lịch | Lịch tổng hợp hỗ trợ đi đến nghiệp vụ nguồn đúng loại, không chỉ hiển thị sự kiện |
 | Mobile `72e6c67` | `AuthState` lưu `AuthUser` trong SharedPreferences; đọc lại khi lỗi mạng/non-401; xóa token và cache người dùng khi `/api/state` trả 401, thiếu token hoặc logout; sửa đích điều hướng splash | Nêu cơ chế phục hồi phiên có điều kiện. Cache không cấp thêm quyền, không giúp thực hiện nghiệp vụ ghi khi offline |
@@ -35,13 +37,13 @@ Commit mobile `2ebf898fcee05f039ae8bbdfbc4752c46670ec70` đã đưa bộ chỉnh
 | Chỉnh sửa hồ sơ native | `PersonalProfilePage` mở `EditSectionMenuSheet`; các trang trong `modules/hrm/lib/src/profile/views/pages/edit/`; `profile_edit_provider.dart` gọi API theo policy | Tách cập nhật trực tiếp, gửi yêu cầu và phản hồi; biểu mẫu native chưa bao phủ mọi trường/editor của web |
 | Lịch sử hồ sơ native | `profile_history_page.dart`, `profile_history.dart`, `profile_history_provider.dart`; `GET /api/staff/ly-lich/profile` | Hiển thị yêu cầu, nhật ký và khác biệt theo dữ liệu backend; không suy luận mọi thay đổi đều đã được nghiệm thu E2E |
 | Tạo cuộc họp từ lịch tổng hợp | `schedule_view.dart` → route `/ioffice/schedule/create` → `ScheduleCreatePage` → `ScheduleCreate` | Có lịch đơn vị, gửi phiếu lịch Trường và lịch Trường trực tiếp; tiếp nhận/phát hành vẫn theo hệ thống nguồn, không tự phát hành trên mobile |
-| Lịch chưa phát hành và lời mời | `schedule-general.js`, `schedule-general-item.js`, `scheduleGeneralItem.js` tại iOffice | Quyền xem `TONG_HOP` không suy ra quyền sửa/phát hành; HEAD `96b21cf` gửi sau tạo trực tiếp `TONG_HOP` để demo; phát hành vẫn gửi theo luồng hiện có |
+| Lịch chưa phát hành và lời mời | `schedule-general.js`, `schedule-general-item.js`, `scheduleGeneralItem.js` tại iOffice | Quyền xem `TONG_HOP` không suy ra quyền sửa/phát hành; Commit `96b21cf` gửi sau tạo trực tiếp `TONG_HOP` để demo; phát hành vẫn gửi theo luồng hiện có |
 
 **Tình trạng mã cũ:** HEAD mobile vẫn chứa `src/webview/`, export, phụ thuộc `flutter_inappwebview` và hook xóa cookie khi logout. Không tìm thấy lời gọi mở `AppInAppWebViewScreen` trong luồng hồ sơ hiện tại. Báo cáo có thể mô tả chức năng trong phạm vi bằng native, nhưng không dùng câu “đã xóa toàn bộ mã và phụ thuộc WebView khỏi repository”. Cơ chế ticket SSO còn ở backend không tự chứng minh app đang dùng WebView.
 
 ## 4. Bằng chứng và giới hạn kiểm chứng
 
-- Đã đọc diff ba codebase và kiểm chứng iOffice `96b21cf`: toàn bộ 39/39 test backend đạt, kiểm tra cú pháp controller và diff đạt. Kiểm thử hồi quy phát hiện lỗi khi vô hiệu hóa lệnh gửi sớm trong bộ nạp test. Chưa chạy lại test HRM/mobile hoặc xác nhận push trên điện thoại thật; không dùng kết quả backend thay số liệu kiểm thử toàn hệ thống ở Chương 6.
+- Đã kiểm chứng iOffice `4ca9249` với 47/47 test backend; mobile `61722ad` với 64/64 test phân hệ notification và `make analyze` sạch ở cả 11 package. Bản debug đã build/cài trên RMX2151. Push thật của lịch `383` và `384` ở `TONG_HOP` đã xuất hiện trên Android khi app mở và chạy nền; bấm mở Lịch biểu. Chi tiết ở [biên bản thiết bị](chapter6-7-evidence/12_school_schedule_push_device_verification.md). Chưa chạy lại toàn bộ test HRM/mobile, chưa thử iOS hoặc phát hành thật; không dùng số liệu phân hệ thay tổng toàn hệ thống.
 - `myhcmut-mobile/docs/profile-edit-web-comparison.md` và `docs/schedule-creation-audit.md` chứa đối chiếu ngày 01/10, gồm quan sát trên thiết bị và kết quả kiểm tra ở từng giai đoạn. Chỉ dùng đúng phạm vi, phiên bản và giới hạn của từng lượt; không cộng các số test thành tổng mới của HEAD.
 - Các kết quả ngày 22–24/09 và Gate 0 là lịch sử. Thành công qua WebView/trình duyệt không chứng minh nộp hồ sơ native kèm minh chứng ở phiên bản mới.
 - iOffice có hạ tầng outbox tại `config/lib/outbox.js`; riêng lời mời họp mới dùng `notification.send` sau commit, chưa có retry/outbox bền vững riêng. Không suy rộng sự hiện diện outbox sang mọi luồng thông báo.
@@ -60,4 +62,12 @@ Commit mobile `2ebf898fcee05f039ae8bbdfbc4752c46670ec70` đã đưa bộ chỉnh
 - iOffice `POST /api/schedule/general-item/general/create` gửi lời mời ngay sau commit khi tạo trực tiếp lịch Trường ở `TONG_HOP`; lịch vẫn chưa phát hành. API dùng chung cho mobile và web. Gửi phiếu/tiếp nhận không kích hoạt thông báo sớm.
 - Dùng phân công đã lưu hợp lệ, SHCC và tài khoản hoạt động; không gửi khi lưu/commit thất bại. Upload tệp diễn ra sau request tạo nên lời mời có thể đến trước khi tải tệp xong.
 - Luồng phát hành cũ vẫn gửi thông báo, nên người nhận có thể nhận thêm khi phát hành. Đây là điều chỉnh phục vụ demo, cần ghi rõ khi viết báo cáo.
-- Kiểm tra mới: `node --test test/*.test.js` đạt 39/39 test backend (37 test lịch và 2 test quyền đọc tệp văn bản); `node --check modules/md-schedule/schedule-general/controller/schedule-general-item.js` và `git diff --check` đạt. Test dùng mock, chưa xác nhận giao nhận push trên thiết bị thật.
+- Kiểm tra mới: `node --test test/*.test.js` đạt 39/39 test backend (37 test lịch và 2 test quyền đọc tệp văn bản); `node --check modules/md-schedule/schedule-general/controller/schedule-general-item.js` và `git diff --check` đạt. Đây là kết quả kiểm thử mock tại commit nền; kiểm chứng thiết bị sau sửa đồng bộ token/khóa Firebase xem mục 7.
+
+## 7. Kiểm chứng push thật và cấu hình demo
+
+- Ban đầu iOffice không có token của tài khoản trên điện thoại; mobile chỉ đăng ký tại HRM. Sau sửa đồng bộ hai backend, iOffice có token và đã tạo lời mời thật.
+- Lần đầu với lịch `382` tạo được thông báo hộp thư `1327` nhưng không nhận push: khóa Firebase của iOffice bị từ chối với `invalid_grant: Invalid JWT Signature`. Khóa HRM hiện có, cùng project, vượt qua kiểm tra Firebase; đã dùng cho cấu hình iOffice cục bộ và khởi động lại backend. Không lưu khóa/token trong tài liệu hoặc commit.
+- Lịch `383`/thông báo `1328` khi app mở và lịch `384`/thông báo `1329` khi chạy nền đều được nhận trên Android 12/RMX2151; mỗi lời mời có một người nhận đích danh. Cả ba lịch vẫn ở bước 3 `TONG_HOP`, chưa phát hành.
+- Request tạo được thực hiện qua API thật bằng phiên của app; đây không phải nghiệm thu đầy đủ thao tác nhập/lưu form mobile. Bấm push hiện mở `/ioffice/schedule`, chưa mở thẳng chi tiết theo ID cuộc họp.
+- `myhcmut-mobile/docs/schedule-creation-audit.md` ghi đợt trước thay đổi gửi sớm; các câu chỉ gửi khi phát hành/chưa kiểm chứng push tại đó là lịch sử. Dùng biên bản thiết bị mới cho kết quả hiện hành.

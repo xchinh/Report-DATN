@@ -1,6 +1,6 @@
 # ĐẶC TẢ TẠO CUỘC HỌP NATIVE TỪ LỊCH TỔNG HỢP
 
-> Đối chiếu 01/10/2026: mobile `72e6c67`, iOffice `96b21cf`. Các mã FR/UC bổ sung dưới đây là đề xuất đưa vào báo cáo khi viết lại; chưa sửa LaTeX. Nguồn và giới hạn kiểm chứng xem [snapshot](13_CURRENT_SOURCE_SNAPSHOT.md). Commit demo `96b21cf` đã push, gửi lời mời ngay sau tạo trực tiếp ở `TONG_HOP` và commit thành công.
+> Đối chiếu 01/10/2026: mobile `61722ad`, iOffice `4ca9249`. Các mã FR/UC bổ sung dưới đây là đề xuất đưa vào báo cáo khi viết lại; chưa sửa LaTeX. Nguồn và giới hạn kiểm chứng xem [snapshot](13_CURRENT_SOURCE_SNAPSHOT.md). Commit demo `96b21cf` đã push, gửi lời mời ngay sau tạo trực tiếp ở `TONG_HOP` và commit thành công.
 
 ## 1. Mục tiêu và phạm vi
 
@@ -87,3 +87,11 @@ Mốc iOffice: `96b21cf88b73a55a1debd33c3b45206309119bc0`, nhánh `chinh-khang`,
 Các kiểm thử dùng mock cho lưu trữ và chuyển phát, không kết nối dịch vụ để gửi thông báo thật. Không có script lint/build trong `package.json`; không suy từ kiểm tra cú pháp ra toàn bộ ứng dụng đã build hoặc chạy tích hợp thành công. GitNexus chưa có chỉ mục iOffice; yêu cầu `detect_changes` không trả được phạm vi, nên đã đối chiếu trực tiếp diff và mã gọi.
 
 Minh chứng thiết bị còn cần cho Chương 6: chạy backend chứa commit này, tạo lịch Trường trực tiếp từ app, xác nhận chủ trì/tham dự/thư ký nhận và mở đúng cuộc họp `TONG_HOP`; kiểm tra người ngoài không xem được và ghi nhận lần thông báo tiếp theo nếu phát hành.
+
+## 8. Kiểm chứng trên thiết bị sau sửa token và cấu hình Firebase
+
+Đã xác nhận nhận push thật khi app mở và chạy nền cho lịch `TONG_HOP` trên Android 12/RMX2151; xem [biên bản và ảnh](chapter6-7-evidence/12_school_schedule_push_device_verification.md). iOffice `4ca9249` đạt 47/47 test backend; mobile `61722ad` đạt 64/64 test notification và phân tích tĩnh toàn bộ 11 package. Số liệu mục 7 là mốc nền trước sửa chuyển phát, không phải tổng hiện tại.
+
+Mobile đăng ký token với cả HRM/iOffice bằng phiên đăng nhập hiện hành. iOffice lấy UUID từ session, không nhận người sở hữu token do client tự khai báo; đăng ký lại cùng token chuyển token sang tài khoản hiện hành. Sender giữ token khi khóa/dịch vụ Firebase lỗi; chỉ xóa token bị xác nhận không còn đăng ký hoặc không hợp lệ.
+
+Lần thử chỉ gửi đến một tài khoản trên điện thoại. Có slot mời đơn vị `01` không có SHCC để đáp ứng validation lịch Trường; slot này không mở rộng người nhận push. Bấm thông báo hiện mở Lịch biểu, chưa đi thẳng vào chi tiết ID cuộc họp. Chưa nghiệm thu iOS, phát hành thật, form tạo kèm tệp hoặc nhận trên nhiều thiết bị/vai trò.

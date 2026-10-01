@@ -1,6 +1,6 @@
 # NỘI DUNG CẦN CHỈNH SỬA BÁO CÁO THEO CODEBASE HIỆN TẠI
 
-> **Đối chiếu:** 01/10/2026; HRM `250274c`, iOffice `96b21cf`, mobile `72e6c67`, cùng commit mobile `2ebf898` đã bổ sung hồ sơ native. Đã đọc diff và hiện thực; iOffice đạt 39/39 test backend và kiểm tra cú pháp controller. Chưa chạy lại HRM/mobile hoặc kiểm chứng push trên thiết bị thật. Mốc đầy đủ xem [13_CURRENT_SOURCE_SNAPSHOT.md](13_CURRENT_SOURCE_SNAPSHOT.md).
+> **Đối chiếu:** 01/10/2026; HRM `250274c`, iOffice `4ca9249`, mobile `61722ad`, cùng commit mobile `2ebf898` đã bổ sung hồ sơ native. Đã đọc diff và hiện thực; iOffice đạt 47/47 test backend, mobile đạt 64/64 test notification và phân tích tĩnh sạch ở 11 package; push Android thật đã nhận ở tổng hợp khi app mở/chạy nền. Chưa chạy toàn bộ test HRM/mobile hoặc kiểm chứng iOS/phát hành thật. Mốc đầy đủ xem [13_CURRENT_SOURCE_SNAPSHOT.md](13_CURRENT_SOURCE_SNAPSHOT.md).
 >
 > **Mục đích:** Cung cấp nội dung và căn cứ để người dùng viết lại báo cáo. Các tệp LaTeX, hình báo cáo và `main.pdf` chưa được sửa. Những đoạn dưới đây là đề xuất biên tập, không phải kết quả nghiệm thu mới.
 
@@ -12,6 +12,7 @@
 | P0 | Bổ sung tạo cuộc họp từ lịch tổng hợp | Hiện thực trên HEAD có ba nhánh đơn vị/đăng ký Trường/Trường trực tiếp. `72e6c67` hoàn thiện tệp và thử lại; không mô tả commit này là lần đầu tạo mọi chức năng lịch |
 | P0 | Phân biệt lưu lịch và phát hành | Trường trực tiếp lưu `TONG_HOP`; `6803b7b` cho người liên quan xem trước và gửi lời mời khi chuyển `HOAN_THANH` sau commit. Commit demo `96b21cf` bổ sung lời mời ngay sau tạo trực tiếp `TONG_HOP`; mobile chưa cung cấp luồng phát hành |
 | P0 | Đổi căn cứ kiểm chứng hồ sơ từ WebView sang native | Biên bản nộp bằng web/trình duyệt ngày 24/09 không chứng minh nộp native. Test native đã có nhưng cần log và ảnh đúng phiên bản để nêu kết quả mới |
+| P1 | Ghi kết quả push trên Android | `4ca9249`/`61722ad` sửa đồng bộ token và xử lý lỗi sender; đã nhận tại `TONG_HOP` khi app mở/chạy nền trên RMX2151. Bấm mở Lịch biểu, chưa mở thẳng chi tiết; bổ sung ảnh/biên bản Chương 6 |
 | P1 | Cập nhật quản lý phiên | `72e6c67`: giữ AuthUser cache khi lỗi mạng/non-401, xóa khi 401/thiếu token/logout; không có silent refresh/replay ở interceptor hiện tại |
 | P1 | Cập nhật điều hướng lịch và hiển thị văn bản | Lịch rút gọn mở đúng phiếu HRM; văn bản đến hiển thị phân công ngay cả khi danh bạ chưa tải, chỉ cho sửa khi đủ quyền/dữ liệu |
 | P1 | Điều chỉnh đóng góp backend | HRM bảo toàn quyền cấp thủ công khi đồng bộ; iOffice thêm quyền xem lịch chờ, lời mời khi tạo trực tiếp ở tổng hợp để demo và lời mời khi phát hành. Không còn mô tả iOffice chỉ chỉnh metadata/SSO |
@@ -64,7 +65,7 @@ Khi viết UC/sequence hồ sơ, dùng chuỗi: chọn thao tác → chọn nhó
 
 ### Tổng kết và giới hạn — Chương 7
 
-> Phiên bản hiện tại mở rộng giao diện native cho chỉnh sửa và theo dõi lịch sử hồ sơ, đồng thời hỗ trợ tạo cuộc họp từ lịch tổng hợp và hiển thị lịch chưa phát hành theo quyền. Mức hoàn thiện cần được đánh giá riêng theo phạm vi field/editor, các nhánh quy trình và bằng chứng trên thiết bị. Các nội dung cần tiếp tục kiểm chứng gồm nộp hồ sơ native kèm minh chứng và đối chiếu sau duyệt, tạo/gửi phiếu lịch qua đầy đủ các bước, giao nhận lời mời khi tạo trực tiếp ở tổng hợp và khi phát hành, phục hồi sau gián đoạn và vận hành trên iOS.
+> Phiên bản hiện tại mở rộng giao diện native cho chỉnh sửa và theo dõi lịch sử hồ sơ, đồng thời hỗ trợ tạo cuộc họp từ lịch tổng hợp và hiển thị lịch chưa phát hành theo quyền. Mức hoàn thiện cần được đánh giá riêng theo phạm vi field/editor, các nhánh quy trình và bằng chứng trên thiết bị. Các nội dung cần tiếp tục kiểm chứng gồm nộp hồ sơ native kèm minh chứng và đối chiếu sau duyệt, tạo/gửi phiếu lịch qua đầy đủ các bước, giao nhận lời mời trên nhiều thiết bị/vai trò và khi phát hành (đã quan sát push tổng hợp trên một Android), phục hồi sau gián đoạn và vận hành trên iOS.
 
 ## 4. Hình và bảng cần làm lại khi sửa báo cáo
 
@@ -80,8 +81,14 @@ Khi viết UC/sequence hồ sơ, dùng chuỗi: chọn thao tác → chọn nhó
 
 1. Hồ sơ native: trực tiếp/yêu cầu/phản hồi, chính sách theo vai trò, lý do/tệp, đọc lại hồ sơ/lịch sử sau xử lý. Test liên quan ở `modules/hrm/test/profile/`, gồm policy, branches, navigation, submission refresh và history.
 2. Lịch: ba nhánh tạo, quyền upload, thời gian không hợp lệ, upload lỗi/thử lại, người tạo/người được mời/người ngoài và `TONG_HOP` so với `HOAN_THANH`.
-3. Thông báo: tạo trực tiếp tổng hợp và phát hành commit/rollback và người nhận hợp lệ bằng test backend; quan sát nhận/mở push thực tế theo đúng metadata. Test mô phỏng không thay thế giao nhận FCM thật.
+3. Thông báo: đã có [minh chứng nhận push Android](chapter6-7-evidence/12_school_schedule_push_device_verification.md) ở tổng hợp và test backend commit/rollback. Bổ sung nhận nhiều tài khoản/vai trò, phát hành thật và iOS; bấm push hiện mở Lịch biểu, không mô tả là mở thẳng chi tiết cuộc họp.
 4. Auth: khởi động lại với token/cache, lỗi mạng/non-401, 401, logout/đổi tài khoản và điều hướng splash. Không xem cache còn hiển thị là bằng chứng phiên server vẫn hợp lệ.
 5. Văn bản/nhiệm vụ/đơn từ: dùng các test hồi quy mới để xác định phạm vi bảo vệ; cập nhật kết quả bằng log đúng commit, không suy từ tên test rằng toàn bộ hệ thống đã E2E.
 
 **Cách dùng tài liệu cũ:** Các biên bản WebView ngày 22–24/09 và Gate 0 giữ giá trị lịch sử. Không đưa chúng làm kết quả hồ sơ native mới. `06_REQUIREMENT_PACK_SSO.md` lưu thiết kế trước đây; không dùng cầu nối WebView làm đóng góp chính của bản báo cáo viết lại. Mã WebView còn sót trong repository là thông tin kỹ thuật ở snapshot, không làm căn cứ để đưa lại luồng WebView vào phạm vi chức năng.
+
+## 6. Đoạn kết quả thông báo đề xuất cho Chương 6
+
+> Trên thiết bị Android 12 (RMX2151), nhóm đã thực hiện request tạo lịch Trường trực tiếp bằng API thật, dùng phiên đăng nhập của ứng dụng. Hai lịch demo vẫn ở bước tổng hợp và phát sinh thông báo sau lưu thành công. Điện thoại nhận được lời mời khi ứng dụng đang mở và khi chạy nền; thao tác bấm thông báo mở màn hình Lịch biểu. Kiểm chứng này xác nhận khả năng chuyển phát trong cấu hình demo đã dùng, không chứng minh mọi thiết bị luôn nhận, điều hướng thẳng vào chi tiết hay nghiệm thu đầy đủ biểu mẫu tạo lịch kèm tệp.
+
+Nguồn: [biên bản thiết bị và ảnh](chapter6-7-evidence/12_school_schedule_push_device_verification.md). Mô tả việc đồng bộ token hai backend và xử lý lỗi khóa Firebase ở Chương 5; không đưa khóa/token hoặc định danh nhân sự vào báo cáo.

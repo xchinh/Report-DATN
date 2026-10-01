@@ -7,7 +7,7 @@
 > - Vũ Xuân Chính (MSSV: 2210392) — Core Mobile, Hồ sơ native, Quản lý Nghỉ phép & Hồ sơ Cán bộ, FCM Notification Hub.
 > - Tống Duy Khang (MSSV: 2211467) — Phân hệ Văn phòng số iOffice (Văn bản đến/đi, PDF Viewer) & Quản lý Nhiệm vụ (Missions/Tasks).  
 > **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tùng  
-> **Mốc hiện hành:** 01/10/2026 — `myhcmut-mobile:72e6c67`, `hrm-be:250274c`, `ioffice-be:96b21cf`; xem [snapshot](13_CURRENT_SOURCE_SNAPSHOT.md).
+> **Mốc hiện hành:** 01/10/2026 — `myhcmut-mobile:61722ad`, `hrm-be:250274c`, `ioffice-be:4ca9249`; xem [snapshot](13_CURRENT_SOURCE_SNAPSHOT.md).
 > **Số liệu lịch sử:** Gate 0 ghi nhận 427 bài (370 Mobile + 57 Backend); chưa chốt tổng mới của ba HEAD trong phiên biên tập này.
 
 ---
@@ -52,6 +52,7 @@ Native là phạm vi chức năng của app viết lại; không đưa WebView/t
 | **CLM-SCH-02** | Tạo/đăng ký cuộc họp có thành phần và tệp | **SOURCE_CONFIRMED** | `ScheduleCreatePage`, `ScheduleCreate`, `72e6c67`; API iOffice ba nhánh | “Tạo cuộc họp trên app theo quyền, phân biệt lưu/tải tệp/gửi phiếu với phát hành.” |
 | **CLM-SCH-03** | Người liên quan xem lịch Trường chờ tổng hợp | **SOURCE_CONFIRMED** | `6803b7b`: `includePending`, `canViewPending`, `getPendingForUser` | “Chỉ người tạo, người mời đích danh hoặc đơn vị được mời thấy lịch TONG_HOP phù hợp; không mở mọi lịch nháp.” |
 | **CLM-SCH-04** | Lời mời họp sau commit, bổ sung gửi sớm để demo | **SOURCE_CONFIRMED** | `6803b7b`: gửi khi phát hành; `96b21cf`: API tạo trực tiếp gửi tại `TONG_HOP` | “Demo gửi ngay khi tạo trực tiếp; phát hành vẫn có thể gửi thêm. Chỉ gửi phân công SHCC hợp lệ/tài khoản hoạt động; chưa có retry bền vững riêng.” |
+| **CLM-SCH-05** | Nhận push thật ở tổng hợp trên một Android | **VERIFIED_DEVICE** | `4ca9249`/`61722ad`; lịch 383/384, thông báo 1328/1329; [biên bản](chapter6-7-evidence/12_school_schedule_push_device_verification.md) | “Đã nhận khi app mở/chạy nền ở cấu hình demo. Bấm mở Lịch biểu; không suy ra mọi thiết bị nhận hoặc mở thẳng chi tiết.” |
 | **CLM-AUTH-01** | Giữ AuthUser cache khi non-401, xóa khi 401/thiếu token/logout | **SOURCE_CONFIRMED** | `72e6c67`: `auth_state_provider.dart`; interceptor không tự refresh | “Cache hỗ trợ giữ trạng thái hiển thị khi lỗi mạng, không cấp quyền server hay bảo đảm nghiệp vụ offline.” |
 | **CLM-RBAC-01** | Đồng bộ vai trò bảo toàn quyền cấp thủ công | **SOURCE_CONFIRMED** | `250274c`: `sync_dv_roles_consumer.ts`; chỉ xóa quyền tự động không còn phù hợp, thêm quyền thiếu tránh trùng | “Backend đồng bộ quyền theo chức vụ và bảo toàn quyền cấp thủ công.” |
 

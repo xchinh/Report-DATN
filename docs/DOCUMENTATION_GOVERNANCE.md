@@ -55,3 +55,7 @@ Các prompt, review và kế hoạch đã lỗi thời đã được loại bỏ
 ## 6. Nguồn để viết lại sau đối chiếu ngày 01/10/2026
 
 Ưu tiên `13_CURRENT_SOURCE_SNAPSHOT.md`, `14_REPORT_7_CHAPTER_AUDIT.md`, `03_REQUIREMENT_PACK_PROFILE.md`, `06B_REQUIREMENT_PACK_SCHEDULE.md` và các luồng native trong `SYSTEM_OPERATION.md`. Các bản thảo cũ `07`–`10`, blueprint và tài liệu thiết kế có mô tả WebView phải đọc theo snapshot mới; không sao chép chúng như hiện trạng. Các log/biên bản lịch sử giữ nguyên giá trị theo phiên bản, không đổi kết quả cũ thành kết quả của HEAD.
+
+## Minh chứng push thiết bị ngày 01/10/2026
+
+Dùng [biên bản mới](chapter6-7-evidence/12_school_schedule_push_device_verification.md) để viết kết quả Chương 6: push tại tổng hợp đã nhận trên một Android khi app mở/chạy nền, bấm mở Lịch biểu. Ghi mốc iOffice `4ca9249`, mobile `61722ad` và phân biệt 47 test backend/64 test notification với tổng test toàn hệ thống. Không sao chép khóa Firebase hoặc kết luận đã nghiệm thu iOS, phát hành thật hay toàn bộ form tạo lịch.

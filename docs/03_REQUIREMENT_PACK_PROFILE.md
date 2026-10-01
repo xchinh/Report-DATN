@@ -9,7 +9,7 @@
 > **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tùng  
 > **Thời điểm đối chiếu hiện hành:** 01/10/2026; kết quả Gate 0 là lịch sử
 > **Kho mã nguồn đối chuẩn:**  
-> - Mobile: `myhcmut-mobile` (Commit: `72e6c679f947c27b445d153a4ef49869b01e9013`)
+> - Mobile: `myhcmut-mobile` (Commit: `61722adcb66d0fb50deb6e529dd7a5a10103147d`)
 > - Backend: `hrm-be` (Commit: `250274cac7db8f2f4c2f188c9e4084b3e1e52308`)
 
 ---
