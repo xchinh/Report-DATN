@@ -1,0 +1,67 @@
+---
+config:
+  layout: elk
+  theme: neutral
+  fontFamily: "'Recursive Variable', sans-serif"
+---
+flowchart LR
+    user["Người dùng<br/>(Cán bộ, giảng viên)"]
+
+    subgraph client["TẦNG ỨNG DỤNG DI ĐỘNG"]
+        mobile["MyHCMUT Mobile<br/>(Flutter)"]
+        webview["WebView tích hợp<br/>(HRM Web)"]
+        mobile -->|Mở biểu mẫu hồ sơ kèm vé SSO| webview
+    end
+
+    subgraph web["TẦNG GIAO DIỆN WEB"]
+        hrmweb["HRM Web<br/>(Biểu mẫu lý lịch)"]
+    end
+
+    subgraph services["TẦNG DỊCH VỤ BACKEND"]
+        auth["Auth Service<br/>(Đăng nhập, xác thực,<br/>cấp và làm mới JWT)"]
+        ioffice["iOffice Backend<br/>(Văn phòng số, nhiệm vụ,<br/>lịch, điểm danh)"]
+        hrm["HRM Backend<br/>(Hồ sơ nhân sự, nghỉ phép,<br/>công tác, SSO Web)"]
+    end
+
+    subgraph data["TẦNG DỮ LIỆU VÀ LƯU TRỮ"]
+        authdb[("CSDL Auth<br/>(PostgreSQL · fwUser)")]
+        iofficedb[("CSDL iOffice<br/>(PostgreSQL)")]
+        redis[("Redis<br/>(Vé SSO · phiên Web)")]
+        hrmdb[("CSDL HRM<br/>(PostgreSQL)")]
+    end
+
+    subgraph external["DỊCH VỤ BÊN NGOÀI"]
+        fcm["Firebase Cloud Messaging<br/>(FCM)"]
+    end
+
+    user --> mobile
+    mobile -->|Thông tin đăng nhập| auth
+    auth -->|Access token · Refresh token| mobile
+    mobile -->|REST API · Bearer JWT<br/>Văn bản · nhiệm vụ · lịch · điểm danh| ioffice
+    mobile -->|REST API · Bearer JWT<br/>Hồ sơ · nghỉ phép · công tác| hrm
+    mobile -->|Kết nối thời gian thực<br/>Socket.IO · điểm danh| ioffice
+    mobile -->|Mở URL kèm vé SSO| hrmweb
+    hrmweb -->|Đổi vé, gọi API bằng phiên Web| hrm
+
+    auth -->|Đọc và ghi tài khoản| authdb
+    ioffice -->|Đọc và ghi dữ liệu| iofficedb
+    hrm -->|Đọc và ghi dữ liệu| hrmdb
+    hrm -->|Lưu/tiêu thụ vé SSO, phiên Web| redis
+
+    ioffice -.->|Gửi thông báo| fcm
+    hrm -.->|Gửi thông báo| fcm
+    fcm -->|Push notification| mobile
+
+    classDef clientNode fill:#fff3fc,stroke:#d946ef,color:#31223a;
+    classDef webNode fill:#ecfeff,stroke:#06b6d4,color:#164e63;
+    classDef serviceNode fill:#f0fdfa,stroke:#2dd4bf,color:#134e4a;
+    classDef dataNode fill:#fff7ed,stroke:#fb923c,color:#7c2d12;
+    classDef externalNode fill:#f0fdf4,stroke:#4ade80,color:#14532d;
+    classDef userNode fill:#f8fafc,stroke:#475569,color:#1e293b;
+
+    class user userNode;
+    class mobile,webview clientNode;
+    class hrmweb webNode;
+    class auth,ioffice,hrm serviceNode;
+    class authdb,iofficedb,redis,hrmdb dataNode;
+    class fcm externalNode;
