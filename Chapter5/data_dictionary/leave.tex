@@ -16,9 +16,9 @@
 \endlastfoot
 \texttt{tcns\_nghi\_phep\_dang\_ky} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh phiếu nghỉ phép. \\
 \cline{2-4}
- & \texttt{shcc} & text (PK, NOT NULL) & Mã số cán bộ đăng ký nghỉ phép. \\
+ & \texttt{shcc} & text (PK, NOT NULL) & Mã số nhân sự đăng ký nghỉ phép. \\
 \cline{2-4}
- & \mbox{\texttt{ma\_don\_vi}} & text & Đơn vị công tác của cán bộ. \\
+ & \mbox{\texttt{ma\_don\_vi}} & text & Đơn vị công tác của nhân sự. \\
 \cline{2-4}
  & \texttt{ngay\_bat\_dau} & bigint & Thời điểm bắt đầu nghỉ (timestamp). \\
 \cline{2-4}
@@ -32,7 +32,7 @@
 \cline{2-4}
  & \texttt{hinh\_thuc} & text & Hình thức nghỉ (phép năm, việc riêng,...). \\
 \cline{2-4}
- & \texttt{ly\_do} & text & Lý do xin nghỉ phép của cán bộ. \\
+ & \texttt{ly\_do} & text & Lý do xin nghỉ phép của nhân sự. \\
 \cline{2-4}
  & \texttt{files} & jsonb & Danh sách tệp minh chứng đính kèm. \\
 \cline{2-4}
@@ -74,11 +74,11 @@
 \cline{2-4}
  & \texttt{phieu\_id} & integer & Liên kết logic đến phiếu nghỉ phép. \\
 \cline{2-4}
- & \texttt{shcc} & jsonb & Danh sách cán bộ được phân công xử lý. \\
+ & \texttt{shcc} & jsonb & Danh sách nhân sự được phân công xử lý. \\
 \cline{2-4}
  & \texttt{ma\_quy\_trinh} & text & Mã bước quy trình được phân công. \\
 \cline{2-4}
- & \texttt{trang\_thai} & text & Trạng thái xử lý của cán bộ được phân công. \\
+ & \texttt{trang\_thai} & text & Trạng thái xử lý của nhân sự được phân công. \\
 \cline{2-4}
  & \texttt{forward\_to} & text & Thông tin người hoặc bước được chuyển tiếp. \\
 \hline
@@ -88,7 +88,7 @@
 \cline{2-4}
  & \texttt{ma\_quy\_trinh} & text & Bước quy trình tại thời điểm xử lý. \\
 \cline{2-4}
- & \texttt{shcc} & text & Mã cán bộ thực hiện thao tác. \\
+ & \texttt{shcc} & text & Mã nhân sự thực hiện thao tác. \\
 \cline{2-4}
  & \texttt{trang\_thai} & text & Trạng thái ghi nhận tại thời điểm xử lý. \\
 \cline{2-4}
@@ -98,7 +98,7 @@
 \hline
 \texttt{tcns\_so\_nghi\_phep\_nam} & \texttt{nam} & numeric (PK, NOT NULL) & Năm quản lý hạn mức nghỉ phép. \\
 \cline{2-4}
- & \texttt{shcc} & text (PK, NOT NULL) & Mã cán bộ được quản lý hạn mức phép. \\
+ & \texttt{shcc} & text (PK, NOT NULL) & Mã nhân sự được quản lý hạn mức phép. \\
 \cline{2-4}
  & \texttt{tong\_so\_ngay} & numeric & Tổng số ngày phép được nghỉ trong năm. \\
 \end{xltabular}

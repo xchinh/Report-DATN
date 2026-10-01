@@ -1,5 +1,5 @@
 \begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
-\caption[Từ điển dữ liệu phân hệ hồ sơ cán bộ]{Từ điển dữ liệu phân hệ hồ sơ cán bộ}\label{tab:tcns_profile_dictionary}\\
+\caption[Từ điển dữ liệu phân hệ hồ sơ nhân sự]{Từ điển dữ liệu phân hệ hồ sơ nhân sự}\label{tab:tcns_profile_dictionary}\\
 \hline
 \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
 \hline
@@ -14,27 +14,27 @@
 \endfoot
 \hline
 \endlastfoot
-\texttt{tcns\_ly\_lich} & \texttt{shcc} & varchar (PK, NOT NULL) & Mã cán bộ và định danh hồ sơ chính thức. \\
+\texttt{tcns\_ly\_lich} & \texttt{shcc} & varchar (PK, NOT NULL) & Mã nhân sự và định danh hồ sơ chính thức. \\
 \cline{2-4}
- & \texttt{ho} & varchar & Họ và tên đệm của cán bộ. \\
+ & \texttt{ho} & varchar & Họ và tên đệm của nhân sự. \\
 \cline{2-4}
- & \texttt{ten} & varchar & Tên của cán bộ. \\
+ & \texttt{ten} & varchar & Tên của nhân sự. \\
 \cline{2-4}
  & \texttt{email} & varchar & Email công vụ do Nhà trường cấp. \\
 \cline{2-4}
- & \texttt{email\_ca\_nhan} & varchar  & Email cá nhân của cán bộ. \\
+ & \texttt{email\_ca\_nhan} & varchar  & Email cá nhân của nhân sự. \\
 \cline{2-4}
- & \texttt{sdt} & varchar  & Số điện thoại liên hệ của cán bộ. \\
+ & \texttt{sdt} & varchar  & Số điện thoại liên hệ của nhân sự. \\
 \cline{2-4}
- & \mbox{\texttt{don\_vi}} & varchar  & Đơn vị công tác của cán bộ. \\
+ & \mbox{\texttt{don\_vi}} & varchar  & Đơn vị công tác của nhân sự. \\
 \cline{2-4}
- & \texttt{chuc\_vu\_chinh} & varchar  & Chức vụ chính quyền của cán bộ. \\
+ & \texttt{chuc\_vu\_chinh} & varchar  & Chức vụ chính quyền của nhân sự. \\
 \cline{2-4}
  & \texttt{chuc\_danh} & text  & Chức danh khoa học hoặc nghề nghiệp. \\
 \cline{2-4}
  & \texttt{hoc\_ham} & varchar  & Học hàm (Giáo sư, Phó giáo sư). \\
 \cline{2-4}
- & \texttt{hoc\_vi} & varchar  & Học vị cao nhất của cán bộ. \\
+ & \texttt{hoc\_vi} & varchar  & Học vị cao nhất của nhân sự. \\
 \cline{2-4}
  & \texttt{ngach} & varchar  & Ngạch viên chức hiện tại. \\
 \cline{2-4}
@@ -44,7 +44,7 @@
 \hline
 \texttt{tcns\_ly\_lich\_request} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh yêu cầu cập nhật hồ sơ. \\
 \cline{2-4}
- & \texttt{shcc} & varchar  & Liên kết logic đến cán bộ gửi yêu cầu. \\
+ & \texttt{shcc} & varchar  & Liên kết logic đến nhân sự gửi yêu cầu. \\
 \cline{2-4}
  & \texttt{phan\_loai} & varchar  & Phân loại nhóm thông tin cần cập nhật. \\
 \cline{2-4}
@@ -74,7 +74,7 @@
 \cline{2-4}
  & \texttt{reviewed\_at} & bigint  & Thời điểm thẩm định (timestamp). \\
 \cline{2-4}
- & \texttt{reviewed\_by} & varchar  & Mã cán bộ thực hiện thẩm định. \\
+ & \texttt{reviewed\_by} & varchar  & Mã nhân sự thực hiện thẩm định. \\
 \hline
 \texttt{tcns\_ly\_lich\_request\_file} & \texttt{file\_id} & uuid (PK, NOT NULL) & Định danh tệp minh chứng. \\
 \cline{2-4}

@@ -5,9 +5,9 @@ Chuyển đổi số trong giáo dục đại học là một trong những đ�
 
 Trường Đại học Bách khoa -- ĐHQG-HCM có quy mô 1.061 viên chức, người lao động, trong đó có 667 giảng viên, cùng khoảng 28.000 học viên, sinh viên~\cite{hcmut_overview_2026}. Với quy mô này, các hoạt động quản lý và điều hành liên quan đến nhân sự bao gồm quản lý hồ sơ, đăng ký và phê duyệt nghỉ phép, xử lý hồ sơ đi công tác, tra cứu văn bản, theo dõi nhiệm vụ và lịch làm việc.
 
-Để hỗ trợ các nghiệp vụ trên, Nhà trường đã triển khai các hệ thống như Quản lý Nhân sự (HRM) và Văn phòng điện tử (iOffice). Các hệ thống này cung cấp dữ liệu và quy trình nghiệp vụ phục vụ công tác quản lý, điều hành. Tuy nhiên, việc truy cập và thao tác chủ yếu được thực hiện thông qua giao diện Web. Khi không sử dụng máy tính, cán bộ và giảng viên có thể gặp bất tiện trong việc tra cứu thông tin, theo dõi trạng thái hồ sơ hoặc xử lý công việc phát sinh. Bên cạnh đó, các nghiệp vụ được cung cấp qua nhiều hệ thống khác nhau khiến người dùng phải chuyển đổi giữa các giao diện trong quá trình làm việc.
+Để hỗ trợ các nghiệp vụ trên, Nhà trường đã triển khai các hệ thống như Quản lý Nhân sự (HRM) và Văn phòng điện tử (iOffice). Các hệ thống này cung cấp dữ liệu và quy trình nghiệp vụ phục vụ công tác quản lý, điều hành. Tuy nhiên, việc truy cập và thao tác chủ yếu được thực hiện thông qua giao diện Web. Khi không sử dụng máy tính, nhân sự trường có thể gặp bất tiện trong việc tra cứu thông tin, theo dõi trạng thái hồ sơ hoặc xử lý công việc phát sinh. Bên cạnh đó, các nghiệp vụ được cung cấp qua nhiều hệ thống khác nhau khiến người dùng phải chuyển đổi giữa các giao diện trong quá trình làm việc.
 
-Từ thực tế trên, đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} được thực hiện nhằm xây dựng \textbf{MyHCMUT Mobile}, một ứng dụng cho phép cán bộ và giảng viên tiếp cận các nghiệp vụ cần thiết trên thiết bị di động. Ứng dụng được phát triển theo hướng tích hợp với HRM, iOffice và các dịch vụ hiện hữu của Nhà trường, tận dụng dữ liệu và quy trình nghiệp vụ đã có thay vì xây dựng một hệ thống quản lý nhân sự mới.
+Từ thực tế trên, đề tài \textbf{``Phát triển ứng dụng di động phục vụ nhân sự Trường Đại học''} được thực hiện nhằm xây dựng \textbf{MyHCMUT Mobile}, một ứng dụng cho phép nhân sự trường tiếp cận các nghiệp vụ cần thiết trên thiết bị di động. Ứng dụng được phát triển theo hướng tích hợp với HRM, iOffice và các dịch vụ hiện hữu của Nhà trường, tận dụng dữ liệu và quy trình nghiệp vụ đã có thay vì xây dựng một hệ thống quản lý nhân sự mới.
 
 \section{Bài toán đặt ra}
 \label{sec:baitoandatra}
@@ -15,7 +15,7 @@ Từ thực tế trên, đề tài \textbf{``Phát triển ứng dụng di độ
 \subsection{Bài toán thực tế từ góc độ người dùng}
 \label{subsec:baitoan_thucte_nguoidung}
 
-Trong quá trình làm việc, cán bộ và giảng viên cần thực hiện nhiều nghiệp vụ có tính chất khác nhau, từ tra cứu thông tin cá nhân đến đăng ký nghỉ phép, lập hồ sơ công tác, xử lý văn bản và theo dõi lịch làm việc. Những nhu cầu này có thể phát sinh khi người dùng không có điều kiện sử dụng máy tính.
+Trong quá trình làm việc, nhân sự trường cần thực hiện nhiều nghiệp vụ có tính chất khác nhau, từ tra cứu thông tin cá nhân đến đăng ký nghỉ phép, lập hồ sơ công tác, xử lý văn bản và theo dõi lịch làm việc. Những nhu cầu này có thể phát sinh khi người dùng không có điều kiện sử dụng máy tính.
 
 Đối với các nghiệp vụ tra cứu, người dùng cần một giao diện phù hợp với thiết bị di động để xem thông tin và theo dõi trạng thái xử lý. Đối với các nghiệp vụ có thao tác cập nhật hoặc phê duyệt, ứng dụng cần hỗ trợ người dùng thực hiện công việc theo đúng quyền hạn và quy trình đang được áp dụng tại Nhà trường.
 
@@ -42,7 +42,7 @@ Như vậy, trọng tâm kỹ thuật của đề tài là \textbf{thiết kế 
 \subsection{Mục tiêu tổng quát}
 \label{subsec:muctieu_tongquat}
 
-Phát triển ứng dụng MyHCMUT Mobile phục vụ cán bộ và giảng viên Trường Đại học Bách khoa -- ĐHQG-HCM, cho phép người dùng tra cứu thông tin và thực hiện các nghiệp vụ quản lý, điều hành thuộc phạm vi đề tài trên thiết bị di động thông qua việc tích hợp với các hệ thống hiện hữu của Nhà trường.
+Phát triển ứng dụng MyHCMUT Mobile phục vụ nhân sự Trường Đại học Bách khoa -- ĐHQG-HCM, cho phép người dùng tra cứu thông tin và thực hiện các nghiệp vụ quản lý, điều hành thuộc phạm vi đề tài trên thiết bị di động thông qua việc tích hợp với các hệ thống hiện hữu của Nhà trường.
 
 \subsection{Mục tiêu cụ thể}
 \label{subsec:muctieu_cuthe}
@@ -60,7 +60,7 @@ Phát triển ứng dụng MyHCMUT Mobile phục vụ cán bộ và giảng viê
 \section{Phạm vi đề tài}
 \label{sec:doituong_phamvi_ranhgioi}
 
-Đề tài tập trung phát triển ứng dụng di động MyHCMUT Mobile phục vụ cán bộ và giảng viên Trường Đại học Bách khoa -- ĐHQG-HCM. Ứng dụng khai thác dữ liệu và các quy trình nghiệp vụ từ những hệ thống hiện hữu của Nhà trường, chủ yếu là HRM và iOffice.
+Đề tài tập trung phát triển ứng dụng di động MyHCMUT Mobile phục vụ nhân sự Trường Đại học Bách khoa -- ĐHQG-HCM. Ứng dụng khai thác dữ liệu và các quy trình nghiệp vụ từ những hệ thống hiện hữu của Nhà trường, chủ yếu là HRM và iOffice.
 
 Trong phạm vi đồ án, nhóm tập trung phân tích, thiết kế và hiện thực các chức năng trên ứng dụng di động cùng những thành phần tích hợp cần thiết để ứng dụng có thể tương tác với các dịch vụ nghiệp vụ. Đề tài không đặt mục tiêu thay thế HRM, iOffice hoặc xây dựng lại toàn bộ các quy trình quản lý đang được Nhà trường vận hành.
 

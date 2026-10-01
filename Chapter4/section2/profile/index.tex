@@ -4,18 +4,18 @@
 
 \subsubsection{Mục tiêu và yêu cầu chức năng}
 
-Chức năng quản lý hồ sơ cá nhân cho phép cán bộ, giảng viên tra cứu thông tin lý lịch nhân sự của bản thân trên MyHCMUT Mobile và cập nhật thông tin theo phạm vi quyền được hệ thống HRM xác định. Dữ liệu hồ sơ chính thức được quản lý tại hệ thống Quản lý Nhân sự (HRM); ứng dụng di động cung cấp giao diện tra cứu và điểm truy cập đến các chức năng cập nhật tương ứng.
+Chức năng quản lý hồ sơ cá nhân cho phép nhân sự tra cứu thông tin lý lịch nhân sự của bản thân trên MyHCMUT Mobile và cập nhật thông tin theo phạm vi quyền được hệ thống HRM xác định. Dữ liệu hồ sơ chính thức được quản lý tại hệ thống Quản lý Nhân sự (HRM); ứng dụng di động cung cấp giao diện tra cứu và điểm truy cập đến các chức năng cập nhật tương ứng.
 
 Tùy theo trường thông tin và chính sách do HRM cung cấp, việc cập nhật được thực hiện theo hai hướng. Đối với các thông tin người dùng được phép tự cập nhật, thay đổi hợp lệ được ghi nhận trực tiếp vào hồ sơ. Đối với các thông tin cần thẩm định, hệ thống ghi nhận đề xuất cập nhật cùng tài liệu minh chứng để chuyển đến người có thẩm quyền xử lý. Trong cùng một lần cập nhật, các trường thông tin có thể được xử lý theo các hướng khác nhau tùy theo chính sách áp dụng cho từng trường.
 
-Đối với các đề xuất cần thẩm định, chuyên viên TCCB có quyền xử lý có thể đối chiếu thông tin hiện tại với nội dung đề xuất và tài liệu minh chứng, sau đó xử lý từng nội dung thay đổi theo phạm vi được phân công. Kết quả xử lý được ghi nhận để xác định trạng thái cuối cùng của đề xuất và cập nhật dữ liệu hồ sơ tương ứng.
+Đối với các đề xuất cần thẩm định, chuyên viên TCNS có quyền xử lý có thể đối chiếu thông tin hiện tại với nội dung đề xuất và tài liệu minh chứng, sau đó xử lý từng nội dung thay đổi theo phạm vi được phân công. Kết quả xử lý được ghi nhận để xác định trạng thái cuối cùng của đề xuất và cập nhật dữ liệu hồ sơ tương ứng.
 
 Để hỗ trợ người dùng tra cứu thuận tiện trên thiết bị di động, thông tin hồ sơ được tổ chức thành các danh mục chi tiết, phân bố trên 3 nhóm giao diện chính như trình bày tại Bảng~\ref{tab:profile_groups}.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Phân nhóm danh mục thông tin hồ sơ cán bộ}
+\caption{Phân nhóm danh mục thông tin hồ sơ nhân sự}
 \label{tab:profile_groups}
 \vspace{0.15cm}
 \begin{tabularx}{\textwidth}{|L{4.2cm}|Y|}
@@ -42,11 +42,11 @@ Bảng~\ref{tab:fr_profile} tổng hợp các yêu cầu chức năng của nhó
 \hline
 \textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả và ràng buộc nghiệp vụ} \\
 \hline
-FR-PRO-01 & Tra cứu hồ sơ & Cán bộ, Giảng viên & Xem các danh mục thông tin lý lịch cá nhân do HRM cung cấp. \\
+FR-PRO-01 & Tra cứu hồ sơ & Nhân sự & Xem các danh mục thông tin lý lịch cá nhân do HRM cung cấp. \\
 \hline
-FR-PRO-02 & Cập nhật hồ sơ & Cán bộ, Giảng viên & Truy cập tới Web HRM với giao diện phù hợp mà không yêu cầu đăng nhập lại; HRM kiểm tra quyền và quy tắc dữ liệu để cập nhật trực tiếp hoặc tiếp nhận đề xuất cần thẩm định. \\
+FR-PRO-02 & Cập nhật hồ sơ & Nhân sự & Truy cập tới Web HRM với giao diện phù hợp mà không yêu cầu đăng nhập lại; HRM kiểm tra quyền và quy tắc dữ liệu để cập nhật trực tiếp hoặc tiếp nhận đề xuất cần thẩm định. \\
 \hline
-FR-PRO-03 & Thẩm định đề xuất & Chuyên viên TCCB & Đối với đề xuất cần thẩm định, xem xét thông tin sai khác, đối chiếu minh chứng và phê duyệt hoặc từ chối theo thẩm quyền. \\
+FR-PRO-03 & Thẩm định đề xuất & Chuyên viên TCNS & Đối với đề xuất cần thẩm định, xem xét thông tin sai khác, đối chiếu minh chứng và phê duyệt hoặc từ chối theo thẩm quyền. \\
 \hline
 \end{tabularx}
 \end{table}
@@ -74,7 +74,7 @@ Bảng~\ref{tab:mapping_uc_pro} tổng hợp danh mục các use case thuộc nh
 \hline
 \textbf{Mã Use Case} & \textbf{Tên Use Case} & \textbf{Mục tiêu Nghiệp vụ} \\
 \hline
-\textbf{UC-PRO-01} & Tra cứu hồ sơ cán bộ & Tra cứu thông tin lý lịch theo các danh mục trên thiết bị di động. \\
+\textbf{UC-PRO-01} & Tra cứu hồ sơ nhân sự & Tra cứu thông tin lý lịch theo các danh mục trên thiết bị di động. \\
 \hline
 \textbf{UC-PRO-02} & Cập nhật hồ sơ cá nhân & Cập nhật trực tiếp thông tin được phép hoặc gửi đề xuất kèm minh chứng đối với thông tin cần thẩm định. \\
 \hline
@@ -87,11 +87,11 @@ Use case trọng tâm làm phát sinh yêu cầu thay đổi dữ liệu là UC-
 
 \usecasespec{
   id={UC-PRO-01},
-  name={Tra cứu hồ sơ cán bộ},
+  name={Tra cứu hồ sơ nhân sự},
   shortname={Tra cứu hồ sơ},
-  actor={Cán bộ / Giảng viên},
-  desc={Cho phép cán bộ tra cứu các danh mục thông tin lý lịch cá nhân được cung cấp bởi hệ thống HRM.},
-  pre={Cán bộ đã đăng nhập thành công vào ứng dụng MyHCMUT Mobile.},
+  actor={Nhân sự},
+  desc={Cho phép nhân sự tra cứu các danh mục thông tin lý lịch cá nhân được cung cấp bởi hệ thống HRM.},
+  pre={Nhân sự đã đăng nhập thành công vào ứng dụng MyHCMUT Mobile.},
   trigger={Người dùng chọn mục ``Hồ sơ cá nhân'' trên ứng dụng di động.},
   mainflow={
     1. Người dùng mở giao diện hồ sơ cá nhân trên ứng dụng. \newline
@@ -113,9 +113,9 @@ Use case trọng tâm làm phát sinh yêu cầu thay đổi dữ liệu là UC-
   id={UC-PRO-02},
   name={Cập nhật hồ sơ cá nhân},
   shortname={Cập nhật hồ sơ},
-  actor={Cán bộ / Giảng viên},
-  desc={Cho phép cán bộ cập nhật thông tin hồ sơ theo phạm vi quyền; HRM ghi nhận trực tiếp các thông tin được phép và tiếp nhận đề xuất đối với thông tin cần thẩm định.},
-  pre={Cán bộ đã đăng nhập vào MyHCMUT Mobile và đang xem hồ sơ của bản thân.},
+  actor={Nhân sự},
+  desc={Cho phép nhân sự cập nhật thông tin hồ sơ theo phạm vi quyền; HRM ghi nhận trực tiếp các thông tin được phép và tiếp nhận đề xuất đối với thông tin cần thẩm định.},
+  pre={Nhân sự đã đăng nhập vào MyHCMUT Mobile và đang xem hồ sơ của bản thân.},
   trigger={Người dùng chọn chức năng cập nhật tại danh mục thông tin tương ứng.},
   mainflow={
     1. Người dùng chọn cập nhật thông tin hồ sơ. \newline
@@ -138,9 +138,9 @@ Use case trọng tâm làm phát sinh yêu cầu thay đổi dữ liệu là UC-
   id={UC-PRO-03},
   name={Thẩm định thay đổi hồ sơ},
   shortname={Thẩm định thay đổi hồ sơ},
-  actor={Chuyên viên Phòng Tổ chức Cán bộ có thẩm quyền},
-  desc={Cho phép chuyên viên TCCB có thẩm quyền đối chiếu nội dung đề xuất với dữ liệu hiện tại và tài liệu minh chứng, sau đó xử lý các nội dung thay đổi theo phạm vi được phân công.},
-  pre={Chuyên viên đã đăng nhập và tài khoản được phân quyền thẩm định hồ sơ cán bộ.},
+  actor={Chuyên viên Phòng Tổ chức Nhân sự có thẩm quyền},
+  desc={Cho phép chuyên viên TCNS có thẩm quyền đối chiếu nội dung đề xuất với dữ liệu hiện tại và tài liệu minh chứng, sau đó xử lý các nội dung thay đổi theo phạm vi được phân công.},
+  pre={Chuyên viên đã đăng nhập và tài khoản được phân quyền thẩm định hồ sơ nhân sự.},
   trigger={Chuyên viên mở danh sách các đề xuất cập nhật hồ sơ đang chờ xử lý.},
   mainflow={
     1. Chuyên viên mở danh sách đề xuất cập nhật hồ sơ chờ xử lý. \newline
@@ -163,7 +163,7 @@ Use case trọng tâm làm phát sinh yêu cầu thay đổi dữ liệu là UC-
 
 \subsubsection{Biểu đồ hoạt động}
 
-Quy trình cập nhật hồ sơ bắt đầu khi cán bộ lựa chọn thông tin cần thay đổi. Dựa trên chính sách áp dụng cho từng trường thông tin, HRM xác định nội dung có thể được cập nhật trực tiếp và nội dung cần được ghi nhận thành đề xuất thẩm định. Trong cùng một lần cập nhật, hai hình thức xử lý có thể đồng thời xuất hiện đối với các trường thông tin khác nhau.
+Quy trình cập nhật hồ sơ bắt đầu khi nhân sự lựa chọn thông tin cần thay đổi. Dựa trên chính sách áp dụng cho từng trường thông tin, HRM xác định nội dung có thể được cập nhật trực tiếp và nội dung cần được ghi nhận thành đề xuất thẩm định. Trong cùng một lần cập nhật, hai hình thức xử lý có thể đồng thời xuất hiện đối với các trường thông tin khác nhau.
 
 Đối với nội dung cần thẩm định, người có thẩm quyền đối chiếu thông tin hiện tại, nội dung đề xuất và tài liệu minh chứng trước khi ghi nhận kết quả xử lý. Khi toàn bộ nội dung của đề xuất đã được xử lý, trạng thái cuối cùng của đề xuất được xác định và kết quả được phản hồi đến người đề xuất.
 

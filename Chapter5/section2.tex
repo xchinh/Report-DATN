@@ -20,18 +20,18 @@ Khi đánh giá đóng góp của đề tài, cần phân biệt bốn phần: �
 Cấu trúc mã nguồn gồm ba nhóm chính:
 \begin{itemize}
     \item \textbf{Ứng dụng chính (\texttt{apps/myhcmut}):} Là điểm khởi chạy và kết hợp các module thành ứng dụng hoàn chỉnh. Thành phần này đảm nhiệm khởi tạo ứng dụng, cấu hình điều hướng, đăng ký các provider dùng chung và tổ chức các màn hình ở cấp ứng dụng.
-    \item \textbf{Các module nghiệp vụ (\texttt{modules}):} Được tổ chức thành các nhóm HRM, iOffice và thông báo. Module HRM cung cấp các chức năng hồ sơ cán bộ, nghỉ phép, đi công tác và phê duyệt liên quan. Module iOffice cung cấp các chức năng văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Module thông báo đảm nhiệm tiếp nhận, hiển thị thông báo và xử lý điều hướng đến chức năng tương ứng.
+    \item \textbf{Các module nghiệp vụ (\texttt{modules}):} Được tổ chức thành các nhóm HRM, iOffice và thông báo. Module HRM cung cấp các chức năng hồ sơ nhân sự, nghỉ phép, đi công tác và phê duyệt liên quan. Module iOffice cung cấp các chức năng văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Module thông báo đảm nhiệm tiếp nhận, hiển thị thông báo và xử lý điều hướng đến chức năng tương ứng.
     \item \textbf{Các package dùng chung (\texttt{packages}):} Cung cấp những thành phần được nhiều module sử dụng, bao gồm giao tiếp mạng, quản lý thông tin xác thực, thành phần giao diện và các tiện ích hỗ trợ.
 \end{itemize}
 
 Cách tổ chức này giúp phân định phạm vi mã nguồn theo nhóm nghiệp vụ, đồng thời cho phép tái sử dụng các thành phần chung giữa nhiều module. Tuy nhiên, cấu trúc nội bộ không hoàn toàn giống nhau ở mọi chức năng; đề tài không áp đặt một chuỗi lớp xử lý cố định cho toàn bộ ứng dụng.
 
-\textbf{Luồng xử lý chức năng hồ sơ cán bộ:} Chức năng hồ sơ cán bộ được lựa chọn để minh họa cách các thành phần Flutter phối hợp trong một luồng xử lý thực tế. Màn hình \texttt{PersonalProfilePage} theo dõi trạng thái từ \texttt{profileInfoProvider}; provider này tổng hợp dữ liệu từ ba provider thành phần tương ứng với thông tin cá nhân, đào tạo và quá trình công tác. Mỗi provider thành phần sử dụng \texttt{fetchWithCacheFirst} để đọc dữ liệu cục bộ hoặc gọi HRM Backend thông qua \texttt{hrmDioProvider}. Kết quả được chuyển thành \texttt{ProfileModel}, hợp nhất và cung cấp lại cho giao diện.
+\textbf{Luồng xử lý chức năng hồ sơ nhân sự:} Chức năng hồ sơ nhân sự được lựa chọn để minh họa cách các thành phần Flutter phối hợp trong một luồng xử lý thực tế. Màn hình \texttt{PersonalProfilePage} theo dõi trạng thái từ \texttt{profileInfoProvider}; provider này tổng hợp dữ liệu từ ba provider thành phần tương ứng với thông tin cá nhân, đào tạo và quá trình công tác. Mỗi provider thành phần sử dụng \texttt{fetchWithCacheFirst} để đọc dữ liệu cục bộ hoặc gọi HRM Backend thông qua \texttt{hrmDioProvider}. Kết quả được chuyển thành \texttt{ProfileModel}, hợp nhất và cung cấp lại cho giao diện.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth,height=0.36\textheight,keepaspectratio]{image/architecture/chapter5-profile-cache.png}
-    \caption[Luồng tải và lưu đệm dữ liệu hồ sơ cán bộ]{Luồng tải và lưu đệm dữ liệu hồ sơ cán bộ}
+    \caption[Luồng tải và lưu đệm dữ liệu hồ sơ nhân sự]{Luồng tải và lưu đệm dữ liệu hồ sơ nhân sự}
     \label{fig:profile_cache_flow}
 \end{figure}
 
@@ -52,7 +52,7 @@ MyHCMUT Mobile tích hợp với Auth Service, HRM Backend và iOffice Backend. 
 
 \textbf{Auth Service:} Cung cấp chức năng đăng nhập và cấp token cho ứng dụng. Sau khi nhận token, ứng dụng gửi yêu cầu trực tiếp đến HRM Backend hoặc iOffice Backend tùy theo chức năng được sử dụng. Các backend tự xác thực yêu cầu và kiểm tra quyền truy cập nghiệp vụ. Trong phạm vi đề tài, nhóm tích hợp ứng dụng với dịch vụ xác thực hiện hữu, không xây dựng mới một hệ thống xác thực độc lập.
 
-\textbf{HRM Backend:} Cung cấp các module nghiệp vụ hồ sơ cán bộ, nghỉ phép, đi công tác và quy trình phê duyệt. Trong cấu trúc mã nguồn hiện hữu, middleware được gắn khi đăng ký route để xử lý các yêu cầu dùng chung như xác thực và phân quyền. Controller hoặc handler tiếp nhận yêu cầu và điều phối xử lý; tùy từng module, thành phần này có thể làm việc trực tiếp với model hoặc thông qua service/helper.
+\textbf{HRM Backend:} Cung cấp các module nghiệp vụ hồ sơ nhân sự, nghỉ phép, đi công tác và quy trình phê duyệt. Trong cấu trúc mã nguồn hiện hữu, middleware được gắn khi đăng ký route để xử lý các yêu cầu dùng chung như xác thực và phân quyền. Controller hoặc handler tiếp nhận yêu cầu và điều phối xử lý; tùy từng module, thành phần này có thể làm việc trực tiếp với model hoặc thông qua service/helper.
 
 Đề tài kế thừa các nghiệp vụ, quy trình và dữ liệu HRM hiện hữu, đồng thời bổ sung hoặc điều chỉnh một số điểm tích hợp phục vụ ứng dụng di động, bao gồm API hồ sơ, kiểm tra điều kiện nghỉ phép, đăng ký token thiết bị, metadata thông báo và cơ chế cấp, tiêu thụ vé SSO. Các phần mở rộng này hỗ trợ ứng dụng khai thác hệ thống HRM mà không chuyển quyền xử lý nghiệp vụ hoặc quản lý dữ liệu chính thức sang thiết bị di động.
 

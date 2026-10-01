@@ -1,0 +1,40 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
+    \caption[\textit{Từ điển dữ liệu bảng lý lịch gia đình}]{\textit{Từ điển dữ liệu bảng lý lịch gia đình}}\label{tab:profile_family}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endfirsthead
+    \multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endhead
+    \hline
+    \multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+    \endfoot
+    \hline
+    \endlastfoot
+    \texttt{tcns\_ly\_lich\_cong\_tac} & \texttt{id} & integer (PK, NOT NULL) & Định danh địa chỉ. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) (FK với \texttt{shcc} trong \texttt{tcns\_ly\_lich}) & Liên kết logic đến quy trình. \\
+    \cline{2-4}
+    & \texttt{moi\_quan\_he} & varchar(5)  & Mối quan hệ với người thân với nhân sự. \\
+    \cline{2-4}
+    & \texttt{don\_vi\_cong\_tac} & varchar(1000) & Đơn vị công tác của người thân. \\
+    \cline{2-4}
+    & \texttt{nghe\_nghiep} & varchar(5)  & Nghề nghiệp của người thân. \\
+    \cline{2-4}
+    & \texttt{ho\_ten} & varchar(5)  & Họ tên của người thân. \\
+    \cline{2-4}
+    & \texttt{gioi\_tinh} & boolean & Giới tính của người thân. \\
+    \cline{2-4}
+    & \texttt{ngay\_sinh} & bigint & Ngày sinh của người thân. \\
+    \cline{2-4}
+    & \texttt{thong\_tin\_khac} & text & Thông tin khác về người thân. \\
+    \cline{2-4}
+    & \texttt{nhom\_quan\_he} & varchar(50) & Nhóm quan hệ với nhân sự. \\
+    \cline{2-4}
+    & \texttt{que\_quan\_moi} & varchar(50) & Quê quán mới của người thân. \\
+    \cline{2-4}
+    & \texttt{noi\_o\_hien\_tai\_moi} & varchar(50) & Nơi ở hiện tại mới của người thân. \\
+\end{xltabular}
