@@ -4,43 +4,56 @@
 > **Dự án:** Ứng dụng di động MyHCMUT phục vụ Nhân sự Trường Đại học (MyHCMUT Mobile)  
 > **Cơ quan chủ quản:** Trường Đại học Bách khoa – ĐHQG-HCM  
 > **Sinh viên thực hiện:**  
-> - Vũ Xuân Chính (MSSV: 2210392) — Core Mobile, SSO Ticket Bridge, Quản lý Nghỉ phép & Hồ sơ Cán bộ, FCM Notification Hub.  
+> - Vũ Xuân Chính (MSSV: 2210392) — Core Mobile, Hồ sơ native, Quản lý Nghỉ phép & Hồ sơ Cán bộ, FCM Notification Hub.
 > - Tống Duy Khang (MSSV: 2211467) — Phân hệ Văn phòng số iOffice (Văn bản đến/đi, PDF Viewer) & Quản lý Nhiệm vụ (Missions/Tasks).  
 > **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tùng  
-> **Mốc đối chuẩn:** Gate 0 — Khóa Baseline Học thuật & Bằng chứng Kỹ thuật (`myhcmut-mobile:4fe5d9c`, Tháng 09/2026)  
-> **Quy mô kiểm chuẩn:** 427 bài kiểm thử tự động (370 Mobile Flutter tests + 57 Backend Vitest tests, 100% Pass Rate).  
+> **Mốc hiện hành:** 01/10/2026 — `myhcmut-mobile:72e6c67`, `hrm-be:250274c`, `ioffice-be:96b21cf`; xem [snapshot](13_CURRENT_SOURCE_SNAPSHOT.md).
+> **Số liệu lịch sử:** Gate 0 ghi nhận 427 bài (370 Mobile + 57 Backend); chưa chốt tổng mới của ba HEAD trong phiên biên tập này.
 
 ---
 
 ## 1. SỔ ĐĂNG KÝ TUYÊN BỐ KỸ THUẬT (CLAIM REGISTER)
 
-Sổ đăng ký này phân định rạch ròi 3 nhóm nhận định trong toàn bộ văn bản Đồ án Tốt nghiệp:
-- **`VERIFIED` (Đã thẩm định):** Đã hiện thực trong mã nguồn (đối chuẩn baseline `myhcmut-mobile:4fe5d9c` và `hrm-be:38745a26`) và có bài kiểm thử tự động trong bộ 427 bài tests (370 Mobile + 57 Backend, 100% Pass Rate) hoặc log thực nghiệm chứng minh trực tiếp.
-- **`ASSUMPTION` (Tiền đề thiết kế):** Giả định nghiệp vụ kế thừa từ hệ thống Web HRM hiện hữu của Nhà trường.
-- **`PROPOSED` (Đề xuất phát triển):** Giải pháp kiến trúc lý thuyết cho tương lai (Chương 7), chưa có mã nguồn kích hoạt trên môi trường sản xuất.
+Trạng thái dùng trong đối chiếu hiện hành:
+
+- **`SOURCE_CONFIRMED`:** Đã đối chiếu mã/diff hiện tại; không đồng nghĩa đã chạy E2E hoặc test tại HEAD.
+- **`VERIFIED`:** Kết quả kiểm chứng đã ghi nhận theo baseline/log được nêu. Các dòng cũ có số test/line baseline chỉ là bằng chứng lịch sử cho tới khi đối chiếu và tái lập lại.
+- **`HISTORICAL`:** Thiết kế hoặc kết quả trước đây không thuộc luồng mobile native hiện hành.
+- **`ASSUMPTION` / `PROPOSED`:** Tiền đề hoặc đề xuất chưa được chứng minh bằng hiện thực/kết quả tương ứng.
+- **`REQUIRES_RECHECK`:** Có bằng chứng mâu thuẫn; không dùng làm kết luận đã đạt trong bản báo cáo mới.
+
+Native là phạm vi chức năng của app viết lại; không đưa WebView/ticket bridge vào luồng hồ sơ mới. Việc backend giữ API SSO không thay đổi ranh giới này.
 
 | Mã Claim | Nội dung tuyên bố kỹ thuật | Phân loại | Bằng chứng mã nguồn / Kiểm thử đối chiếu | Diễn đạt chuẩn mực trong báo cáo |
 | :--- | :--- | :---: | :--- | :--- |
 | **CLM-CON-01** | Kiểm soát tương tranh trùng lịch nộp đơn (`checkTrungLich`) bằng PostgreSQL Advisory Lock 2 thành phần. | **VERIFIED** | `hrm-be`: `helper.ts` (L11-31), `controller.ts` (L212, L287), `concurrency_race_condition.unit.test.ts` (7/7 pass). | "Cơ chế Advisory Lock kết hợp lan truyền transaction CSDL giúp tuần tự hóa các yêu cầu nộp đơn của cùng cán bộ trong các luồng ghi cùng tuân thủ giao thức khóa." |
 | **CLM-CON-02** | Ngăn chặn hiện tượng gửi duyệt lặp (Idempotent State Guard) trên đường ghi cập nhật đơn. | **VERIFIED** | `hrm-be`: `controller.ts` (L328-L336) mệnh đề `WHERE id = :id AND ma_quy_trinh = :currentMaQuyTrinh`, test Case 3 (pass). | "Mệnh đề cập nhật nguyên tử bảo đảm trạng thái đơn không bị ghi đè khi có nhiều yêu cầu gửi song song." |
-| **CLM-CON-03** | Khóa mức dòng (`SELECT FOR UPDATE`) bảo vệ số dư quỹ phép năm tại bước phê duyệt cuối (`KET_THUC`). | **VERIFIED** | Stored Procedure `tcns_nghi_phep_dang_ky_insert` trên bảng `tcns_so_nghi_phep_nam`. | "Quỹ phép chỉ được trừ có thẩm quyền ở bước phê duyệt cuối cùng thông qua khóa mức dòng trên bản ghi quỹ phép." |
+| **CLM-CON-03** | Khóa dòng và kiểm tra số dư tại bước duyệt cuối nghỉ phép | **REQUIRES_RECHECK** | Biên bản `chapter6-7-evidence/11_current_scope_implementation_verification.md` ngày 24/09 xác định số dư âm khi duyệt đồng thời; HEAD HRM mới nhất chỉ sửa đồng bộ role | Không khẳng định `SELECT FOR UPDATE`/số dư không âm đã được bảo đảm khi chưa đối chiếu thủ tục triển khai và kiểm chứng đồng thời. |
 | **CLM-CON-04** | Toàn bộ các luồng ghi ngoài hệ thống đều bị chặn tương tranh bởi cơ sở dữ liệu. | **PROPOSED** | Kiến trúc đề xuất Chương 7: PostgreSQL Exclusion Constraint (`EXCLUDE USING gist`) trên `tcns_lich_ca_nhan`. | "Đề xuất thiết lập Exclusion Constraint cấp schema CSDL để bảo vệ toàn vẹn lịch cá nhân độc lập với tầng ứng dụng." |
 | **CLM-CON-05** | Bản ghi quỹ phép năm `tcns_so_nghi_phep_nam` luôn tồn tại sẵn cho mọi cán bộ. | **ASSUMPTION** | Endpoint khởi tạo hàng loạt đầu năm `POST /api/so-nghi-phep-nam/init` (`tcnsSoNghiPhepNam.initData`). | "Dòng dữ liệu quỹ phép của năm hiện tại là tiền đề thiết kế nghiệp vụ (Design-time Invariant), kỳ vọng được chạy định kỳ hàng năm." |
 | **CLM-LEV-01** | Quy trình nộp đơn nghỉ phép gồm 3 giai đoạn kỹ thuật rõ rệt. | **VERIFIED** | Giai đoạn 1: `POST /dang-ky-mobile`, Giai đoạn 2: Wizard & `POST /validate`, Giai đoạn 3: `PUT /dang-ky` (`isSend=0/1`). | "Quy trình nộp đơn tách biệt rõ giữa tạo nháp sơ bộ, kiểm tra hỗ trợ nhập liệu và chốt chặn phê duyệt có thẩm quyền." |
 | **CLM-LEV-02** | Dọn dẹp bản nháp chủ động khi người dùng thoát phiên tạo mới trên Mobile. | **VERIFIED** | `myhcmut-mobile`: `leave_request_page.dart` (L50-100), cờ `isNewlyCreated` gọi `DELETE /api/tcns-nghi-phep/dang-ky/:id`. | "Cơ chế isNewlyCreated hỗ trợ dọn dẹp nháp ngay khi người dùng hủy thao tác, giảm thiểu các bản nháp mồ côi." |
 | **CLM-LEV-03** | Tự động dọn sạch các bản nháp bị bỏ quên (Abandoned Drafts) khi ứng dụng bị tắt đột ngột. | **PROPOSED** | Kiến trúc đề xuất Chương 7: Scheduled Worker / Cron Job định kỳ quét và xóa các bản nháp quá hạn 30 ngày. | "Hệ thống hiện tại chưa có cron job dọn nháp bị bỏ quên; nhóm đề xuất triển khai worker định kỳ trong tương lai." |
-| **CLM-SSO-01** | Chuyển tiếp xác thực sang Web HRM qua vé dùng một lần (Opaque Bearer Ticket) và Redis `GETDEL`. | **VERIFIED** | `hrm-be`: `fw_auth/controller.ts`, Redis `client.getDel()`, `sso_phase0.unit.test.ts`, `sso_phase1.unit.test.ts` (46/46 pass). | "Vé SSO 64 ký tự hex có TTL 60 giây, bị tiêu thụ và xóa nguyên tử bằng Redis GETDEL khi đổi sang Web Session Cookie." |
-| **CLM-SSO-02** | Làm sạch URL thanh địa chỉ WebView sau khi tiêu thụ vé SSO. | **VERIFIED** | `hrm-fe`: `window.history.replaceState({}, document.title, window.location.pathname)`. | "Frontend Web bóc tách vé khỏi URL ngay sau khi đổi cookie, giảm thiểu lưu vết vé trong lịch sử duyệt web." |
-| **CLM-SSO-03** | Vé SSO có cơ chế thu hồi phiên tức thì từ xa (Backchannel Revocation) nếu bị đánh cắp trước. | **PROPOSED** | Kiến trúc đề xuất Chương 7: Server-side Backchannel Session Revocation và PoP/Nonce binding. | "Hệ thống hiện hữu chưa hỗ trợ thu hồi phiên tức thời nếu vé bị kẻ xấu can thiệp tiêu thụ trước WebView hợp lệ." |
+| **CLM-SSO-01** | Chuyển tiếp xác thực sang Web HRM qua vé dùng một lần (Opaque Bearer Ticket) và Redis `GETDEL`. | **HISTORICAL** | `hrm-be`: `fw_auth/controller.ts`, Redis `client.getDel()`, `sso_phase0.unit.test.ts`, `sso_phase1.unit.test.ts` (46/46 pass). | "Vé SSO 64 ký tự hex có TTL 60 giây, bị tiêu thụ và xóa nguyên tử bằng Redis GETDEL khi đổi sang Web Session Cookie." |
+| **CLM-SSO-02** | Làm sạch URL thanh địa chỉ WebView sau khi tiêu thụ vé SSO. | **HISTORICAL** | `hrm-fe`: `window.history.replaceState({}, document.title, window.location.pathname)`. | "Frontend Web bóc tách vé khỏi URL ngay sau khi đổi cookie, giảm thiểu lưu vết vé trong lịch sử duyệt web." |
+| **CLM-SSO-03** | Vé SSO có cơ chế thu hồi phiên tức thì từ xa (Backchannel Revocation) nếu bị đánh cắp trước. | **HISTORICAL** | Kiến trúc đề xuất Chương 7: Server-side Backchannel Session Revocation và PoP/Nonce binding. | "Hệ thống hiện hữu chưa hỗ trợ thu hồi phiên tức thời nếu vé bị kẻ xấu can thiệp tiêu thụ trước WebView hợp lệ." |
 | **CLM-DAT-01** | Cơ sở dữ liệu SQLite trên thiết bị di động không lưu trữ thông tin lý lịch cá nhân nhạy cảm. | **VERIFIED** | `myhcmut-mobile`: `master_data_database_service.dart` chỉ lưu 47 bảng danh mục hành chính dùng chung (HRM Master Data). | "SQLite chỉ dùng để lưu trữ danh mục tham chiếu dùng chung; thông tin hồ sơ cán bộ được quản lý qua bộ nhớ đệm SWR." |
 | **CLM-DAT-02** | Mã hóa an toàn cấp phần cứng cho Token và Hồ sơ trên mọi thiết bị di động. | **PROPOSED** | Kiến trúc đề xuất Chương 7: Tích hợp `flutter_secure_storage` (Android Keystore / iOS Keychain) thay cho SharedPreferences. | "Trong phiên bản tạo mẫu, token được lưu trong SharedPreferences; việc mã hóa phần cứng là hướng phát triển trước khi golive." |
 | **CLM-NOT-01** | Tách rời phát sự kiện thông báo Kafka ra khỏi CSDL Transaction. | **VERIFIED** | `hrm-be`: `tcns_nghi_phep/controller.ts`, `app.messageQueue.send('SEND_NOTIFY_SERVICE')` chỉ gọi sau `transaction.commit()`. | "Backend chỉ phát sự kiện thông báo sang Kafka sau khi giao dịch CSDL đã commit thành công, ngăn ngừa phát thông báo rác; không bảo đảm thiết bị nhận được thông báo." |
-| **CLM-NOT-02** | Hệ thống bảo đảm chuyển phát thông báo FCM chính xác một lần duy nhất (Exactly-Once Delivery). | **PROPOSED** | Kiến trúc đề xuất Chương 7: Bổ sung Transactional Outbox Pattern và ràng buộc `UNIQUE (event_id)` trên `fw_notification`. | "Do chưa có cơ chế Transactional Outbox, hệ thống có cửa sổ rủi ro mất hoặc trùng lặp thông báo nếu mạng gián đoạn." |
+| **CLM-NOT-02** | Thông báo exactly-once cho toàn hệ thống | **PROPOSED** | iOffice có `config/lib/outbox.js`, nhưng lời mời lịch mới gọi sender sau commit, chưa có retry bền vững riêng | “Cơ chế phải được xét theo từng luồng; có outbox trong một backend không bảo đảm mọi push được nhận exactly-once.” |
 | **CLM-BTR-01** | Endpoint di động thực tế là `/api/tcns-di-cong-tac/dang-ky` và `/duyet`, không phải endpoint giả định `/create` hay `/approve`. | **VERIFIED** | `myhcmut-mobile`: `business_trip.dart` (L85, L127), `hrm-be`: `tcns_dang_ky_cong_tac/controller/dang_ky.controller.ts` (L70), `duyet.controller.ts` (L51). | "Các thao tác tạo mới, cập nhật và duyệt công tác sử dụng bộ endpoint RESTful chuẩn xác `/api/tcns-di-cong-tac/*`." |
 | **CLM-BTR-02** | Vòng đời trạng thái đơn thực tế gồm: `NHAP`, `KET_THUC`, `TU_CHOI`, `THU_HOI`, `TRA_LAI` (các bước duyệt trung gian ánh xạ sang Chờ duyệt). | **VERIFIED** | `myhcmut-mobile`: `business_trip_model.dart` (L348-362), `hrm-be`: `quy_trinh.controller.ts` (L83-85). | "Hệ thống quản lý trạng thái hồ sơ công tác thông qua 5 trạng thái nghiệp vụ xác định kết hợp các bước luân chuyển trung gian." |
 | **CLM-BTR-03** | Cơ chế kiểm tra trùng lịch dùng chung giữa Nghỉ phép và Công tác qua `checkTrungLich`. | **VERIFIED** | `hrm-be`: `tcns_dang_ky_cong_tac/controller/dang_ky.controller.ts` (L227), `tcns_lich_ca_nhan.model.ts` (L169). | "Thuật toán kiểm tra xung đột thời gian biểu cá nhân được chia sẻ dùng chung giữa phân hệ Nghỉ phép và Đi công tác." |
-| **CLM-BTR-04** | Phân hệ Đi công tác trên mobile hiện chưa có bộ kiểm thử tự động (Unit/Widget Test) trong CI/CD. | **VERIFIED** | Thư mục `modules/hrm/test/` không chứa test script cho `business_trip`; xác thực qua Manual Staging. | "Phân hệ Đi công tác được kiểm thử tích hợp thủ công trên máy chủ staging; chưa có bộ test tự động trong monorepo." |
+| **CLM-BTR-04** | Kiểm thử tự động nghiệp vụ nghỉ phép/công tác mobile | **SOURCE_CONFIRMED** | `72e6c67` thêm `modules/hrm/test/workflows/leave_business_trip_workflow_test.dart` | “Đã bổ sung test hồi quy workflow ở mobile; không còn khẳng định công tác hoàn toàn không có test tự động, không suy ra E2E thật.” |
 | **CLM-SCH-01** | Tổng hợp Lịch công tác Đa phân hệ (Unified Calendar Aggregation) hiển thị tích hợp Lịch họp iOffice, Lịch nghỉ phép HRM và Lịch đi công tác HRM qua mô hình Adapter Pattern; trực quan hóa trạng thái tham dự (`ScheduleAttendanceStatus`) và bộ widget lịch tối ưu layout (`CustomTableCalendar`, `CompactSchedule`, `ScheduleEventCardWidget`). | **VERIFIED** | `myhcmut-mobile`: `modules/ioffice` (`hrm_leave_mapper.dart`, `hrm_business_trip_mapper.dart`, `schedule_item_helper.dart`, `schedule_list_provider.dart`, `schedule_attendance_status.dart`, `attendance_status_chip.dart`, `custom_table_calendar.dart`, `compact_schedule.dart`, `schedule_event_card_widget.dart`), 34 tests Lịch pass (14 unit/mapper tests + 20 widget tests trong `modules/ioffice/test/`). | "Mô hình Adapter Pattern kết hợp thực thể miền ScheduleAttendanceStatus, widget kiểm thử tự động và cơ chế phân vùng ID âm tổng hợp đồng nhất dữ liệu lịch đa nguồn kèm trực quan hóa trạng thái điểm danh tại Mobile Client mà không làm biến đổi CSDL máy chủ." |
+
+| **CLM-PRF-01** | Biểu mẫu native trực tiếp/yêu cầu/phản hồi theo policy và hợp đồng từng editor | **SOURCE_CONFIRMED** | Mobile `2ebf898`, `profile_edit_provider.dart`, `edit_section_menu_sheet.dart`, `views/pages/edit/`; controller request HRM | “Hồ sơ được chỉnh sửa bằng Flutter native; HRM giữ quyền quyết định nghiệp vụ.” |
+| **CLM-PRF-02** | Xem yêu cầu và nhật ký hồ sơ native | **SOURCE_CONFIRMED** | `profile_history_page.dart`, `profile_history_provider.dart`; `/api/staff/ly-lich/profile` | “Lịch sử hiển thị dữ liệu do HRM trả về; không dùng biên bản web để nghiệm thu native.” |
+| **CLM-SCH-02** | Tạo/đăng ký cuộc họp có thành phần và tệp | **SOURCE_CONFIRMED** | `ScheduleCreatePage`, `ScheduleCreate`, `72e6c67`; API iOffice ba nhánh | “Tạo cuộc họp trên app theo quyền, phân biệt lưu/tải tệp/gửi phiếu với phát hành.” |
+| **CLM-SCH-03** | Người liên quan xem lịch Trường chờ tổng hợp | **SOURCE_CONFIRMED** | `6803b7b`: `includePending`, `canViewPending`, `getPendingForUser` | “Chỉ người tạo, người mời đích danh hoặc đơn vị được mời thấy lịch TONG_HOP phù hợp; không mở mọi lịch nháp.” |
+| **CLM-SCH-04** | Lời mời họp sau commit, bổ sung gửi sớm để demo | **SOURCE_CONFIRMED** | `6803b7b`: gửi khi phát hành; `96b21cf`: API tạo trực tiếp gửi tại `TONG_HOP` | “Demo gửi ngay khi tạo trực tiếp; phát hành vẫn có thể gửi thêm. Chỉ gửi phân công SHCC hợp lệ/tài khoản hoạt động; chưa có retry bền vững riêng.” |
+| **CLM-AUTH-01** | Giữ AuthUser cache khi non-401, xóa khi 401/thiếu token/logout | **SOURCE_CONFIRMED** | `72e6c67`: `auth_state_provider.dart`; interceptor không tự refresh | “Cache hỗ trợ giữ trạng thái hiển thị khi lỗi mạng, không cấp quyền server hay bảo đảm nghiệp vụ offline.” |
+| **CLM-RBAC-01** | Đồng bộ vai trò bảo toàn quyền cấp thủ công | **SOURCE_CONFIRMED** | `250274c`: `sync_dv_roles_consumer.ts`; chỉ xóa quyền tự động không còn phù hợp, thêm quyền thiếu tránh trùng | “Backend đồng bộ quyền theo chức vụ và bảo toàn quyền cấp thủ công.” |
 
 ---
 
@@ -60,7 +73,7 @@ Ma trận ánh xạ toàn diện **10 Use Cases (UC-LEV-01..10)** và **12 Busin
 | **UC-LEV-06** | **Hủy & Dọn dẹp đơn mới tạo khi thoát**<br>*Actor: Cán bộ* | `leave_request_page.dart`<br>(`_showExitWarningDialog`) | `_handleExit`<br>Cờ `isNewlyCreated = true`<br>`deleteLeave(phieuId)` | `DELETE /api/tcns-nghi-phep/dang-ky/:id`<br>Xóa phiếu, xóa lịch cá nhân trong Transaction<br>(`tcns_nghi_phep/controller.ts: L360-390`) | `leave_request_model_test.dart` (Mobile)<br>`acquire_leave_lock.unit.test.ts` (Backend) |
 | **UC-LEV-07** | **Chỉnh sửa & Gửi lại đơn bị trả về**<br>*Actor: Cán bộ* | `leave_view_detail.dart`<br>`leave_request_page.dart` | `LeaveViewDetail`<br>`isNewlyCreated = false` | `PUT /api/upload/tcns-nghi-phep/dang-ky`<br>Loại trừ chính phiếu đang sửa trong `checkTrungLich`<br>(`tcns_lich_ca_nhan.model.ts: L173`) | `check_overlap_test.dart` (Mobile)<br>`concurrency_race_condition.unit.test.ts` (Case 1) |
 | **UC-LEV-08** | **Thu hồi đơn khi đang chờ duyệt**<br>*Actor: Cán bộ* | `leave_view_detail.dart`<br>(Nút "Thu hồi đơn") | `cancelLeaveRequest`<br>`leaveControllerProvider` | `POST /api/tcns-nghi-phep/user-phase`<br>Cập nhật `trangThai = 'THU_HOI'`, xóa lịch cá nhân<br>(`tcns_nghi_phep/controller.ts: L392-417`) | `widget_badge_test.dart` (Mobile)<br>Manual Staging E2E Scen 1 |
-| **UC-LEV-09** | **Phê duyệt hoặc Từ chối đơn nghỉ phép**<br>*Actor: Lãnh đạo / TCCB* | `leave_view_detail.dart`<br>`leave_status_badge.dart` | `approveLeaveRequest`<br>`rejectLeaveRequest` | `POST /api/tcns/quy-trinh/approved`<br>`POST /api/tcns/quy-trinh/rejected`<br>SP trừ quỹ phép bằng `SELECT FOR UPDATE` | `widget_badge_test.dart` (Mobile)<br>Manual Staging E2E Scen 1 |
+| **UC-LEV-09** | **Phê duyệt hoặc Từ chối đơn nghỉ phép**<br>*Actor: Lãnh đạo / TCCB* | `leave_view_detail.dart`<br>`leave_status_badge.dart` | `approveLeaveRequest`<br>`rejectLeaveRequest` | `POST /api/tcns/quy-trinh/approved`<br>`POST /api/tcns/quy-trinh/rejected`<br>SP trừ quỹ phép; cần kiểm chứng đồng thời theo CLM-CON-03 | `widget_badge_test.dart` (Mobile)<br>Manual Staging E2E Scen 1 |
 | **UC-LEV-10** | **Phê duyệt nhiều đơn hàng loạt**<br>*Actor: Lãnh đạo đơn vị* | `app_batch_action_bar.dart`<br>`leave_management_screen.dart` | `batchApproveLeaves`<br>Refetch trên lỗi (Fail-Stop) | `POST /api/tcns/quy-trinh/approved`<br>Xử lý `Per-Item Commit (Fail-Stop)` vòng lặp `for`<br>(`tcns_quy_trinh/controller.ts`) | `app_batch_action_bar_test.dart` (Mobile Core)<br>Manual Staging E2E Scen 1 |
 
 ---
@@ -80,7 +93,7 @@ Ma trận ánh xạ toàn diện **10 Use Cases (UC-LEV-01..10)** và **12 Busin
 | **BR-LEV-08** | Bắt buộc ghi chú theo lý do | Mã lý do '00' (Khác) hoặc lý do cần thuyết minh bắt buộc nhập `ghiChu`; lý do chuẩn là tùy chọn. | Quy trình Nhân sự ĐHBK | `leave_request_step1.dart`<br>(Form validation logic) | `tcns_nghi_phep/controller.ts`<br>(Kiểm tra ghi chú theo loại lý do) | `widget_form_validation_test.dart` (Mobile) |
 | **BR-LEV-09** | Thẩm quyền chỉnh sửa & Thu hồi | Chỉ chủ đơn mới được sửa khi ở `NHAP` hoặc `TRA_LAI`; chỉ thu hồi khi đơn chưa được duyệt. | Quy trình luân chuyển đơn | `leave_view_detail.dart`<br>(Ẩn/hiện nút theo trạng thái) | `checkPhieuOwnership` và kiểm tra `maQuyTrinh` trong `controller.ts` | `widget_badge_test.dart` (Mobile) |
 | **BR-LEV-10** | Chuẩn hóa trạng thái từ chối | Chuẩn hóa cả hai mã `TU_CHOI` và `REJECTED` về trạng thái hiển thị "Từ chối" thống nhất. | Tiêu chuẩn giao diện người dùng | `leave_status_badge.dart`<br>`leave_status_select.dart` | Backend lưu trữ phân biệt quy trình nội bộ và quyết định hành chính | `widget_badge_test.dart` (Mobile) |
-| **BR-LEV-11** | Khóa dòng trừ quỹ phép năm | Quỹ phép năm chỉ bị trừ ở bước cuối (`KET_THUC`) bởi chuyên viên TCCB qua `SELECT FOR UPDATE`. | Luật Cán bộ Viên chức | `vacation_balance_widget.dart`<br>(Hiển thị số dư tham khảo) | Stored Procedure `tcns_nghi_phep_dang_ky_insert`<br>Khóa dòng trên `tcns_so_nghi_phep_nam` | Manual Staging E2E Scen 1 |
+| **BR-LEV-11** | Khóa dòng trừ quỹ phép năm | Quỹ phép năm chỉ bị trừ ở bước cuối (`KET_THUC`) bởi chuyên viên TCCB theo kiểm tra backend hiện hành, cần rà soát khóa/số dư. | Luật Cán bộ Viên chức | `vacation_balance_widget.dart`<br>(Hiển thị số dư tham khảo) | Stored Procedure `tcns_nghi_phep_dang_ky_insert`<br>Không dùng claim khóa dòng cũ khi chưa kiểm chứng; xem CLM-CON-03 | Manual Staging E2E Scen 1 |
 | **BR-LEV-12** | Xóa đơn nháp nguyên tử | Xóa đồng thời bản ghi đơn, lịch cá nhân và quy trình trong CSDL Transaction bọc Advisory Lock. | Toàn vẹn dữ liệu hệ thống | `leaveControllerProvider`<br>(`deleteLeave`) | `DELETE /api/tcns-nghi-phep/dang-ky/:id`<br>Bọc trong `BkcoretechModel.transaction` | `acquire_leave_lock.unit.test.ts` (Backend) |
 
 ### 2.3. Ánh xạ 4 Đặc tả Use caseBối cảnh Phân hệ Đi công tác (CTX-BTR-01 đến CTX-BTR-04)
@@ -93,7 +106,7 @@ Ma trận ánh xạ toàn diện **10 Use Cases (UC-LEV-01..10)** và **12 Busin
 | **CTX-BTR-03** | **Thẩm định & Phê duyệt đa cấp**<br>*Actor: Lãnh đạo / BGH* | `approve_btrip_list_page.dart`<br>`popup_workflow_buttons.dart`<br>`approve_action_fab.dart` | `approveBusinessTripProvider`<br>`danhMucProvider` | `POST /api/tcns-di-cong-tac/duyet`<br>`GET /api/tcns-di-cong-tac/page/:pageNumber/:pageSize`<br>(`duyet.controller.ts: L51`) | Manual Staging Testing |
 | **CTX-BTR-04** | **Đồng bộ quá trình & phát sinh sự kiện thông báo**<br>*Actor: Hệ thống* | `notification_list_screen.dart`<br>`business_trip_detail_page.dart` | `notificationListProvider`<br>`NotificationRouteParser` | Ghi vào `tcnsQuaTrinhDiCongTac`<br>Backend phát event Kafka `SEND_NOTIFY_SERVICE` sau commit; FCM là bước chuyển phát best-effort, không bảo đảm thiết bị nhận | Manual Staging Testing |
 
-### 2.4. Ánh xạ Đặc tả Use casePhân hệ Văn phòng số iOffice & Lịch Tổng hợp (UC-SCH-01..02, UC-IOFFICE-01..02)
+### 2.4. Ánh xạ Đặc tả Use casePhân hệ Văn phòng số iOffice & Lịch Tổng hợp (UC-SCH-01..03, UC-IOFFICE-01..02)
 *Ghi chú: Phân hệ do sinh viên Tống Duy Khang phụ trách chính và sinh viên Vũ Xuân Chính phối hợp phát triển tầng Mobile Client & Adapter Pattern.*
 
 | Mã Truy vết (Trace ID) | Tên Đặc tả Use Case & Tác tử (Actor) | Giao diện Di động (Mobile UI) | Bộ Quản lý Trạng thái & Service | Endpoint & Tệp Xử lý Máy chủ (Backend) | Bằng chứng Kiểm thử (Test Evidence) |
@@ -102,6 +115,18 @@ Ma trận ánh xạ toàn diện **10 Use Cases (UC-LEV-01..10)** và **12 Busin
 | **UC-SCH-02** | **Xem Lịch công tác và Hoạt động Tổng hợp trên Mobile**<br>*Actor: Cán bộ / Giảng viên* | `schedule_screen.dart`<br>`calendar_timeline_view.dart`<br>`compact_schedule.dart`<br>`custom_table_calendar.dart`<br>`schedule_event_card_widget.dart`<br>`attendance_status_chip.dart` | `scheduleListProvider`<br>`ScheduleAttendanceStatus`<br>`HrmLeaveScheduleMapper`<br>`HrmBusinessTripScheduleMapper`<br>`ScheduleItemHelper` | `GET /api/e-office/schedule` (`ioffice-be`)<br>`GET /api/tcns-nghi-phep/danh-sach-mobile` (`hrm-be`)<br>`GET /api/tcns-di-cong-tac/page/...` (`hrm-be`) | `hrm_leave_mapper_test.dart`<br>`hrm_business_trip_mapper_test.dart`<br>`schedule_item_helper_test.dart` (14 unit tests)<br>`compact_schedule_test.dart`<br>`custom_table_calendar_test.dart`<br>`schedule_event_card_widget_test.dart` (20 widget tests)<br>(Tổng cộng 34 tests Lịch / 77 tests iOffice pass) |
 | **UC-IOFFICE-01** | **Tra cứu Văn bản Đến/Đi và Bút phê Phân phối Chỉ đạo**<br>*Actor: Cán bộ, Lãnh đạo Đơn vị* | `incoming_docs_list_page.dart`<br>`incoming_doc_detail_page.dart`<br>`outgoing_docs_list_page.dart`<br>(Tích hợp `pdfrx` hiển thị PDF) | `incomingDocsProvider`<br>`outgoingDocsProvider`<br>`distributionControllerProvider` | `GET /api/e-office/van-ban-den`<br>`POST /api/e-office/van-ban-den/distribute`<br>Bảng `eoffice_van_ban_den`, `eoffice_distribution`, `eoffice_van_ban_di` | `incoming_doc_model_test.dart`<br>Manual Staging E2E Scen 3 |
 | **UC-IOFFICE-02** | **Quản lý & Giám sát Tiến độ Nhiệm vụ (Tasks/Missions)**<br>*Actor: Cán bộ, Lãnh đạo Đơn vị* | `missions_list_page.dart`<br>`mission_detail_page.dart`<br>`task_detail_bottom_sheet.dart`<br>(Cây đầu việc `outlined-tree`) | `missionListProvider`<br>`missionDetailProvider` | `GET /api/e-office/mission`<br>`POST /api/e-office/mission/report`<br>Bảng `eoffice_mission`, `mission_report_batch` | `mission_model_test.dart`<br>Manual Staging E2E Scen 3 |
+
+| **UC-SCH-03** | **Tạo/đăng ký cuộc họp native** | `schedule_view.dart`, `schedule_create_page.dart` | `ScheduleCreate`, `schedule_personnel_provider.dart` | `/api/schedule/general-item/{don-vi,general,register}/create`; `/api/schedule/register/create`; `/api/schedule/register/submit/item/:id`; `/api/schedule/general-files/{register,general}/upload` | Mobile test create/attachments/navigation; iOffice test pending visibility/publication notifications. Test tồn tại, chưa chạy lại trong phiên này. |
+
+### 2.5. Truy vết hồ sơ native bổ sung cho báo cáo viết lại
+
+| Use case báo cáo | Hiện thực | Hợp đồng / test |
+| --- | --- | --- |
+| `UC-PRO-02` — Cập nhật hồ sơ | `PersonalProfilePage` → `EditSectionMenuSheet` → editor native / `ProfileEditNotifier` | API `/api/staff/user/my/staff-ly-lich/*` và nhánh chuyên viên; test policy/branches/navigation/submission refresh |
+| Bổ sung phản hồi | `profile_feedback_page.dart`, `submitFeedback` | Nội dung/tệp bắt buộc, `isPhanHoi=true`; không tự áp dụng thay đổi |
+| Bổ sung lịch sử | `profile_history_page.dart`, `profileHistoryProvider` | `/api/staff/ly-lich/profile`; `profile_history_test.dart`, `profile_history_page_test.dart` |
+
+Xem [đặc tả hồ sơ](03_REQUIREMENT_PACK_PROFILE.md), [đặc tả lịch](06B_REQUIREMENT_PACK_SCHEDULE.md) và [đề xuất sửa báo cáo](14_REPORT_7_CHAPTER_AUDIT.md) để đồng bộ mã FR/UC khi biên tập LaTeX.
 
 ---
 
@@ -134,15 +159,15 @@ Nhằm bảo đảm tính trung thực tuyệt đối trong văn phong học thu
 - **Giới hạn kỹ thuật thực tế:** PostgreSQL Advisory Lock chỉ tuần tự hóa hiệu quả giữa **các luồng ghi cùng tuân thủ giao thức lấy khóa này**. Nếu có một tiến trình ghi khác bên ngoài (ví dụ một script bảo trì hoặc Stored Procedure khác can thiệp trực tiếp vào bảng `tcns_lich_ca_nhan` mà không gọi `pg_advisory_xact_lock`), xung đột Check-then-Act vẫn có thể xảy ra.
 - **Quy tắc biên soạn:** Trình bày chuẩn xác rằng Advisory Lock tuần tự hóa các yêu cầu nộp đơn trong phạm vi các luồng ghi của mô-đun; giải pháp bảo vệ độc lập cấp schema CSDL (Exclusion Constraint `EXCLUDE USING gist`) được định vị là đề xuất nghiên cứu nâng cấp tại Chương 7.
 
-### 3.3. Không tuyên bố cơ chế SSO Opaque Bearer Ticket "An toàn tuyệt đối"
+### 3.3. Giới hạn của thiết kế SSO lịch sử (không thuộc luồng native hiện hành)
 - **Nhận định cần chấn chỉnh:** *"Vé dùng một lần và lệnh Redis GETDEL bảo đảm phiên làm việc không bao giờ có thể bị đánh cắp."*
 - **Giới hạn kỹ thuật thực tế:** Vé SSO là một chuỗi ngẫu nhiên (Opaque Bearer Credential) có thời hạn 60 giây. Nếu một kẻ tấn công chiếm quyền kiểm soát thiết bị hoặc proxy trung gian để can thiệp và gửi vé lên endpoint `POST /api/auth/sso/consume-ticket` trước khi WebView hợp lệ kịp nạp, kẻ đó sẽ sở hữu phiên làm việc Web hợp lệ. Hệ thống hiện tại chưa có cơ chế thu hồi phiên tức thời từ máy chủ (Backchannel Revocation).
 - **Quy tắc biên soạn:** Phân tích minh bạch mô hình an ninh: Vé ngắn hạn kết hợp xóa nguyên tử giúp giảm thiểu nguy cơ rò rỉ JWT dài hạn trên URL, nhưng vẫn tồn tại rủi ro nếu vé bị đánh cắp trước khi tiêu thụ; giải pháp PoP (Proof-of-Possession) và Backchannel Revocation được dành cho Chương 7.
 
 ### 3.4. Không tuyên bố FCM và Kafka phát tán "Tin cậy 100% / Exactly-Once"
 - **Nhận định cần chấn chỉnh:** *"Hệ thống thông báo đẩy bảo đảm 100% cán bộ luôn nhận được thông báo tức thì và không bao giờ mất tin nhắn."*
-- **Giới hạn kỹ thuật thực tế:** Kiến trúc hiện tại phát sự kiện Kafka sau khi CSDL commit nhưng chưa áp dụng mẫu thiết kế Transactional Outbox Pattern; nếu broker Kafka gặp sự cố đúng lúc phát sự kiện, thông báo có thể bị thất lạc. Ngoài ra, giao thức đẩy qua mạng di động (FCM / APNs) hoạt động theo cơ chế At-Least-Once Delivery kết hợp Best-Effort, có thể gây ra việc nhận trùng hoặc trễ thông báo nếu thiết bị ở vùng sóng yếu.
-- **Quy tắc biên soạn:** Trình bày trung thực luồng phát tán thông báo, ghi nhận rủi ro mất mát/lặp tin và đề xuất Outbox Pattern trong Chương 7.
+- **Giới hạn kỹ thuật thực tế:** iOffice có hạ tầng Transactional Outbox, nhưng lời mời lịch mới gọi sender sau commit và chưa có retry bền vững riêng. Phải đối chiếu đường phát cụ thể thay vì kết luận toàn hệ thống có hoặc không có outbox. Giao nhận FCM/APNs còn phụ thuộc token, nền tảng và kết nối; không suy ra exactly-once hay mọi thiết bị luôn nhận.
+- **Quy tắc biên soạn:** Trình bày cơ chế và giới hạn theo từng luồng; đề xuất độ bền/retry riêng cho đường chưa được bảo vệ, không nói iOffice hoàn toàn chưa có outbox.
 
 ### 3.5. Không khẳng định Badge Icon luôn hiển thị số lượng trên mọi thiết bị
 - **Nhận định cần chấn chỉnh:** *"Hệ thống bảo đảm huy hiệu ứng dụng (App Badge) luôn hiển thị chính xác số lượng thông báo chưa đọc trên màn hình chính."*
@@ -161,11 +186,11 @@ Nhằm bảo đảm tính trung thực tuyệt đối trong văn phong học thu
 
 ---
 
-## 4. CAM KẾT RANH GIỚI HỆ THỐNG VÀ PHẠM VI NGHIỆM THU (SYSTEM BOUNDARY COMMITMENT)
+## 4. RANH GIỚI HIỆN HÀNH VÀ BẰNG CHỨNG BASELINE LỊCH SỬ
 
-Nhằm bảo đảm tính minh bạch và chuẩn mực học thuật cao nhất trước Hội đồng Đánh giá Đồ án Tốt nghiệp, nhóm nghiên cứu thiết lập cam kết ranh giới hệ thống đối chuẩn trên baseline chính thức **`myhcmut-mobile:4fe5d9c`**:
+Số liệu Gate 0 dưới đây chỉ thuộc baseline **`myhcmut-mobile:4fe5d9c`**. Phạm vi chức năng ở mục 2 được cập nhật theo snapshot ngày 01/10/2026; không gắn tổng test Gate 0 với các chức năng mới.
 
-1. **Bộ Số liệu Kiểm chuẩn Tự động Duy nhất (427 Tests - 100% Pass Rate):**
+1. **Số liệu Gate 0 lịch sử (không phải tổng HEAD hiện hành):**
    - **Mobile Client:** **370 tests** (HRM: 233, Notification: 47, iOffice: 77 gồm 57 unit/logic + 20 widget tests, Core & Shared Packages: 13 tests).
    - **Backend Services:** **57 tests** (`hrm-be`: 46 SSO Ticket Bridge + 11 Concurrency & Advisory Lock tests).
    - **Tổng cộng Toàn Hệ thống:** Gate 0 ghi nhận **427 / 427 tests PASSED** (tỷ lệ đỗ 100%, thời gian thực thi lịch sử ~21s Mobile và ~8s Backend). Trạng thái tái lập hiện tại xem `12_BASELINE_REPRODUCIBILITY_AUDIT.md`.
@@ -173,9 +198,9 @@ Nhằm bảo đảm tính minh bạch và chuẩn mực học thuật cao nhất
 
 2. **Khẳng định Ranh giới Miền nghiệp vụ và Cơ chế hỗ trợ:**
    - Đề tài tập trung vào **hai miền nghiệp vụ hoạt động**:
-     - **Quản lý Nhân sự (HRM):** Tra cứu hồ sơ lý lịch, Quy trình nộp và duyệt nghỉ phép chống tương tranh, Đăng ký và phê duyệt đi công tác.
-     - **Văn phòng số & Lịch tổng hợp (iOffice):** Tra cứu văn bản đến/đi, quản lý nhiệm vụ đa cấp, Lịch công tác tổng hợp đa nguồn (Adapter Pattern) và điểm danh cuộc họp thời gian thực.
-   - **Auth / SSO:** cơ chế xác thực và tích hợp Mobile--Web, gồm SSO Ticket Bridge một lần và In-App WebView.
+     - **Quản lý Nhân sự (HRM):** Tra cứu, chỉnh sửa/đề xuất/phản hồi và lịch sử hồ sơ native; nộp/duyệt nghỉ phép, đăng ký/phê duyệt công tác. Giới hạn đồng thời xem CLM-CON-03 và biên bản hiện hành.
+     - **Văn phòng số & Lịch tổng hợp (iOffice):** Tra cứu văn bản đến/đi, quản lý nhiệm vụ đa cấp, Lịch tổng hợp đa nguồn, tạo/đăng ký cuộc họp native có tệp và điểm danh; lịch Trường chờ hiển thị theo quyền; bản demo gửi lời mời ngay sau tạo trực tiếp ở tổng hợp, phát hành vẫn gửi theo luồng hiện có.
+   - **Auth:** Form native, Bearer Token và cache người dùng có điều kiện; SSO/WebView chỉ là thiết kế lịch sử, không thuộc luồng hồ sơ viết lại.
    - **Cơ chế thông báo nghiệp vụ xuyên suốt:** `modules/notification` tiếp nhận/hiển thị và định tuyến Deep Link; backend phát sự kiện Kafka sau commit, còn FCM không bảo đảm thiết bị nhận hoặc exactly-once.
 
 3. **Xác nhận Loại trừ Tuyệt đối các Module Giả định (Phantom Modules Exclusion):**

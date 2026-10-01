@@ -1,4 +1,7 @@
 # BẢN THIẾT KẾ ĐẶC TẢ BÁO CÁO TỐT NGHIỆP (THESIS BLUEPRINT)
+
+> **Nguồn thay thế cho hiện trạng ngày 01/10/2026:** [13_CURRENT_SOURCE_SNAPSHOT.md](13_CURRENT_SOURCE_SNAPSHOT.md), [SYSTEM_OPERATION.md](SYSTEM_OPERATION.md) và [14_REPORT_7_CHAPTER_AUDIT.md](14_REPORT_7_CHAPTER_AUDIT.md). Khi viết lại, dùng hồ sơ native (editor/đề xuất/phản hồi/lịch sử) và tạo cuộc họp từ lịch tổng hợp theo [06B_REQUIREMENT_PACK_SCHEDULE.md](06B_REQUIREMENT_PACK_SCHEDULE.md). Các phần hybrid/WebView/SSO bridge và số test baseline bên dưới là phương án hoặc số liệu trước đây, không là luồng chức năng/kết quả mới của app. Bản khung này được giữ để tham khảo bố cục, không dùng thay snapshot hiện hành.
+
 *Phiên bản Chuẩn hóa Cấu trúc 7 Chương & Module hóa Chapter 4 (Ground Truth có điều kiện tái lập)*
 
 > **Lưu ý bằng chứng:** Commit Gate 0 vẫn truy xuất được. Các chỉ số kiểm thử trong blueprint là kết quả Gate 0 đã ghi nhận; xem `12_BASELINE_REPRODUCIBILITY_AUDIT.md` để biết giới hạn tái lập hiện tại trước khi nêu chúng như kết quả vừa thực thi.

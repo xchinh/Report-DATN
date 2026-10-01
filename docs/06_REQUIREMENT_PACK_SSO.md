@@ -8,11 +8,11 @@
 > - Tống Duy Khang (MSSV: 2211467) — Phân hệ Văn phòng số iOffice (Văn bản đến/đi, PDF Viewer) & Quản lý Nhiệm vụ (Missions/Tasks).  
 > **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tùng  
 > **Mốc đối chuẩn:** Gate 0 — Khóa Baseline Học thuật & Bằng chứng Kỹ thuật (Tháng 09/2026)  
-> **Trạng thái tài liệu:** 🔒 **BASELINE RELEASE v1.0 (VERIFIED IMPLEMENTATION)**
+> **Trạng thái tài liệu (01/10/2026):** Hồ sơ thiết kế/kiểm thử lịch sử của cầu nối WebView. Không dùng làm kiến trúc mobile hiện hành khi viết lại báo cáo.
 
-> [!NOTE]
-> **PHẠM VI XÁC THỰC VẬN HÀNH THỰC TẾ:**  
-> Trong môi trường đánh giá và vận hành thực tế của MyHCMUT Mobile, ứng dụng sử dụng phương thức **Đăng nhập bằng Tài khoản định danh nội bộ (Tên đăng nhập / Mã số cán bộ / Email và Mật khẩu)** kết hợp cơ chế JWT Bearer Token và **Cầu nối One-Time Ticket SSO sang In-App WebView**. Các phần phân tích CAS/OIDC trong tài liệu này phản ánh hạ tầng backend kế thừa và giao thức dự phòng, không phải điều kiện tiên quyết trong luồng demo và kiểm chuẩn chính thức.
+> **Phạm vi hiện hành:** App sử dụng biểu mẫu Flutter native và REST API cho chức năng hồ sơ, cùng cơ chế đăng nhập nội bộ/Bearer Token. Cầu nối One-Time Ticket → WebView bên dưới là phương án trước đây. Mã SSO backend và mã WebView cũ còn trong source không chứng minh chúng tham gia luồng hồ sơ mới. Nguồn thay thế: [snapshot](13_CURRENT_SOURCE_SNAPSHOT.md), [đặc tả hồ sơ native](03_REQUIREMENT_PACK_PROFILE.md) và [luồng vận hành](SYSTEM_OPERATION.md).
+>
+> Các phần CAS/OIDC, Web session/bridge, rollout và số test dưới đây giữ vai trò tham khảo thiết kế/lịch sử. Không chuyển kết quả WebView cũ thành nghiệm thu native; không xem nội dung này là chứng nhận vận hành production của HEAD mới.
 
 ---
 
@@ -901,4 +901,4 @@ flutter test test/webview/sso_bridge_test.dart test/webview/sso_logout_test.dart
 ```
 
 > **KẾT LUẬN KIỂM TOÁN HỆ THỐNG:**  
-> Hệ thống Xác thực Đăng nhập một lần (SSO) và Cầu nối Vé một lần In-App WebView giữa ứng dụng di động MyHCMUT và các phân hệ Web nội bộ đã đạt mức độ hoàn thiện kỹ thuật cao nhất (**Production-Ready v1.0**), bảo đảm tính toàn vẹn dữ liệu, chống tấn công cố định phiên, ngăn ngừa lộ lọt thông tin nhạy cảm và sẵn sàng phục vụ báo cáo Đồ án Tốt nghiệp tại Hội đồng ĐHQG-HCM.
+> Tài liệu này lưu thiết kế và các kết quả lịch sử của phương án SSO/WebView; không xác nhận production readiness hay E2E của phiên bản mobile native hiện hành.

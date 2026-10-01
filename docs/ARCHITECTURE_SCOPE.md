@@ -1,4 +1,7 @@
 # ĐẶC TẢ RANH GIỚI VÀ PHẠM VI KIẾN TRÚC HỆ THỐNG (ARCHITECTURE SCOPE)
+
+> **Nguồn thay thế cho hiện trạng ngày 01/10/2026:** [13_CURRENT_SOURCE_SNAPSHOT.md](13_CURRENT_SOURCE_SNAPSHOT.md), [SYSTEM_OPERATION.md](SYSTEM_OPERATION.md) và [14_REPORT_7_CHAPTER_AUDIT.md](14_REPORT_7_CHAPTER_AUDIT.md). Khi viết lại, dùng hồ sơ native (editor/đề xuất/phản hồi/lịch sử) và tạo cuộc họp từ lịch tổng hợp theo [06B_REQUIREMENT_PACK_SCHEDULE.md](06B_REQUIREMENT_PACK_SCHEDULE.md). Các phần hybrid/WebView/SSO bridge và số test baseline bên dưới là phương án hoặc số liệu trước đây, không là luồng chức năng/kết quả mới của app. Bản khung này được giữ để tham khảo bố cục, không dùng thay snapshot hiện hành.
+
 *Phiên bản Chuẩn hóa Cấu trúc Thư mục Codebase & Báo cáo 7 Chương (Folder-Based Edition)*
 
 > **Trạng thái bằng chứng:** Các commit Gate 0 là snapshot dùng cho báo cáo. Các số liệu test trong tài liệu là kết quả Gate 0 đã ghi nhận; không diễn giải là kết quả tái chạy hiện tại nếu chưa có log tái lập theo `12_BASELINE_REPRODUCIBILITY_AUDIT.md`.
