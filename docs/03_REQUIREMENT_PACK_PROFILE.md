@@ -4,13 +4,13 @@
 > **Dự án:** Ứng dụng di động MyHCMUT phục vụ Nhân sự Trường Đại học (MyHCMUT Mobile)  
 > **Cơ quan chủ quản:** Trường Đại học Bách khoa – ĐHQG-HCM  
 > **Sinh viên thực hiện:**  
-> - Vũ Xuân Chính (MSSV: 2210392) — Core Mobile, SSO Ticket Bridge, Quản lý Nghỉ phép & Hồ sơ Cán bộ, FCM Notification Hub.  
+> - Vũ Xuân Chính (MSSV: 2210392) — Core Mobile, Hồ sơ native, Quản lý Nghỉ phép & Hồ sơ Cán bộ, FCM Notification Hub.
 > - Tống Duy Khang (MSSV: 2211467) — Phân hệ Văn phòng số iOffice (Văn bản đến/đi, PDF Viewer) & Quản lý Nhiệm vụ (Missions/Tasks).  
 > **Giảng viên hướng dẫn:** ThS. Nguyễn Thanh Tùng  
-> **Thời điểm thẩm định:** Tháng 09/2026 (Mốc khóa Gate 0 & Concurrency Hardening)  
+> **Thời điểm đối chiếu hiện hành:** 01/10/2026; kết quả Gate 0 là lịch sử
 > **Kho mã nguồn đối chuẩn:**  
-> - Mobile: `myhcmut-mobile` (Commit: `161d5bb848f97983682654e17771b88aeb638af6`)  
-> - Backend: `hrm-be` (Commit: `38745a26a45fc49c8c5c1cbcf3b91a76f23ae945`)  
+> - Mobile: `myhcmut-mobile` (Commit: `61722adcb66d0fb50deb6e529dd7a5a10103147d`)
+> - Backend: `hrm-be` (Commit: `250274cac7db8f2f4c2f188c9e4084b3e1e52308`)
 
 ---
 
@@ -24,29 +24,21 @@ Phân hệ giải quyết bài toán cốt lõi:
 2. **Tối ưu hóa tải dữ liệu mạng:** Bóc tách khối dữ liệu lý lịch đồ sộ thành các phân đoạn chuyên biệt, áp dụng kiến trúc bộ nhớ đệm hai tầng giúp người dùng xem thông tin tức thì ngay cả khi mạng chậm hoặc gián đoạn.
 3. **Bảo mật và toàn vẹn dữ liệu định danh:** Phân định nghiêm ngặt quyền xem, quyền tự cập nhật thông tin liên lạc và quy trình gửi đề xuất chỉnh sửa các dữ liệu hộ tịch/văn bằng có thẩm định của Phòng Tổ chức – Cán bộ (TCCB).
 
-### 1.2. Phân định Ranh giới Học thuật (Academic Scope Classification)
-Tuân thủ tiêu chuẩn trung thực học thuật đã thiết lập tại [02_SCOPE_CLAIM_TRACEABILITY.md](file:///home/xchinh/workspace/HK253_DATN_341_2211467_2210392/docs/02_SCOPE_CLAIM_TRACEABILITY.md), phân hệ phân định rạch ròi giữa các tính năng đã hiện thực kiểm chứng và các đề xuất thực nghiệm:
+### 1.2. Phạm vi native hiện hành và trạng thái bằng chứng
 
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│                        PHÂN ĐỊNH PHẠM VI HỌC THUẬT PHÂN HỆ HỒ SƠ                      │
-├────────────────────────────────────────────┬───────────────────────────────────────────┤
-│ TÍNH NĂNG ĐÃ THẨM ĐỊNH (VERIFIED SCOPE)    │ ĐỀ XUẤT PHÁT TRIỂN (PROPOSED SCOPE)       │
-├────────────────────────────────────────────┼───────────────────────────────────────────┤
-│ • Giao diện Native tra cứu 11 nhóm thông   │ • Biểu mẫu nộp đề xuất chỉnh sửa lý lịch  │
-│   tin phân bổ trên 3 Tab trực quan.        │   Native trực tiếp trên ứng dụng di động  │
-│ • Cơ chế Cache 2 tầng: Riverpod In-Memory  │   (hiện tại thực hiện qua WebView SSO).   │
-│   + Persistent SWR (TTL 12h) + SQLite DB.  │ • Cơ chế mã hóa an toàn cấp phần cứng     │
-│ • SQLite offline lưu 47 bảng danh mục      │   (Keystore/Keychain) cho bộ nhớ đệm      │
-│   hành chính dùng chung (Master Data).     │   lý lịch cá nhân trên thiết bị di động.  │
-│ • Cầu nối SSO Ticket kích hoạt In-App      │ • Ứng dụng OCR/AI bóc tách văn bằng và    │
-│   WebView sang Web HRM để sửa lý lịch.     │   thẻ CCCD để tự động điền form đề xuất.  │
-│ • Backend Core thẩm định đề xuất chỉnh sửa │ • Cơ chế đồng bộ Delta Sync theo cờ phiên  │
-│   (Diff verification, Line-item review).   │   bản CSDL thay cho cơ chế thời gian TTL. │
-│ • Phân hệ thẩm định trên Mobile cho TCCB   │                                           │
-│   (`approve_profile`: duyệt/từ chối diff). │                                           │
-└────────────────────────────────────────────┴───────────────────────────────────────────┘
-```
+Ứng dụng dùng biểu mẫu Flutter để chỉnh sửa hồ sơ, gửi đề xuất hoặc phản hồi và xem lịch sử. HRM Web là nguồn đối chiếu quy tắc/hợp đồng, không phải biểu mẫu nhúng trong luồng hồ sơ hiện tại. Commit `2ebf898` bổ sung phần hiện thực này trước HEAD mobile `72e6c67`.
+
+| Phần | Hiện thực | Giới hạn kết luận |
+| --- | --- | --- |
+| Tra cứu hồ sơ | Ba tab và các nhóm hồ sơ, SWR cache; SQLite cho danh mục chung | Cache không thay thế dữ liệu có thẩm quyền tại HRM |
+| Chỉnh sửa native | Menu chọn trực tiếp/yêu cầu/phản hồi; editor cá nhân, địa chỉ, ngân hàng/bảo hiểm, gia đình, công tác ngoài trường, đào tạo, tài sản/thu nhập | Không khẳng định đủ toàn bộ field/editor web; trường được sửa phụ thuộc policy và vai trò |
+| Policy và minh chứng | Lấy policy từ backend, lọc field theo nhánh; gửi field thực sự đổi; multipart với minh chứng khi endpoint/policy yêu cầu | Gia đình, đào tạo và kê khai có hợp đồng riêng; không suy rằng mọi nhóm phải gửi tệp |
+| Phản hồi | Chọn mục, nhập nội dung và tệp, gửi `isPhanHoi=true` | Phản hồi không tự thay đổi dữ liệu hồ sơ |
+| Lịch sử hồ sơ | Hiển thị yêu cầu, nhật ký, trạng thái và nội dung thay đổi từ `/api/staff/ly-lich/profile` | Không dùng biên bản WebView cũ để kết luận E2E native |
+| Thẩm định | Danh sách/chi tiết và so sánh dữ liệu trên mobile, HRM quyết định cập nhật | Quyền sửa của chuyên viên khác quyền cán bộ tự cập nhật |
+| Hướng phát triển | Mã hóa bộ đệm, OCR, delta sync và mở rộng các field chưa hỗ trợ | Biểu mẫu native và lịch sử đã có, không tiếp tục liệt kê chúng là đề xuất chưa triển khai |
+
+Nguồn chi tiết: [snapshot](13_CURRENT_SOURCE_SNAPSHOT.md), mobile `docs/profile-edit-web-comparison.md`, `modules/hrm/lib/src/profile/` và các controller `request*.controller.ts` tại HRM. Audit mobile ghi nhận một số quan sát giao diện và test ở từng giai đoạn, không xác nhận đã nộp dữ liệu thật cho mọi editor. Số test ở các phần lịch sử bên dưới không phải tổng mới của HEAD.
 
 ---
 
@@ -58,7 +50,7 @@ Dữ liệu lý lịch viên chức theo tiêu chuẩn Bộ Nội vụ và ĐHQG
 ```mermaid
 flowchart TD
     subgraph UI_PAGE["PersonalProfilePage (Giao diện Hồ sơ Di động)"]
-        HEADER["ProfileHeaderCard (Avatar, SHCC, Chức danh, Web Edit Bridge)"]
+        HEADER["ProfileHeaderCard (Avatar, SHCC, Chức danh, Menu sửa native và lịch sử)"]
         SEARCH["SearchBar & QuickCopySheet (Tìm kiếm MST, CCCD, BHYT, Số hiệu)"]
         
         subgraph TAB1["Tab 1: Cá Nhân (Personal & Family)"]
@@ -263,6 +255,20 @@ Không chỉ phục vụ cán bộ xem hồ sơ, ứng dụng MyHCMUT tích hợ
 
 ## 5. MA TRẬN ĐẶC TẢ API PHÂN HỆ HỒ SƠ (API SPECIFICATION MATRIX)
 
+### 5.1. Hợp đồng được biểu mẫu native sử dụng (01/10/2026)
+
+| Mục đích | Endpoint / dữ liệu |
+| --- | --- |
+| Policy cá nhân | `GET /api/staff/user/my/staff-ly-lich/request/policy` |
+| Policy chuyên viên | `GET /api/staff/user/tcns/staff-ly-lich/request/policy` |
+| Cá nhân/địa chỉ/ngân hàng và phản hồi | `POST /api/staff/user/my/staff-ly-lich/request`; multipart `sectionKey`, `changes`, `lyDo`, `fileFieldKeys`, `files` theo nhánh; phản hồi có `isPhanHoi=true` |
+| Đào tạo/công tác/gia đình/tài sản/thu nhập | `POST /api/staff/user/my/staff-ly-lich/{suffix}`; suffix: `dao-tao/submit`, `cong-tac/submit`, `gia-dinh/submit`, `ke-khai-tai-san/submit`, `ke-khai-thu-nhap/submit` |
+| Sửa hồ sơ theo quyền chuyên viên | Các endpoint ghi tương ứng dưới `/api/staff/user/tcns/staff-ly-lich/:shcc/{suffix}`; backend kiểm tra quyền chuyên viên |
+| Lịch sử | `GET /api/staff/ly-lich/profile`, query `shcc` khi có ngữ cảnh xem hồ sơ khác được cấp quyền |
+
+`ProfileEditNotifier` làm mới cache hồ sơ và invalidate bộ đếm/danh sách duyệt sau gửi thành công. Các bảng API chung bên dưới là danh mục tham khảo; không thay thế endpoint thực sự được native gọi ở bảng này.
+
+
 Toàn bộ các endpoint của phân hệ được khai báo tại `hrm-be` tuân thủ các quy chuẩn bảo mật phân quyền nghiêm ngặt:
 
 | STT | Phương thức | Đường dẫn API (Endpoint) | Quyền truy cập (Permissions) | Tham số / Payload chính | Mô tả chức năng kỹ thuật |
@@ -284,6 +290,9 @@ Toàn bộ các endpoint của phân hệ được khai báo tại `hrm-be` tuâ
 
 ## 6. MA TRẬN TRUY VẾT & CHỈ SỐ KIỂM THỬ (TRACEABILITY & TEST SUITE)
 
+> Bảng giữ lại truy vết lịch sử cho các phần cũ. Các dòng PASS/số lượng không chứng minh đã chạy lại tại mobile `72e6c67`; bằng chứng hiện hành cần phân biệt test tồn tại trong source, log thực thi và quan sát trên thiết bị. Lịch sử native có `profile_history_test.dart` và `profile_history_page_test.dart`.
+
+
 Hệ thống kiểm thử phân hệ Hồ sơ Cán bộ được tích hợp sâu trong bộ kiểm thử tổng thể của dự án (427/427 PASS), tập trung chứng minh tính toàn vẹn của mô hình dữ liệu, cơ chế gộp bất biến và hành vi giao diện người dùng:
 
 | Mã Use Case | Tên Use Case / Nghiệp vụ | Tệp Giao diện & Xử lý (Mobile/BE) | Tệp Kiểm thử Tự động Đối chuẩn | Số Test Cases | Kết quả Kiểm thử |
@@ -293,9 +302,9 @@ Hệ thống kiểm thử phân hệ Hồ sơ Cán bộ được tích hợp sâ
 | **UC-PRF-03** | **Tra cứu Danh mục Hành chính SQLite Master Data** | [master_data_database_service.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/profile/services/master_data_database_service.dart)<br>[master_lookup_service.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/profile/utils/master_lookup_service.dart) | [master_lookup_service_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/master_lookup_service_test.dart) | **12** | **12/12 PASS** |
 | **UC-PRF-04** | **Dòng thời gian Công tác & Phân nhóm Đào tạo** | [work_history_timeline_widget.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/profile/views/widgets/sections/work_history_timeline_widget.dart)<br>[work_history_utils.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/profile/utils/work_history_utils.dart) | [salary_timeline_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/salary_timeline_test.dart)<br>[training_group_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/training_group_test.dart)<br>[widget_work_timeline_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart) | **22** | **22/22 PASS** |
 | **UC-PRF-05** | **Phân nhóm Quan hệ Gia đình & Giảm trừ Gia cảnh** | [family_tab.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/profile/views/pages/tabs/family_tab.dart) | [family_group_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_group_test.dart) | **8** | **8/8 PASS** |
-| **UC-PRF-06** | **Cầu nối SSO Ticket WebView Cập nhật Hồ sơ** | [personal_profile_page.dart: L98](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/profile/views/pages/personal_profile_page.dart#L98)<br>[sso_ticket_service.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/webview/sso_ticket_service.dart) | [sso_phase0.unit.test.ts](file:///home/xchinh/workspace/hrm-be/test/unit/sso_phase0.unit.test.ts)<br>[sso_phase1.unit.test.ts](file:///home/xchinh/workspace/hrm-be/test/unit/sso_phase1.unit.test.ts) | **38** | **38/38 PASS** |
+| **UC-PRF-06** | **Cập nhật / gửi đề xuất / phản hồi bằng biểu mẫu native** | `personal_profile_page.dart`, `edit_section_menu_sheet.dart`, `views/pages/edit/`, `profile_edit_provider.dart` | `profile_edit_policy_test.dart`, `profile_edit_branches_test.dart`, `profile_edit_navigation_test.dart`, `profile_submission_refresh_test.dart`, `evidence_uploader_test.dart` | Không suy số lượng | Có test trong mã nguồn; chưa chạy lại tại HEAD trong phiên biên tập |
 | **UC-PRF-07** | **Thẩm định Đề xuất Chỉnh sửa & So sánh Khác biệt** | [approve_profile_provider.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/lib/src/approve_profile/providers/approve_profile_provider.dart)<br>[request-review.controller.ts](file:///home/xchinh/workspace/hrm-be/modules/md_staff/staff_ly_lich/controller/request-review.controller.ts) | [approve_profile_model_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/approve_profile_model_test.dart)<br>[approve_profile_utils_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/approve_profile_utils_test.dart)<br>[review_diff_card_test.dart](file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart) | **16** | **16/16 PASS** |
-| — | **Toàn bộ Test Cases Phân hệ Hồ sơ** | — | **Mobile + Backend Suites** | **128** | **128/128 PASS** |
+| — | **Tổng kết kiểm thử** | Các số ở những dòng cũ là kết quả lịch sử | Native bổ sung nhiều test sau baseline; cần log đúng commit để công bố tổng mới | Chưa chốt tổng HEAD | Không dùng tổng cũ 128/128 làm kết quả native |
 
 ---
 
@@ -304,12 +313,12 @@ Hệ thống kiểm thử phân hệ Hồ sơ Cán bộ được tích hợp sâ
 Căn cứ vào Sổ đăng ký tuyên bố kỹ thuật [02_SCOPE_CLAIM_TRACEABILITY.md](file:///home/xchinh/workspace/HK253_DATN_341_2211467_2210392/docs/02_SCOPE_CLAIM_TRACEABILITY.md), các giải pháp sau được đề xuất phát triển trong giai đoạn tiếp theo:
 1. **Mã hóa Bộ nhớ đệm Cấp Phần cứng (Hardware-backed Secure Storage - CLM-DAT-02):**  
    Thay thế việc lưu trữ chuỗi JSON hồ sơ cá nhân trong `SharedPreferences` bằng giải pháp mã hóa cấp phần cứng `flutter_secure_storage` (sử dụng Android KeyStore với thuật toán AES-GCM 256-bit và iOS Keychain Services). Điều này triệt tiêu rủi ro trích xuất tệp cache nếu thiết bị di động của người dùng bị bẻ khóa (Root/Jailbreak).
-2. **Biểu mẫu Nộp Đề xuất Chỉnh sửa Native trên Di động:**  
-   Hiện thực hóa giao diện nộp đề xuất chỉnh sửa trực tiếp (Native Edit Form) cho từng khối dữ liệu trên ứng dụng di động thay vì kích hoạt In-App WebView sang Web HRM, đồng thời tận dụng thư viện máy ảnh để nén và tải minh chứng tức thời.
+2. **Mở rộng và kiểm chứng các biểu mẫu native đã có:**
+   Bổ sung các field/editor còn thiếu theo quyền thực tế, mở rộng khả năng sửa bản ghi đào tạo nếu hợp đồng backend cho phép và kiểm chứng E2E việc nộp minh chứng, xử lý đề xuất, đọc lại hồ sơ/lịch sử. Không gọi toàn bộ biểu mẫu native là chức năng tương lai.
 3. **Tự động Hóa Trích xuất Thông tin bằng AI/OCR:**  
    Tích hợp mô hình thị giác máy tính trên thiết bị (On-device ML Kit / Vision OCR) để tự động nhận diện và bóc tách dữ liệu từ ảnh chụp thẻ CCCD gắn chip và Bằng tốt nghiệp Đại học/Sau đại học, hỗ trợ cán bộ tự động điền các trường biểu mẫu mà không cần nhập liệu thủ công.
 4. **Cơ chế Đồng bộ Hóa Theo Delta Version (Delta Synchronization):**  
    Thay thế cơ chế TTL 12 giờ cố định bằng việc cấp phát trường `versionId` cấp bản ghi. Khi mở ứng dụng, client chỉ gửi mã phiên bản hiện tại lên máy chủ; máy chủ chỉ trả về các trường dữ liệu có thay đổi kể từ phiên bản đó (HTTP 304 Not Modified hoặc Delta JSON Payload), giúp tiết kiệm đến 95% lượng băng thông mạng truyền tải.
 
 ---
-*Tài liệu đặc tả này hoàn tất việc chuẩn hóa kỹ thuật cho Phân hệ Hồ sơ Cán bộ, là căn cứ nghiệm thu chính thức cho Đồ án Tốt nghiệp HK253.*
+*Tài liệu là căn cứ kỹ thuật để viết lại báo cáo; mức nghiệm thu phải dựa trên log và biên bản của phiên bản tương ứng.*

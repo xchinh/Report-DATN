@@ -1,52 +1,73 @@
 # SNAPSHOT NGUỒN ĐỐI CHIẾU HIỆN HÀNH
 
-> **Ngày khóa đối chiếu:** 15/09/2026 (Asia/Ho_Chi_Minh).
->
-> Snapshot này là nguồn dùng để cập nhật tài liệu hỗ trợ và rà soát báo cáo. Nó không thay thế commit chính thức và không xác nhận một kịch bản runtime chưa chạy được.
+> **Ngày đối chiếu:** 01/10/2026 (Asia/Ho_Chi_Minh). Nguồn là HEAD của ba codebase đã commit và push. Snapshot này dùng để chuẩn bị viết lại báo cáo; không thay thế biên bản chạy kiểm thử.
 
 ## 1. Mốc mã nguồn
 
-| Thành phần | Nhánh / HEAD | Vai trò khi đối chiếu | Trạng thái working tree |
+| Thành phần | Nhánh | HEAD | Trạng thái khi đối chiếu |
 | --- | --- | --- | --- |
-| `hrm-be` | `chinh-dev` / `9e39ccc2515defab70c2f18ea88fb0a50b5fd1e0` | Nguồn nghiệp vụ HRM, phát hành vé SSO | Sạch tại thời điểm kiểm tra |
-| `ioffice-be` | `main` / `e70b44ce62b2de062e873b11fa2cdc2746a1fece` | Nguồn nghiệp vụ iOffice và consumer SSO | Có thay đổi chưa commit, dùng làm nguồn hiện hành |
-| `myhcmut-be` | `dev/khang-chinh` / `7e687a6005ceb6264f3467072081c784a6f9c7bc` | Dịch vụ xác thực/API dùng chung | Có thay đổi cấu hình chưa commit |
-| `myhcmut-mobile` | `feat/leaveRequest` / `4fe5d9cbd92e971f0b4b75ebfd308e7a8486d079` | Hiện thực native và điều hướng | Chỉ có thay đổi hướng dẫn nội bộ |
-| `hrm-fe` | `main` / `ccce8697754b1aa5c06f84e14ea5761cebf5a4c0` | WebApp HRM và tích hợp WebView | Có thay đổi SSO/Flutter bridge chưa commit |
-| `ioffice-fe` | `main` / `bf27e36a796a3b072a12f2aa02f6c27fa34a7e7e` | WebApp iOffice và tích hợp WebView | Có thay đổi SSO/Flutter bridge chưa commit |
+| `hrm-be` | `chinh-dev` | `250274cac7db8f2f4c2f188c9e4084b3e1e52308` | Còn thay đổi cục bộ `.env.local`; không dùng nội dung cấu hình này làm bằng chứng tính năng |
+| `ioffice-be` | `chinh-khang` | `4ca9249c2ab4a478ee62ea3d53d961ca5de8e2fb` | Có `AGENTS.md` chưa theo dõi và cấu hình Firebase `.env.local` đã sửa cục bộ để demo; cấu hình không đưa vào commit |
+| `myhcmut-mobile` | `feat/leaveRequest` | `61722adcb66d0fb50deb6e529dd7a5a10103147d` | Working tree sạch |
 
-## 2. Delta chưa commit có liên quan
+Commit mobile `2ebf898fcee05f039ae8bbdfbc4752c46670ec70` đã đưa bộ chỉnh sửa hồ sơ native và lịch sử hồ sơ vào nhánh, trước HEAD hiện tại. Khi viết về hồ sơ native, cần dẫn cả hiện thực này; không quy toàn bộ tính năng cho commit `72e6c67`.
 
-### iOffice backend
+## 2. Thay đổi mới nhất và commit nền liên quan
 
-- Bổ sung consumer vé SSO tại `POST /api/auth/sso/consume-ticket`: đọc-xóa vé bằng Redis `getDel`, kiểm tra `targetSystem = ioffice`, tái tạo session và lưu session mới.
-- Cấu hình session/cookie và proxy được điều chỉnh; thông báo FCM mang metadata điều hướng như nguồn, loại thực thể và định danh thực thể.
-- Tài liệu nghiệp vụ điểm danh/lịch công tác mới xuất hiện trong source. Tài liệu này chứa dữ liệu định danh nội bộ nên **không sao chép** vào repository báo cáo; chỉ dùng các quy tắc/API đã kiểm tra mã nguồn.
-
-### WebApp và Mobile
-
-- `hrm-fe` và `ioffice-fe` nhận tham số `ticket`, gọi consumer backend, sau đó xóa ticket khỏi URL; bridge có các sự kiện như `profile_updated`, `request_logout` và trạng thái nghiệp vụ.
-- `myhcmut-mobile` có màn hình WebView, dịch vụ lấy vé và bridge handler tương ứng. Luồng đi công tác có màn hình tạo/duyệt và mapper sang lịch tổng hợp.
-
-### Không sao chép dữ liệu nhạy cảm
-
-- Không sao chép `.env.local`, giá trị `SESSION_SECRET`, thông tin Firebase, danh sách tài khoản hay dữ liệu định danh từ các working tree nguồn.
-- Manifest ghi mốc và delta nghiệp vụ thay vì chép raw diff, để tránh nhân bản bí mật/PII sang repository báo cáo. Khi cần tái lập, phải lấy lại diff trực tiếp từ đúng working tree và HEAD nêu ở trên.
-
-## 3. Kết luận kỹ thuật đã xác minh tĩnh
-
-| Nội dung | Trạng thái | Căn cứ |
+| Commit | Thay đổi xác nhận từ diff | Ý nghĩa đối với nội dung báo cáo |
 | --- | --- | --- |
-| Ticket SSO dùng Redis và tiêu thụ một lần | Có trong mã nguồn | `hrm-be` issuer; `ioffice-be` consumer dùng `getDel` |
-| FE là thành phần tích hợp WebApp | Có trong mã nguồn | Hai FE xử lý ticket/bridge, không chỉ là tài liệu tham khảo |
-| Business trip thuộc chức năng Mobile | Có trong mã nguồn | Màn hình tạo/duyệt và mapper lịch trong `myhcmut-mobile` |
-| Transactional Outbox iOffice | Có trong mã nguồn | `config/lib/outbox.js`: ghi `outbox_events`, relay Kafka, retry và cleanup |
-| SSO/concurrency backend có Redis | Đã chạy lại có điều kiện | 53/53 Vitest pass tại `hrm-be:9e39ccc` ngày 15/09/2026 |
-| E2E WebView SSO liên hệ thống | Chưa xác minh runtime | Chưa có kịch bản chạy qua Mobile → FE → consumer backend trong phiên này |
+| HRM `250274c` | Đồng bộ vai trò xét cả quyền đã gán thủ công, chỉ xóa quyền tự động `isAssign=true` không còn phù hợp; thêm quyền thiếu với `ignoreDuplicates` | Phân quyền vẫn do backend quản lý; đồng bộ quyền theo chức vụ không được làm mất quyền cấp thủ công. Đây là hoàn thiện cơ chế quyền, không phải một use case mobile mới |
+| iOffice `6803b7b` | Bổ sung lịch `TRUONG/TONG_HOP` vào lịch cá nhân khi `includePending=true`; kiểm soát người tạo, người mời đích danh và đơn vị được mời; cho mở chi tiết phù hợp, tránh lộ lịch riêng qua cảnh báo | Lịch chưa phát hành có thể hiển thị cho người liên quan; không đồng nghĩa mọi người đều thấy hoặc mọi trạng thái nháp đều được mở |
+| iOffice `6803b7b` | Gửi lời mời sau commit thành công khi chuyển sang `HOAN_THANH`; lịch đơn vị chỉ gửi ngay khi bước đầu thực sự là `HOAN_THANH`; khử trùng người nhận có SHCC và tài khoản hoạt động | Phải phân biệt lưu lịch, gửi đăng ký và phát hành; ở commit nền này, thông báo chưa gửi sớm chỉ vì đã lưu; commit `96b21cf` bổ sung gửi khi tạo trực tiếp để demo |
+| iOffice `96b21cf` | API tạo trực tiếp lịch Trường gửi lời mời ngay sau commit tại `TONG_HOP`, từ phân công thực sự đã lưu; không rollback lại transaction đã kết thúc; thêm bốn kiểm thử | Điều chỉnh thời điểm gửi để demo; lịch vẫn chưa phát hành, không thay luồng đăng ký. API chung cho mobile/web; phát hành vẫn gửi thêm thông báo |
+| iOffice `4ca9249` | Thêm đăng ký FCM token theo tài khoản phiên đăng nhập, chuyển token khi đổi tài khoản; giữ token khi lỗi khóa/dịch vụ Firebase, chỉ xóa token bị xác nhận không hợp lệ; log không chứa token | Sửa điểm đứt giữa đăng ký thiết bị ở HRM và sender iOffice; lỗi chuyển phát không được coi là thiết bị không còn hợp lệ |
+| Mobile `61722ad` | Đồng bộ FCM token sang cả HRM và iOffice; lỗi một backend không chặn backend còn lại; thêm ba test | Lời mời iOffice có địa chỉ thiết bị để gửi; không suy ra mọi lần gửi luôn được nhận |
+| Mobile `72e6c67` | Tạo lịch hỗ trợ chọn/tải tệp, giữ ID đã nhận và danh sách tệp đã tải để thử lại; kiểm tra dữ liệu tệp, chặn gửi đồng thời, làm mới danh sách | Bổ sung thiết kế và kiểm thử lỗi từng phần của luồng tạo cuộc họp native; không tuyên bố transaction xuyên suốt mọi request hay chống trùng tuyệt đối |
+| Mobile `72e6c67` | Lịch rút gọn và lịch danh sách dùng chung điều hướng: nghỉ phép/công tác mở chi tiết HRM, cuộc họp mở chi tiết lịch | Lịch tổng hợp hỗ trợ đi đến nghiệp vụ nguồn đúng loại, không chỉ hiển thị sự kiện |
+| Mobile `72e6c67` | `AuthState` lưu `AuthUser` trong SharedPreferences; đọc lại khi lỗi mạng/non-401; xóa token và cache người dùng khi `/api/state` trả 401, thiếu token hoặc logout; sửa đích điều hướng splash | Nêu cơ chế phục hồi phiên có điều kiện. Cache không cấp thêm quyền, không giúp thực hiện nghiệp vụ ghi khi offline |
+| Mobile `72e6c67` | Văn bản đến không phụ thuộc tải danh bạ để hiển thị phân công; chỉ bật sửa khi đủ quyền và dữ liệu nhân sự sẵn sàng; bỏ điều kiện bước không phù hợp khi gửi tham mưu | Hoàn thiện luồng văn bản native theo quyền và trạng thái tải; không mở rộng thành chức năng văn bản mới |
+| Mobile `72e6c67` | Dropdown dùng bottom sheet có tìm kiếm, giữ validation; thêm kiểm thử hồi quy hồ sơ đơn từ, nhiệm vụ, lịch, auth và văn bản | Nêu hỗ trợ nhập liệu trên màn hình nhỏ và bổ sung phạm vi kiểm thử; chưa có tổng số test mới được tái lập trong phiên đối chiếu tài liệu này |
 
-## 4. Quy tắc dùng snapshot
+## 3. Phạm vi native để viết lại báo cáo
 
-1. Khi tài liệu cũ mâu thuẫn với snapshot này, dùng snapshot và ghi rõ trạng thái kiểm chứng.
-2. Không ghi một thay đổi chưa commit là “đã phát hành” hoặc “đã nghiệm thu”.
-3. Nhóm test `sso_phase0`, `sso_phase1`, `sso_phase7` và `concurrency_race_condition` đã chạy với Redis, kết quả 53/53 pass. Kết quả này không thay thế số liệu Gate 0 57 backend và không chứng minh E2E WebView.
-4. Chỉ nâng trạng thái E2E sau khi có kịch bản Mobile → FE → consumer backend, lệnh kiểm thử được ghi lại và log không lỗi.
+Ứng dụng cung cấp giao diện Flutter native cho các chức năng nằm trong phạm vi báo cáo. Hồ sơ cá nhân được sửa, gửi đề xuất hoặc gửi phản hồi bằng biểu mẫu Flutter và gọi REST API HRM; không dùng luồng Mobile → WebView → HRM Web làm thiết kế hiện hành. HRM/iOffice tiếp tục sở hữu dữ liệu, quyền và quy trình nghiệp vụ. Web hiện hữu có thể là công cụ quản trị/xử lý tiếp tại hệ thống nguồn, không phải màn hình nhúng được tái sử dụng trong app.
+
+| Nhóm tính năng | Bằng chứng hiện thực | Ranh giới cần giữ |
+| --- | --- | --- |
+| Chỉnh sửa hồ sơ native | `PersonalProfilePage` mở `EditSectionMenuSheet`; các trang trong `modules/hrm/lib/src/profile/views/pages/edit/`; `profile_edit_provider.dart` gọi API theo policy | Tách cập nhật trực tiếp, gửi yêu cầu và phản hồi; biểu mẫu native chưa bao phủ mọi trường/editor của web |
+| Lịch sử hồ sơ native | `profile_history_page.dart`, `profile_history.dart`, `profile_history_provider.dart`; `GET /api/staff/ly-lich/profile` | Hiển thị yêu cầu, nhật ký và khác biệt theo dữ liệu backend; không suy luận mọi thay đổi đều đã được nghiệm thu E2E |
+| Tạo cuộc họp từ lịch tổng hợp | `schedule_view.dart` → route `/ioffice/schedule/create` → `ScheduleCreatePage` → `ScheduleCreate` | Có lịch đơn vị, gửi phiếu lịch Trường và lịch Trường trực tiếp; tiếp nhận/phát hành vẫn theo hệ thống nguồn, không tự phát hành trên mobile |
+| Lịch chưa phát hành và lời mời | `schedule-general.js`, `schedule-general-item.js`, `scheduleGeneralItem.js` tại iOffice | Quyền xem `TONG_HOP` không suy ra quyền sửa/phát hành; Commit `96b21cf` gửi sau tạo trực tiếp `TONG_HOP` để demo; phát hành vẫn gửi theo luồng hiện có |
+
+**Tình trạng mã cũ:** HEAD mobile vẫn chứa `src/webview/`, export, phụ thuộc `flutter_inappwebview` và hook xóa cookie khi logout. Không tìm thấy lời gọi mở `AppInAppWebViewScreen` trong luồng hồ sơ hiện tại. Báo cáo có thể mô tả chức năng trong phạm vi bằng native, nhưng không dùng câu “đã xóa toàn bộ mã và phụ thuộc WebView khỏi repository”. Cơ chế ticket SSO còn ở backend không tự chứng minh app đang dùng WebView.
+
+## 4. Bằng chứng và giới hạn kiểm chứng
+
+- Đã kiểm chứng iOffice `4ca9249` với 47/47 test backend; mobile `61722ad` với 64/64 test phân hệ notification và `make analyze` sạch ở cả 11 package. Bản debug đã build/cài trên RMX2151. Push thật của lịch `383` và `384` ở `TONG_HOP` đã xuất hiện trên Android khi app mở và chạy nền; bấm mở Lịch biểu. Chi tiết ở [biên bản thiết bị](chapter6-7-evidence/12_school_schedule_push_device_verification.md). Chưa chạy lại toàn bộ test HRM/mobile, chưa thử iOS hoặc phát hành thật; không dùng số liệu phân hệ thay tổng toàn hệ thống.
+- `myhcmut-mobile/docs/profile-edit-web-comparison.md` và `docs/schedule-creation-audit.md` chứa đối chiếu ngày 01/10, gồm quan sát trên thiết bị và kết quả kiểm tra ở từng giai đoạn. Chỉ dùng đúng phạm vi, phiên bản và giới hạn của từng lượt; không cộng các số test thành tổng mới của HEAD.
+- Các kết quả ngày 22–24/09 và Gate 0 là lịch sử. Thành công qua WebView/trình duyệt không chứng minh nộp hồ sơ native kèm minh chứng ở phiên bản mới.
+- iOffice có hạ tầng outbox tại `config/lib/outbox.js`; riêng lời mời họp mới dùng `notification.send` sau commit, chưa có retry/outbox bền vững riêng. Không suy rộng sự hiện diện outbox sang mọi luồng thông báo.
+- Mã tạo lịch giữ ID khi đã nhận phản hồi để thử lại trên cùng bản ghi. Nếu POST đã commit nhưng phản hồi bị mất, client có thể không biết ID; chưa có khóa idempotency backend bảo đảm chống tạo trùng trong trường hợp này.
+- Không sao chép cấu hình bí mật, token, dữ liệu tài khoản hay hồ sơ nhân sự vào repository tài liệu.
+
+## 5. Tài liệu dùng tiếp
+
+- [Danh mục nội dung cần sửa theo chương](14_REPORT_7_CHAPTER_AUDIT.md): vị trí báo cáo, lý do và đoạn diễn đạt đề xuất.
+- [Đặc tả hồ sơ native](03_REQUIREMENT_PACK_PROFILE.md): phạm vi nhập liệu, policy, API và kiểm chứng.
+- [Đặc tả tạo cuộc họp](06B_REQUIREMENT_PACK_SCHEDULE.md): FR, UC, quyền, trạng thái và lỗi từng phần.
+- [Luồng vận hành hiện tại](SYSTEM_OPERATION.md) và [ma trận truy vết](02_SCOPE_CLAIM_TRACEABILITY.md).
+
+## 6. Thay đổi demo đã commit và push — `96b21cf`
+
+- iOffice `POST /api/schedule/general-item/general/create` gửi lời mời ngay sau commit khi tạo trực tiếp lịch Trường ở `TONG_HOP`; lịch vẫn chưa phát hành. API dùng chung cho mobile và web. Gửi phiếu/tiếp nhận không kích hoạt thông báo sớm.
+- Dùng phân công đã lưu hợp lệ, SHCC và tài khoản hoạt động; không gửi khi lưu/commit thất bại. Upload tệp diễn ra sau request tạo nên lời mời có thể đến trước khi tải tệp xong.
+- Luồng phát hành cũ vẫn gửi thông báo, nên người nhận có thể nhận thêm khi phát hành. Đây là điều chỉnh phục vụ demo, cần ghi rõ khi viết báo cáo.
+- Kiểm tra mới: `node --test test/*.test.js` đạt 39/39 test backend (37 test lịch và 2 test quyền đọc tệp văn bản); `node --check modules/md-schedule/schedule-general/controller/schedule-general-item.js` và `git diff --check` đạt. Đây là kết quả kiểm thử mock tại commit nền; kiểm chứng thiết bị sau sửa đồng bộ token/khóa Firebase xem mục 7.
+
+## 7. Kiểm chứng push thật và cấu hình demo
+
+- Ban đầu iOffice không có token của tài khoản trên điện thoại; mobile chỉ đăng ký tại HRM. Sau sửa đồng bộ hai backend, iOffice có token và đã tạo lời mời thật.
+- Lần đầu với lịch `382` tạo được thông báo hộp thư `1327` nhưng không nhận push: khóa Firebase của iOffice bị từ chối với `invalid_grant: Invalid JWT Signature`. Khóa HRM hiện có, cùng project, vượt qua kiểm tra Firebase; đã dùng cho cấu hình iOffice cục bộ và khởi động lại backend. Không lưu khóa/token trong tài liệu hoặc commit.
+- Lịch `383`/thông báo `1328` khi app mở và lịch `384`/thông báo `1329` khi chạy nền đều được nhận trên Android 12/RMX2151; mỗi lời mời có một người nhận đích danh. Cả ba lịch vẫn ở bước 3 `TONG_HOP`, chưa phát hành.
+- Request tạo được thực hiện qua API thật bằng phiên của app; đây không phải nghiệm thu đầy đủ thao tác nhập/lưu form mobile. Bấm push hiện mở `/ioffice/schedule`, chưa mở thẳng chi tiết theo ID cuộc họp.
+- `myhcmut-mobile/docs/schedule-creation-audit.md` ghi đợt trước thay đổi gửi sớm; các câu chỉ gửi khi phát hành/chưa kiểm chứng push tại đó là lịch sử. Dùng biên bản thiết bị mới cho kết quả hiện hành.

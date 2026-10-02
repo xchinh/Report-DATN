@@ -1,4 +1,6 @@
-# Đối chiếu đặc tả – hiện thực – kiểm chứng hiện hành
+# Đối chiếu đặc tả – hiện thực – kiểm chứng ngày 24/09/2026
+
+> **Cập nhật 01/10/2026:** Bảng bên dưới là biên bản của phạm vi/phiên bản ngày 24/09. Luồng hồ sơ hiện tại đã có editor và lịch sử native; tạo cuộc họp từ Lịch tổng hợp đã thuộc phạm vi đề xuất viết lại báo cáo. Xem [snapshot mới](../13_CURRENT_SOURCE_SNAPSHOT.md), [đặc tả tạo cuộc họp](../06B_REQUIREMENT_PACK_SCHEDULE.md) và [danh mục chỉnh sửa](../14_REPORT_7_CHAPTER_AUDIT.md). Kết quả WebView/trình duyệt trong bảng không chứng minh nộp hồ sơ native; việc tạo lịch từng dùng làm dữ liệu chuẩn bị thử không loại trừ tính năng tạo lịch mới khỏi báo cáo viết lại.
 
 Nguồn đặc tả: Chương 1 và các tệp được nạp từ `Chapter4/section2/index.tex` ngày 24/09/2026. Nguồn kết quả: Chương 6, biên bản `10_e2e_audit_20260924.md` và hồ sơ kiểm thử liên quan. Bảng này dùng để biên tập luận văn; mã phiếu và log chi tiết giữ trong biên bản, không dùng số kịch bản lịch sử để nghiệm thu đặc tả hiện hành.
 
