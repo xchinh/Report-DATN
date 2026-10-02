@@ -1,0 +1,376 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - ESM syntax in a file loaded as CommonJS (vitest.config.ts:1:1). Use a `.mjs` extension or set `"type": "module"` in the closest package.json
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+The plugin "vite-tsconfig-paths" is detected. Vite now supports tsconfig paths resolution natively via the resolve.tsconfigPaths option. You can remove the plugin and set resolve.tsconfigPaths: true in your Vite config instead.
+
+ RUN  v4.1.10 /home/xchinh/workspace/hrm-be
+
+stdout | test/unit/sso_phase0.unit.test.ts
+◇ injected env (28) from .env.test // tip: ⌁ auth for agents [www.vestauth.com]
+
+ ❯ test/unit/sso_phase0.unit.test.ts (18 tests | 1 failed) 174ms
+       × hrm-fe and ioffice-fe ports align with topology: hrm-fe (6022) -> hrm-be (6023), ioffice-fe (3000) -> ioffice-be (3001) 9ms
+stdout | test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts
+◇ injected env (28) from .env.test // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts (84 tests | 16 failed) 64ms
+       × J1 - bậc nằm gọn trong ngạch cùng mã thì hợp lệ 8ms
+       × J2 - bậc vượt quá ngày kết thúc ngạch thì bị chặn 3ms
+       × J3 - bậc chưa kết thúc trong ngạch đã đóng thì bị chặn 1ms
+       × J4 - bậc chưa kết thúc trong ngạch đang mở thì hợp lệ 1ms
+       × J5 - đúng khoảng nhưng sai mã ngạch thì bị chặn 1ms
+       × M4 - bậc phải là số nguyên dương 1ms
+       × M5 - hệ số lương phải dương 1ms
+       × M6 - dữ liệu hợp lệ thì đi qua 1ms
+       × S1 - chưa xử lý gì thì bậc bị chặn vì nằm ngoài phạm vi ngạch 1ms
+       × S2 - sau khi rút ngắn ngạch trước và lùi ngạch cha thì bậc hợp lệ 1ms
+       × S3 - chỉ rút ngắn mà quên lùi ngạch cha thì vẫn bị chặn 1ms
+       × S4 - ngạch chắn phía trước đang mở thì đi nhánh ketThuc, kết quả y hệt 1ms
+       × S5 - mở lại ngạch cha (ngayKetThuc null) cho bậc còn mở nằm trong ngạch đã đóng 1ms
+       × T3 - chỉ dời ngạch mà bỏ quên bậc con thì backend chặn 1ms
+       × T12 - bậc có đúng khoảng ngày nhưng sai mã ngạch cha vẫn bị chặn 1ms
+       × T13 - bậc còn mở không được nằm trong ngạch đã đóng 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 17 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/unit/sso_phase0.unit.test.ts > PHASE 0: SSO Pre-implementation Verification > Criterion 4: CORS Policies and 10.0.2.2 Mapping > hrm-fe and ioffice-fe ports align with topology: hrm-fe (6022) -> hrm-be (6023), ioffice-fe (3000) -> ioffice-be (3001)
+AssertionError: expected 'APP_PORT = 3000\nAPP_ROOT_URL = http:…' to contain 'APP_API_URL = http://localhost:3001'
+
+- Expected
++ Received
+
+- APP_API_URL = http://localhost:3001
++ [environment line redacted]
++ [environment line redacted]
++ APP_API_URL = http://10.130.45.37:3001
++ [environment line redacted]
++ [environment line redacted]
++ [environment line redacted]
++ [environment line redacted]
++ [environment line redacted]
++
++ # 
++ # APP_HRM_P
++ [environment line redacted]
++ [environment line redacted]
+
+ ❯ test/unit/sso_phase0.unit.test.ts:187:34
+    185|
+    186|             expect(iofficeFeEnv).toContain('APP_PORT = 3000');
+    187|             expect(iofficeFeEnv).toContain('APP_API_URL = http://local…
+       |                                  ^
+    188|         });
+    189|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateBacInsideNgach > J1 - bậc nằm gọn trong ngạch cùng mã thì hợp lệ
+AssertionError: expected [Function] to not throw an error but 'TypeError: (0 , __vite_ssr_import_2__…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"TypeError: (0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:224:24
+    222|                 expect(() => validateBacInsideNgach(
+    223|                     '01003', ngay('31/05/2026'), ngay('30/06/2026'), d…
+    224|                 )).not.toThrow();
+       |                        ^
+    225|             });
+    226|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateBacInsideNgach > J2 - bậc vượt quá ngày kết thúc ngạch thì bị chặn
+AssertionError: expected [Function] to throw error matching /nằm gọn trong một kỳ ngạch/ but got '(0 , __vite_ssr_import_2__.validateBa…'
+
+- Expected:
+/nằm gọn trong một kỳ ngạch/
+
++ Received:
+"(0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:230:20
+    228|                 expect(() => validateBacInsideNgach(
+    229|                     '01003', ngay('31/05/2026'), ngay('31/07/2026'), d…
+    230|                 )).toThrow(/nằm gọn trong một kỳ ngạch/);
+       |                    ^
+    231|             });
+    232|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateBacInsideNgach > J3 - bậc chưa kết thúc trong ngạch đã đóng thì bị chặn
+AssertionError: expected [Function] to throw error matching /nằm gọn trong một kỳ ngạch/ but got '(0 , __vite_ssr_import_2__.validateBa…'
+
+- Expected:
+/nằm gọn trong một kỳ ngạch/
+
++ Received:
+"(0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:236:20
+    234|                 expect(() => validateBacInsideNgach(
+    235|                     '01003', ngay('31/05/2026'), null, danhSachNgach,
+    236|                 )).toThrow(/nằm gọn trong một kỳ ngạch/);
+       |                    ^
+    237|             });
+    238|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateBacInsideNgach > J4 - bậc chưa kết thúc trong ngạch đang mở thì hợp lệ
+AssertionError: expected [Function] to not throw an error but 'TypeError: (0 , __vite_ssr_import_2__…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"TypeError: (0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:242:24
+    240|                 expect(() => validateBacInsideNgach(
+    241|                     'V.07.01.03', ngay('01/08/2026'), null, danhSachNg…
+    242|                 )).not.toThrow();
+       |                        ^
+    243|             });
+    244|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateBacInsideNgach > J5 - đúng khoảng nhưng sai mã ngạch thì bị chặn
+AssertionError: expected [Function] to throw error matching /nằm gọn trong một kỳ ngạch/ but got '(0 , __vite_ssr_import_2__.validateBa…'
+
+- Expected:
+/nằm gọn trong một kỳ ngạch/
+
++ Received:
+"(0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:248:20
+    246|                 expect(() => validateBacInsideNgach(
+    247|                     'V.07.01.03', ngay('31/05/2026'), ngay('30/06/2026…
+    248|                 )).toThrow(/nằm gọn trong một kỳ ngạch/);
+       |                    ^
+    249|             });
+    250|         });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateNgachRow > M4 - bậc phải là số nguyên dương
+AssertionError: expected [Function] to throw error matching /số nguyên dương/ but got 'Ngày vào ngạch không được ở tương lai'
+
+- Expected:
+/số nguyên dương/
+
++ Received:
+"Ngày vào ngạch không được ở tương lai"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:294:22
+    292|             it('M4 - bậc phải là số nguyên dương', () => {
+    293|                 expect(() => validateNgachRow(ngay('01/01/2025'), null…
+    294|                     .toThrow(/số nguyên dương/);
+       |                      ^
+    295|                 expect(() => validateNgachRow(ngay('01/01/2025'), null…
+    296|                     .toThrow(/số nguyên dương/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateNgachRow > M5 - hệ số lương phải dương
+AssertionError: expected [Function] to throw error matching /Hệ số lương phải là số dương/ but got 'Ngày vào ngạch không được ở tương lai'
+
+- Expected:
+/Hệ số lương phải là số dương/
+
++ Received:
+"Ngày vào ngạch không được ở tương lai"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:301:22
+    299|             it('M5 - hệ số lương phải dương', () => {
+    300|                 expect(() => validateNgachRow(ngay('01/01/2025'), null…
+    301|                     .toThrow(/Hệ số lương phải là số dương/);
+       |                      ^
+    302|             });
+    303|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > validateNgachRow > M6 - dữ liệu hợp lệ thì đi qua
+AssertionError: expected [Function] to not throw an error but 'Error: Ngày vào ngạch không được ở tư…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"Error: Ngày vào ngạch không được ở tương lai"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:307:24
+    305|                 expect(() => validateNgachRow(
+    306|                     ngay('01/01/2025'), ngay('31/12/2025'), 1, 2.34, b…
+    307|                 )).not.toThrow();
+       |                        ^
+    308|             });
+    309|         });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > moPhongNgachSauXuLy + validateBacInsideNgach > S1 - chưa xử lý gì thì bậc bị chặn vì nằm ngoài phạm vi ngạch
+AssertionError: expected [Function] to throw error matching /nằm gọn trong một kỳ ngạch/ but got '(0 , __vite_ssr_import_2__.validateBa…'
+
+- Expected:
+/nằm gọn trong một kỳ ngạch/
+
++ Received:
+"(0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:463:20
+    461|                 expect(() => validateBacInsideNgach(
+    462|                     'V.07.01.03', ngay('01/05/2026'), null, danhSachNg…
+    463|                 )).toThrow(/nằm gọn trong một kỳ ngạch/);
+       |                    ^
+    464|             });
+    465|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > moPhongNgachSauXuLy + validateBacInsideNgach > S2 - sau khi rút ngắn ngạch trước và lùi ngạch cha thì bậc hợp lệ
+AssertionError: expected [Function] to not throw an error but 'TypeError: (0 , __vite_ssr_import_2__…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"TypeError: (0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:470:24
+    468|                 expect(() => validateBacInsideNgach(
+    469|                     'V.07.01.03', ngay('01/05/2026'), null, sauXuLy,
+    470|                 )).not.toThrow();
+       |                        ^
+    471|             });
+    472|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > moPhongNgachSauXuLy + validateBacInsideNgach > S3 - chỉ rút ngắn mà quên lùi ngạch cha thì vẫn bị chặn
+AssertionError: expected [Function] to throw error matching /nằm gọn trong một kỳ ngạch/ but got '(0 , __vite_ssr_import_2__.validateBa…'
+
+- Expected:
+/nằm gọn trong một kỳ ngạch/
+
++ Received:
+"(0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:477:20
+    475|                 expect(() => validateBacInsideNgach(
+    476|                     'V.07.01.03', ngay('01/05/2026'), null, sauXuLy,
+    477|                 )).toThrow(/nằm gọn trong một kỳ ngạch/);
+       |                    ^
+    478|             });
+    479|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > moPhongNgachSauXuLy + validateBacInsideNgach > S4 - ngạch chắn phía trước đang mở thì đi nhánh ketThuc, kết quả y hệt
+AssertionError: expected [Function] to not throw an error but 'TypeError: (0 , __vite_ssr_import_2__…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"TypeError: (0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:489:24
+    487|                 expect(() => validateBacInsideNgach(
+    488|                     'V.07.01.03', ngay('01/05/2026'), null, sauXuLy,
+    489|                 )).not.toThrow();
+       |                        ^
+    490|             });
+    491|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > moPhongNgachSauXuLy + validateBacInsideNgach > S5 - mở lại ngạch cha (ngayKetThuc null) cho bậc còn mở nằm trong ngạch đã đóng
+AssertionError: expected [Function] to not throw an error but 'TypeError: (0 , __vite_ssr_import_2__…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"TypeError: (0 , __vite_ssr_import_2__.validateBacInsideNgach) is not a function"
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:499:24
+    497|                 expect(() => validateBacInsideNgach(
+    498|                     '01003', ngay('01/06/2025'), null, sauXuLy,
+    499|                 )).not.toThrow();
+       |                        ^
+    500|             });
+    501|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > điều chỉnh khoảng ngày liên quan > T3 - chỉ dời ngạch mà bỏ quên bậc con thì backend chặn
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:550:70
+    548|
+    549|                 expect(() => validateTimelineNgachLuong(
+    550|                     ngachSauCung, snapshot.ngachBac, snapshot.tnvk)).t…
+       |                                                                      ^
+    551|             });
+    552|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > điều chỉnh khoảng ngày liên quan > T12 - bậc có đúng khoảng ngày nhưng sai mã ngạch cha vẫn bị chặn
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:665:20
+    663|                     [{ id: 1, maNgach: 'V.07', bac: 1, ngayVaoBac: nga…
+    664|                     [],
+    665|                 )).toThrow(/đúng một kỳ ngạch cùng mã/);
+       |                    ^
+    666|             });
+    667|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/17]⎯
+
+ FAIL  test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts > KetThucNgachUnitTest > điều chỉnh khoảng ngày liên quan > T13 - bậc còn mở không được nằm trong ngạch đã đóng
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ test/unit/staff_luong_phu_cap/ket-thuc-ngach.unit.test.ts:673:20
+    671|                     [{ id: 1, maNgach: '01003', bac: 1, ngayVaoBac: ng…
+    672|                     [],
+    673|                 )).toThrow(/đúng một kỳ ngạch cùng mã/);
+       |                    ^
+    674|             });
+    675|         });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/17]⎯
+
+
+ Test Files  2 failed | 9 passed (11)
+      Tests  17 failed | 167 passed (184)
+   Start at  01:55:43
+   Duration  3.59s (transform 10.63s, setup 455ms, import 23.78s, tests 808ms, environment 1ms)
+

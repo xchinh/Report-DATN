@@ -1,0 +1,170 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/mission_provider_workflow_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/mission_provider_workflow_test.dart: mission, task, and report providers load filtered workflow data
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums MissionStatus returns appropriate labels and colors
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums MissionReportBatchStatus returns appropriate labels and colors
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums MissionReportStatus returns appropriate labels and colors
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/models/mission_model_test.dart: Mission Models & Enums Mission deserialization from JSON works properly
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDate formats timestamp correctly
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDate returns fallback for null timestamp
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDateTime formats date and time correctly
+00:00 +8: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDateTime returns fallback for null timestamp
+00:00 +9: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils formatDateRange formats range properly
+00:00 +10: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/mission/utils/mission_format_utils_test.dart: MissionFormatUtils isOverdue and overdueDays work correctly
+00:00 +11: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_detail_regression_test.dart: assigned director permits advice without a director timeline step
+00:00 +11: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_actions_test.dart: advice rejects API error with HTTP 200
+[DEBUG] DioException in advise Document: Workflow permission denied
+00:00 +12: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_detail_regression_test.dart: assigned director permits advice without a director timeline step
+00:00 +13: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_detail_regression_test.dart: assigned director permits advice without a director timeline step
+00:00 +13: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_actions_test.dart: direction rejects API error with HTTP 200
+[DEBUG] DioException in direct Document: Workflow permission denied
+00:00 +14: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_detail_regression_test.dart: assigned director permits advice without a director timeline step
+00:00 +15: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_detail_regression_test.dart: assigned director permits advice without a director timeline step
+00:01 +16: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_workflow_test.dart: empty assignment respects edit permission true
+00:01 +17: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_workflow_test.dart: empty assignment respects edit permission true
+00:01 +18: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_workflow_test.dart: empty assignment respects edit permission true
+00:01 +19: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/custom_table_calendar_test.dart: CustomTableCalendar Tests renders calendar day with centered text layout
+00:01 +20: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/custom_table_calendar_test.dart: CustomTableCalendar Tests renders calendar day with centered text layout
+00:01 +21: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/custom_table_calendar_test.dart: CustomTableCalendar Tests renders calendar day with centered text layout
+00:02 +22: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/custom_table_calendar_test.dart: CustomTableCalendar Tests renders calendar day with centered text layout
+00:02 +23: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +24: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +25: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +26: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +27: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +28: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +29: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +30: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +31: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +32: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +33: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +34: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +35: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +36: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:02 +36: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_workflow_test.dart: first directive uses the page document ID and reports API failure
+[DEBUG] DioException in addResolutionForm: Cannot assign director
+00:02 +37: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +38: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +39: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +39: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_workflow_test.dart: failed directive edit closes progress and allows retry
+[DEBUG] DioException in updateResolutionForm: Cannot edit director
+00:03 +40: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +41: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +42: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +43: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +44: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +45: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +46: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +47: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +48: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +49: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +50: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +51: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +52: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +53: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +54: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +55: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests shows a retry action after a load failure
+00:03 +56: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +57: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +58: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +59: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +60: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +61: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +62: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +63: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +64: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +65: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +66: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +67: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +68: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +69: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +70: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +71: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:03 +72: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:04 +73: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:04 +74: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:04 +74: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests keeps left border color as eventColor even when event is ended
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "Sự kiện đã kết thúc": []>
+   Which: means none were found but one was expected
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure>.<anonymous closure> (file:///home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart:238:9)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  file:///home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart line 238
+The test description was:
+  keeps left border color as eventColor even when event is ended
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:04 +74 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:04 +74 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart: CompactSchedule Widget Rendering Tests keeps left border color as eventColor even when event is ended [E]
+  Test failed. See exception logs above.
+  The test description was: keeps left border color as eventColor even when event is ended
+  
+00:04 +75 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:04 +76 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: reselecting a native source does not add another cached copy
+00:04 +77 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code HOP
+00:04 +78 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code HOP
+00:04 +79 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code HOP
+00:04 +80 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code HOP
+00:04 +81 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code HOP
+00:04 +82 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code HOP
+00:04 +83 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_navigation_test.dart: Home opens HRM_NGHI_PHEP -73 in HRM and Back returns to the calendar
+00:04 +84 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_workflow_test.dart: returning after advice refreshes other previously loaded tabs
+[INFO] Socket iOffice client disposed
+00:04 +85 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/incoming_document/incoming_document_workflow_test.dart: returning after advice refreshes other previously loaded tabs
+00:04 +86 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: unit schedule read permission does not offer unauthorized uploads
+00:04 +87 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: unit schedule read permission does not offer unauthorized uploads
+00:04 +88 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code EVENT-99
+00:04 +89 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code EVENT-99
+00:04 +90 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: shared type dropdown sends catalog code EVENT-99
+00:05 +91 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_navigation_test.dart: Home keeps iOffice meetings on their schedule detail page
+00:05 +92 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_navigation_test.dart: Home keeps iOffice meetings on their schedule detail page
+00:05 +93 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_navigation_test.dart: Home keeps iOffice meetings on their schedule detail page
+00:05 +94 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_navigation_test.dart: Home keeps iOffice meetings on their schedule detail page
+00:05 +95 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_navigation_test.dart: Home keeps iOffice meetings on their schedule detail page
+00:05 +96 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: DON_VI uploads attachments before completing creation
+00:05 +97 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: DON_VI uploads attachments before completing creation
+00:05 +98 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: DON_VI uploads attachments before completing creation
+00:05 +99 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: DON_VI uploads attachments before completing creation
+00:05 +100 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: DON_VI uploads attachments before completing creation
+00:05 +101 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: DON_VI uploads attachments before completing creation
+00:05 +102 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: DON_VI uploads attachments before completing creation
+00:05 +103 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: direct creation failure shows the backend error and keeps the form
+00:05 +104 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: direct creation failure shows the backend error and keeps the form
+00:05 +105 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: direct creation failure shows the backend error and keeps the form
+00:05 +106 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: direct creation failure shows the backend error and keeps the form
+00:05 +107 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: direct creation failure shows the backend error and keeps the form
+00:05 +108 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: direct creation failure shows the backend error and keeps the form
+00:05 +109 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +110 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +111 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +112 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +113 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +114 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +115 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +116 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +117 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +118 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +119 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +120 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +121 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +122 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +123 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT uploads attachments before completing creation
+00:05 +124 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: search handles empty results, failures, retry and changed names
+00:05 +125 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG uploads attachments before completing creation
+00:06 +126 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: Chủ trì searches by name and selects the returned identity
+00:06 +127 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: removing a selected attachment keeps plain schedule creation
+00:06 +128 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: Tham dự searches by name and selects the returned identity
+00:06 +129 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG_DIRECT retries failed files without recreating or reuploading completed files
+00:06 +130 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_create_page_test.dart: Thư ký searches by name and selects the returned identity
+00:06 +131 -1: /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/schedule_attachments_test.dart: TRUONG retries failed files without recreating or reuploading completed files
+00:07 +132 -1: Some tests failed.

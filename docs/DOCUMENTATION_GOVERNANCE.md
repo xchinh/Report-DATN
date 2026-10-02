@@ -4,6 +4,8 @@
 
 Tài liệu này xác định nguồn thông tin chuẩn, cách phân loại tài liệu và backlog đồng bộ báo cáo. Nó không thay thế bằng chứng mã nguồn, không xác nhận một chức năng mới, và không sửa nội dung LaTex của báo cáo.
 
+**Điểm vào từ 02/10/2026:** [kết quả kiểm thử và quyết định sửa báo cáo](chapter6-7-evidence/14_retest_and_rewrite_gate_20261002.md), [manifest/log mới](chapter6-7-evidence/results/DATN-RETEST-20261002/manifest.md) và [audit Chương 4–6](chapter6-7-evidence/13_chapter4_chapter6_claim_audit_20261002.md). E2E đợt mới chưa chạy được; chưa bắt đầu sửa các chương. Không dùng backlog tháng 9 để khôi phục scope WebView hoặc gán Pass cho HEAD.
+
 ## 2. Nguồn chuẩn và thứ tự ưu tiên
 
 | Mức ưu tiên | Nguồn | Dùng để xác nhận |
@@ -11,7 +13,7 @@ Tài liệu này xác định nguồn thông tin chuẩn, cách phân loại tà
 | 1 | Working tree hiện tại của `hrm-be`, `ioffice-be`, `myhcmut-be` | Hành vi backend, API và giới hạn kỹ thuật hiện hành; xem snapshot nguồn ngày 01/10/2026 |
 | 2 | `myhcmut-mobile`, `hrm-fe`, `ioffice-fe` hiện tại | Hành vi native hiện hành; web tham chiếu/quản trị tại hệ thống nguồn, backend quyết định nghiệp vụ |
 | 3 | `13_CURRENT_SOURCE_SNAPSHOT.md` | Mốc commit, thay đổi chưa commit, giới hạn snapshot và trạng thái phụ thuộc môi trường |
-| 4 | `01_GATE0_EVIDENCE_INDEX.md`, `12_BASELINE_REPRODUCIBILITY_AUDIT.md` | Bằng chứng Gate 0 lịch sử và giới hạn tái lập |
+| 4 | `chapter6-7-evidence/14_retest_and_rewrite_gate_20261002.md`, manifest `DATN-RETEST-20261002` | Kết quả chạy lại hiện hành và phần E2E chưa thực hiện; Gate 0 trong `01_GATE0`/`12_BASELINE` chỉ là lịch sử |
 | 5 | `02_SCOPE_CLAIM_TRACEABILITY.md`, `SYSTEM_OPERATION.md` | Ranh giới nghiệm thu và luồng vận hành đã đối chiếu |
 | 6 | `ARCHITECTURE_SCOPE.md`, `THESIS_BLUEPRINT.md`, requirement pack `03` đến `06` | Quy hoạch báo cáo và đặc tả theo miền; phải sửa khi mâu thuẫn với nguồn ưu tiên cao hơn |
 
@@ -24,7 +26,7 @@ Gate 0 (`myhcmut-mobile:4fe5d9c`, `hrm-be:38745a26`) chỉ là mốc lịch sử
 | Chuẩn vận hành | `13_CURRENT_SOURCE_SNAPSHOT`, `01_GATE0`, `02_SCOPE`, `SYSTEM_OPERATION`, `ARCHITECTURE_SCOPE`, `THESIS_BLUEPRINT`, `12_BASELINE_REPRODUCIBILITY_AUDIT` | Cập nhật khi có bằng chứng mới; không suy diễn vượt quá bằng chứng |
 | Đặc tả miền | `03_REQUIREMENT_PACK_PROFILE`, `04_REQUIREMENT_PACK_LEAVE`, `05_REQUIREMENT_PACK_NOTIFICATION`, `06_REQUIREMENT_PACK_SSO`, `06B_REQUIREMENT_PACK_SCHEDULE` | Nguồn chi tiết cho FR, UC, BR; pack SSO chỉ còn là hồ sơ lịch sử của luồng WebView |
 | Danh mục biên tập hiện hành | `14_REPORT_7_CHAPTER_AUDIT` | Đề xuất sửa theo diff và snapshot ngày 01/10/2026; chưa thay LaTeX |
-| Bản thảo/đánh giá lịch sử | `07` đến `10`, `09B`, `11_FINAL_CONSISTENCY_REVIEW` | Chỉ tham khảo lịch sử; không dùng làm nguồn duy nhất để khẳng định hiện trạng |
+| Bản thảo/đánh giá đã loại bỏ | `07` đến `10`, `09B`, `11_FINAL_CONSISTENCY_REVIEW`; kế hoạch/spec tháng 9 | Đã xoá ngày 02/10; danh sách trong `chapter6-7-evidence/results/DATN-RETEST-20261002/cleanup.json`, phục hồi lịch sử từ Git nếu cần |
 
 Các prompt, review và kế hoạch đã lỗi thời đã được loại bỏ để giữ tập tài liệu dễ đọc. Khi tài liệu bị thay thế, phải ghi rõ nguồn chuẩn thay thế và lý do thay thế.
 
@@ -54,7 +56,7 @@ Các prompt, review và kế hoạch đã lỗi thời đã được loại bỏ
 
 ## 6. Nguồn để viết lại sau đối chiếu ngày 01/10/2026
 
-Ưu tiên `13_CURRENT_SOURCE_SNAPSHOT.md`, `14_REPORT_7_CHAPTER_AUDIT.md`, `03_REQUIREMENT_PACK_PROFILE.md`, `06B_REQUIREMENT_PACK_SCHEDULE.md` và các luồng native trong `SYSTEM_OPERATION.md`. Các bản thảo cũ `07`–`10`, blueprint và tài liệu thiết kế có mô tả WebView phải đọc theo snapshot mới; không sao chép chúng như hiện trạng. Các log/biên bản lịch sử giữ nguyên giá trị theo phiên bản, không đổi kết quả cũ thành kết quả của HEAD.
+Ưu tiên kết quả kiểm thử ngày 02/10 và audit Chương 4–6 ở đầu tài liệu, sau đó đối chiếu `13_CURRENT_SOURCE_SNAPSHOT.md`, `14_REPORT_7_CHAPTER_AUDIT.md`, các requirement pack và `SYSTEM_OPERATION.md`. Các bản thảo cũ `07`–`11` đã bị loại bỏ. Blueprint và hướng dẫn còn giữ phải đọc theo snapshot mới; các log/biên bản lịch sử giữ nguyên giá trị theo phiên bản, không đổi kết quả cũ thành kết quả của HEAD.
 
 ## Minh chứng push thiết bị ngày 01/10/2026
 

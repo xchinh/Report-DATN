@@ -1,5 +1,7 @@
 # DANH SÁCH KIỂM THỬ ĐỀ XUẤT
 
+> **Backlog lịch sử, đã được thay thế:** Dùng [kết quả và backlog ngày 02/10](14_retest_and_rewrite_gate_20261002.md). Người dùng đã yêu cầu thực hiện kiểm thử trước khi viết; các câu chờ duyệt trong kế hoạch cũ bên dưới không phải trạng thái của đợt mới.
+
 > **Hiệu chỉnh nghiệp vụ ngày 24/09:** Hạng mục `UC-SCH-01-B05` yêu cầu chặn người ngoài danh sách mời ở phần lịch sử bên dưới đã bị thay thế. Nghiệp vụ hiện hành cho phép khách tự điểm danh; lần chạy tiếp theo cần xác minh nhánh khách, quyền sử dụng lịch và thời gian hợp lệ.
 
 ## 1. Nguồn tạo backlog

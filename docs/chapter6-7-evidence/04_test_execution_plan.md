@@ -1,5 +1,7 @@
 # KẾ HOẠCH THỰC HIỆN KIỂM THỬ CHƯƠNG 6–7
 
+> **Kế hoạch lịch sử tháng 9:** Đã được thay bằng [đợt kiểm thử 02/10 và các nhánh E2E còn thiếu](14_retest_and_rewrite_gate_20261002.md). Không thực thi lại các bước WebView hoặc tiêu chí/mapping cũ như hiện trạng.
+
 > **Lưu vết lịch sử:** Tiêu chí `SCH-01` trong kế hoạch ngày 23/09 yêu cầu từ chối người ngoài danh sách mời. Đặc tả Chương 4 hiện hành đã xác nhận nghiệp vụ khách tự điểm danh (`assign_id = null`), nên không dùng tiêu chí cũ để nghiệm thu sản phẩm hiện tại. Khi chạy lại, kiểm tra riêng người được phân công, khách tự điểm danh, quyền truy cập và khung thời gian.
 
 ## 1. Mục tiêu và phạm vi
@@ -8,7 +10,7 @@
 
 Kế hoạch gốc chuyển 51 khoảng trống bằng chứng thành 21 kịch bản. Bản hiệu chỉnh có **22 kịch bản** (thêm OFF-04) và giữ mã cũ để truy vết log, nhưng **không giữ nguyên mapping và kỳ vọng cũ** của LEV-03, BTR-02, OFF-01/02/03. Chỉ kết quả của lần chạy lại theo tiêu chí mới mới được dùng để đánh giá các hành vi mới.
 
-Tài liệu chỉ là **kế hoạch chờ phê duyệt**. Việc tạo tệp này không cho phép viết test, chạy test, sửa dữ liệu staging hoặc sửa LaTeX.
+Đây là trạng thái kế hoạch tại mốc tháng 9. Ngày 02/10 người dùng đã yêu cầu kiểm thử trước khi sửa báo cáo; kết quả và phần phụ thuộc môi trường/fixture của đợt mới được ghi trong tài liệu thay thế ở đầu trang.
 
 ### 1.2. Phạm vi xác minh
 

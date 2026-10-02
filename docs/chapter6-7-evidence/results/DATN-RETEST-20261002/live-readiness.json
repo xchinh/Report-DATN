@@ -1,0 +1,38 @@
+[
+  {
+    "label": "HRM local",
+    "host": "127.0.0.1",
+    "port": 6023,
+    "status": "unreachable"
+  },
+  {
+    "label": "iOffice local",
+    "host": "127.0.0.1",
+    "port": 3001,
+    "status": "reachable"
+  },
+  {
+    "label": "Auth local",
+    "host": "127.0.0.1",
+    "port": 4000,
+    "status": "unreachable"
+  },
+  {
+    "label": "HRM mobile endpoint",
+    "host": "192.168.1.13",
+    "port": 6023,
+    "status": "unreachable"
+  },
+  {
+    "label": "iOffice mobile endpoint",
+    "host": "192.168.1.13",
+    "port": 3001,
+    "status": "reachable"
+  },
+  {
+    "label": "Auth mobile endpoint",
+    "host": "192.168.1.13",
+    "port": 4000,
+    "status": "unreachable"
+  }
+]

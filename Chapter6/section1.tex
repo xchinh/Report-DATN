@@ -1,198 +1,309 @@
 \section{Kết quả hiện thực hệ thống}
 \label{sec:ketqua_hienthuc}
 
-Mục này trình bày kết quả xây dựng ứng dụng theo các nhóm nghiệp vụ đã đặc tả ở Chương~4. Phần nhóm trực tiếp phát triển gồm các màn hình và luồng Flutter cùng những API hoặc cơ chế tích hợp được bổ sung ở backend; dữ liệu và quy tắc nghiệp vụ sẵn có của HRM/iOffice được tái sử dụng, còn biểu mẫu lý lịch của HRM Web được mở qua WebView. Ranh giới từng thành phần được nêu ở Bảng~\ref{tab:component_ownership_scope}. Một số ảnh giao diện đã được thay thông tin định danh; các ảnh này chỉ minh họa cách trình bày và thao tác. Mức độ hoạt động đúng trong môi trường tích hợp được đánh giá riêng ở Mục~\ref{sec:kiemthu_danhgia}.
+MyHCMUT Mobile đã hiện thực các nhóm chức năng hồ sơ nhân sự, nghỉ phép, công tác, văn bản, nhiệm vụ, lịch biểu và thông báo. Ứng dụng kết nối với Auth Service, HRM Backend và iOffice Backend; dữ liệu chính thức, quy trình nghiệp vụ và kiểm tra quyền tiếp tục do các hệ thống nguồn quản lý.
 
-\subsection{Trang chủ}
-\begin{figure}[!htbp]
+Các hình dưới đây minh họa những kết quả hiện thực tiêu biểu trên ứng dụng Android với dữ liệu mẫu hoặc đã loại bỏ thông tin định danh. Kết quả kiểm thử được trình bày tại Mục~\ref{sec:kiemthu_danhgia}.
+
+\subsection{Trang chủ và điều hướng chức năng}
+
+Trang chủ cung cấp lối vào các chức năng thường sử dụng và hiển thị lịch theo ngày. Thanh điều hướng kết nối trang chủ, khu vực Khám phá và tài khoản; các chức năng còn lại được tổ chức theo nhóm nghiệp vụ trong khu vực Khám phá.
+
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.43\linewidth,height=0.53\textheight,keepaspectratio]{image/chapter6/schedule_home_vi_demo.png}
-    \caption{Trang chủ và lịch cá nhân}
-    \label{fig:ch6_schedule_home}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.43\textheight,keepaspectratio]{image/chapter6/home.png}
+        \caption{Trang chủ}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.43\textheight,keepaspectratio]{image/chapter6/explore.png}
+        \caption{Nhóm chức năng}
+    \end{subfigure}
+    \caption{Trang chủ và khu vực điều hướng}
+    \label{fig:ch6_home_explore}
 \end{figure}
-
-Trên trang chủ ở Hình~\ref{fig:ch6_schedule_home}, nhóm \emph{Truy cập nhanh} đưa người dùng đến thông báo, văn bản, công việc, nghỉ phép, lý lịch và công tác. Phần \emph{Lịch của tôi} hiển thị dãy ngày trong tuần và sự kiện của ngày được chọn; thanh điều hướng phía dưới dẫn đến trang chủ, khu vực khám phá và tài khoản. Biểu tượng chuông kèm số thông báo chưa đọc giúp người dùng nhận biết công việc mới. Các lối vào này được bố trí theo tác vụ thường gặp để người dùng không phải đi qua nhiều tầng menu khi mở một hồ sơ cần xử lý.
 
 \subsection{Quản lý hồ sơ cá nhân}
 
-Ứng dụng đã xây dựng giao diện tra cứu hồ sơ nhân sự theo các nhóm thông tin cá nhân, công tác, đào tạo và chế độ liên quan. Người dùng có thể mở từng danh mục để xem dữ liệu được HRM cung cấp và yêu cầu làm mới thông tin. Đây là phần giao diện tra cứu được phát triển trên ứng dụng di động.
-
-Hình~\ref{fig:ch6_profile_overview} cho thấy màn hình tổng quan và một thẻ thông tin cá nhân sau khi được mở. Hai ví dụ ở Hình~\ref{fig:ch6_profile_cards} minh họa cách xem chi tiết ở nhóm công tác và chế độ; các thẻ khác được truy cập theo cùng cách, không cần đưa ảnh của mọi trường dữ liệu vào báo cáo.
+Phân hệ hồ sơ cho phép tra cứu các nhóm thông tin cá nhân, quá trình công tác, đào tạo và các chế độ liên quan từ HRM.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/profile_overview_demo.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/profile_personal_card_demo.png}
-    \caption{Hồ sơ: tổng quan và thông tin cá nhân}
-    \label{fig:ch6_profile_overview}
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/profile-card-detail.png}
+        \caption{Chi tiết một nhóm thông tin hồ sơ}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/profile-edit-modes.png}
+        \caption{Các cách cập nhật hồ sơ}
+    \end{subfigure}
+    \caption{Tra cứu chi tiết và chọn cách cập nhật hồ sơ}
+    \label{fig:ch6_profile_modes}
 \end{figure}
 
+Các biểu mẫu cập nhật được hiện thực bằng Flutter. Tùy trường dữ liệu và quyền do HRM cung cấp, người dùng có thể cập nhật trực tiếp, gửi yêu cầu chỉnh sửa để thẩm định hoặc gửi phản hồi kèm minh chứng. Yêu cầu chỉnh sửa tạo đề xuất chờ thẩm định, trong khi phản hồi chỉ ghi nhận nội dung cần P.TCNS rà soát và không tự thay đổi hồ sơ.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/profile_work_card_demo.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/profile_benefits_card_demo.png}
-    \caption{Hồ sơ: học vị và khen thưởng}
-    \label{fig:ch6_profile_cards}
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/profile-edit-detail.png}
+        \caption{Gửi yêu cầu chỉnh sửa}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/profile-feedback.png}
+        \caption{Gửi phản hồi}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/profile-direct-update.png}
+        \caption{Cập nhật trực tiếp}
+    \end{subfigure}
+    \caption{Các biểu mẫu cập nhật thông tin cá nhân}
+    \label{fig:ch6_profile_edit_detail}
 \end{figure}
 
-Khi cần thay đổi hồ sơ, ứng dụng chuyển người dùng đến biểu mẫu tương ứng của HRM Web trong WebView thông qua cơ chế vé đăng nhập một lần. Việc kiểm tra trường được cập nhật trực tiếp, trường cần lập đề xuất và tài liệu minh chứng thuộc quy trình của HRM Web và HRM Backend; không phải toàn bộ biểu mẫu cập nhật được viết lại bằng Flutter. Đối với người có thẩm quyền thẩm định, ứng dụng có giao diện đối chiếu giá trị hiện tại với nội dung đề xuất và lựa chọn xử lý từng nội dung. Kết quả kiểm tra thực tế của các nhánh cập nhật và thẩm định được phân biệt trong phần kiểm thử, thay vì suy ra từ việc đã có giao diện.
+Người dùng có thể theo dõi trạng thái và lịch sử xử lý. Tài khoản có quyền thẩm định được cung cấp thông tin so sánh nội dung đề xuất và các thao tác xử lý tương ứng.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.43\linewidth,height=0.51\textheight,keepaspectratio]{image/chapter6/profile_webview_edit_demo.png}
-    \caption{Biểu mẫu cập nhật hồ sơ trên HRM Web}
-    \label{fig:ch6_profile_webview}
-\end{figure}
-
-Ở vai trò thẩm định, màn hình chi tiết yêu cầu trình bày thông tin người đề xuất, trạng thái, từng nhóm trường thay đổi và tệp minh chứng. Thẻ so sánh đặt giá trị trước và nội dung đề xuất cạnh nhau; người xử lý có thể xem nội dung rồi chọn \emph{Duyệt} hoặc \emph{Từ chối} cho mục cần thẩm định. Hình~\ref{fig:ch6_profile_review} minh họa bố cục này với thông tin định danh đã thay bằng dữ liệu mẫu. Việc hiển thị đúng màn hình không thay thế bước xác minh kết quả cập nhật hồ sơ nguồn sau khi duyệt.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.43\linewidth,height=0.52\textheight,keepaspectratio]{image/chapter6/profile_review_demo.png}
-    \caption{Giao diện so sánh và thẩm định đề xuất lý lịch (dữ liệu mẫu)}
+    \includegraphics[width=0.46\linewidth,height=0.56\textheight,keepaspectratio]{image/chapter6/profile_review_demo.png}
+    \caption{Chi tiết nội dung thay đổi và thao tác thẩm định hồ sơ}
     \label{fig:ch6_profile_review}
 \end{figure}
 
 \subsection{Quản lý nghỉ phép}
 
-Phần nghỉ phép cung cấp danh sách đơn, thông tin số dư và biểu mẫu lập đơn ba bước: nhập thông tin, bổ sung minh chứng và rà soát trước khi gửi. Hình~\ref{fig:ch6_leave_list_input} thể hiện điểm bắt đầu từ danh sách đến bước nhập thông tin; Hình~\ref{fig:ch6_leave_wizard} thể hiện hai bước tiếp theo. Ứng dụng kết nối HRM để kiểm tra dữ liệu đơn và ghi nhận yêu cầu. Sau khi gửi, người lập có thể theo dõi trạng thái xử lý; thao tác sửa hoặc xóa thông thường chỉ áp dụng với đơn \emph{Nháp}. Đơn \emph{Bị trả lại} có đường xử lý để người lập điều chỉnh và gửi lại, còn đơn đã gửi không mặc nhiên cho phép người lập sửa hoặc thu hồi.
+Phân hệ nghỉ phép hỗ trợ tra cứu quỹ phép, danh sách phiếu, trạng thái xử lý và đăng ký nghỉ phép. Biểu mẫu cho phép khai báo thông tin, bổ sung minh chứng hoặc cam kết và rà soát trước khi lưu nháp hoặc gửi.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/leave_list_demo.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/leave_wizard_step1.png}
-    \caption{Nghỉ phép: danh sách đơn và bước nhập liệu}
-    \label{fig:ch6_leave_list_input}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/leave-step-information.png}
+        \caption{Khai báo thông tin nghỉ}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/leave-step-attachments.png}
+        \caption{Minh chứng và cam kết}
+    \end{subfigure}
+    \caption{Biểu mẫu đăng ký nghỉ phép và xử lý phiếu}
+    \label{fig:ch6_leave_form}
 \end{figure}
 
 \begin{figure}[H]
+    \ContinuedFloat
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/leave_wizard_step2.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/leave_wizard_review.png}
-    \caption{Nghỉ phép: minh chứng và rà soát đơn}
-    \label{fig:ch6_leave_wizard}
+    \setcounter{subfigure}{2}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/leave-step-review.png}
+        \caption{Rà soát phiếu trước khi gửi}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/leave-approval-actions.png}
+        \caption{Các thao tác xử lý phiếu}
+    \end{subfigure}
+    \caption*{Hình 6.4 (tiếp). Biểu mẫu đăng ký nghỉ phép và xử lý phiếu}
 \end{figure}
 
-Giao diện xử lý đơn dành cho người có thẩm quyền tách \emph{Nội dung}, \emph{Quy trình} và \emph{Lịch sử thao tác} để người duyệt có thể đối chiếu dữ liệu đơn với bước hiện tại trước khi quyết định. Sau thao tác, ứng dụng hiển thị phản hồi và trạng thái mới như Hình~\ref{fig:ch6_leave_approval}. Các quy tắc về trạng thái, quyền và số dư phép tiếp tục do HRM Backend quyết định. Phần kiểm thử sau đây đánh giá nhánh lập--gửi và chuỗi duyệt tuần tự đến kết thúc đã quan sát được trên một phiếu thử, đồng thời phân biệt các nhánh quản lý nháp, gửi lại và những sai lệch nghiệp vụ còn tồn tại.
+Phiếu nháp được lưu tại HRM và có thể mở lại để hoàn thiện. Khi gửi, HRM kiểm tra điều kiện nghiệp vụ và xác định bước xử lý; người có quyền thực hiện các thao tác tương ứng với trạng thái phiếu. Kết quả được tải lại từ HRM để hiển thị trên ứng dụng.
+
+Màn hình chi tiết phiếu nghỉ phép gồm ba tab để xem nội dung đăng ký, tiến trình phê duyệt và lịch sử thao tác.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.43\linewidth,height=0.52\textheight,keepaspectratio]{image/chapter6/leave_approval_demo.png}
-    \caption{Màn hình chi tiết đơn sau thao tác duyệt (dữ liệu mẫu)}
-    \label{fig:ch6_leave_approval}
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{image/chapter6/leave_content_demo.png}
+        \caption{Nội dung}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{image/chapter6/leave_workflow_live.png}
+        \caption{Quy trình}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{image/chapter6/leave_history_demo.png}
+        \caption{Lịch sử thao tác}
+    \end{subfigure}
+    \caption{Chi tiết phiếu nghỉ phép qua ba tab Nội dung, Quy trình và Lịch sử thao tác}
+    \label{fig:ch6_leave_detail_tabs}
 \end{figure}
 
 \subsection{Quản lý công tác}
 
-Ứng dụng đã hiện thực danh sách, chi tiết và biểu mẫu đăng ký công tác năm bước. Hình~\ref{fig:ch6_trip_list} trình bày riêng danh sách phiếu với bộ lọc theo năm và trạng thái. Người lập có thể chuẩn bị hồ sơ, lưu ở trạng thái \emph{Nháp}, bổ sung các thông tin và tệp cần thiết rồi gửi đến quy trình xử lý của HRM. Các bước của biểu mẫu lần lượt tổ chức thời gian chuyến đi, nội dung, người tham gia, kinh phí và trang rà soát trước khi gửi; cách chia này giúp người lập kiểm tra từng nhóm thông tin trên màn hình nhỏ. Hình~\ref{fig:ch6_trip_step1_step2}--\ref{fig:ch6_trip_step5} minh họa năm bước nhập liệu trên một phiếu nháp dùng để chụp giao diện; việc đi đến bước rà soát không chứng minh phiếu đã được nộp thành công. Giao diện theo dõi các bước xử lý của một phiếu khác được minh họa ở Hình~\ref{fig:ch6_business_trip_workflow}. Các hồ sơ \emph{Bị trả lại} có đường điều chỉnh để gửi lại; quyền xóa của người lập chỉ áp dụng cho \emph{Nháp}. Vì vậy, chức năng này không được mô tả như quyền tự thu hồi hồ sơ đã gửi.
+Phân hệ công tác hỗ trợ tra cứu phiếu, lịch sử xử lý và đăng ký công tác. Biểu mẫu gồm các thông tin về thời gian, hình thức, nội dung, địa điểm, người tham gia, kinh phí, cam kết và tệp đính kèm.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[trim=0 1050bp 0 0,clip,width=0.65\linewidth,height=0.32\textheight,keepaspectratio]{image/chapter6/business_trip_list_demo.png}
-    \caption{Danh sách phiếu đăng ký công tác}
-    \label{fig:ch6_trip_list}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/business-trip-step1.png}
+        \caption{Thời gian và hình thức}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/business-trip-step2.png}
+        \caption{Nội dung, địa điểm và căn cứ}
+    \end{subfigure}
+    \caption{Các bước đăng ký và xử lý phiếu công tác}
+    \label{fig:ch6_trip_form}
 \end{figure}
 
 \begin{figure}[H]
+    \ContinuedFloat
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/business_trip_wizard_step1.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/business_trip_wizard_step2.png}
-    \caption{Công tác: thời gian và nội dung chuyến đi}
-    \label{fig:ch6_trip_step1_step2}
+    \setcounter{subfigure}{2}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/business-trip-step3.png}
+        \caption{Người tham gia}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/business-trip-step4.png}
+        \caption{Cam kết và tệp đính kèm}
+    \end{subfigure}
+    \caption*{Hình 6.5 (tiếp). Các bước đăng ký và xử lý phiếu công tác}
 \end{figure}
 
 \begin{figure}[H]
+    \ContinuedFloat
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/business_trip_wizard_step3_demo.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/business_trip_wizard_step4.png}
-    \caption{Công tác: người tham gia và kinh phí}
-    \label{fig:ch6_trip_step3_step4}
+    \setcounter{subfigure}{4}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/business-trip-step5-review.png}
+        \caption{Rà soát trước khi gửi}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.58\textheight,keepaspectratio]{image/chapter6/business-trip-approval-actions.png}
+        \caption{Các thao tác xử lý phiếu}
+    \end{subfigure}
+    \caption*{Hình 6.5 (tiếp). Các bước đăng ký và xử lý phiếu công tác}
 \end{figure}
+
+Ứng dụng hỗ trợ lưu, mở lại phiếu nháp và các thao tác xử lý theo quyền. Việc kiểm tra điều kiện, luân chuyển và cập nhật dữ liệu sau xử lý do HRM thực hiện. Nộp báo cáo kết quả công tác chưa được hỗ trợ trên mobile và tiếp tục thực hiện tại hệ thống nguồn.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.43\linewidth,height=0.51\textheight,keepaspectratio]{image/chapter6/business_trip_wizard_step5_demo.png}
-    \caption{Công tác: rà soát phiếu trước khi gửi}
-    \label{fig:ch6_trip_step5}
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{docs/chapter6-7-evidence/results/DATN-RERUN-20260923/LIVE-PHYSICAL-DEVICE/screen_btr_detail.png}
+        \caption{Nội dung}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{image/chapter6/business_trip_workflow.png}
+        \caption{Quy trình}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{docs/chapter6-7-evidence/results/DATN-FIX-RECHECK-20260924/screenshots/BTR_mobile_approve_history.png}
+        \caption{Lịch sử thao tác}
+    \end{subfigure}
+    \caption{Chi tiết phiếu công tác qua ba tab Nội dung, Quy trình và Lịch sử thao tác}
+    \label{fig:ch6_trip_detail_tabs}
 \end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.43\linewidth,height=0.53\textheight,keepaspectratio]{image/chapter6/business_trip_workflow.png}
-    \caption{Tiến trình xử lý phiếu công tác}
-    \label{fig:ch6_business_trip_workflow}
-\end{figure}
-
-Các giao diện dành cho người có thẩm quyền thể hiện thông tin thẩm định, phê duyệt, trả lại hoặc từ chối theo bước xử lý. Nhánh thu hồi hồ sơ thuộc vai trò được HRM cấp quyền riêng, không phải thao tác quản lý đơn cá nhân của người lập. Phép thử ở Mục~\ref{sec:kiemthu_danhgia} xác nhận một phiếu đã gửi được duyệt tuần tự qua các cấp đến kết thúc; một phiếu trong nước khác được lập qua năm bước, trả lại và gửi lại sau khi sửa. Nhánh từ chối và thu hồi cũng đã được kiểm tra trên các phiếu thử riêng; kết quả không được suy rộng sang mọi biến thể hồ sơ và vai trò.
 
 \subsection{Văn bản và nhiệm vụ}
 
-Đối với văn bản đến và văn bản đi, ứng dụng cung cấp danh sách, tìm kiếm, thông tin chi tiết và các thao tác xử lý tương ứng với quyền của người dùng. Hình~\ref{fig:ch6_incoming_documents} minh họa danh sách văn bản đến cùng tệp đính kèm. Từ một dòng văn bản, người dùng đi đến trang chi tiết để xem thông tin, tệp và tiến trình xử lý; các hành động chỉ xuất hiện trong phạm vi quyền được cấp. Danh sách văn bản đi được phân theo trạng thái để người dùng theo dõi hồ sơ của mình, hồ sơ đang xử lý, bị trả lại và đã hoàn tất. Tệp đính kèm văn bản được tải tạm rồi mở bằng ứng dụng phù hợp của hệ điều hành Android; ứng dụng không nhúng trình đọc PDF riêng cho các tệp văn bản này. Giao diện xử lý văn bản có các đường thao tác phân công trách nhiệm, tham mưu, chỉ đạo và tiếp nhận; việc ghi nhận, kiểm tra quyền và cập nhật trạng thái thuộc iOffice Backend.
+Ứng dụng hỗ trợ tra cứu văn bản đến, văn bản đi và nhiệm vụ theo phạm vi tài khoản. Người dùng có thể xem chi tiết, tệp đính kèm và thông tin tham mưu, chỉ đạo, triển khai của văn bản đến.
+
+Các thao tác tham mưu, chỉ đạo, tiếp nhận và phân công xử lý văn bản được hỗ trợ theo dữ liệu và quyền do iOffice cung cấp. Đối với nhiệm vụ, ứng dụng hỗ trợ tra cứu và xem nội dung, hạn xử lý, tiến độ. Tạo và phân công nhiệm vụ hoặc nộp báo cáo tiến độ tiếp tục được thực hiện trên iOffice Web.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.43\linewidth,height=0.53\textheight,keepaspectratio]{image/chapter6/incoming_documents.png}
-    \caption{Văn bản đến và tệp đính kèm}
-    \label{fig:ch6_incoming_documents}
-\end{figure}
-
-Trong quy trình tiếp nhận, một dòng phân công mang tính thông tin hoặc \emph{để biết} có thể được ghi nhận hoàn thành cùng lúc với tiếp nhận. Với văn bản giao nhiệm vụ, tiếp nhận chỉ xác nhận bắt đầu xử lý; người có quyền phải thực hiện thao tác \emph{Hoàn thành} riêng trên iOffice sau khi thực hiện công việc. Đây là hai trường hợp nghiệp vụ khác nhau, không thể suy ra toàn bộ văn bản tự hoàn thành chỉ vì mọi người đã tiếp nhận. Mức độ xác minh các thao tác này được trình bày ở Mục~\ref{sec:kiemthu_danhgia}.
-
-Đối với nhiệm vụ, phần di động tập trung vào xem danh sách theo trạng thái, chi tiết, cây công việc, người được phân công, tiến độ và các báo cáo tiến độ đã có. Các tab và số lượng trên danh sách giúp người dùng chuyển nhanh giữa công việc của mình, bản nháp, nhiệm vụ đang thực hiện và đã hoàn thành. Từng thẻ nhiệm vụ thể hiện loại công việc, hạn xử lý và trạng thái đúng hạn hoặc quá hạn như Hình~\ref{fig:ch6_mission_list}. Việc tạo mới, phân công nhiệm vụ và nộp báo cáo tiến độ được thực hiện trên hệ thống iOffice Web hiện hữu, không thuộc kết quả hiện thực của giao diện di động trong phạm vi đề tài.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.43\linewidth,height=0.52\textheight,keepaspectratio]{image/chapter6/mission_list_demo.png}
-    \caption{Danh sách nhiệm vụ theo trạng thái (tên nhiệm vụ mẫu)}
-    \label{fig:ch6_mission_list}
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.39\textheight,keepaspectratio]{image/chapter6/incoming-doc-list-sample.png}
+        \caption{Danh sách văn bản đến}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.39\textheight,keepaspectratio]{image/chapter6/missions.png}
+        \caption{Danh sách nhiệm vụ}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.31\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.39\textheight,keepaspectratio]{image/chapter6/incoming-doc-workflow.png}
+        \caption{Thông tin xử lý văn bản}
+    \end{subfigure}
+    \caption{Tra cứu văn bản, nhiệm vụ và thông tin xử lý văn bản}
+    \label{fig:ch6_documents_missions_workflow}
 \end{figure}
 
 \subsection{Lịch công tác và điểm danh cuộc họp}
 
-Giao diện lịch tổng hợp các sự kiện liên quan đến người dùng từ lịch họp iOffice, lịch nghỉ phép HRM và lịch công tác HRM. Người dùng có thể chọn ngày hoặc sự kiện để xem thông tin và chuyển đến màn hình nghiệp vụ liên quan. Hình~\ref{fig:ch6_schedule_home} cho thấy lịch thu gọn trên trang chủ; Hình~\ref{fig:ch6_schedule_attendance} minh họa một ngày có cuộc họp iOffice và tab điểm danh của cuộc họp đó. Ảnh này chỉ thể hiện sự kiện từ iOffice, không tự chứng minh cả ba nguồn đều có dữ liệu trong ngày được chọn. Dữ liệu gốc vẫn do từng hệ thống quản lý; ứng dụng tổng hợp để hiển thị trên thiết bị di động.
+Lịch của tôi tổng hợp sự kiện từ iOffice với dữ liệu nghỉ phép và công tác từ HRM. Người dùng có thể xem lịch theo ngày và mở sự kiện để truy cập thông tin nghiệp vụ tương ứng.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/schedule_meeting_day_vi_demo.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.45\textheight,keepaspectratio]{image/chapter6/meeting_attendance_expired.png}
-    \caption{Lịch có cuộc họp và tab điểm danh}
-    \label{fig:ch6_schedule_attendance}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.43\textheight,keepaspectratio]{image/chapter6/calendar-meeting.png}
+        \caption{Lịch biểu}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.43\textheight,keepaspectratio]{image/chapter6/meeting-detail.png}
+        \caption{Chi tiết cuộc họp}
+    \end{subfigure}
+    \caption{Lịch biểu và chi tiết cuộc họp}
+    \label{fig:ch6_calendar_meeting}
 \end{figure}
 
-Với cuộc họp được cấu hình điểm danh, ứng dụng có giao diện ghi nhận có mặt, hoàn tác hoặc báo vắng kèm lý do trong trang chi tiết sự kiện. Yêu cầu được gửi đến iOffice để xử lý quyền sử dụng lịch, thời gian hợp lệ và trạng thái tham dự. Người được phân công có dòng điểm danh tương ứng; người ngoài danh sách phân công có thể tự điểm danh và được hiển thị trong nhóm khách tham dự. Bộ chuyển đổi dữ liệu ở mobile đọc phản hồi điểm danh dạng nhóm và ánh xạ các trường thông tin khách mà không yêu cầu thay đổi API iOffice. Hình~\ref{fig:ch6_schedule_attendance} minh họa lịch cá nhân và thống kê điểm danh của một cuộc họp đã có trong lịch. Ảnh thể hiện giao diện cùng trạng thái tham dự được tải về; không được dùng làm bằng chứng cho một thao tác điểm danh mới thành công. Lối vào \emph{Họp} riêng trên trang Khám phá hiện vẫn là màn hình đang phát triển; đường truy cập đang hoạt động là từ sự kiện trên lịch. Kết quả thao tác thực tế được đánh giá riêng ở Mục~\ref{sec:kiemthu_danhgia}.
-
-Khi cuộc họp còn trong thời gian điểm danh, tab \emph{Điểm danh} trình bày số người có mặt, vắng mặt, chưa xác nhận và trạng thái của từng nhóm tham dự. Sau khi ghi nhận có mặt, người dùng thấy trạng thái của mình và nút \emph{Hoàn tác điểm danh}; khi báo vắng, giao diện hiển thị lý do và cho phép đổi trạng thái theo quyền. Hình~\ref{fig:ch6_meeting_states} minh họa hai trạng thái của người được phân công với dữ liệu tên đã thay thế. Các ảnh không mô tả một lượt tự điểm danh thành công của khách ngoài danh sách.
+Người dùng có thể tạo lịch nội bộ đơn vị, gửi phiếu đăng ký lịch cấp Trường hoặc tạo trực tiếp lịch cấp Trường khi có quyền. Lịch cấp Trường được tạo trực tiếp được lưu ở bước tổng hợp; việc phát hành chính thức vẫn thuộc quy trình iOffice. Ứng dụng cũng hỗ trợ điểm danh, báo vắng và hoàn tác theo điều kiện xử lý của iOffice.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.40\linewidth,height=0.47\textheight,keepaspectratio]{image/chapter6/meeting_checkin_demo.png}
-    \hspace{0.03\linewidth}
-    \includegraphics[width=0.40\linewidth,height=0.47\textheight,keepaspectratio]{image/chapter6/meeting_absence_demo.png}
-    \caption{Giao diện sau khi ghi nhận có mặt và báo vắng (dữ liệu mẫu)}
-    \label{fig:ch6_meeting_states}
-\end{figure}
-
-\subsection{Thông báo và điều hướng đến nghiệp vụ}
-
-Biểu tượng thông báo trên trang chủ dẫn đến danh sách với các tab \emph{Tất cả}, \emph{HRM} và \emph{iOffice}. Mỗi thẻ hiển thị nội dung, thời gian tương đối và nguồn; số thông báo chưa đọc được thể hiện trên từng tab, như Hình~\ref{fig:ch6_notification_list}. Người dùng có thể mở thông báo để chuyển nhanh đến màn hình nghiệp vụ liên quan hoặc đánh dấu là đã đọc. Trên Android, ứng dụng cũng hiển thị banner khi có thông báo và hỗ trợ mở nội dung tương ứng khi người dùng chạm vào banner. Kết quả kiểm tra được trình bày tại Mục~\ref{sec:kiemthu_danhgia}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.43\linewidth,height=0.36\textheight,keepaspectratio]{image/chapter6/notification_list_test.png}
-    \caption{Trung tâm thông báo trên thiết bị thử}
-    \label{fig:ch6_notification_list}
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.48\textheight,keepaspectratio]{image/chapter6/meeting_checkin_demo.png}
+        \caption{Điểm danh có mặt}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.44\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.48\textheight,keepaspectratio]{image/chapter6/meeting_absence_demo.png}
+        \caption{Báo vắng}
+    \end{subfigure}
+    \caption{Giao diện điểm danh và báo vắng cuộc họp}
+    \label{fig:ch6_meeting_attendance}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.70\linewidth,keepaspectratio]{image/chapter6/notification_background_banner.png}
-    \caption{Thông báo hiển thị khi ứng dụng chạy nền trên Android 12}
-    \label{fig:ch6_notification_background_banner}
+    \includegraphics[width=0.48\linewidth,height=0.52\textheight,keepaspectratio]{image/chapter6/meeting-create-form.png}
+    \caption{Biểu mẫu tạo lịch cấp Trường}
+    \label{fig:ch6_meeting_form}
+\end{figure}
+
+\subsection{Thông báo và điều hướng nghiệp vụ}
+
+Trung tâm thông báo tập hợp nội dung từ HRM và iOffice, thể hiện trạng thái đọc và hỗ trợ điều hướng đến nghiệp vụ liên quan. Ứng dụng đồng thời tiếp nhận thông báo đẩy qua Firebase Cloud Messaging. Thông báo đóng vai trò hỗ trợ nhận biết và điều hướng; trạng thái nghiệp vụ vẫn được tải từ hệ thống nguồn.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{image/chapter6/leave-notification-inbox.png}
+        \caption{Thông báo trong ứng dụng}
+    \end{subfigure}\hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth,height=0.49\textheight,keepaspectratio]{image/chapter6/android-push-meeting.png}
+        \caption{Thông báo đẩy trên Android}
+    \end{subfigure}
+    \caption{Thông báo trong ứng dụng và thông báo đẩy trên Android}
+    \label{fig:ch6_notifications}
 \end{figure}

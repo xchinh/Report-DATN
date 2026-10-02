@@ -1,0 +1,58 @@
+[
+  {
+    "package": "apps/myhcmut",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 0,
+    "seconds": 7.1,
+    "log": "apps_myhcmut.log"
+  },
+  {
+    "package": "modules/hrm",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 0,
+    "seconds": 16.0,
+    "log": "modules_hrm.log"
+  },
+  {
+    "package": "modules/ioffice",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 1,
+    "seconds": 10.2,
+    "log": "modules_ioffice.log"
+  },
+  {
+    "package": "modules/notification",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 0,
+    "seconds": 7.8,
+    "log": "modules_notification.log"
+  },
+  {
+    "package": "packages/core/global_system",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 0,
+    "seconds": 3.1,
+    "log": "packages_core_global_system.log"
+  },
+  {
+    "package": "packages/core/network",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 0,
+    "seconds": 1.6,
+    "log": "packages_core_network.log"
+  },
+  {
+    "package": "packages/shared/auth",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 0,
+    "seconds": 1.6,
+    "log": "packages_shared_auth.log"
+  },
+  {
+    "package": "packages/shared/localization",
+    "command": "flutter test --no-pub --reporter expanded",
+    "exit": 0,
+    "seconds": 1.6,
+    "log": "packages_shared_localization.log"
+  }
+]

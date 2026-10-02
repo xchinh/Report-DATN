@@ -1,5 +1,7 @@
 # Đồ Án Tốt Nghiệp: Phát Triển Ứng Dụng Di Động Phục Vụ Nhân Sự Trường Đại Học
 
+**Kiểm thử trước khi sửa báo cáo (02/10):** [Kết quả, các claim cần sửa và E2E còn thiếu](docs/chapter6-7-evidence/14_retest_and_rewrite_gate_20261002.md) · [Manifest/log](docs/chapter6-7-evidence/results/DATN-RETEST-20261002/manifest.md). Đã dọn 20 bản thảo/kế hoạch/đặc tả cũ; chưa sửa nội dung các chương trong đợt này.
+
 [![LaTeX Build](https://img.shields.io/badge/LaTeX-report-blue.svg)](main.tex)
 [![Institution](https://img.shields.io/badge/HCMUT-CSE-00529C.svg)](https://cse.hcmut.edu.vn/)
 [![Academic Year](https://img.shields.io/badge/Academic%20Year-2025--2026-green.svg)](#)
@@ -27,10 +29,10 @@ Báo cáo Đồ án Tốt nghiệp ngành **Khoa học Máy tính**, Khoa Khoa h
 Đề tài tập trung nghiên cứu, thiết kế, hiện thực hóa và kiểm thử ứng dụng di động **MyHCMUT** đa nền tảng (iOS & Android) phục vụ cán bộ, giảng viên và lãnh đạo Trường Đại học Bách khoa – ĐHQG-HCM. Ứng dụng đóng vai trò là một **cổng tương tác di động tập trung**, tích hợp với các hệ thống nghiệp vụ hiện hữu qua REST API, WebSocket và Firebase Cloud Messaging (FCM). HRM và iOffice vẫn là nguồn dữ liệu và nơi quyết định nghiệp vụ có thẩm quyền.
 
 ### 4 Phân Hệ Nghiệm Thu
-1. **Xác thực và SSO**: Quản lý phiên Mobile, chuyển tiếp sang WebView bằng vé dùng một lần.
-2. **Quản lý nhân sự (HRM)**: Hồ sơ cán bộ, nghỉ phép và đi công tác theo workflow do HRM backend kiểm soát.
-3. **Văn phòng điện tử (iOffice)**: Văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp theo quyền iOffice.
-4. **Trung tâm thông báo**: Tiếp nhận thông báo và điều hướng sâu đến đối tượng nghiệp vụ.
+1. **Xác thực và phiên**: Tích hợp Auth Service, quản lý token và trạng thái người dùng khi gọi API.
+2. **Quản lý nhân sự (HRM)**: Hồ sơ nhân sự native, phản hồi/lịch sử, nghỉ phép và đi công tác theo workflow do HRM backend kiểm soát.
+3. **Văn phòng điện tử (iOffice)**: Văn bản, nhiệm vụ, lịch tổng hợp, tạo/đăng ký cuộc họp native và điểm danh theo quyền iOffice. Chuyên viên BGH được cấp quyền tạo trực tiếp lịch Trường ở tổng hợp; phát hành thuộc hệ thống nguồn.
+4. **Trung tâm thông báo**: Tiếp nhận thông báo và điều hướng theo loại được hỗ trợ; push lịch hiện mở Lịch biểu.
 
 KHCN, ký số PKI và họp trực tuyến WebRTC không thuộc phạm vi nghiệm thu vì chưa có hạ tầng backend tương ứng; chúng chỉ là hướng phát triển tương lai.
 

@@ -1,34 +1,28 @@
 \section{Kết quả đạt được}
 \label{sec:nhanxet_ketqua}
 
-Nhóm đã xây dựng ứng dụng MyHCMUT Mobile, cung cấp một kênh truy cập trên thiết bị di động đến các chức năng quản lý hồ sơ cá nhân, nghỉ phép, công tác, văn bản, nhiệm vụ và lịch làm việc của Nhà trường. Ứng dụng được tổ chức theo các nhóm nghiệp vụ, hỗ trợ người dùng tra cứu thông tin, theo dõi trạng thái xử lý và thực hiện các thao tác phù hợp với vai trò được cấp quyền.
+Đề tài đã xây dựng MyHCMUT Mobile như một kênh truy cập trên thiết bị di động cho nhân sự Trường Đại học Bách khoa - ĐHQG-HCM. Ứng dụng tích hợp các nhóm chức năng hồ sơ nhân sự, nghỉ phép, công tác, văn bản, nhiệm vụ, lịch biểu và thông báo với các hệ thống Auth, HRM và iOffice hiện hữu.
 
-Về mặt kỹ thuật, ứng dụng tích hợp với các hệ thống HRM, iOffice và dịch vụ xác thực hiện hữu để khai thác dữ liệu và quy trình nghiệp vụ. Nhóm đã xây dựng các giao diện và luồng tương tác trên thiết bị di động, đồng thời sử dụng cơ chế chuyển tiếp phiên làm việc để tái sử dụng một số biểu mẫu Web. Cách tiếp cận này cho phép mở rộng kênh truy cập đến các hệ thống đang vận hành mà không cần xây dựng lại toàn bộ chức năng nghiệp vụ nguồn.
+Trong phạm vi đề tài, các biểu mẫu nghiệp vụ được lựa chọn được hiện thực trực tiếp trên Flutter; ứng dụng hỗ trợ tra cứu và cập nhật hồ sơ, đăng ký và xử lý nghỉ phép, công tác, tra cứu và xử lý văn bản, theo dõi nhiệm vụ, tổng hợp lịch, tạo hoặc đăng ký lịch theo quyền, điểm danh và tiếp nhận thông báo. Dữ liệu chính thức, quy trình nghiệp vụ và kiểm tra quyền tiếp tục do các hệ thống nguồn quản lý.
 
-Kết quả kiểm thử tại Chương~6 ghi nhận khả năng thực hiện một số luồng nghiệp vụ tiêu biểu trên thiết bị Android và kết quả kiểm tra các thành phần được chọn bằng kiểm thử tự động. Các kết quả này xác nhận những hành vi đã được kiểm tra trong điều kiện thử nghiệm tương ứng; chưa đủ cơ sở để kết luận mọi chức năng, vai trò và tình huống sử dụng đều hoạt động đúng.
-
-Nhìn chung, đề tài đã hiện thực được ứng dụng di động tích hợp các nhóm chức năng thuộc phạm vi đặt ra, qua đó bổ sung một phương thức truy cập đến dữ liệu và quy trình nghiệp vụ hiện hữu của Nhà trường. Tuy nhiên, do chưa thực hiện khảo sát người dùng hoặc đánh giá so sánh trước và sau khi sử dụng, nhóm chưa có cơ sở định lượng để kết luận về mức cải thiện thời gian xử lý hay hiệu quả sử dụng khi triển khai thực tế.
+Kết quả kiểm thử tự động và kiểm thử các luồng nghiệp vụ trên hệ thống tích hợp cho thấy các chức năng chính đã hoạt động trong phạm vi những kịch bản được kiểm tra trên Android. Qua đó, mục tiêu xây dựng một ứng dụng di động tích hợp các nghiệp vụ được lựa chọn từ HRM và iOffice đã được hiện thực trong phạm vi đề tài.
 
 \section{Hạn chế của đề tài}
 \label{sec:hanche}
 
-Bên cạnh các kết quả đạt được, phiên bản hiện tại còn một số hạn chế cần được tiếp tục hoàn thiện và kiểm chứng.
+Phạm vi chức năng trên mobile chưa bao phủ toàn bộ nghiệp vụ của HRM và iOffice. Một số chức năng như nộp báo cáo kết quả công tác, tạo và phân công nhiệm vụ, nộp báo cáo tiến độ, phát hành lịch chính thức và một số nhóm dữ liệu hồ sơ vẫn được thực hiện tại hệ thống nguồn.
 
-Thứ nhất, tính nhất quán dữ liệu trong quy trình nghỉ phép chưa được bảo đảm ở tình huống xử lý đồng thời đã thử nghiệm. Khi hai thao tác duyệt cuối được thực hiện đồng thời, kết quả thử nghiệm ghi nhận cả hai đơn được duyệt và số dư phép suy ra giảm xuống âm. Đây là sai lệch dữ liệu nghiệp vụ cần được xử lý và kiểm tra lại. Kết quả duyệt tuần tự thành công chưa đủ để khẳng định quy trình hoạt động đúng trong trường hợp nhiều yêu cầu được xử lý đồng thời.
+Một số tình huống tích hợp và xử lý lỗi chưa được kiểm chứng đầy đủ, bao gồm lỗi từng nguồn khi tổng hợp lịch, thử lại sau lỗi và các thao tác ghi hoàn tất một phần. Phân quyền theo đối tượng cũng còn một số trường hợp cần rà soát, đặc biệt giữa quyền xem lịch và điểm danh. Đối với nghỉ phép, các kiểm thử hiện tại chưa đủ cơ sở kết luận về tính nhất quán khi nhiều người cùng xử lý một phiếu.
 
-Thứ hai, một số luồng tích hợp với giao diện Web chưa hoạt động trọn vẹn trong ứng dụng. Cụ thể, thao tác tạo đề xuất thay đổi lý lịch kèm tệp minh chứng chưa hoàn tất trong WebView do biểu mẫu tải lại sau khi người dùng chọn tệp. Việc thực hiện thao tác tạo đề xuất bằng trình duyệt ngoài và duyệt đề xuất trên mobile không thay thế cho việc kiểm chứng toàn bộ luồng này trong WebView.
-
-Thứ ba, phạm vi chức năng trên mobile chưa bao phủ toàn bộ nghiệp vụ của các hệ thống nguồn. Ứng dụng tập trung vào những chức năng được lựa chọn trong phạm vi đề tài, chưa đưa toàn bộ vòng đời xử lý văn bản và nhiệm vụ của iOffice lên thiết bị di động. Một số điều kiện nghiệp vụ cũng cần được hoàn tất trên hệ thống hiện hữu trước khi người dùng tiếp tục thao tác trên mobile, chẳng hạn việc nộp báo cáo kết quả chuyến công tác trước khi đăng ký chuyến mới theo quy tắc của HRM. Đây là giới hạn phạm vi tích hợp, không đồng nghĩa với lỗi của các chức năng mobile đã được hiện thực.
-
-Thứ tư, phạm vi kiểm thử và đánh giá còn giới hạn. Một số nhánh nghiệp vụ và vai trò chưa được kiểm chứng đầy đủ qua giao diện mobile, trong đó có các nhánh xử lý công tác và khách tự điểm danh. Kiểm thử tự động mới tập trung vào những thành phần được chọn; kiểm thử trên thiết bị thật chủ yếu được thực hiện với một điện thoại Android. Đề tài chưa kiểm chứng khả năng vận hành trên iOS, chưa đánh giá trên nhiều cấu hình thiết bị và điều kiện mạng, đồng thời chưa thực hiện đo lường hiệu năng định lượng hoặc khảo sát người dùng.
+Mức kiểm chứng giữa các chức năng chưa đồng đều và chưa bao phủ toàn bộ nhánh nghiệp vụ, vai trò và tình huống lỗi. Việc kiểm thử trên thiết bị tập trung vào Android; iOS, nhiều cấu hình thiết bị và điều kiện mạng chưa được đánh giá. Đề tài cũng chưa thực hiện khảo sát với người dùng đại diện hoặc đo định lượng về hiệu năng và khả năng bảo trì. Vì vậy, chưa đủ cơ sở để kết luận về hiệu quả sử dụng và khả năng vận hành của ứng dụng trên phạm vi rộng.
 
 \section{Hướng phát triển}
 \label{sec:huongphattrien}
 
-Trong thời gian tới, ưu tiên trước hết là xử lý sai lệch dữ liệu đã phát hiện trong quy trình nghỉ phép. Cần rà soát cơ chế kiểm tra và cập nhật quỹ phép khi nhiều yêu cầu được duyệt đồng thời, bổ sung biện pháp xử lý phù hợp và thực hiện lại kịch bản đã phát hiện sai lệch cùng các trường hợp biên liên quan.
+Trước hết, hệ thống cần tiếp tục hoàn thiện độ tin cậy của các luồng tích hợp. Các trường hợp phân quyền theo đối tượng, xử lý đồng thời, lỗi từng phần và mất phản hồi cần được kiểm tra và xử lý rõ ràng hơn. Giao diện cũng cần cung cấp phản hồi phù hợp để người dùng phân biệt dữ liệu rỗng, dữ liệu chưa tải được và thao tác chưa hoàn tất.
 
-Tiếp theo, cần hoàn thiện khả năng chọn và tải tệp trong WebView để người dùng có thể thực hiện trọn vẹn thao tác tạo đề xuất thay đổi lý lịch kèm minh chứng ngay trên ứng dụng. Đối với các quy trình còn phụ thuộc hệ thống nguồn, giao diện mobile cần thông báo rõ điều kiện phải hoàn tất trên HRM hoặc iOffice Web trước khi người dùng tiếp tục thao tác.
+Phạm vi kiểm thử tích hợp cần được mở rộng cho các nhánh nghiệp vụ và vai trò còn thiếu, đồng thời bổ sung các tình huống mất mạng, lỗi dịch vụ, tải tệp thất bại và thử lại. Các bộ kiểm thử tự động cũng cần được duy trì phù hợp với hợp đồng hiện hành và hạn chế phụ thuộc vào dữ liệu hoặc thời điểm chạy.
 
-Về phạm vi chức năng, các phiên bản tiếp theo có thể xem xét mở rộng quy trình xử lý văn bản, nhiệm vụ và những nghiệp vụ hiện mới có điểm điều hướng hoặc chưa được tích hợp đầy đủ trên mobile. Việc lựa chọn chức năng mở rộng cần dựa trên nhu cầu thực tế của Nhà trường và khả năng tích hợp với các hệ thống hiện hữu.
+Về chức năng, các phiên bản tiếp theo có thể mở rộng những nghiệp vụ hiện vẫn cần thực hiện tại HRM hoặc iOffice, như báo cáo kết quả công tác, tạo và phân công nhiệm vụ, cập nhật tiến độ và các nhóm dữ liệu hồ sơ còn thiếu. Việc mở rộng cần dựa trên nhu cầu thực tế và tiếp tục duy trì hệ thống nguồn làm nơi quản lý dữ liệu, quyền và quy trình nghiệp vụ.
 
-Cuối cùng, cần mở rộng kiểm thử đầu--cuối đối với các nhánh nghiệp vụ và vai trò chưa được xác minh, đồng thời đánh giá ứng dụng trên nhiều thiết bị, nền tảng và điều kiện mạng. Việc bổ sung phép đo hiệu năng và khảo sát người dùng sẽ cung cấp cơ sở để đánh giá chất lượng và hiệu quả sử dụng của ứng dụng trong điều kiện thực tế.
+Cuối cùng, ứng dụng cần được đánh giá trên iOS, nhiều cấu hình thiết bị và điều kiện mạng khác nhau. Việc bổ sung khảo sát với người dùng đại diện cùng các phép đo về thời gian phản hồi và tài nguyên sử dụng sẽ cung cấp cơ sở định lượng cho việc cải thiện khả năng sử dụng và hiệu năng trước khi mở rộng phạm vi triển khai.

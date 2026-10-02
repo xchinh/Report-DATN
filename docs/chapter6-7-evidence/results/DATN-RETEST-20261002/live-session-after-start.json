@@ -1,0 +1,27 @@
+{
+  "superseded_by": "session-correction.json",
+  "reason": "Previous probes sent access|||refresh as one Bearer credential. Correct access token is first component. The phone session is valid; previous rejection does not demonstrate the app session was invalid.",
+  "original_probe": [
+    {
+      "port": 3001,
+      "http": 200,
+      "status": null,
+      "errorCode": 4001,
+      "has_user": false
+    },
+    {
+      "port": 6023,
+      "http": 200,
+      "status": 401,
+      "errorCode": null,
+      "has_user": false
+    },
+    {
+      "port": 4000,
+      "http": 200,
+      "status": 401,
+      "errorCode": null,
+      "has_user": false
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/modules/ioffice/test/schedule/widgets/compact_schedule_test.dart
+00:00 +0: CompactSchedule Widget Rendering Tests keeps left border color as eventColor even when event is ended
+00:00 +1: All tests passed!

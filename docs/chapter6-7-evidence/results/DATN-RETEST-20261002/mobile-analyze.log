@@ -1,0 +1,163 @@
+[01:56:31] 🔍 Analyzing packages... 
+melos run analyze
+  └> melos exec -- flutter analyze
+     └> RUNNING
+
+$ melos exec
+  └> flutter analyze
+     └> RUNNING (in 11 packages)
+
+--------------------------------------------------------------------------------
+ERROR: ERROR: [khcn]: Waiting for another flutter command to release the startup lock...
+
+ERROR: [hcmut_sign]: Waiting for another flutter command to release the startup lock...
+
+
+ERROR: ERROR: [global_system]: Waiting for another flutter command to release the startup lock...
+
+
+ERROR: ERROR: [ioffice]: Waiting for another flutter command to release the startup lock...
+
+
+ERROR: ERROR: [myhcmut]: Waiting for another flutter command to release the startup lock...
+
+
+ERROR: ERROR: [hrm]: Waiting for another flutter command to release the startup lock...
+
+
+ERROR: ERROR: [network]: Waiting for another flutter command to release the startup lock...
+
+
+ERROR: ERROR: [shared_localization]: Waiting for another flutter command to release the startup lock...
+
+
+ERROR: ERROR: [notification]: Waiting for another flutter command to release the startup lock...
+
+
+[notification]: Resolving dependencies...
+[notification]: Downloading packages...
+[news]: Analyzing news...                                               
+[hcmut_sign]: Analyzing hcmut_sign...                                         
+[auth]: Analyzing auth...                                               
+[khcn]: Analyzing khcn...                                               
+[shared_localization]: Analyzing localization...                                       
+[network]: Analyzing network...                                            
+[global_system]: Analyzing global_system...                                      
+[hrm]: Analyzing hrm...                                                
+[notification]:   _fe_analyzer_shared 91.0.0 (108.0.0 available)
+[notification]:   _flutterfire_internals 1.3.59 (1.3.77 available)
+[notification]:   analyzer 8.4.0 (14.4.0 available)
+[notification]:   analyzer_buffer 0.1.11 (0.3.4 available)
+[notification]:   analyzer_plugin 0.13.10 (0.14.17 available)
+[notification]:   app_badge_plus 1.3.4 (1.3.5 available)
+[notification]: ! auth 1.0.0 from path ../../packages/shared/auth (overridden in ./pubspec_overrides.yaml)
+[notification]:   build 4.0.7 (4.0.11 available)
+[notification]:   build_config 1.3.2 (1.3.3 available)
+[notification]:   build_daemon 4.1.5 (4.1.6 available)
+[notification]:   build_runner 2.15.1 (2.16.1 available)
+[notification]:   built_collection 5.1.1 (5.1.2 available)
+[notification]:   built_value 8.12.7 (8.13.0 available)
+[notification]:   clock 1.1.2 (1.1.3 available)
+[notification]:   code_assets 1.2.1 (2.1.0 available)
+[notification]:   code_builder 4.11.1 (4.12.0 available)
+[notification]:   custom_lint_core 0.8.1 (0.8.2 available)
+[notification]:   custom_lint_visitor 1.0.0+8.4.0 (1.0.0+9.0.0 available)
+[notification]:   dart_style 3.1.3 (3.1.13 available)
+[notification]:   dbus 0.7.15 (0.8.0 available)
+[notification]:   dio 5.11.0 (5.11.1 available)
+[notification]:   dio_web_adapter 2.2.1 (2.2.2 available)
+[notification]:   equatable 2.1.0 (3.0.0 available)
+[notification]:   firebase_core 3.15.2 (4.15.0 available)
+[notification]:   firebase_core_platform_interface 6.0.3 (8.1.1 available)
+[notification]:   firebase_core_web 2.24.1 (3.12.0 available)
+[notification]:   firebase_messaging 15.2.10 (16.7.0 available)
+[notification]:   firebase_messaging_platform_interface 4.6.10 (4.10.0 available)
+[notification]:   firebase_messaging_web 3.10.10 (4.2.5 available)
+[notification]:   flutter_local_notifications 17.2.4 (22.3.1 available)
+[notification]:   flutter_local_notifications_linux 4.0.1 (8.0.1 available)
+[notification]:   flutter_local_notifications_platform_interface 7.2.0 (12.2.0 available)
+[notification]:   flutter_riverpod 3.0.3 (3.4.3 available)
+[notification]:   freezed 3.2.3 (4.0.2 available)
+[notification]:   glob 2.1.3 (2.2.0 available)
+[notification]: ! global_system 1.0.0 from path ../../packages/core/global_system (overridden in ./pubspec_overrides.yaml)
+[notification]:   go_router 16.3.0 (18.0.2 available)
+[notification]:   google_fonts 6.3.3 (9.0.0 available)
+[notification]:   hooks 2.0.2 (2.2.0 available)
+[notification]:   io 1.0.5 (1.1.0 available)
+[notification]:   jni 1.0.3 (1.1.0 available)
+[notification]:   jni_flutter 1.0.2 (1.0.4 available)
+[notification]:   json_annotation 4.9.0 (4.12.0 available)
+[notification]:   json_serializable 6.11.2 (6.14.1 available)
+[notification]:   matcher 0.12.19 (0.12.20 available)
+[notification]:   material_color_utilities 0.13.0 (0.13.1 available)
+[notification]:   meta 1.17.0 (1.19.0 available)
+[notification]:   mime 2.0.0 (2.1.0 available)
+[notification]:   mockito 5.6.4 (5.8.1 available)
+[notification]: ! network 1.0.0 from path ../../packages/core/network (overridden in ./pubspec_overrides.yaml)
+[notification]:   objective_c 9.5.0 (9.6.2 available)
+[notification]:   package_config 2.2.0 (3.0.0 available)
+[notification]:   permission_handler 12.0.3 (13.0.2 available)
+[notification]:   permission_handler_android 13.0.1 (14.1.0 available)
+[notification]:   permission_handler_apple 9.6.1 (9.6.2 available)
+[notification]:   permission_handler_platform_interface 4.4.0 (4.4.1 available)
+[notification]:   petitparser 7.0.2 (7.1.0 available)
+[notification]:   platform 3.1.6 (3.2.0 available)
+[notification]:   pool 1.5.2 (1.5.3 available)
+[notification]:   pub_semver 2.2.0 (2.2.1 available)
+[notification]:   pubspec_parse 1.5.0 (1.6.0 available)
+[notification]:   record_use 0.6.0 (1.1.1 available)
+[notification]:   riverpod 3.0.3 (3.4.3 available)
+[notification]:   riverpod_analyzer_utils 1.0.0-dev.7 (1.0.0-dev.12 available)
+[notification]:   riverpod_annotation 3.0.3 (4.0.7 available)
+[notification]:   riverpod_generator 3.0.3 (4.0.9 available)
+[notification]: ! shared_localization 1.0.0 from path ../../packages/shared/localization (overridden in ./pubspec_overrides.yaml)
+[notification]:   shared_preferences_android 2.4.23 (2.4.28 available)
+[notification]:   shared_preferences_foundation 2.5.6 (2.5.7 available)
+[notification]:   source_gen 4.2.4 (4.3.0 available)
+[notification]:   source_helper 1.3.8 (1.3.13 available)
+[notification]:   stack_trace 1.12.1 (1.12.2 available)
+[notification]:   stream_transform 2.1.1 (2.1.2 available)
+[notification]:   test 1.30.0 (1.32.0 available)
+[notification]:   test_api 0.7.10 (0.7.14 available)
+[notification]:   test_core 0.6.16 (0.6.20 available)
+[notification]:   timezone 0.9.4 (0.11.1 available)
+[notification]:   vector_math 2.2.0 (2.4.3 available)
+[notification]:   xml 7.0.1 (7.1.0 available)
+[notification]:   yaml 3.1.3 (3.1.4 available)
+[notification]: Got dependencies!
+[notification]: 76 packages have newer versions incompatible with dependency constraints.
+[notification]: Try `flutter pub outdated` for more information.
+[ioffice]: Analyzing ioffice...                                            
+[myhcmut]: Analyzing myhcmut...                                            
+[notification]: Analyzing notification...                                       
+[network]: 
+[network]: No issues found! (ran in 2.9s)
+[shared_localization]: 
+[shared_localization]: No issues found! (ran in 3.1s)
+[auth]: 
+[auth]: No issues found! (ran in 3.2s)
+[global_system]: 
+[global_system]: No issues found! (ran in 3.4s)
+[hcmut_sign]: 
+[hcmut_sign]: No issues found! (ran in 3.8s)
+[khcn]: 
+[khcn]: No issues found! (ran in 3.8s)
+[news]: 
+[news]: No issues found! (ran in 4.2s)
+[notification]: 
+[notification]: No issues found! (ran in 2.9s)
+[hrm]: 
+[hrm]: No issues found! (ran in 4.6s)
+[ioffice]: 
+[ioffice]: No issues found! (ran in 4.5s)
+[myhcmut]: 
+[myhcmut]: No issues found! (ran in 5.6s)
+--------------------------------------------------------------------------------
+
+$ melos exec
+  └> flutter analyze
+     └> SUCCESS
+
+melos run analyze
+  └> melos exec -- flutter analyze
+     └> SUCCESS

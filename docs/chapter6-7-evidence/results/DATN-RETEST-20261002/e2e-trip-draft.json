@@ -1,0 +1,32 @@
+{
+  "id": "E-BTR-DRAFT-01",
+  "at": "2026-10-02T02:55:10.396570+07:00",
+  "actor": "CB-A",
+  "execution": "Android UI -> real HRM API -> remote PostgreSQL; supplementary read-only API/DB checks",
+  "fixture_id": 1083,
+  "steps": [
+    "UI choose 30/10/2026 -> create domestic individual draft",
+    "UI advance to step 2 with missing location -> validation message and remains at step 2",
+    "UI exit wizard -> list still contains NHAP draft",
+    "UI reopen -> dates/individual/domestic selections preserved",
+    "UI exit -> delete only fixture 1083 -> confirm"
+  ],
+  "validation_message": "Vui lòng chọn tỉnh/thành phố công tác",
+  "state_after_reopen": "NHAP",
+  "before_list_count": 13,
+  "after_list_count": 13,
+  "baseline_ids_restored": true,
+  "db_cleanup_counts": {
+    "request": 0,
+    "tcns_lich_ca_nhan": 0,
+    "tcns_quy_trinh": 0,
+    "tcns_quy_trinh_history": 0,
+    "tcns_quy_trinh_user": 0,
+    "tcns_dang_ky_cong_tac_tham_gia": 0,
+    "tcns_dang_ky_cong_tac_ke_hoach": 0
+  },
+  "limits": [
+    "No complete five-step save/submit or approval/rejection/revocation/foreign branch in this case",
+    "Private account data/screenshots not added to repository"
+  ]
+}

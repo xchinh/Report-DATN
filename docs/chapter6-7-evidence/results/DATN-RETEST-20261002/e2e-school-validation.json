@@ -1,0 +1,34 @@
+{
+  "id": "E-SCH-INVALID-01",
+  "at": "2026-10-02T02:48:17.498359+07:00",
+  "actor": "CV-BGH",
+  "execution": "Android native form -> real iOffice API -> read-only PostgreSQL checks",
+  "title": "DATN20261002SCH0242",
+  "cases": [
+    {
+      "case": "empty title",
+      "observed": "Client shows field required; form remains open",
+      "result": "Expected validation observed"
+    },
+    {
+      "case": "title/date/type HOP, no participants",
+      "attempts": 2,
+      "observed_http": 400,
+      "body": {
+        "status": "error",
+        "message": "An error occurred",
+        "data": null
+      },
+      "result": "Backend rejects invalid participant composition; UI error lacks specific cause"
+    }
+  ],
+  "fixture_rows_after_failure": 0,
+  "cleanup": "No schedule row persisted. Transaction rolled back; no participants supplied.",
+  "backend_rule": "TRUONG requires at least one assign.donVi in 01/87/14 (BGH/HDT/VP.DU); updateAssignList throws Thành phần không phù hợp for an empty list.",
+  "rule_source": "ioffice-be/modules/md-schedule/schedule-general/model/scheduleGeneralAssign.js:18",
+  "error_source": "general create passes {error: error.message}; response API expects message, resulting in generic error.",
+  "limits": [
+    "No valid creation, publication, attachment retry or attendance executed in this case",
+    "No invitations sent because both creates failed and participant list was empty"
+  ]
+}

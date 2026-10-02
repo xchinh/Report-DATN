@@ -1,0 +1,10 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/api_response_interceptor_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/api_response_interceptor_test.dart: HTTP 400 retains the backend error message and HTTP failure
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/api_response_interceptor_test.dart: HTTP 401 retains the backend error message and HTTP failure
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/api_response_interceptor_test.dart: HTTP 500 retains the backend error message and HTTP failure
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/api_response_interceptor_test.dart: non-envelope HTTP error keeps the original Dio message
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/demo_name_interceptor_test.dart: demo flag controls aliasing and only name fields change
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/demo_name_interceptor_test.dart: names are aliased in leave, trip, incoming document, mission and schedule data
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/demo_name_interceptor_test.dart: workflow history uses doneBy as the employee SHCC
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/packages/core/network/test/demo_name_interceptor_test.dart: profile name uses SHCC inherited from its response envelope
+00:00 +8: All tests passed!

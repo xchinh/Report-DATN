@@ -1,0 +1,1 @@
+{"command": "node --test test/firebase_token_failure.test.js test/incoming_document_file_access.test.js test/notification_device_registration.test.js test/schedule_meeting_checkin.test.js test/schedule_pending_visibility.test.js test/schedule_publication_notifications.test.js", "exit": 0, "seconds": 0.3}

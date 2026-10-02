@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: I01: unrelated guest is denied pending detail but checkin handler accepts it
+ok 1 - I01: unrelated guest is denied pending detail but checkin handler accepts it
+  ---
+  duration_ms: 5.856503
+  type: 'test'
+  ...
+# Subtest: I02: PGQ handler accepts assignment without checking actor ownership or receiver membership
+ok 2 - I02: PGQ handler accepts assignment without checking actor ownership or receiver membership
+  ---
+  duration_ms: 1.221466
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 47.872808

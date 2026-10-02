@@ -1,3 +1,5 @@
+> **Trạng thái sau biên tập 01/10/2026:** bản Markdown này giữ thiết kế lịch sử. Nguồn hiện hành là các tệp LaTeX trong `Chapter5/`; hồ sơ đã chuyển native và có tích hợp tạo lịch. Không dùng mô tả WebView/SSO bên dưới làm hiện trạng. Xem `docs/14_REPORT_7_CHAPTER_AUDIT.md`, mục 10.
+
 # CHƯƠNG 5. THIẾT KẾ HỆ THỐNG
 
 Chương này trình bày thiết kế hệ thống MyHCMUT Mobile dựa trên các yêu cầu và quy trình nghiệp vụ đã phân tích ở Chương 4. Nội dung chương bao gồm kiến trúc tổng thể, kiến trúc các thành phần phần mềm, mô hình dữ liệu phục vụ các chức năng chính và những cơ chế tích hợp giữa ứng dụng di động với các hệ thống hiện hữu của Nhà trường.
