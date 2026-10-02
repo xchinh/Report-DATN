@@ -1,31 +1,17 @@
 \section{Người dùng, phân quyền và Use Case tổng thể}
 \label{sec:nguoidung_rbac_usecase}
 
-Phần này xác định các nhóm người dùng trực tiếp tương tác với MyHCMUT Mobile, phạm vi nghiệp vụ của từng nhóm và các nhóm use case chính của ứng dụng. Việc xác định người dùng và phạm vi thao tác là cơ sở để phân tích chi tiết yêu cầu của từng phân hệ ở các mục tiếp theo.
-
 \subsection{Các nhóm người dùng}
 \label{subsec:nhom_nguoidung}
 
-MyHCMUT Mobile phục vụ các nhóm người dùng trong Nhà trường với vai trò và phạm vi nghiệp vụ khác nhau:
+MyHCMUT Mobile phục vụ sáu nhóm người dùng trực tiếp: nhân sự, lãnh đạo đơn vị, chuyên viên các phòng ban, chuyên viên BGH, văn thư và Ban Giám hiệu. Các vai trò chuyên môn bổ sung phạm vi xử lý cho tài khoản nhân sự; một tài khoản có thể đảm nhiệm nhiều vai trò. Chuyên viên BGH chuẩn bị lịch họp cấp Trường, còn Ban Giám hiệu tham gia chỉ đạo hoặc phê duyệt theo thẩm quyền.
 
-\begin{itemize}
-    \item \textbf{Nhân sự:} Thực hiện các nghiệp vụ cá nhân và khai thác thông tin phục vụ công việc như quản lý hồ sơ, nghỉ phép, công tác, văn bản, nhiệm vụ và lịch công tác.
-
-    \item \textbf{Lãnh đạo đơn vị:} Ngoài các chức năng dành cho nhân sự, nhóm người dùng này tham gia xem xét và xử lý các nghiệp vụ thuộc phạm vi đơn vị theo thẩm quyền được phân công.
-
-    \item \textbf{Chuyên viên các phòng ban:} Chuyên viên phòng ban như: TCNS hay phòng Hành chính là nhóm người dùng chính của hệ thống. Thực hiện các nghiệp vụ chuyên môn liên quan đến phong ban, chẳng hạn thẩm định hồ sơ, xử lý nghỉ phép, công tác và các nghiệp vụ chuyên môn khác.
-
-    \item \textbf{Văn thư:} Thực hiện các nghiệp vụ liên quan đến văn bản, lịch công tác và các quy trình hành chính thuộc phạm vi được phân công.
-
-    \item \textbf{Ban Giám hiệu:} Tham gia xem xét và xử lý các nghiệp vụ thuộc thẩm quyền cấp Trường được cung cấp trên ứng dụng.
-\end{itemize}
-
-Bên cạnh các nhóm người dùng trực tiếp, MyHCMUT Mobile khai thác dữ liệu và nghiệp vụ từ các hệ thống hiện hữu của Nhà trường, bao gồm hệ thống quản lý nhân sự, hệ thống iOffice và dịch vụ xác thực. Ứng dụng đồng thời sử dụng dịch vụ thông báo đẩy để chuyển thông báo từ hệ thống đến thiết bị của người dùng. Các hệ thống này đóng vai trò cung cấp dịch vụ và dữ liệu cho ứng dụng, không được xem là nhóm người dùng của MyHCMUT Mobile.
+HRM, iOffice và dịch vụ xác thực cung cấp dữ liệu, quyền và nghiệp vụ cho ứng dụng; dịch vụ thông báo đẩy chuyển thông báo đến thiết bị. Đây là các hệ thống hỗ trợ, không phải nhóm người dùng.
 
 \subsection{Vai trò và phạm vi nghiệp vụ}
 \label{subsec:nguyentac_phanquyen}
 
-Phạm vi chức năng mà người dùng có thể thực hiện trên MyHCMUT Mobile phụ thuộc vào vai trò, quyền nghiệp vụ và bước xử lý được phân công trong từng quy trình. Một người dùng có thể đồng thời đảm nhiệm nhiều vai trò; do đó, phạm vi thao tác thực tế được xác định theo các quyền gắn với tài khoản thay vì chỉ dựa trên tên nhóm người dùng. Ma trận tác nhân và phạm vi nghiệp vụ được trình bày trong Bảng~\ref{tab:actor_function_matrix}.
+Phạm vi thao tác được xác định theo quyền thực tế của tài khoản, đối tượng nghiệp vụ và bước xử lý được phân công. Tên chức danh không tự suy ra quyền phê duyệt hoặc quyền tạo lịch.
 
 \begin{table}[H]
 \centering
@@ -36,12 +22,15 @@ Phạm vi chức năng mà người dùng có thể thực hiện trên MyHCMUT 
 \hline
 \textbf{Tác nhân} & \textbf{Phạm vi thao tác chính} & \textbf{Giới hạn phạm vi} \\
 \hline
-Nhân sự & Tra cứu và đề xuất cập nhật hồ sơ; tạo và theo dõi yêu cầu nghỉ phép, công tác; tra cứu văn bản, nhiệm vụ và lịch; điểm danh và nhận thông báo. & Chủ yếu thao tác trên thông tin cá nhân và các nghiệp vụ mà bản thân được tham gia; không thực hiện chức năng thẩm định hoặc phê duyệt nếu không có quyền tương ứng. \\
+Nhân sự & Tra cứu, cập nhật/đề xuất, phản hồi và xem lịch sử hồ sơ; tạo và theo dõi yêu cầu nghỉ phép, công tác; tra cứu văn bản, nhiệm vụ và lịch; điểm danh và nhận thông báo. & Chủ yếu thao tác trên thông tin cá nhân và các nghiệp vụ mà bản thân được tham gia; không thực hiện chức năng thẩm định hoặc phê duyệt nếu không có quyền tương ứng. \\
 \hline
 Lãnh đạo đơn vị & Thực hiện các chức năng của nhân sự; xem xét và xử lý các yêu cầu thuộc đơn vị; theo dõi các công việc thuộc phạm vi quản lý. & Chỉ xử lý các nghiệp vụ thuộc đơn vị và tại các bước được cấu hình trong quy trình. \\
 \hline
 Chuyên viên các phòng ban & Thẩm định đề xuất cập nhật hồ sơ; xử lý nghiệp vụ nghỉ phép, công tác và các dữ liệu chuyên môn liên quan. & Thao tác theo phạm vi nghiệp vụ và quyền chuyên môn được cấp; không thực hiện thay các bước phê duyệt ngoài thẩm quyền. \\
 \hline
+Chuyên viên BGH & Tạo trực tiếp lịch họp cấp Trường, chọn thành phần và tài liệu; xem mục lịch ở bước tổng hợp. & Cần quyền tạo trực tiếp; không mặc nhiên được phát hành lịch hoặc thao tác ngoài phạm vi được cấp. \\
+\hline
+
 Văn thư & Thực hiện các nghiệp vụ liên quan đến tiếp nhận, xử lý và luân chuyển văn bản, lịch công tác và các nghiệp vụ hành chính liên quan. & Thao tác trên các văn bản và quy trình được phân công theo quyền nghiệp vụ. \\
 \hline
 Ban Giám hiệu & Xem xét và xử lý các yêu cầu hoặc nghiệp vụ thuộc thẩm quyền cấp Trường. & Chỉ tham gia tại các bước và nghiệp vụ thuộc thẩm quyền. \\
@@ -49,18 +38,12 @@ Ban Giám hiệu & Xem xét và xử lý các yêu cầu hoặc nghiệp vụ th
 \end{tabularx}
 \end{table}
 
-Ứng dụng sử dụng thông tin quyền do các hệ thống backend cung cấp để xác định các chức năng phù hợp với từng người dùng. Việc giới hạn chức năng trên giao diện nhằm phản ánh đúng phạm vi nghiệp vụ của tài khoản; quyền thực hiện các thao tác nghiệp vụ vẫn được kiểm tra tại hệ thống backend tương ứng. Vì vậy, ứng dụng di động không tự xác lập hoặc mở rộng quyền của người dùng.
+Ứng dụng dùng thông tin quyền từ backend để hiển thị chức năng phù hợp. Việc ẩn hoặc hiện nút chỉ phục vụ giao diện; backend vẫn phải kiểm tra quyền truy cập dữ liệu và thực hiện nghiệp vụ khi nhận yêu cầu, kể cả yêu cầu được gọi trực tiếp ngoài ứng dụng. Các giới hạn hiện thực và kiểm chứng phân quyền được đối chiếu riêng tại Chương~6.
 
 \subsection{Các nhóm Use Case tổng thể}
 \label{subsec:nhom_usecase_tongthe}
 
-Sơ đồ Use Case tổng thể mô tả các nhóm chức năng mà người dùng có thể thực hiện thông qua MyHCMUT Mobile (Hình~\ref{fig:system_usecase_diagram}). Các use case được tổ chức thành các nhóm nghiệp vụ chính gồm xác thực và truy cập hệ thống, quản lý hồ sơ cá nhân, quản lý nghỉ phép, quản lý công tác, quản lý văn bản và nhiệm vụ, tra cứu lịch công tác, điểm danh và tiếp nhận thông báo.
-
-Phạm vi tương tác với từng nhóm chức năng phụ thuộc vào vai trò và quyền của người dùng. Chẳng hạn, nhân sự có thể tạo và theo dõi yêu cầu nghỉ phép của bản thân, trong khi người có thẩm quyền có thể tham gia xem xét hoặc xử lý yêu cầu tại các bước tương ứng của quy trình.
-
-Sơ đồ tổng thể chỉ thể hiện các use case được cung cấp thông qua MyHCMUT Mobile. Các chức năng quản trị hoặc nghiệp vụ chỉ được thực hiện trên những hệ thống Web hiện hữu của Nhà trường không thuộc phạm vi của sơ đồ này. Các hệ thống quản lý nhân sự, iOffice, dịch vụ xác thực và dịch vụ thông báo đóng vai trò hỗ trợ việc cung cấp dữ liệu và thực hiện nghiệp vụ cho ứng dụng.
-
-Để bảo đảm sơ đồ tổng thể dễ theo dõi, các nghiệp vụ chi tiết được phân rã và phân tích trong các sơ đồ Use Case của từng phân hệ ở các mục tiếp theo.
+Hình~\ref{fig:system_usecase_diagram} thể hiện các nhóm chức năng: xác thực, hồ sơ cá nhân, nghỉ phép, công tác, văn bản và nhiệm vụ, lịch, điểm danh và thông báo. Các mục tiếp theo phân rã yêu cầu nghiệp vụ của từng nhóm. Chức năng quản trị và nghiệp vụ chỉ có trên Web nằm ngoài phạm vi đặc tả mobile.
 
 \begin{figure}[H]
     \centering

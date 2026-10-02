@@ -4,11 +4,7 @@
 
 \subsubsection{Mục tiêu và yêu cầu chức năng}
 
-Chức năng quản lý nghỉ phép hỗ trợ nhân sự thực hiện các nghiệp vụ nghỉ phép trên thiết bị di động: từ việc tra cứu số ngày phép năm còn lại, lập đơn qua biểu mẫu hướng dẫn, đính kèm minh chứng, nộp đơn vào quy trình luân chuyển phê duyệt, đến việc theo dõi tiến độ xử lý của cấp quản lý đơn vị và chuyên viên Phòng Tổ chức Nhân sự.
-
-Hệ thống thiết lập ranh giới rõ ràng giữa ứng dụng di động và hệ thống nghiệp vụ phía máy chủ: các bước kiểm tra tức thời trên MyHCMUT Mobile (tính số ngày làm việc thực tế, cảnh báo số dư ngày phép, kiểm tra trùng lặp lịch biểu) đóng vai trò hỗ trợ người dùng hoàn thiện dữ liệu chính xác trước khi gửi; trong khi đó, backend HRM là thành phần thẩm quyền duy nhất thẩm định tính hợp lệ cuối cùng, bảo đảm kiểm soát tương tranh và thực thi chuyển trạng thái hồ sơ.
-
-Bảng~\ref{tab:fr_leave} tổng hợp các yêu cầu chức năng của nhóm quản lý nghỉ phép.
+Ứng dụng hỗ trợ tra cứu quỹ phép tham khảo, lập đơn theo biểu mẫu ba bước, theo dõi và xử lý theo thẩm quyền. Kiểm tra ngày, số dư và xung đột trên mobile hỗ trợ hoàn thiện dữ liệu; backend HRM thực hiện kiểm tra nghiệp vụ cuối cùng và xử lý việc chuyển trạng thái hồ sơ.
 
 \begin{table}[H]
 \centering
@@ -34,7 +30,7 @@ Trong quy trình hiện thực, thao tác lưu giữ đơn ở trạng thái Nh�
 
 \subsubsection{Đặc tả Use Case}
 
-Các use case của nhóm quản lý nghỉ phép mô tả trọn vẹn vòng đời của một yêu cầu nghỉ phép từ khi khởi tạo, kiểm tra điều kiện, gửi xử lý, theo dõi cho đến khi được cấp có thẩm quyền ra quyết định. Hình~\ref{fig:uc_leave} thể hiện sơ đồ use case của nhóm quản lý nghỉ phép.
+UC-LEV-01 cụ thể hóa FR-LEV-01 và FR-LEV-03; UC-LEV-02 gắn với FR-LEV-02, còn UC-LEV-03 gắn với FR-LEV-04. Hình~\ref{fig:uc_leave} thể hiện các nhóm thao tác tương ứng.
 
 \begin{figure}[H]
 \centering
@@ -42,29 +38,6 @@ Các use case của nhóm quản lý nghỉ phép mô tả trọn vẹn vòng đ
 \caption{Sơ đồ Đặc tả Use case nhóm Quản lý nghỉ phép}
 \label{fig:uc_leave}
 \end{figure}
-
-Bảng~\ref{tab:mapping_uc_lev} tổng hợp danh mục các use case thuộc nhóm quản lý nghỉ phép.
-
-\begin{table}[H]
-\centering
-\small
-\caption{Danh mục use case nhóm quản lý nghỉ phép}
-\label{tab:mapping_uc_lev}
-\vspace{0.15cm}
-\begin{tabularx}{\textwidth}{|L{2.6cm}|L{4.5cm}|Y|}
-\hline
-\textbf{Mã Use Case} & \textbf{Tên Use Case} & \textbf{Mục tiêu Nghiệp vụ} \\
-\hline
-\textbf{UC-LEV-01} & Quản lý đơn nghỉ phép cá nhân & Theo dõi quỹ phép, tra cứu đơn và tiến trình duyệt; sửa hoặc xóa đơn Nháp, sửa và gửi lại đơn Bị trả lại. \\
-\hline
-\textbf{UC-LEV-02} & Lập và gửi đơn nghỉ phép & Khởi tạo đơn mới theo biểu mẫu 3 bước, kiểm tra điều kiện và gửi phê duyệt. \\
-\hline
-\textbf{UC-LEV-03} & Xử lý đơn nghỉ phép & Xem xét nội dung, kiểm tra minh chứng và phê duyệt, từ chối hoặc yêu cầu chỉnh sửa đơn. \\
-\hline
-\end{tabularx}
-\end{table}
-
-Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-LEV-02} và \textbf{UC-LEV-03} được đặc tả chi tiết tại Bảng~\ref{tab:uc_lev_02} và Bảng~\ref{tab:uc_lev_03}. Đặc tả Use Case \textbf{UC-LEV-01} được đặc tả tại Bảng~\ref{tab:uc_lev_01}.
 
 \usecasespec{
   id={UC-LEV-01},
@@ -108,7 +81,7 @@ Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-L
   },
   altflow={
     - \textit{Luồng 3a (Lưu nháp):} Người dùng chọn lưu nháp tại bất kỳ bước nào để tiếp tục hoàn thiện sau. \newline
-    - \textit{Luồng 5a (Hủy tạo đơn):} Người dùng chọn thoát khỏi biểu mẫu $\rightarrow$ ứng dụng tự động dọn dẹp bản ghi nháp vừa tạo.
+    - \textit{Luồng 3b (Thoát biểu mẫu):} Người dùng xác nhận thoát; dữ liệu chưa lưu trên ứng dụng bị bỏ. Bản ghi nháp đã tạo trên HRM vẫn tồn tại, có thể mở lại hoặc xóa bằng thao tác riêng.
   },
   exflow={
     - \textit{Ngoại lệ 1a (Ngày đăng ký không hợp lệ):} Ứng dụng thông báo nguyên nhân và không tạo bản ghi nháp. \newline
@@ -116,7 +89,7 @@ Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-L
     - \textit{Ngoại lệ 3b (Vượt số dư quỹ phép):} Số ngày đăng ký vượt quá số dư phép năm còn lại $\rightarrow$ hệ thống cảnh báo để người dùng điều chỉnh. \newline
     - \textit{Ngoại lệ 3c (Quá hạn đăng ký):} Khi kiểm tra thời hạn xác định không thể tạo đơn nghỉ phép thông thường, ứng dụng thông báo nguyên nhân và điều hướng người dùng đến điểm truy cập phân hệ Giải trình. Việc lập và xử lý Giải trình không thuộc phạm vi hiện thực của use case này.
   },
-  post={Đơn nghỉ phép được ghi nhận vào hệ thống ở trạng thái Chờ duyệt; hệ thống phát sinh thông báo cho người duyệt tương ứng.},
+  post={Khi gửi thành công, đơn được ghi nhận ở bước chờ duyệt và phát sinh thông báo theo quy trình. Nếu chỉ lưu hoặc thoát sau khi tạo nháp, đơn vẫn ở trạng thái Nháp.},
   label={tab:uc_lev_02}
 }
 
@@ -141,17 +114,15 @@ Hai use case cốt lõi làm thay đổi trạng thái hồ sơ là \textbf{UC-L
   },
   exflow={
     - \textit{Ngoại lệ 3a (Từ chối đơn):} Người duyệt bắt buộc nhập lý do từ chối trước khi hệ thống ghi nhận kết quả. \newline
-    - \textit{Ngoại lệ 4a (Đơn đã thay đổi trạng thái):} Đơn đã bị thu hồi hoặc cấp quản lý khác xử lý trước $\rightarrow$ hệ thống từ chối thao tác và làm mới danh sách.
+    - \textit{Ngoại lệ 4a (Trạng thái không phù hợp):} Khi HRM xác định đơn không còn ở bước cho phép xử lý, thao tác bị từ chối và người dùng cần tải lại dữ liệu. Kiểm tra này không được xem là bảo đảm chống mọi thao tác phê duyệt đồng thời.
   },
-  post={Đơn nghỉ phép được chuyển sang bước phê duyệt tiếp theo hoặc hoàn tất quy trình (Đã duyệt / Bị từ chối); số dư phép được cập nhật chính thức khi duyệt bước cuối.},
+  post={Đơn được chuyển sang bước tiếp theo, trả lại hoặc kết thúc theo quyết định được HRM ghi nhận; dữ liệu nghỉ phép được cập nhật khi duyệt bước cuối theo quy trình.},
   label={tab:uc_lev_03}
 }
 
 \subsubsection{Biểu đồ hoạt động}
 
-Trong nhóm chức năng quản lý nghỉ phép, hai quy trình có ý nghĩa quyết định đối với vòng đời hồ sơ là quy trình lập đơn của nhân sự và quy trình luân chuyển phê duyệt của cấp quản lý được mô tả bằng biểu đồ hoạt động.
-
-Quy trình thể hiện các bước kiểm tra hỗ trợ người dùng: tự động tính số ngày làm việc, kiểm tra số dư phép, kiểm tra hạn nộp và kiểm tra minh chứng bắt buộc trước khi cho phép nộp đơn chính thức. Trường hợp quá hạn, ứng dụng không tiếp tục luồng tạo đơn nghỉ phép thông thường mà thông báo và điều hướng đến điểm truy cập phân hệ Giải trình; quy trình Giải trình được định hướng phát triển ở Chương~7.
+Hình~\ref{fig:act_leave_submit} mô tả lập đơn và luân chuyển phê duyệt. Khi quá hạn, ứng dụng thông báo và điều hướng đến điểm truy cập Giải trình; quy trình Giải trình nằm ngoài phạm vi use case nghỉ phép hiện tại.
 
 \begin{figure}[H]
 \centering
@@ -161,9 +132,7 @@ Quy trình thể hiện các bước kiểm tra hỗ trợ người dùng: tự 
 \end{figure}
 
 \subsubsection{Biểu đồ tuần tự}
-Biểu đồ tuần tự mô tả sự tương tác logic giữa Người dùng, MyHCMUT Mobile và Hệ thống HRM trong kịch bản Lập và gửi đơn nghỉ phép (UC-LEV-02). Biểu đồ thể hiện trình tự khởi tạo nháp, kiểm tra các điều kiện dữ liệu cần thiết và ghi nhận đơn ở trạng thái Chờ duyệt.
-
-Hình~\ref{fig:seq_leave_submit} thể hiện biểu đồ tuần tự của use case Gửi yêu cầu nghỉ phép.
+Hình~\ref{fig:seq_leave_submit} minh họa UC-LEV-02: khởi tạo nháp, hoàn thiện dữ liệu và gửi vào quy trình chờ duyệt.
 
 \begin{figure}[H]
 \centering

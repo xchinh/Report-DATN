@@ -8,7 +8,7 @@ MyHCMUT Mobile được phát triển theo định hướng ứng dụng di đ�
 
 Các hệ thống backend của Nhà trường (HRM và iOffice) được xây dựng trên nền tảng Node.js kết hợp framework Express~\cite{nodejs_doc, express_doc}. Node.js cung cấp môi trường thực thi JavaScript bất đồng bộ hiệu năng cao phía máy chủ, trong khi Express hỗ trợ tổ chức hệ thống định tuyến (routing) và các middleware xử lý yêu cầu HTTP. Về lưu trữ dữ liệu, hệ thống sử dụng hệ quản trị cơ sở dữ liệu quan hệ PostgreSQL~\cite{postgresql_doc} kết hợp thư viện ORM Sequelize~\cite{sequelize_doc} để quản lý, ánh xạ và đảm bảo tính toàn vẹn của dữ liệu nghiệp vụ nhân sự và văn bản. Ngoài ra, Redis được sử dụng làm máy chủ lưu trữ bộ nhớ đệm phân tán cho các dữ liệu có vòng đời ngắn.
 
-Trong phạm vi đề tài, nhóm không xây dựng lại hệ thống quản trị dữ liệu mới mà tích hợp trực tiếp vào các dịch vụ backend này. Nhóm nghiên cứu cấu trúc API hiện hữu, thực hiện kết nối với các route nghiệp vụ của HRM/iOffice và khai thác Redis để lưu trữ tạm thời vé xác thực một lần (One-Time Ticket SSO) phục vụ luồng chuyển tiếp phiên làm việc an toàn từ ứng dụng di động sang Web.
+Trong phạm vi đề tài, nhóm không xây dựng lại hệ thống quản trị dữ liệu mới mà tích hợp trực tiếp vào các dịch vụ backend này. Nhóm nghiên cứu cấu trúc API hiện hữu, thực hiện kết nối với các route nghiệp vụ của HRM/iOffice và giữ việc xác thực, phân quyền, xử lý transaction tại backend. Biểu mẫu native nhận policy và gửi dữ liệu qua API; không truy cập trực tiếp tầng lưu trữ.
 
 \subsection{Môi trường thực thi: Node.js}
 Node.js là một môi trường runtime mã nguồn mở, đa nền tảng, cho phép thực thi JavaScript
@@ -36,7 +36,7 @@ TypeScript là một ngôn ngữ lập trình mã nguồn mở được phát tr
 là một siêu tập (Superset) của JavaScript.
 \begin{itemize}
     \item \textbf{Static Typing:} TypeScript bổ sung hệ thống kiểu dữ liệu tĩnh (Static Types) vào Java\-Script. Các kiểu dữ liệu được kiểm tra ngay tại thời điểm biên dịch (Compile\-time), giúp phát hiện sớm các lỗi sai lệch kiểu dữ liệu trước khi ứng dụng được chạy.
-    \item \textbf{Non-blocking I/O:} Cung cấp các cấu trúc lập trình hướng đối tượng nâng cao như
+    \item \textbf{Mô hình hóa dữ liệu:} Cung cấp các cấu trúc lập trình hướng đối tượng nâng cao như
           Interface, Class và Generics, giúp định nghĩa rõ ràng các DTO (Data Transfer Object) và
           cấu trúc dữ liệu trả về từ API.
 \end{itemize}

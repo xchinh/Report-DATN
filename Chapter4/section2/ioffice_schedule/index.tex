@@ -5,93 +5,69 @@
 
 \subsubsection{Mục tiêu và yêu cầu chức năng}
 
-Nhóm chức năng Văn phòng số, nhiệm vụ và lịch công tác hỗ trợ nhân sự, giảng viên tiếp cận thông tin điều hành từ hệ thống iOffice trên thiết bị di động: tra cứu văn bản đến/đi, theo dõi thông tin nhiệm vụ được giao và xem lịch làm việc tuần.
+Ứng dụng cung cấp chức năng tra cứu, phân công và xử lý văn bản đến, xem văn bản đi và theo dõi nhiệm vụ từ iOffice. Phân công trên mobile gắn với phiếu giải quyết văn bản đến; tạo hoặc phân công nhiệm vụ độc lập và nộp báo cáo tiến độ nằm ngoài phạm vi mobile.
 
-Đối với lịch công tác, MyHCMUT Mobile đóng vai trò là cổng hiển thị thống nhất (\textit{Unified Calendar}), tổng hợp các sự kiện có liên quan trực tiếp đến người dùng từ ba nguồn dữ liệu độc lập: lịch họp cơ quan từ iOffice, khoảng thời gian nghỉ phép từ HRM và các chuyến đi công tác từ HRM. Việc tổng hợp này giúp nhân sự có góc nhìn toàn diện về lịch trình cá nhân trên một giao diện duy nhất; trong đó dữ liệu nghiệp vụ gốc vẫn được quản lý và phân định thẩm quyền độc lập tại từng hệ thống nguồn.
+Lịch tổng hợp (\textit{Unified Calendar}) kết hợp lịch họp iOffice với lịch nghỉ phép và công tác từ HRM, giúp người dùng theo dõi các loại lịch liên quan trên một giao diện. Dữ liệu gốc và thẩm quyền xử lý vẫn thuộc từng hệ thống nguồn.
 
-Đối với cuộc họp có điểm danh, ứng dụng hỗ trợ ghi nhận có mặt, hoàn tác điểm danh hoặc báo vắng có lý do. iOffice kiểm tra phiên đăng nhập, quyền sử dụng lịch, cuộc họp và khung thời gian thao tác. Người có phân công cá nhân hoặc theo đơn vị điểm danh trên dòng phân công; nhân sự không có dòng phân công vẫn có thể tự điểm danh và được thống kê riêng trong nhóm khách tham dự. Vì vậy, không dùng điều kiện ``phải có tên trong danh sách mời'' làm tiêu chí từ chối mặc định.
+Người dùng có quyền sử dụng lịch có thể ghi nhận có mặt, hoàn tác hoặc báo vắng trong cửa sổ thời gian được iOffice cho phép. Có phân công thì trạng thái gắn với dòng phân công; không có phân công thì trạng thái được ghi nhận ở nhóm khách. Tạo trực tiếp lịch họp cấp Trường dành cho tài khoản được cấp quyền, lưu ở bước tổng hợp và chưa phải phát hành lịch chính thức.
 
-Bảng~\ref{tab:fr_ioffice_schedule} tổng hợp các yêu cầu chức năng của nhóm nghiệp vụ này.
-
-\begin{table}[H]
-    \centering
-    \small
-    \caption{Yêu cầu chức năng nhóm văn phòng số và lịch}
-    \label{tab:fr_ioffice_schedule}
-    \begin{tabularx}{\textwidth}{|L{1.8cm}|L{3.5cm}|L{2.5cm}|Y|}
+\begin{xltabular}{\textwidth}{|L{1.8cm}|L{3.5cm}|L{2.5cm}|Y|}
+\caption{Yêu cầu chức năng nhóm văn phòng số và lịch}\label{tab:fr_ioffice_schedule}\\\hline
+\textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả và ràng buộc nghiệp vụ} \\\hline
+\endfirsthead\hline
+\textbf{Mã FR} & \textbf{Chức năng} & \textbf{Tác nhân} & \textbf{Mô tả và ràng buộc nghiệp vụ} \\\hline
+\endhead
+        FR-IOFF-01     & Tra cứu văn bản và nhiệm vụ                      & Nhân sự                     & Tra cứu văn bản đến/đi và tiến trình luân chuyển; xem danh sách nhiệm vụ liên quan.                   \\
         \hline
-        \textbf{Mã FR} & \textbf{Chức năng}                               & \textbf{Tác nhân}          & \textbf{Mô tả và ràng buộc nghiệp vụ}                                                                           \\
-        \hline
-        FR-IOFF-01     & Tra cứu văn bản và nhiệm vụ                      & Nhân sự                     & Hỗ trợ phân loại, lọc và tra cứu văn bản đến/đi, theo dõi dòng thời gian tiến trình luân chuyển.                   \\
-        \hline
-        FR-IOFF-02     & Phân công trách nhiệm                            & Lãnh đạo/văn thư P.HC, BGH & Tiến hành phân công các loại trách nhiệm, công việc tới các đơn vị hoặc đích danh cá nhân.                      \\
+        FR-IOFF-02     & Phân công xử lý văn bản đến                            & Lãnh đạo/văn thư P.HC, BGH & Phân công trách nhiệm xử lý văn bản đến cho đơn vị hoặc cá nhân trên phiếu giải quyết, theo quyền và trạng thái nghiệp vụ.                      \\
         \hline
         FR-IOFF-03     & Xử lý quy trình văn bản                          & Nhân sự có thẩm quyền       & Thực hiện các thao tác xử lý văn bản như: tham mưu, chỉ đạo, hoặc tiếp nhận các nhiệm vụ được giao.             \\
         \hline
-        FR-IOFF-04     & Chi tiết thông tin nhiệm vụ đính kèm với văn bản & Nhân sự                     & Cho phép xem chi tiết nhiệm vụ được phân công, bao gồm trạng thái, tiến độ, báo cáo và các công việc liên quan. \\
+        FR-IOFF-04     & Chi tiết thông tin nhiệm vụ đính kèm với văn bản & Nhân sự                     & Xem trạng thái, tiến độ, báo cáo đã có và công việc liên quan của nhiệm vụ được phép truy cập. \\
         \hline
         FR-SCH-01      & Điểm danh và báo vắng                            & Nhân sự tham dự             & Ghi nhận có mặt, hoàn tác hoặc báo vắng có lý do trong khung thời gian hợp lệ; phân biệt người được phân công và khách tự điểm danh. \\
         \hline
-        FR-SCH-02      & Xem lịch công tác tổng hợp                       & Nhân sự, Giảng viên         & Hiển thị lịch tuần tổng hợp từ 3 nguồn: lịch họp iOffice, lịch phép HRM và lịch công tác HRM.                   \\
+        FR-SCH-02      & Xem lịch làm việc tổng hợp                       & Nhân sự         & Hiển thị lịch tuần tổng hợp từ 3 nguồn: lịch họp iOffice, lịch phép HRM và lịch công tác HRM.                   \\
         \hline
-    \end{tabularx}
-\end{table}
+
+        FR-SCH-03 & Tạo/đăng ký cuộc họp & Nhân sự có quyền; Chuyên viên BGH & Biểu mẫu native cho nhánh đơn vị, đăng ký Trường hoặc tạo trực tiếp Trường theo quyền. \\
+        \hline
+        FR-SCH-04 & Thành phần và tài liệu & Người tạo lịch & Chọn chủ trì/tham dự/thư ký và tài liệu. Lịch Trường cần thành phần thuộc BGH, HĐT hoặc VPĐU; tải tệp theo quyền riêng. \\
+        \hline
+        FR-SCH-05 & Xem lịch chờ liên quan & Nhân sự & Hiển thị lịch Trường ở tổng hợp trong danh sách lịch liên quan khi là người tạo, được mời hoặc thuộc đơn vị được mời. \\
+        \hline
+        FR-SCH-06 & Mở nghiệp vụ từ lịch & Nhân sự & Mở đúng chi tiết cuộc họp, đơn nghỉ phép hoặc phiếu công tác theo nguồn sự kiện. \\
+        \hline
+        FR-SCH-07 & Tiếp nhận lời mời & Người được mời & Phát sinh lời mời sau khi tạo trực tiếp ở tổng hợp theo cơ chế bản demo; kết quả lưu không bảo đảm thiết bị đã nhận push. \\
+        \hline
+\end{xltabular}
 
 \subsubsection{Đặc tả Use Case}
 
-Các use case của nhóm chức năng này tập trung vào mục tiêu tra cứu văn bản, theo dõi thông tin nhiệm vụ, xem lịch công tác tổng hợp và thực hiện điểm danh cuộc họp. Hình~\ref{fig:uc_ioffice_schedule} thể hiện sơ đồ use case của nhóm này.
+UC-OFF-01 cụ thể hóa FR-IOFF-02; UC-OFF-02/03/04 cụ thể hóa FR-IOFF-03. UC-SCH-01 gắn với FR-SCH-01, UC-SCH-02 với FR-SCH-02/05/06 và UC-SCH-03 với FR-SCH-03/04/07. Các yêu cầu tra cứu FR-IOFF-01/04 được mô tả trực tiếp trong bảng FR. Hình~\ref{fig:uc_ioffice_schedule} minh họa các nhóm chức năng.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{image/usecase/UC_IOFF.png}
+    \includegraphics[width=\linewidth]{image/usecase/UC_DOC.png}
     \caption{Sơ đồ Đặc tả Use case nhóm Văn phòng số, nhiệm vụ và lịch công tác}
     \label{fig:uc_ioffice_schedule}
 \end{figure}
 
-Bảng~\ref{tab:mapping_uc_ioffice} tổng hợp danh mục các use case thuộc nhóm chức năng này.
-
-\begin{table}[H]
-    \centering
-    \small
-    \caption{Danh mục use case nhóm văn phòng số và lịch}
-    \label{tab:mapping_uc_ioffice}
-    \vspace{0.15cm}
-    \begin{tabularx}{\textwidth}{|L{2.6cm}|L{4.5cm}|Y|}
-        \hline
-        \textbf{Mã Use Case} & \textbf{Tên Use Case} & \textbf{Mục tiêu Nghiệp vụ} \\
-        \hline
-        \textbf{UC-OFF-01} & Phân công trách nhiệm & Phân công các vai trò trách nhiệm, công việc tới các đơn vị hoặc đích danh cá nhân trên Phiếu Giải Quyết. \\
-        \hline
-        \textbf{UC-OFF-02} & Tham mưu văn bản đến & Lãnh đạo Phòng Hành chính nghiên cứu nội dung và ghi nhận ý kiến tham mưu đề xuất xử lý. \\
-        \hline
-        \textbf{UC-OFF-03} & Chỉ đạo văn bản đến & Ban Giám hiệu xem xét hồ sơ, ghi nhận ý kiến chỉ đạo và phê duyệt phương án phân công. \\
-        \hline
-        \textbf{UC-OFF-04} & Tiếp nhận văn bản/nhiệm vụ & Đơn vị hoặc cá nhân được phân công xác nhận tiếp nhận văn bản và nhiệm vụ thụ lý. \\
-        \hline
-        \textbf{UC-SCH-01} & Điểm danh hoặc báo vắng cuộc họp & Ghi nhận có mặt hoặc báo vắng kèm lý do khi tham dự cuộc họp có cấu hình điểm danh. \\
-        \hline
-        \textbf{UC-SCH-02} & Xem lịch công tác tổng hợp & Xem các sự kiện từ 3 nguồn dữ liệu (lịch họp iOffice, lịch phép HRM, lịch công tác HRM). \\
-        \hline
-    \end{tabularx}
-\end{table}
-
-Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác được đặc tả chi tiết từ Bảng~\ref{tab:uc_off_01} đến Bảng~\ref{tab:uc_sch_02}.
-
 \usecasespec{
     id={UC-OFF-01},
-    name={Phân công trách nhiệm},
-    shortname={Phân công nhiệm vụ},
-    actor={Chuyên viên, văn thư P.HC},
-    desc={Cho phép người dùng phân công các loại trách nhiệm, công việc tới các đơn vị hoặc đích danh cá nhân.},
-    pre={Người dùng đã đăng nhập và có quyền phân công nhiệm vụ.},
+    name={Phân công xử lý văn bản đến},
+    shortname={Phân công văn bản đến},
+    actor={Nhân sự được cấp quyền chỉnh sửa phiếu giải quyết văn bản đến},
+    desc={Tạo hoặc cập nhật phân công trách nhiệm xử lý văn bản đến trên phiếu giải quyết.},
+    pre={Người dùng đã đăng nhập; dữ liệu quyền và trạng thái văn bản cho phép chỉnh sửa phiếu giải quyết.},
     trigger={Người dùng mở màn hình chi tiết văn bản đến và chọn chức năng phân công.},
     mainflow={
             1. Người dùng chọn văn bản đến cần phân công. \newline
             2. Người dùng chọn loại trách nhiệm và đối tượng nhận nhiệm vụ (đơn vị hoặc cá nhân). \newline
-            3. Hệ thống lưu trữ thông tin phân công trên văn bản và gửi thông báo đến các đối tượng liên quan.
+            3. Ứng dụng gửi phiếu giải quyết; iOffice tiếp nhận và lưu các phân công hợp lệ, rồi phản hồi kết quả.
         },
-    exflow={- \textit{3a (Đối tượng không hợp lệ):} Người dùng chọn đối tượng không có quyền nhận nhiệm vụ $\rightarrow$ Hệ thống từ chối và thông báo lỗi.},
-    post={Thông tin phân công được lưu trữ và các đối tượng nhận nhiệm vụ được thông báo kịp thời.},
+    exflow={- iOffice từ chối dữ liệu hoặc không thể lưu: hiển thị lỗi, không xác nhận đã lưu.},
+    post={Thông tin phân công được ghi nhận khi iOffice chấp nhận. Phát sinh thông báo phụ thuộc hành động và bước luân chuyển văn bản.},
     label={tab:uc_off_01}
 }
 
@@ -101,17 +77,17 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
     shortname={Tham mưu văn bản},
     actor={Lãnh đạo phòng Hành chính},
     desc={Thực hiện tham mưu cho văn bản đến.},
-    pre={Lãnh đạo phòng Hành chính đã đăng nhập vào hệ thống.},
+    pre={Người dùng đã đăng nhập, có quyền tham mưu ở bước hiện tại và phiếu giải quyết đã có người chỉ đạo.},
     trigger={Người dùng mở màn hình chi tiết văn bản đến.},
     mainflow={
             1. Người dùng xem chi tiết văn bản đến và các thông tin liên quan. \newline
             2. Người dùng nhập ý kiến và gửi tham mưu. \newline
-            3. Hệ thống cập nhật trạng thái văn bản và lưu trữ thông tin thao tác.
+            3. iOffice ghi nhận ý kiến và xử lý quy trình văn bản theo quyền, trạng thái hiện tại.
         },
     altflow={
-            - \textit{1a (Thực hiện phân công trách nhiệm):} Nếu chưa có thông tin phân công, người dùng tiến hành phân công trách nhiệm (nếu có quyền) (UC-OFF-01). \newline
+            - \textit{1a (Thiếu người chỉ đạo):} Ứng dụng yêu cầu bổ sung người chỉ đạo trên phiếu giải quyết trước khi gửi; người có quyền thực hiện UC-OFF-01.
         },
-    post={Trạng thái nhiệm vụ được cập nhật và thông tin thao tác được lưu trữ chính thức.},
+    post={Ý kiến tham mưu và kết quả xử lý văn bản được iOffice ghi nhận.},
     label={tab:uc_off_02}
 }
 
@@ -126,13 +102,13 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
     mainflow={
             1. Người dùng xem chi tiết văn bản đến và các thông tin liên quan. \newline
             2. Người dùng nhập ý kiến và gửi chỉ đạo. \newline
-            3. Hệ thống cập nhật trạng thái nhiệm vụ và lưu trữ thông tin thao tác.
+            3. iOffice ghi nhận ý kiến chỉ đạo và cập nhật quy trình văn bản theo điều kiện hiện tại.
         },
     altflow={
             - \textit{1a (Thực hiện phân công trách nhiệm):} Nếu chưa có thông tin phân công, người dùng tiến hành phân công trách nhiệm (nếu có quyền) (UC-OFF-01). \newline
-            - \textit{3a (Khởi tạo nhiệm vụ liên kết):} Tại bước 3, nếu văn bản là loại \textit{Triển khai nhiệm vụ}, hệ thống sẽ tự động tạo một nhiệm vụ tương ứng trong hệ thống quản lý nhiệm vụ. \newline
+            - \textit{3a (Nhiệm vụ liên kết):} Khi đã đủ ý kiến chỉ đạo theo phân công, có bước triển khai tiếp theo, văn bản không phải loại thông tin và có người thực hiện, iOffice có thể tạo nhiệm vụ liên kết theo quy trình. \newline
         },
-    post={Trạng thái nhiệm vụ được cập nhật và thông tin thao tác được lưu trữ chính thức.},
+    post={Ý kiến chỉ đạo và kết quả xử lý văn bản được ghi nhận; nhiệm vụ liên kết chỉ phát sinh khi đủ điều kiện quy trình.},
     label={tab:uc_off_03}
 }
 
@@ -161,15 +137,15 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
     id={UC-SCH-01},
     name={Điểm danh hoặc báo vắng cuộc họp},
     shortname={Điểm danh cuộc họp},
-    actor={Nhân sự / Giảng viên có quyền xem lịch, gồm người được phân công và khách tham dự},
-    desc={Cho phép người tham dự ghi nhận có mặt, hoàn tác điểm danh hoặc báo vắng có lý do đối với cuộc họp có cấu hình điểm danh.},
-    pre={Người dùng đã đăng nhập, có quyền sử dụng lịch và cuộc họp được cấu hình tính năng điểm danh.},
+    actor={Nhân sự có quyền sử dụng phân hệ lịch, gồm người được phân công và khách tham dự},
+    desc={Ghi nhận có mặt, hoàn tác hoặc báo vắng có lý do theo người dùng trong phiên.},
+    pre={Người dùng đã đăng nhập, có quyền sử dụng phân hệ lịch; mục lịch tồn tại, chưa bị xóa và có thời gian phù hợp. Đối với luồng trên mobile, người dùng cần mở được chi tiết cuộc họp.},
     trigger={Người dùng mở màn hình chi tiết cuộc họp trên ứng dụng di động.},
     mainflow={
             1. Người dùng mở xem chi tiết cuộc họp trên giao diện Lịch hoặc từ thông báo nhắc việc. \newline
             2. Ứng dụng hiển thị các thao tác điểm danh phù hợp với trạng thái cuộc họp. \newline
             3. Người dùng chọn điểm danh có mặt hoặc báo vắng và nhập lý do khi cần. \newline
-            4. Ứng dụng gửi yêu cầu đến iOffice; iOffice kiểm tra phiên, quyền sử dụng lịch và khung thời gian cho phép. \newline
+            4. Ứng dụng gửi yêu cầu; iOffice kiểm tra phiên, quyền phân hệ lịch, sự tồn tại của mục lịch, thời gian và trạng thái tham dự hiện tại. \newline
             5. iOffice ghi nhận theo dòng phân công nếu có; nếu không, ghi nhận khách tự điểm danh riêng. Ứng dụng cập nhật trạng thái tham dự từ phản hồi.
         },
     altflow={
@@ -178,7 +154,8 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
         },
     exflow={
             - \textit{Ngoại lệ 4a (Ngoài khung thời gian):} Thao tác thực hiện ngoài khung giờ quy định $\rightarrow$ hệ thống từ chối và thông báo lý do. \newline
-            - \textit{Ngoại lệ 4b (Không đủ quyền hoặc phiên không hợp lệ):} iOffice từ chối yêu cầu và không tạo bản ghi tham dự.
+            - \textit{Ngoại lệ 4b (Không đủ quyền phân hệ, phiên không hợp lệ hoặc lịch đã xóa):} iOffice từ chối yêu cầu. \newline
+            - \textit{Ngoại lệ 4c (Thiếu lý do hoặc đã có mặt):} Báo vắng phải có lý do hợp lệ; thao tác điểm danh lại khi đã có mặt bị từ chối.
         },
     post={Trạng thái tham dự được ghi nhận và kết quả mới được phản hồi trên ứng dụng.},
     label={tab:uc_sch_01}
@@ -186,32 +163,70 @@ Các use case thuộc nhóm Văn phòng số, nhiệm vụ và lịch công tác
 
 \usecasespec{
     id={UC-SCH-02},
-    name={Xem lịch công tác tổng hợp},
+    name={Xem lịch làm việc tổng hợp},
     shortname={Xem lịch tổng hợp},
-    actor={Nhân sự / Giảng viên},
+    actor={Nhân sự},
     desc={Cho phép người dùng theo dõi lịch họp iOffice, lịch nghỉ phép HRM và lịch công tác HRM trên một giao diện tuần duy nhất.},
     pre={Người dùng đã đăng nhập và có quyền truy cập dữ liệu nguồn tương ứng.},
-    trigger={Người dùng mở màn hình Lịch công tác trên ứng dụng di động.},
+    trigger={Người dùng mở mục ``Lịch biểu'' trên ứng dụng di động.},
     mainflow={
-            1. Người dùng mở mục ``Lịch công tác'' trên ứng dụng. \newline
-            2. Ứng dụng đồng thời tải các sự kiện lịch mà người dùng được phép xem từ hệ thống iOffice và HRM. \newline
+            1. Người dùng mở mục ``Lịch biểu'' trên ứng dụng. \newline
+            2. Ứng dụng tải lịch iOffice và các dữ liệu nghỉ phép, công tác HRM được phép truy cập trong khoảng thời gian cần xem. \newline
             3. Ứng dụng hiển thị các sự kiện trên giao diện lịch tuần thống nhất, phân biệt rõ nguồn dữ liệu qua màu sắc và nhãn phân loại. \newline
             4. Người dùng chọn một sự kiện cụ thể để xem chi tiết hoặc chuyển đến màn hình nghiệp vụ liên quan.
         },
-    altflow={
-            - \textit{Luồng 3a (Lọc theo nguồn dữ liệu):} Người dùng có thể bật/tắt hiển thị từng nguồn lịch (chỉ xem lịch họp hoặc chỉ xem lịch phép/công tác).
-        },
     exflow={
-            - \textit{Ngoại lệ 2a (Không tải được đầy đủ dữ liệu lịch):} Ứng dụng thông báo trạng thái lỗi và cho phép người dùng thực hiện lại thao tác.
+            - \textit{Ngoại lệ 2a (Lỗi tải lịch):} Khi có lỗi được truyền đến giao diện, ứng dụng hiển thị lỗi và cho phép tải lại. Yêu cầu xử lý lỗi từng nguồn được nêu ở NFR-01; mức đáp ứng hiện tại được đối chiếu tại Chương~6.
         },
-    post={Người dùng có góc nhìn lịch trình toàn diện mà không làm thay đổi hay sai lệch dữ liệu nghiệp vụ gốc.},
+    post={Các sự kiện tải được hiển thị trên lịch tổng hợp; việc tra cứu không thay đổi dữ liệu nguồn.},
     label={tab:uc_sch_02}
 }
+
+Điểm danh có mặt và hoàn tác được thực hiện từ một giờ trước giờ bắt đầu đến hết ngày kết thúc cuộc họp. Báo vắng được thực hiện đến hết ngày bắt đầu, với lý do từ 1 đến 200 ký tự sau khi loại khoảng trắng đầu/cuối. Chuyển từ vắng sang có mặt tuân theo cửa sổ điểm danh. Thẻ thống kê đếm các dòng phân công; khách được hiển thị ở nhóm riêng, không cộng vào tổng này.
+
+\subsubsection{Tạo và đăng ký cuộc họp}
+
+\usecasespec{
+ id={UC-SCH-03}, name={Tạo và đăng ký cuộc họp}, shortname={Tạo cuộc họp},
+ actor={Chuyên viên BGH được cấp quyền đối với tạo trực tiếp Trường; nhân sự có quyền tương ứng đối với các nhánh khác},
+ desc={Chuẩn bị và lưu thông tin cuộc họp bằng biểu mẫu native, lựa chọn nhánh theo quyền do iOffice cung cấp.},
+ pre={Người dùng đăng nhập, có quyền sử dụng lịch và quyền của nhánh được chọn; danh mục, quy trình đang hoạt động đáp ứng yêu cầu backend.},
+ trigger={Người dùng chọn Tạo lịch trên màn hình Lịch biểu.},
+ mainflow={1. Ứng dụng hiển thị các lựa chọn tạo được tài khoản cho phép. \newline
+ 2. Chuyên viên BGH chọn tạo trực tiếp lịch Trường. \newline
+ 3. Người dùng nhập tiêu đề, loại lịch, thời gian, địa điểm và ghi chú; chọn chủ trì, người tham dự, thư ký và tệp theo quyền. \newline
+ 4. Ứng dụng kiểm tra biểu mẫu, gửi yêu cầu tạo tới iOffice. \newline
+ 5. iOffice kiểm tra quyền và thành phần; lịch Trường cần ít nhất một phân công thuộc BGH, HĐT hoặc VPĐU. Người tạo và đơn vị tạo được xác định từ phiên; lịch lưu ở bước tổng hợp cùng các phân công hợp lệ. \newline
+ 6. Hệ thống kích hoạt cơ chế gửi lời mời của bản demo sau khi lưu và trả kết quả; bước này không xác nhận thiết bị đã nhận thông báo. \newline
+ 7. Ứng dụng tải các tệp đã chọn bằng yêu cầu riêng rồi làm mới lịch; người tạo xem trạng thái chưa phát hành.},
+ altflow={- Nhánh đơn vị: lưu theo hợp đồng lịch đơn vị. \newline
+ - Nhánh đăng ký Trường: tạo phiếu đăng ký, lưu mục/tệp rồi gửi phiếu theo quy trình; không đồng nhất với tạo trực tiếp.},
+ exflow={- Dữ liệu chưa hợp lệ hoặc thiếu thành phần bắt buộc của lịch Trường: yêu cầu bổ sung; backend có thể trả thông báo lỗi chung. \newline
+ - Không đủ quyền, hết phiên hoặc lỗi lưu: backend từ chối, ứng dụng không thông báo đã tạo. \newline
+ - Đã nhận ID nhưng upload lỗi: mục lịch có thể đã tồn tại; ứng dụng giữ ID và phần tệp đã tải trong phiên form để thử lại trên mục đó. \newline
+ - Mất phản hồi tạo: kết quả có thể chưa xác định; không có bảo đảm chống trùng tuyệt đối khi tạo lại.},
+ post={Với nhánh trực tiếp thành công, mục lịch có người tạo, phân công và trạng thái tổng hợp; tệp được ghi nhận khi upload thành công. Lịch chưa được coi là phát hành chính thức.}, label={tab:uc_sch_03}
+}
+
+\begin{table}[H]
+\centering\small
+\caption{Các nhánh tạo và đăng ký lịch}\label{tab:schedule_create_permissions}
+\begin{tabularx}{\textwidth}{|L{3.5cm}|Y|}\hline
+\textbf{Nhánh} & \textbf{Ý nghĩa} \\\hline
+Đơn vị & Lập lịch họp nội bộ của đơn vị. \\\hline
+Đăng ký Trường & Lập và gửi phiếu đăng ký để được tiếp nhận theo quy trình. \\\hline
+Trực tiếp Trường & Lưu lịch họp cấp Trường ở bước tổng hợp, chưa phát hành chính thức. \\\hline
+\end{tabularx}
+\end{table}
+
+Các lựa chọn tạo lịch được hiển thị theo quyền tài khoản. Với nhánh tạo trực tiếp cấp Trường, lịch được lưu ở bước tổng hợp để tiếp tục xử lý, chưa phải lịch chính thức đã phát hành.
+
+Các quyết định tích hợp đối với chức năng tạo lịch được trình bày tại Mục~\ref{subsec:backend_hien_huu_va_mo_rong}.
 
 \subsubsection{Biểu đồ hoạt động}
 \subsubsubsection{Quy trình điểm danh và báo vắng cuộc họp}
 
-Quy trình điểm danh và báo vắng cuộc họp có điều kiện về phiên, quyền sử dụng lịch và thời gian thực hiện. Hình~\ref{fig:act_attendance} tập trung vào thao tác của người được phân công; nhánh khách tự điểm danh được nêu trong đặc tả \texttt{UC-SCH-01}.
+Hình~\ref{fig:act_attendance} minh họa quy trình điểm danh và báo vắng của người được phân công. Nhánh khách và khung thời gian được mô tả tại UC-SCH-01 và biểu đồ tuần tự.
 
 \begin{figure}[H]
     \centering
@@ -221,7 +236,7 @@ Quy trình điểm danh và báo vắng cuộc họp có điều kiện về phi
 \end{figure}
 
 \subsubsubsection{Quy trình xử lý văn bản đến}
-Quy trình xử lý văn bản đến có nhiều bước và điều kiện nghiệp vụ phức tạp, do đó cũng được lựa chọn để mô tả bằng biểu đồ hoạt động.
+Hình~\ref{fig:ID_ACT} thể hiện luân chuyển văn bản đến qua các bước xử lý.
 
 \begin{figure}[H]
     \centering
@@ -232,13 +247,24 @@ Quy trình xử lý văn bản đến có nhiều bước và điều kiện ngh
 
 \subsubsection{Biểu đồ tuần tự}
 
-Biểu đồ tuần tự mô tả sự tương tác ở mức logic giữa người dùng, MyHCMUT Mobile và hệ thống iOffice trong quá trình điểm danh hoặc báo vắng cuộc họp. Khi người dùng thực hiện thao tác trên ứng dụng, yêu cầu được chuyển đến hệ thống iOffice để kiểm tra các điều kiện nghiệp vụ và ghi nhận kết quả. Trạng thái tham dự sau xử lý được trả về MyHCMUT Mobile để cập nhật thông tin hiển thị cho người dùng.
+\subsubsubsection{Điểm danh và báo vắng cuộc họp}
 
-Hình~\ref{fig:seq_attendance} thể hiện trình tự tương tác của use case UC-SCH-01. Biểu đồ chỉ tập trung vào sự phối hợp giữa các thành phần ở mức hệ thống; các thành phần hiện thực và cơ chế giao tiếp chi tiết được trình bày tại Chương~5.
+Hình~\ref{fig:seq_attendance} thể hiện kiểm tra điều kiện, ghi nhận theo phân công hoặc khách và cập nhật kết quả của UC-SCH-01.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{image/uml/seq_attendance.png}
     \caption{Biểu đồ tuần tự Điểm danh và báo vắng cuộc họp}
     \label{fig:seq_attendance}
+\end{figure}
+
+\subsubsubsection{Tạo trực tiếp lịch họp cấp Trường}
+
+Hình~\ref{fig:schedule_create_integration} thể hiện lưu lịch ở tổng hợp và bổ sung tài liệu sau đó. Lỗi tải tài liệu không làm mất lịch đã lưu; tạo trực tiếp chưa phải phát hành lịch chính thức.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{image/uml/seq_schedule_create.png}
+    \caption{Biểu đồ tuần tự nghiệp vụ tạo trực tiếp lịch họp cấp Trường}
+    \label{fig:schedule_create_integration}
 \end{figure}

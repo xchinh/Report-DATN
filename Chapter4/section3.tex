@@ -1,29 +1,30 @@
 \section{Yêu cầu phi chức năng}
 \label{sec:yeucau_phichucnang}
 
-Bên cạnh các yêu cầu chức năng, MyHCMUT Mobile cần đáp ứng một số yêu cầu phi chức năng nhằm bảo đảm khả năng sử dụng ổn định trên thiết bị di động và phù hợp với việc tích hợp các hệ thống nghiệp vụ hiện hữu của Nhà trường. Danh mục các yêu cầu phi chức năng được tổng hợp trong Bảng~\ref{tab:nfr}.
+Các yêu cầu phi chức năng xác định những mục tiêu chất lượng cần xem xét trong quá trình thiết kế và hiện thực MyHCMUT Mobile. Mức độ đáp ứng được đánh giá thông qua kết quả kiểm thử và các giới hạn trình bày tại Chương~6.
 
 \begin{table}[H]
-\centering
-\small
+\centering\small
 \caption{Yêu cầu phi chức năng của MyHCMUT Mobile}
 \label{tab:nfr}
 \begin{tabularx}{\textwidth}{|L{1.8cm}|L{3.4cm}|Y|}
 \hline
 \textbf{Mã} & \textbf{Yêu cầu} & \textbf{Nội dung đặc tả} \\
 \hline
-NFR-01 & Tính ổn định & Ứng dụng cần xử lý phù hợp các trường hợp mất kết nối, quá thời gian chờ hoặc hệ thống nghiệp vụ tạm thời không khả dụng. Khi thao tác không thành công, ứng dụng cần thông báo trạng thái lỗi cho người dùng và không hiển thị kết quả thành công khi chưa nhận được xác nhận từ hệ thống nghiệp vụ tương ứng. \\
+NFR-01 & Tính ổn định & Cần xử lý mất kết nối, quá thời gian chờ và lỗi hệ thống nguồn. Cần phân biệt dữ liệu rỗng với dữ liệu chưa tải được; chỉ báo thao tác thành công sau xác nhận của backend. \\
 \hline
-NFR-02 & Khả năng sử dụng & Giao diện cần được tổ chức nhất quán và phù hợp với thao tác trên thiết bị di động. Các quy trình có nhiều thông tin cần nhập cần được chia thành các bước hợp lý; trạng thái tải, lỗi và kết quả xử lý cần được thể hiện rõ để người dùng có thể theo dõi và tiếp tục thao tác. \\
+NFR-02 & Khả năng sử dụng & Giao diện cần nhất quán, phù hợp thao tác di động; biểu mẫu nhiều thông tin được chia bước. Cần thể hiện trạng thái tải, lỗi, kết quả và điều kiện tiếp tục thao tác. \\
 \hline
-NFR-03 & Bảo mật và phân quyền & Người dùng phải được xác thực trước khi truy cập các chức năng nghiệp vụ. Các chức năng được hiển thị phù hợp với vai trò của người dùng, trong khi quyền truy cập dữ liệu và thực hiện các thao tác nghiệp vụ được kiểm tra tại hệ thống phía máy chủ. \\
+NFR-03 & Bảo mật và phân quyền & Cần xác thực trước khi truy cập nghiệp vụ. UI phản ánh quyền tài khoản; backend cần kiểm tra quyền theo nghiệp vụ, đối tượng và bước xử lý, kể cả yêu cầu gọi trực tiếp. \\
 \hline
-NFR-04 & Tính nhất quán dữ liệu & Dữ liệu nghiệp vụ chính thức được quản lý tại các hệ thống nghiệp vụ tương ứng. Dữ liệu lưu cục bộ trên ứng dụng, nếu có, chỉ phục vụ hỗ trợ quá trình sử dụng và không thay thế dữ liệu tại hệ thống nguồn. Các thao tác làm thay đổi dữ liệu chỉ được xem là hoàn tất sau khi được hệ thống nghiệp vụ ghi nhận. \\
+NFR-04 & Tính nhất quán dữ liệu & Dữ liệu chính thức do hệ thống nguồn quản lý; dữ liệu cục bộ chỉ hỗ trợ sử dụng. Sau thao tác ghi, cần phản ánh kết quả được backend ghi nhận; kết quả chưa xác định khi mất phản hồi không được coi là lưu thất bại chắc chắn. \\
 \hline
-NFR-05 & Khả năng bảo trì và mở rộng & Mã nguồn ứng dụng cần được tổ chức theo các nhóm chức năng nghiệp vụ và phân tách các thành phần dùng chung nhằm hạn chế sự phụ thuộc không cần thiết. Cách tổ chức này hỗ trợ việc thay đổi, bổ sung và kiểm thử các chức năng trong quá trình phát triển và bảo trì hệ thống. \\
+NFR-05 & Khả năng bảo trì và mở rộng & Mục tiêu thiết kế là tổ chức mã theo nhóm nghiệp vụ và tách thành phần dùng chung, hạn chế phụ thuộc không cần thiết để hỗ trợ thay đổi và kiểm thử. \\
 \hline
 \end{tabularx}
 \end{table}
+
+Các yêu cầu trên được dùng làm tiêu chí đối chiếu khi đánh giá hệ thống. Kết quả đánh giá và các giới hạn tương ứng được trình bày tại Chương~6.
 
 \section{Kết luận chương}
 \label{sec:ketluan_chuong4}

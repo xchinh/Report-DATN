@@ -1,0 +1,44 @@
+
+flowchart LR
+    user["Người dùng<br/>(Nhân sự)"]
+
+    subgraph client["TẦNG ỨNG DỤNG DI ĐỘNG"]
+        mobile["MyHCMUT Mobile<br/>(Flutter native)"]
+        sqlite[("SQLite<br/>(Danh mục HRM cục bộ)")]
+        mobile <-->|Đọc và ghi danh mục cục bộ| sqlite
+    end
+
+    subgraph services["TẦNG DỊCH VỤ BACKEND"]
+        auth["Auth Service<br/>"]
+        ioffice["iOffice Backend<br/>(Nghiệp vụ văn phòng số)"]
+        hrm["HRM Backend<br/>(Nghiệp vụ nhân sự)"]
+    end
+
+    subgraph data["TẦNG DỮ LIỆU VÀ LƯU TRỮ"]
+        authdb[("CSDL Auth<br/>(PostgreSQL)")]
+        iofficedb[("CSDL iOffice<br/>(PostgreSQL)")]
+        hrmdb[("CSDL HRM<br/>(PostgreSQL)")]
+        redis[("Redis<br/>")]
+    end
+
+    subgraph external["DỊCH VỤ BÊN NGOÀI"]
+        fcm["Firebase Cloud Messaging<br/>(FCM)"]
+    end
+
+    user --> mobile
+    mobile --> auth
+    auth --> mobile
+    mobile --> ioffice
+    mobile --> hrm
+    mobile <-->|Kết nối thời gian thực<br/>Socket.IO · điểm danh| ioffice
+
+    auth --> authdb
+    ioffice --> iofficedb
+    hrm --> hrmdb
+    auth --> redis
+    ioffice --> redis
+    hrm --> redis
+
+    ioffice -.->|Gửi thông báo| fcm
+    hrm -.->|Gửi thông báo| fcm
+    fcm -->|Push notification| mobile

@@ -18,9 +18,9 @@
 \cline{2-4}
  & \texttt{ten} & text & Tên quy trình. \\
 \hline
-\texttt{fw\_quy\_trinh\_buoc} & \texttt{ma} & text (PK) & Định danh bước quy trình. \\
+\texttt{fw\_quy\_trinh\_buoc} & \texttt{ma} & text (PK, NOT NULL) & Mã bước; thuộc khóa chính ghép với \texttt{ma\_quy\_trinh}. \\
 \cline{2-4}
- & \texttt{ma\_quy\_trinh} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh}) & Liên kết logic đến quy trình. \\
+ & \texttt{ma\_quy\_trinh} & text (PK, NOT NULL) & Mã quy trình; thuộc khóa chính ghép với \texttt{ma}. \\
 \cline{2-4}
  & \texttt{is\_primary} & boolean  & Xác định bước có phải là bước chính hay không. \\
 \cline{2-4}
@@ -36,9 +36,9 @@
 \hline
 \texttt{fw\_quy\_trinh\_target} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh mục tiêu trong quy trình. \\
 \cline{2-4}
- & \texttt{quy\_trinh\_buoc} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh\_buoc}) & Mã bước quy trình. \\
+ & \texttt{quy\_trinh\_buoc} & text & Mã bước; diễn giải cùng \texttt{ma\_quy\_trinh} qua logic backend. \\
 \cline{2-4}
- & \texttt{ma\_quy\_trinh} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh}) & Mã quy trình. \\
+ & \texttt{ma\_quy\_trinh} & text & Mã quy trình dùng để xác định cấu hình bước. \\
 \cline{2-4}
  & \texttt{role} & jsonb  & Danh sách vai trò có quyền xử lý. \\
 \cline{2-4}
@@ -46,7 +46,7 @@
 \cline{2-4}
  & \texttt{trang\_thai} & text  & Mã thao tác xử lý. \\
 \cline{2-4}
- & \texttt{forward\_to} & text  & Khóa ngoại đến bước tiếp theo trong quy trình. \\
+ & \texttt{forward\_to} & text  & Mã bước tiếp theo do backend diễn giải trong quy trình. \\
 \cline{2-4}
  & \texttt{is\_create\_user} & boolean  & Xác định có phải là người tạo đơn xử lý bước này hay không. \\
 \end{xltabular}

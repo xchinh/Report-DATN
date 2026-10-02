@@ -1,31 +1,29 @@
 \section{Kiến trúc tổng thể hệ thống}
 \label{sec:kientruc_hethong}
 
-Ứng dụng MyHCMUT Mobile được phát triển nhằm cung cấp một điểm truy cập trên thiết bị di động đến các chức năng nhân sự và văn phòng số của Trường Đại học Bách khoa -- ĐHQG-HCM. Thay vì xây dựng lại các hệ thống nghiệp vụ hiện hữu, đề tài tập trung phát triển ứng dụng Flutter và bổ sung những điểm tích hợp cần thiết để khai thác chức năng, dữ liệu và quy trình xử lý từ HRM và iOffice.
+MyHCMUT Mobile được xây dựng nhằm cung cấp một điểm truy cập trên thiết bị di động cho các nghiệp vụ nhân sự và văn phòng số đang được quản lý bởi HRM và iOffice. Thay vì xây dựng lại các hệ thống nghiệp vụ hiện hữu, ứng dụng tích hợp trực tiếp với các backend tương ứng thông qua API. Theo đó, ứng dụng di động đảm nhiệm tương tác với người dùng và tổng hợp dữ liệu phục vụ hiển thị, trong khi HRM và iOffice tiếp tục quản lý dữ liệu, quy trình nghiệp vụ và quyền truy cập thuộc phạm vi của từng hệ thống.
 
-Kiến trúc tổng thể của hệ thống được thể hiện tại Hình~\ref{fig:mobile_overall_architecture}, gồm ứng dụng di động, các dịch vụ backend, giao diện HRM Web, tầng dữ liệu và các dịch vụ hỗ trợ. Trong đó, ứng dụng di động đảm nhiệm tương tác với người dùng và kết nối đến các hệ thống nghiệp vụ; các backend tiếp tục chịu trách nhiệm xác thực yêu cầu, kiểm tra quyền truy cập, xử lý nghiệp vụ và quản lý dữ liệu thuộc phạm vi của từng hệ thống.
+Kiến trúc tổng thể được thể hiện tại Hình~\ref{fig:mobile_overall_architecture}, bao gồm ứng dụng MyHCMUT Mobile, Auth Service, HRM Backend, iOffice Backend, các cơ sở dữ liệu nghiệp vụ và những dịch vụ hỗ trợ cho ứng dụng di động.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\linewidth,height=0.32\textheight,keepaspectratio]{image/architecture/architecture_overall.png}
+    \includegraphics[width=0.95\linewidth,height=0.48\textheight,keepaspectratio]{image/architecture/architecture_overall.png}
     \caption[Kiến trúc tổng thể hệ thống MyHCMUT Mobile]{Kiến trúc tổng thể hệ thống MyHCMUT Mobile}
     \label{fig:mobile_overall_architecture}
 \end{figure}
 
-\textbf{Ứng dụng MyHCMUT Mobile} được xây dựng bằng Flutter, cung cấp giao diện cho các chức năng hồ sơ nhân sự, nghỉ phép, đi công tác, văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng kết nối trực tiếp đến các backend thông qua API và sử dụng WebView để tái sử dụng biểu mẫu cập nhật hồ sơ nhân sự từ HRM Web.
+\textbf{Ứng dụng MyHCMUT Mobile} được xây dựng bằng Flutter, cung cấp giao diện cho các chức năng hồ sơ nhân sự, nghỉ phép, công tác, văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Các biểu mẫu cập nhật hồ sơ và tạo hoặc đăng ký cuộc họp thuộc phạm vi mobile được hiện thực trực tiếp bằng Flutter. Ứng dụng quản lý dữ liệu nhập, trạng thái giao diện và việc gọi API; dữ liệu nghiệp vụ chỉ được xem là cập nhật thành công sau khi được backend tương ứng tiếp nhận và xử lý.
 
-\textbf{Auth Service} tiếp nhận yêu cầu đăng nhập và cấp thông tin xác thực cho ứng dụng di động. Sau khi đăng nhập thành công, ứng dụng sử dụng access token khi gửi yêu cầu đến HRM Backend và iOffice Backend. Mỗi backend tự xác thực token, thiết lập ngữ cảnh người dùng và kiểm tra quyền thực hiện nghiệp vụ tương ứng. Auth Service không đóng vai trò trung gian chuyển tiếp các yêu cầu nghiệp vụ giữa ứng dụng và hai backend này.
+\textbf{Auth Service} cung cấp chức năng đăng nhập và cấp token cho ứng dụng. Sau khi xác thực thành công, MyHCMUT Mobile sử dụng token khi gửi yêu cầu đến HRM Backend và iOffice Backend. Auth Service không đóng vai trò trung gian chuyển tiếp các yêu cầu nghiệp vụ; mỗi backend trực tiếp xác thực yêu cầu, thiết lập ngữ cảnh người dùng và kiểm tra quyền đối với thao tác được yêu cầu.
 
-\textbf{HRM Backend} cung cấp các chức năng quản lý nhân sự, bao gồm hồ sơ nhân sự, nghỉ phép, đi công tác và các quy trình phê duyệt liên quan. Đề tài kế thừa các nghiệp vụ và quy trình hiện hữu, đồng thời bổ sung hoặc điều chỉnh một số API và cơ chế tích hợp để phục vụ ứng dụng di động. HRM Backend tiếp tục chịu trách nhiệm xử lý nghiệp vụ và quản lý dữ liệu nhân sự tại hệ thống nguồn.
+\textbf{HRM Backend} quản lý các nghiệp vụ liên quan đến hồ sơ nhân sự, nghỉ phép, công tác và các quy trình phê duyệt tương ứng. Đề tài kế thừa dữ liệu và quy trình nghiệp vụ hiện hữu, đồng thời tích hợp, bổ sung hoặc điều chỉnh một số API và cơ chế cần thiết để hỗ trợ ứng dụng di động. Việc kiểm tra điều kiện nghiệp vụ và cập nhật dữ liệu nhân sự chính thức tiếp tục được thực hiện tại HRM Backend.
 
-\textbf{iOffice Backend} cung cấp các chức năng văn phòng số, bao gồm văn bản đến, văn bản đi, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng di động chủ yếu khai thác các API hiện hữu của iOffice để hiển thị thông tin và thực hiện các thao tác được phép. Một số điều chỉnh hỗ trợ mở đúng nội dung từ thông báo được thực hiện tại các thành phần liên quan. Trong phạm vi hiện tại, ứng dụng sử dụng giao diện native và API của iOffice; iOffice Web không được xem là một luồng WebView đã tích hợp hoàn chỉnh.
+\textbf{iOffice Backend} cung cấp các nghiệp vụ văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng khai thác các API của iOffice để truy xuất dữ liệu và thực hiện những thao tác được phân quyền. Đối với chức năng tạo hoặc đăng ký lịch họp trên mobile, iOffice tiếp tục chịu trách nhiệm kiểm tra quyền, lưu dữ liệu và quản lý quy trình phát hành lịch.
 
-\textbf{HRM Web} là giao diện Web hiện hữu được ứng dụng tái sử dụng để cập nhật hồ sơ nhân sự. Khi người dùng mở chức năng này, ứng dụng yêu cầu một vé xác thực dùng một lần và mở biểu mẫu trong WebView. HRM Web gửi vé đến HRM Backend để thiết lập phiên làm việc trên Web, sau đó người dùng có thể thao tác trên biểu mẫu mà không cần đăng nhập lại. Cơ chế chuyển tiếp phiên được trình bày chi tiết tại Mục~\ref{sec:tich_hop_he_thong}.
+\textbf{Tầng dữ liệu} gồm các cơ sở dữ liệu nghiệp vụ riêng của HRM và iOffice. Ứng dụng di động không kết nối trực tiếp đến các cơ sở dữ liệu và không tự thay đổi trạng thái phê duyệt của nghiệp vụ. Giao diện Web của các hệ thống nguồn tiếp tục phục vụ quản trị và những nghiệp vụ nằm ngoài phạm vi mobile.
 
-\textbf{Tầng dữ liệu và lưu trữ hỗ trợ} gồm các cơ sở dữ liệu PostgreSQL riêng biệt của HRM và iOffice, cùng Redis phục vụ vé SSO và phiên Web. Ứng dụng di động không truy cập trực tiếp các thành phần lưu trữ này mà trao đổi dữ liệu thông qua backend tương ứng. Mỗi hệ thống nghiệp vụ tiếp tục quản lý dữ liệu và các quy tắc xử lý thuộc phạm vi của mình. Các nhóm dữ liệu liên quan trực tiếp đến ứng dụng được trình bày tại Mục~\ref{sec:thietke_csdl}.
+Bên cạnh giao tiếp API, ứng dụng sử dụng Firebase Cloud Messaging để tiếp nhận thông báo từ các hệ thống nghiệp vụ và Socket.IO để hỗ trợ cập nhật trạng thái điểm danh giữa các thiết bị đang theo dõi. Dữ liệu lịch từ HRM và iOffice được tổng hợp tại ứng dụng để cung cấp một giao diện lịch thống nhất cho người dùng.
 
-Bên cạnh các kết nối API, ứng dụng tiếp nhận thông báo đẩy qua Firebase Cloud Messaging từ các hệ thống nghiệp vụ và sử dụng Socket.IO cho chức năng điểm danh cuộc họp theo thời gian thực. Ứng dụng cũng tổng hợp dữ liệu lịch từ HRM và iOffice để hiển thị trong một giao diện thống nhất. Các cơ chế tích hợp này được trình bày tại Mục~\ref{sec:tich_hop_he_thong}.
+Việc kết nối với nhiều backend cho phép ứng dụng tái sử dụng các nghiệp vụ và dữ liệu hiện hữu, đồng thời duy trì quyền quản lý dữ liệu tại từng hệ thống nguồn. Đổi lại, ứng dụng cần quản lý riêng cấu hình kết nối, trạng thái và lỗi phát sinh từ từng miền dịch vụ. Khi một hệ thống nguồn gặp sự cố, mức độ ảnh hưởng phụ thuộc vào các chức năng đang sử dụng dữ liệu từ hệ thống đó.
 
-Việc kết nối trực tiếp đến nhiều backend giúp đề tài tái sử dụng API hiện hữu và duy trì quyền xử lý nghiệp vụ tại từng hệ thống nguồn, nhưng đồng thời yêu cầu ứng dụng tự quản lý cấu hình kết nối, lỗi và trạng thái của từng miền dịch vụ. Việc tách các miền dịch vụ có thể giới hạn ảnh hưởng của sự cố theo từng nhóm chức năng; mức độ suy giảm cụ thể phụ thuộc vào những backend mà chức năng đang sử dụng.
-
-Như vậy, phạm vi phát triển của đề tài tập trung vào ứng dụng MyHCMUT Mobile và các phần mở rộng tích hợp với hệ thống hiện hữu. HRM Backend, iOffice Backend cùng các cơ sở dữ liệu tương ứng được kế thừa mà không xây dựng mới. Cấu trúc các thành phần và điểm mở rộng này được trình bày chi tiết tại Mục~\ref{sec:thietke_kientruc_thanhphan}.
+Phạm vi kế thừa và phần phát triển của đề tài được trình bày cụ thể tại Bảng~\ref{tab:component_ownership_scope}.
