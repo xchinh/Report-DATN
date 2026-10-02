@@ -1,0 +1,5 @@
+{
+  "theme": "neutral",
+  "themeVariables": {"fontFamily": "DejaVu Sans", "fontSize": "18px"},
+  "sequence": {"actorFontSize": 18, "messageFontSize": 18, "noteFontSize": 16, "actorMargin": 30, "width": 120, "mirrorActors": false}
+}

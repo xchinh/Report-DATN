@@ -55,7 +55,7 @@ Trong đề tài, REST API và HTTPS là cơ sở cho việc tích hợp ứng d
 \subsection{Xác thực dựa trên JWT}
 \label{subsec:session_jwt}
 
-JSON Web Token (JWT), được định nghĩa trong chuẩn RFC 7519~\cite{jwt_rfc}, là một định dạng token cho phép biểu diễn các thông tin dưới dạng tập hợp các claim. Một JWT thông dụng gồm ba phần: \textbf{Header}, \textbf{Payload} và \textbf{Signature}, như minh họa trong Hình~\ref{fig:jwt_structure}.
+JSON Web Token (JWT), được định nghĩa trong chuẩn RFC 7519~\cite{jwt_rfc}, là một định dạng token dùng để biểu diễn các thông tin dưới dạng tập hợp các claim. Một JWT thông dụng gồm ba phần: Header, Payload và Signature, như minh họa trong Hình~\ref{fig:jwt_structure}.
 
 \begin{figure}[H]
     \centering
@@ -64,10 +64,8 @@ JSON Web Token (JWT), được định nghĩa trong chuẩn RFC 7519~\cite{jwt_r
     \label{fig:jwt_structure}
 \end{figure}
 
-Header mô tả thông tin liên quan đến token (chẳng hạn loại token và thuật toán ký); payload chứa các claim (như định danh người dùng, thời điểm phát hành và hạn hết hiệu lực); signature được sử dụng để kiểm tra tính toàn vẹn và nguồn phát hành của token theo cơ chế ký tương ứng.
+Header chứa thông tin mô tả token và thuật toán ký; Payload chứa các claim liên quan đến token; Signature được sử dụng để kiểm tra tính toàn vẹn của token theo cơ chế ký tương ứng. Nội dung Payload thông thường chỉ được mã hóa theo Base64URL và không mặc nhiên được mã hóa để bảo mật nội dung. Vì vậy, không nên lưu thông tin nhạy cảm trong Payload với giả định rằng người khác không thể đọc được token.
 
-Trong mô hình xác thực dựa trên token, người dùng đăng nhập để nhận thông tin xác thực. Ứng dụng gửi token trong những yêu cầu tiếp theo đến dịch vụ tương ứng, thông thường qua tiêu đề HTTP \texttt{Authorization: Bearer <token>}. Backend có trách nhiệm kiểm tra tính hợp lệ của token và xác định người dùng có được phép thực hiện thao tác nghiệp vụ hay không.
+Trong mô hình xác thực dựa trên token, sau khi người dùng đăng nhập thành công, ứng dụng nhận thông tin xác thực và sử dụng token khi gửi các yêu cầu đến dịch vụ backend. Backend có trách nhiệm kiểm tra tính hợp lệ của token, xác định ngữ cảnh người dùng và kiểm tra quyền thực hiện nghiệp vụ tương ứng. Do đó, việc sử dụng JWT phục vụ xác thực không thay thế cơ chế phân quyền tại backend.
 
-JWT không mặc nhiên mã hóa nội dung payload (chuỗi payload thông thường chỉ được mã hóa dạng Base64URL). Vì vậy, không nên đưa thông tin bí mật vào payload chỉ với giả định rằng người khác không thể đọc được token. Việc sử dụng JWT cũng không đồng nghĩa mọi dịch vụ đều chấp nhận cùng một token hoặc có cùng phạm vi phân quyền.
-
-Trong MyHCMUT Mobile, cơ chế xác thực bằng token được sử dụng khi ứng dụng giao tiếp với các dịch vụ hiện hữu. Việc lựa chọn token phù hợp cho từng miền dịch vụ và cơ chế chuyển tiếp phiên làm việc sang giao diện Web được trình bày riêng tại Chương 5.
+Trong MyHCMUT Mobile, access token được sử dụng khi ứng dụng giao tiếp với các dịch vụ hiện hữu. Ứng dụng bổ sung token vào các yêu cầu API cần xác thực, trong khi các backend tương ứng chịu trách nhiệm xác thực token và kiểm tra quyền đối với nghiệp vụ được yêu cầu. Cách tổ chức các kết nối API, quản lý token và xử lý lỗi xác thực được trình bày chi tiết tại Chương 5.

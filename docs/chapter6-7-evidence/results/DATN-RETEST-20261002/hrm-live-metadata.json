@@ -1,0 +1,57 @@
+{
+  "functions": [
+    {
+      "schema": "public",
+      "name": "tcns_nghi_phep_dang_ky_insert",
+      "sha256": "a3eeddba8e5add106dfe3bec2db71e96e252e81800647955d85f645a708f7900",
+      "lines": 41,
+      "has_row_lock": false,
+      "has_advisory_lock": false,
+      "has_on_conflict": false
+    }
+  ],
+  "indexes": [
+    {
+      "tablename": "tcns_lich_ca_nhan",
+      "indexname": "tcns_lich_ca_nhan_pk",
+      "indexdef": "CREATE UNIQUE INDEX tcns_lich_ca_nhan_pk ON public.tcns_lich_ca_nhan USING btree (id)"
+    },
+    {
+      "tablename": "tcns_nghi_phep",
+      "indexname": "tcns_nghi_phep_phieu_id_index",
+      "indexdef": "CREATE INDEX tcns_nghi_phep_phieu_id_index ON public.tcns_nghi_phep USING btree (phieu_id)"
+    },
+    {
+      "tablename": "tcns_nghi_phep",
+      "indexname": "tcns_nghi_phep_pkey",
+      "indexdef": "CREATE UNIQUE INDEX tcns_nghi_phep_pkey ON public.tcns_nghi_phep USING btree (id)"
+    },
+    {
+      "tablename": "tcns_nghi_phep_dang_ky",
+      "indexname": "tcns_nghi_phep_dang_ky_pkey",
+      "indexdef": "CREATE UNIQUE INDEX tcns_nghi_phep_dang_ky_pkey ON public.tcns_nghi_phep_dang_ky USING btree (id)"
+    }
+  ],
+  "constraints": [
+    {
+      "table_name": "tcns_lich_ca_nhan",
+      "conname": "tcns_lich_ca_nhan_pk",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "tcns_nghi_phep",
+      "conname": "tcns_nghi_phep_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    },
+    {
+      "table_name": "tcns_nghi_phep_dang_ky",
+      "conname": "tcns_nghi_phep_dang_ky_pkey",
+      "contype": "p",
+      "definition": "PRIMARY KEY (id)"
+    }
+  ],
+  "mode": "BEGIN READ ONLY / ROLLBACK",
+  "user_defined_triggers": []
+}

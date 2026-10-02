@@ -1,0 +1,58 @@
+{
+  "checked_at": "2026-10-02T03:31:09.106237+07:00",
+  "git_diff_check": 0,
+  "artifact_hashes_checked": 48,
+  "artifact_hash_errors": [],
+  "current_document_links_checked": 111,
+  "broken_current_document_links": [],
+  "missing_latex_inputs": [],
+  "active_latex_content_changed_during_turn": [],
+  "deleted_inactive_latex_files": 2,
+  "obsolete_files_deleted": 20,
+  "new_artifact_known_credential_jwt_scan": "clean",
+  "source_repositories": [
+    {
+      "repo": "myhcmut-mobile",
+      "head_matches": true,
+      "working_tree_matches_baseline": true
+    },
+    {
+      "repo": "hrm-be",
+      "head_matches": true,
+      "working_tree_matches_baseline": true
+    },
+    {
+      "repo": "ioffice-be",
+      "head_matches": true,
+      "working_tree_matches_baseline": true
+    },
+    {
+      "repo": "myhcmut-be",
+      "head_matches": true,
+      "working_tree_matches_baseline": true
+    }
+  ],
+  "final_phone_actor": [
+    {
+      "domain": "Auth",
+      "expected_admin_matches": true
+    },
+    {
+      "domain": "HRM",
+      "expected_admin_matches": true
+    },
+    {
+      "domain": "iOffice",
+      "expected_admin_matches": true
+    }
+  ],
+  "e2e_authenticated_flows": "Native direct-school creation/pending navigation, creator guest/invited checkin, rollback and absence/change-to-present verified with real API/DB. API time/duplicate/deleted and other guest checks recorded separately. Other groups retain partial coverage; remaining branches in document 14.",
+  "calendar_creation_attendance": {
+    "cases_total": 11,
+    "pass_with_declared_ui_api_scope": 9,
+    "observed_behavior_or_limitation": 2,
+    "fixture_id": 387,
+    "soft_deleted": true,
+    "attendance_rows_remaining": 0
+  }
+}

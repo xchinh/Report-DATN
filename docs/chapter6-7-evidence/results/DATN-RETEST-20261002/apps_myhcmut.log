@@ -1,0 +1,7 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/apps/myhcmut/test/screens/switch_user_notifications_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/apps/myhcmut/test/screens/splash_screen_test.dart: SplashScreen navigates to /user when authenticated
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/apps/myhcmut/test/screens/switch_user_notifications_test.dart: switching account reinitializes notifications for the new user
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/apps/myhcmut/test/screens/switch_user_notifications_test.dart: switching account reinitializes notifications for the new user
+00:01 +3: /home/xchinh/workspace/myhcmut-mobile/apps/myhcmut/test/routing/app_router_test.dart: permission updates keep Back working on leave approval detail
+00:01 +4: /home/xchinh/workspace/myhcmut-mobile/apps/myhcmut/test/routing/app_router_test.dart: permission loading preserves the router and navigation history
+00:01 +5: All tests passed!

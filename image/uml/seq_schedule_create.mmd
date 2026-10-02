@@ -1,0 +1,31 @@
+sequenceDiagram
+ autonumber
+ actor User as Chuyên viên BGH
+ participant App as MyHCMUT Mobile
+ participant IOffice as Hệ thống iOffice
+ actor Invitee as Người được mời
+ User->>App: Chọn tạo trực tiếp lịch Trường
+ App-->>User: Mở biểu mẫu theo quyền
+ User->>App: Nhập thông tin, thành phần và tài liệu
+ App->>IOffice: Gửi yêu cầu tạo cuộc họp
+ IOffice->>IOffice: Kiểm tra quyền và thông tin cuộc họp
+ alt Không đáp ứng điều kiện
+  IOffice-->>App: Thông báo nguyên nhân từ chối
+  App-->>User: Hiển thị lỗi để điều chỉnh
+ else Đáp ứng điều kiện
+  IOffice->>IOffice: Ghi nhận lịch ở bước Tổng hợp
+  IOffice-->>Invitee: Gửi lời mời cuộc họp
+  IOffice-->>App: Xác nhận lịch đã được lưu
+  opt Có tài liệu đính kèm
+   App->>IOffice: Bổ sung tài liệu vào lịch đã lưu
+   alt Bổ sung thành công
+    IOffice-->>App: Xác nhận tài liệu
+   else Tài liệu chưa tải được
+    IOffice-->>App: Thông báo lỗi tài liệu, lịch vẫn tồn tại
+    App-->>User: Cho phép thử lại trên lịch đã lưu
+   end
+  end
+  App->>IOffice: Yêu cầu làm mới lịch liên quan
+  IOffice-->>App: Danh sách lịch được phép xem
+  App-->>User: Hiển thị lịch Tổng hợp, chưa phát hành
+ end

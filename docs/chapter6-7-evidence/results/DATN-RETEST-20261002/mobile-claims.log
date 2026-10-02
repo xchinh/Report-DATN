@@ -1,0 +1,9 @@
+00:00 +0: loading /home/xchinh/workspace/HK253_DATN_341_2211467_2210392/docs/chapter6-7-evidence/results/DATN-RETEST-20261002/checks/mobile_claims_test.dart
+00:00 +0: M06: HTTP 200 with iOffice errorCode 4001 becomes an empty calendar
+00:00 +1: M05: the midnight fixture ends yesterday and is excluded from today
+00:00 +2: M01: iOffice failure aborts aggregation before HRM is queried
+00:00 +3: M02-leave: HRM failure returns iOffice items without source status
+00:00 +4: M02-trip: HRM failure returns iOffice items without source status
+00:00 +5: M03: feedback with a reason but no attachment is rejected before HTTP
+00:00 +6: M04: closing the leave provider resets local state without calling HRM
+00:00 +7: All tests passed!

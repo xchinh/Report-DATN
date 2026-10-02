@@ -1,0 +1,36 @@
+{
+  "id": "E-LEV-DRAFT-01",
+  "at": "2026-10-02T02:37:35.953078+07:00",
+  "actor": "CB-A",
+  "execution": "Android UI -> real HRM API -> remote PostgreSQL; supplementary read-only API/DB checks",
+  "fixture_id": 320,
+  "steps": [
+    "UI select 30/10/2026 full day",
+    "UI create draft",
+    "UI exit and confirm",
+    "Read-only API/DB confirms persisted draft and calendar reservation",
+    "UI reopen draft; dates/sessions preserved",
+    "UI choose location/reason, enter DATN note, advance wizard and Save draft",
+    "Read-only API confirms NHAP, days=1, note/location/reason persisted",
+    "UI back -> delete draft -> confirm"
+  ],
+  "before_list_count": 12,
+  "after_list_count": 12,
+  "fixture_deleted_from_api": true,
+  "saved_state": "NHAP",
+  "saved_days": "1",
+  "note_marker_present": true,
+  "limits": [
+    "No submit or approval in this case",
+    "Screenshots containing account names kept in private /tmp, not added to repository"
+  ],
+  "finding": "Incomplete initial draft displays literal null for leave days; saving complete draft displays 1.",
+  "db_cleanup_counts": {
+    "request": 0,
+    "tcns_lich_ca_nhan": 0,
+    "tcns_quy_trinh": 0,
+    "tcns_quy_trinh_history": 0,
+    "tcns_quy_trinh_user": 0,
+    "final_leave": 0
+  }
+}

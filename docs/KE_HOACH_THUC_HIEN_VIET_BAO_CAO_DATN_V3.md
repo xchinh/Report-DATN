@@ -1,5 +1,7 @@
 # KẾ HOẠCH THỰC HIỆN VIẾT BÁO CÁO ĐỒ ÁN TỐT NGHIỆP (PHIÊN BẢN V3.1)
 
+> **Kế hoạch tham khảo:** Yêu cầu sau cùng là kiểm thử trước khi sửa tiếp; dùng [kết quả và phạm vi sửa ngày 02/10](chapter6-7-evidence/14_retest_and_rewrite_gate_20261002.md). Checklist/số liệu bên dưới không xác nhận hiện thực hay kiểm thử tại HEAD.
+
 ## 1. Mục đích và phạm vi kế hoạch
 
 Kế hoạch này dùng để chuẩn bị và viết các phần:

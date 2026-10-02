@@ -1,0 +1,292 @@
+TAP version 13
+# Subtest: Firebase only removes tokens rejected as invalid: app/invalid-credential
+ok 1 - Firebase only removes tokens rejected as invalid: app/invalid-credential
+  ---
+  duration_ms: 4.202428
+  type: 'test'
+  ...
+# Subtest: Firebase only removes tokens rejected as invalid: messaging/server-unavailable
+ok 2 - Firebase only removes tokens rejected as invalid: messaging/server-unavailable
+  ---
+  duration_ms: 1.032436
+  type: 'test'
+  ...
+# Subtest: Firebase only removes tokens rejected as invalid: messaging/registration-token-not-registered
+ok 3 - Firebase only removes tokens rejected as invalid: messaging/registration-token-not-registered
+  ---
+  duration_ms: 1.128954
+  type: 'test'
+  ...
+# Subtest: Firebase only removes tokens rejected as invalid: messaging/invalid-registration-token
+ok 4 - Firebase only removes tokens rejected as invalid: messaging/invalid-registration-token
+  ---
+  duration_ms: 3.012527
+  type: 'test'
+  ...
+# Subtest: không đọc nội dung tệp khi người dùng không có quyền trên văn bản
+ok 5 - không đọc nội dung tệp khi người dùng không có quyền trên văn bản
+  ---
+  duration_ms: 1.494122
+  type: 'test'
+  ...
+# Subtest: người có quyền trên văn bản vẫn xem được tệp
+ok 6 - người có quyền trên văn bản vẫn xem được tệp
+  ---
+  duration_ms: 0.351113
+  type: 'test'
+  ...
+# Subtest: registration follows the authenticated account and repeated sync keeps one device
+ok 7 - registration follows the authenticated account and repeated sync keeps one device
+  ---
+  duration_ms: 2.65876
+  type: 'test'
+  ...
+# Subtest: invalid tokens are rejected before changing registration
+ok 8 - invalid tokens are rejected before changing registration
+  ---
+  duration_ms: 0.556888
+  type: 'test'
+  ...
+# Subtest: registration failure does not update session token: save
+ok 9 - registration failure does not update session token: save
+  ---
+  duration_ms: 0.368619
+  type: 'test'
+  ...
+# Subtest: registration failure does not update session token: commit
+ok 10 - registration failure does not update session token: commit
+  ---
+  duration_ms: 0.297772
+  type: 'test'
+  ...
+# Subtest: người ngoài danh sách mời có thể tự điểm danh dưới dạng khách (assignId = null)
+ok 11 - người ngoài danh sách mời có thể tự điểm danh dưới dạng khách (assignId = null)
+  ---
+  duration_ms: 5.892467
+  type: 'test'
+  ...
+# Subtest: người được mời điểm danh theo slot phân công (assignId hợp lệ)
+ok 12 - người được mời điểm danh theo slot phân công (assignId hợp lệ)
+  ---
+  duration_ms: 0.734983
+  type: 'test'
+  ...
+# Subtest: chủ trì, tham dự và thư ký có thể điểm danh lịch trực tiếp TONG_HOP
+ok 13 - chủ trì, tham dự và thư ký có thể điểm danh lịch trực tiếp TONG_HOP
+  ---
+  duration_ms: 2.631241
+  type: 'test'
+  ...
+# Subtest: lịch TONG_HOP vẫn không cho điểm danh sớm hơn một giờ trước cuộc họp
+ok 14 - lịch TONG_HOP vẫn không cho điểm danh sớm hơn một giờ trước cuộc họp
+  ---
+  duration_ms: 0.31898
+  type: 'test'
+  ...
+# Subtest: CREATOR sees the saved meeting before official publication
+ok 15 - CREATOR sees the saved meeting before official publication
+  ---
+  duration_ms: 2.987499
+  type: 'test'
+  ...
+# Subtest: CHAIR sees the saved meeting before official publication
+ok 16 - CHAIR sees the saved meeting before official publication
+  ---
+  duration_ms: 0.445622
+  type: 'test'
+  ...
+# Subtest: ATTENDEE sees the saved meeting before official publication
+ok 17 - ATTENDEE sees the saved meeting before official publication
+  ---
+  duration_ms: 0.254027
+  type: 'test'
+  ...
+# Subtest: SECRETARY sees the saved meeting before official publication
+ok 18 - SECRETARY sees the saved meeting before official publication
+  ---
+  duration_ms: 0.252986
+  type: 'test'
+  ...
+# Subtest: uninvited colleagues cannot see another person’s unpublished meeting
+ok 19 - uninvited colleagues cannot see another person’s unpublished meeting
+  ---
+  duration_ms: 0.380993
+  type: 'test'
+  ...
+# Subtest: existing clients continue receiving official schedules only
+ok 20 - existing clients continue receiving official schedules only
+  ---
+  duration_ms: 0.42161
+  type: 'test'
+  ...
+# Subtest: unpublished schedules are not appended when viewing another person’s calendar
+ok 21 - unpublished schedules are not appended when viewing another person’s calendar
+  ---
+  duration_ms: 1.197061
+  type: 'test'
+  ...
+# Subtest: CHAIR can open an assigned unpublished meeting across departments
+ok 22 - CHAIR can open an assigned unpublished meeting across departments
+  ---
+  duration_ms: 0.930842
+  type: 'test'
+  ...
+# Subtest: ATTENDEE can open an assigned unpublished meeting across departments
+ok 23 - ATTENDEE can open an assigned unpublished meeting across departments
+  ---
+  duration_ms: 0.493411
+  type: 'test'
+  ...
+# Subtest: SECRETARY can open an assigned unpublished meeting across departments
+ok 24 - SECRETARY can open an assigned unpublished meeting across departments
+  ---
+  duration_ms: 0.437898
+  type: 'test'
+  ...
+# Subtest: uninvited staff and invitees to NHAP/TIEP_NHAN cannot open unpublished meetings outside the creator department
+ok 25 - uninvited staff and invitees to NHAP/TIEP_NHAN cannot open unpublished meetings outside the creator department
+  ---
+  duration_ms: 0.469731
+  type: 'test'
+  ...
+# Subtest: a unit invitation grants access to unit members, not unrelated named slots
+ok 26 - a unit invitation grants access to unit members, not unrelated named slots
+  ---
+  duration_ms: 0.409634
+  type: 'test'
+  ...
+# Subtest: conflict warnings do not disclose another unpublished meeting to invitees
+ok 27 - conflict warnings do not disclose another unpublished meeting to invitees
+  ---
+  duration_ms: 0.513603
+  type: 'test'
+  ...
+# Subtest: publication notifies chair, attendee and secretary once after commit
+ok 28 - publication notifies chair, attendee and secretary once after commit
+  ---
+  duration_ms: 5.995824
+  type: 'test'
+  ...
+# Subtest: rolled-back publication does not notify anyone
+ok 29 - rolled-back publication does not notify anyone
+  ---
+  duration_ms: 0.493891
+  type: 'test'
+  ...
+# Subtest: submitting and accepting drafts do not send invitations
+ok 30 - submitting and accepting drafts do not send invitations
+  ---
+  duration_ms: 0.350525
+  type: 'test'
+  ...
+# Subtest: two concurrent publications do not send duplicate invitations
+ok 31 - two concurrent publications do not send duplicate invitations
+  ---
+  duration_ms: 6.046416
+  type: 'test'
+  ...
+# Subtest: notification failure is logged without reporting a committed publication as failed
+ok 32 - notification failure is logged without reporting a committed publication as failed
+  ---
+  duration_ms: 1.709175
+  type: 'test'
+  ...
+# Subtest: publication without named invitees does not create a notification
+ok 33 - publication without named invitees does not create a notification
+  ---
+  duration_ms: 0.461759
+  type: 'test'
+  ...
+# Subtest: a slow notification sender does not delay the publication response
+ok 34 - a slow notification sender does not delay the publication response
+  ---
+  duration_ms: 5.256115
+  type: 'test'
+  ...
+# Subtest: school creation invites at TONG_HOP only after successful save and commit: null
+ok 35 - school creation invites at TONG_HOP only after successful save and commit: null
+  ---
+  duration_ms: 5.460319
+  type: 'test'
+  ...
+# Subtest: school creation invites at TONG_HOP only after successful save and commit: save
+ok 36 - school creation invites at TONG_HOP only after successful save and commit: save
+  ---
+  duration_ms: 1.398524
+  type: 'test'
+  ...
+# Subtest: school creation invites at TONG_HOP only after successful save and commit: commit
+ok 37 - school creation invites at TONG_HOP only after successful save and commit: commit
+  ---
+  duration_ms: 2.328039
+  type: 'test'
+  ...
+# Subtest: school creation invites at TONG_HOP only after successful save and commit: stale
+ok 38 - school creation invites at TONG_HOP only after successful save and commit: stale
+  ---
+  duration_ms: 0.858425
+  type: 'test'
+  ...
+# Subtest: unit creation sends invitations only after completion and successful commit: HOAN_THANH, commit failure=false
+ok 39 - unit creation sends invitations only after completion and successful commit: HOAN_THANH, commit failure=false
+  ---
+  duration_ms: 1.410091
+  type: 'test'
+  ...
+# Subtest: unit creation sends invitations only after completion and successful commit: NHAP, commit failure=false
+ok 40 - unit creation sends invitations only after completion and successful commit: NHAP, commit failure=false
+  ---
+  duration_ms: 1.078201
+  type: 'test'
+  ...
+# Subtest: unit creation sends invitations only after completion and successful commit: HOAN_THANH, commit failure=true
+ok 41 - unit creation sends invitations only after completion and successful commit: HOAN_THANH, commit failure=true
+  ---
+  duration_ms: 0.859661
+  type: 'test'
+  ...
+# Subtest: unit creation does not invite an active account whose assignment was rejected as stale
+ok 42 - unit creation does not invite an active account whose assignment was rejected as stale
+  ---
+  duration_ms: 0.734187
+  type: 'test'
+  ...
+# Subtest: whole-week publication supports multiple items with the generated cursor reader
+ok 43 - whole-week publication supports multiple items with the generated cursor reader
+  ---
+  duration_ms: 2.181511
+  type: 'test'
+  ...
+# Subtest: single-item publication route dispatches after successful commit
+ok 44 - single-item publication route dispatches after successful commit
+  ---
+  duration_ms: 0.717308
+  type: 'test'
+  ...
+# Subtest: single-item publication route sends nothing when Sequelize commit rejects
+ok 45 - single-item publication route sends nothing when Sequelize commit rejects
+  ---
+  duration_ms: 0.979394
+  type: 'test'
+  ...
+# Subtest: whole-week publication route dispatches after successful commit
+ok 46 - whole-week publication route dispatches after successful commit
+  ---
+  duration_ms: 1.242784
+  type: 'test'
+  ...
+# Subtest: whole-week publication route sends nothing when Sequelize commit rejects
+ok 47 - whole-week publication route sends nothing when Sequelize commit rejects
+  ---
+  duration_ms: 0.669183
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 266.338114

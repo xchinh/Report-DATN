@@ -1,0 +1,30 @@
+{
+  "superseded_by": "session-correction.json",
+  "reason": "Previous probes sent access|||refresh as one Bearer credential. Correct access token is first component. The phone session is valid; previous rejection does not demonstrate the app session was invalid.",
+  "original_probe": [
+    {
+      "label": "iOffice state anonymous",
+      "http_status": 200,
+      "keys": [
+        "data",
+        "message",
+        "status"
+      ],
+      "has_user": false,
+      "has_error": false,
+      "data_keys": []
+    },
+    {
+      "label": "iOffice state existing phone session",
+      "http_status": 200,
+      "keys": [
+        "err",
+        "errorCode",
+        "errorMessage"
+      ],
+      "has_user": false,
+      "errorCode": 4001,
+      "has_error": false
+    }
+  ]
+}

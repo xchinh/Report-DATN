@@ -1,0 +1,1 @@
+{"check":"H02","function_calls":2,"leave_rows":2,"distinct_requests":1,"storage":"session-local TEMP tables","cleanup":"ROLLBACK","result":"duplicate insert reproduced"}

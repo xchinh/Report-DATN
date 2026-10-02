@@ -1,5 +1,7 @@
 # MA TRẬN KHOẢNG TRỐNG BẰNG CHỨNG KIỂM THỬ
 
+> **Lưu vết giai đoạn tháng 9:** Khoảng trống và kế hoạch hiện hành từ 02/10 nằm trong [đợt kiểm thử mới](14_retest_and_rewrite_gate_20261002.md). Không dùng mã nhánh/scope WebView hoặc số lượng khoảng trống bên dưới làm phạm vi nghiệm thu hiện tại.
+
 > **Hiệu chỉnh nghiệp vụ ngày 24/09:** Các dòng `SCH-01`/`UC-SCH-01-B05` bên dưới phản ánh tiêu chí cũ là từ chối khách ngoài danh sách mời. Đặc tả hiện hành cho phép khách tự điểm danh; nhãn Fail lịch sử không phải kết luận lỗi sản phẩm hiện tại. Nên kiểm tra riêng quyền sử dụng lịch, khung thời gian, người được phân công và khách tự điểm danh.
 
 ## 1. Mốc kiểm kê

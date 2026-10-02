@@ -32,7 +32,7 @@ Công sức phát triển đa nền tảng & Cần phát triển và duy trì c�
 \end{tabularx}
 \end{table}
 
-Trong phạm vi đề tài, nhóm lựa chọn Flutter do khả năng phát triển giao diện và logic ứng dụng cho Android và iOS từ một cơ sở mã nguồn chung. Nhóm sử dụng Flutter và Dart để xây dựng giao diện cùng các luồng tương tác của MyHCMUT Mobile. Trong quá trình thực hiện đồ án, nhóm tập trung triển khai và kiểm thử ứng dụng trên nền tảng Android. Khả năng vận hành trên iOS chưa được kiểm chứng và cần được đánh giá bổ sung, đặc biệt đối với các chức năng phụ thuộc nền tảng như thông báo đẩy, WebView và xử lý tệp.
+Trong phạm vi đề tài, nhóm lựa chọn Flutter do khả năng phát triển giao diện và logic ứng dụng cho Android và iOS từ một cơ sở mã nguồn chung. Nhóm sử dụng Flutter và Dart để xây dựng giao diện cùng các luồng tương tác của MyHCMUT Mobile. Trong quá trình thực hiện đồ án, nhóm tập trung triển khai và kiểm thử ứng dụng trên nền tảng Android. Khả năng vận hành trên iOS chưa được kiểm chứng và cần được đánh giá bổ sung, đặc biệt đối với các chức năng phụ thuộc nền tảng như thông báo đẩy và xử lý tệp.
 
 \subsection{Tổ chức mã nguồn với Melos Monorepo}
 \label{subsec:melos_monorepo}
@@ -99,7 +99,7 @@ Lưu trữ dữ liệu cục bộ cho phép ứng dụng giữ lại một số 
 
 Dữ liệu lưu trữ cục bộ phục vụ việc hiển thị và sử dụng ứng dụng; dữ liệu nghiệp vụ chính thức cùng kết quả xử lý, phê duyệt tiếp tục được quản lý tại các hệ thống backend tương ứng. Phạm vi dữ liệu lưu trữ, cách cập nhật dữ liệu và xử lý bộ nhớ đệm được trình bày tại Chương 5.
 
-\subsection{WebView và các thư viện tích hợp}
+\subsection{Biểu mẫu native và các thư viện tích hợp}
 \label{subsec:integrated_libraries}
 
 Bên cạnh các công nghệ chính, MyHCMUT Mobile sử dụng một số thư viện để tích hợp các chức năng từ hệ thống hiện hữu và hỗ trợ tương tác trên thiết bị di động. Bảng~\ref{tab:integrated_libraries} tổng hợp các thư viện tích hợp chính và vai trò của chúng trong đề tài.
@@ -113,8 +113,7 @@ Bên cạnh các công nghệ chính, MyHCMUT Mobile sử dụng một số thư
 \hline
 \textbf{Thư viện} & \textbf{Vai trò trong hệ thống} \\
 \hline
-\texttt{flutter\_inappwebview} & Hiển thị và hỗ trợ tương tác với các biểu mẫu, chức năng Web hiện hữu bên trong ứng dụng di động~\cite{inappwebview_doc}. \\
-\hline
+
 \texttt{firebase\_messaging} & Tiếp nhận thông báo đẩy qua Firebase Cloud Messaging và cung cấp dữ liệu thông báo để ứng dụng xử lý, điều hướng đến nội dung nghiệp vụ liên quan~\cite{fcm_doc}. \\
 \hline
 \texttt{freezed} và \texttt{json\_serializable} & Hỗ trợ sinh mã cho các lớp dữ liệu và chuyển đổi giữa đối tượng Dart với dữ liệu JSON~\cite{freezed_doc}. \\
@@ -124,4 +123,6 @@ Bên cạnh các công nghệ chính, MyHCMUT Mobile sử dụng một số thư
 \end{tabularx}
 \end{table}
 
-Trong đó, WebView được sử dụng để tái sử dụng một số biểu mẫu kê khai lý lịch mở rộng đã có trên hệ thống Web của Nhà trường. Thay vì xây dựng lại toàn bộ các biểu mẫu này trên Flutter, ứng dụng mở giao diện Web tương ứng và kết hợp với cơ chế chuyển tiếp phiên đăng nhập để hỗ trợ người dùng tiếp tục thao tác trên thiết bị di động. Cách tổ chức cơ chế chuyển tiếp phiên, luồng tiếp nhận thông báo và xử lý các sự kiện cập nhật trạng thái được trình bày tại Chương 5.
+Biểu mẫu hồ sơ và tạo lịch được xây dựng bằng các widget Flutter, liên kết với trạng thái Riverpod và request Dio. Dữ liệu hiện tại, danh mục lựa chọn và policy được tải từ backend; ứng dụng kiểm tra đầu vào để hướng dẫn người dùng và chỉ gửi những trường phù hợp với nhánh thao tác. Khi yêu cầu có minh chứng hoặc tài liệu, client gửi tệp theo hợp đồng multipart tương ứng. Kiểm tra trên giao diện không thay thế kiểm tra quyền và dữ liệu ở server.
+
+Biểu mẫu cần biểu diễn trạng thái tải, lưu, thành công và lỗi. Đặc biệt, tạo lịch và upload là hai request; giao diện phải giữ ID đã nhận để thử lại trong phiên form khi tệp lỗi. Riverpod quản lý trạng thái này, Dio thực hiện giao tiếp, còn các thư viện trong Bảng~\ref{tab:integrated_libraries} phục vụ mô hình dữ liệu, thông báo và cập nhật thời gian thực. Luồng kỹ thuật chi tiết được trình bày tại Chương~5.

@@ -1,0 +1,40 @@
+CREATE OR REPLACE FUNCTION public.tcns_nghi_phep_dang_ky_insert(refcursor, i_phieu integer)
+ RETURNS refcursor
+ LANGUAGE plpgsql
+AS $function$
+declare
+begin
+
+    INSERT INTO tcns_nghi_phep (shcc, phieu_id, ma_don_vi, ma_chuc_vu, ma_chuc_danh, ngay_bat_dau, ngay_ket_thuc,
+                                so_ngay_thuc_nghi, hinh_thuc, nam_nghi_phep, ly_do, period, period_ket_thuc, ghi_chu,
+                                so_ngay_nghi, quoc_gia, dia_diem, so_quyet_dinh, ngay_quyet_dinh)
+    SELECT shcc,
+           id,
+           ma_don_vi,
+           ma_chuc_vu,
+           ma_chuc_danh,
+           ngay_bat_dau,
+           ngay_ket_thuc,
+           so_ngay_thuc_nghi,
+           hinh_thuc,
+           nam_nghi_phep,
+           ly_do,
+           period,
+           period_ket_thuc,
+           ghi_chu,
+           so_ngay_nghi,
+           quoc_gia,
+           dia_diem,
+           so_quyet_dinh,
+           ngay_quyet_dinh
+    FROM tcns_nghi_phep_dang_ky
+    WHERE id = i_phieu;
+
+    open $1 for
+        select *
+        from tcns_nghi_phep
+        where phieu_id = i_phieu;
+
+    return $1;
+end;
+$function$

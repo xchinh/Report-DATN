@@ -1,14 +1,11 @@
 \subsection{Phân hệ quản lý công tác}
 \label{subsec:business_trip}
 
-\subsubsection{Mục tiêu}
-Công tác là một trong những nghiệp vụ quan trọng hỗ trợ người lao động toàn trường tối
-ưu quá trình quản lý thông tin quy trình các chuyến đi công tác. Quy trình quản lý thông tin công tác bắt đầu từ việc
-đăng ký công tác của nhân sự. Đơn đăng ký công tác sẽ được gửi đến các bên liên quan để thẩm định và phê duyệt, người dùng cũng nắm bắt được thông tin về tiến độ các bước phê duyệt.
-Sau khi được phê duyệt, nhân sự sẽ thực hiện chuyến công tác và báo cáo kết quả (nếu có).
+\subsubsection{Mục tiêu và yêu cầu chức năng}
 
+Ứng dụng hỗ trợ lập, gửi và theo dõi phiếu công tác; người dùng có thẩm quyền thực hiện các thao tác xử lý theo quy trình của HRM. Các điều kiện và bước phê duyệt phụ thuộc vào thông tin chuyến công tác và quyền của người xử lý.
 
-\subsubsection{Yêu cầu chức năng}
+Việc nộp báo cáo kết quả sau chuyến công tác chưa thuộc phạm vi biểu mẫu trên ứng dụng di động.
 
 \begin{table}[H]
 \centering
@@ -27,12 +24,15 @@ FR-BTR-03 & Quản lý nháp và điều chỉnh & Nhân sự & Chỉnh sửa ho
 \hline
 FR-BTR-04 & Xử lý đơn & Các bên liên quan & Xem xét thông tin đơn đăng ký, minh chứng và thực hiện các thao tác như: phê duyệt, từ chối hoặc trả lại đơn theo thẩm quyền. \\
 \hline
-FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng ký công tác ở bất kỳ bước nào trong quy trình. \\
+FR-BTR-05 & Thu hồi đơn & Nhân sự TCNS/Văn phòng BGH có quyền & Thu hồi theo quyền nghiệp vụ và điều kiện vai trò hoặc đơn vị do HRM kiểm tra; người lập không tự có quyền thu hồi. \\
 \hline
 \end{tabularx}
 \end{table}
 
 \subsubsection{Đặc tả Use Case}
+
+FR-BTR-02 gắn với UC-BT-01/02; FR-BTR-03 gắn với UC-BT-01/03; FR-BTR-04/05 lần lượt gắn với UC-BT-04/05. FR-BTR-01 được cụ thể hóa qua tra cứu danh sách, chi tiết và theo dõi sau khi gửi.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{image/usecase/UC_BT.png}
@@ -47,32 +47,33 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
     pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
     trigger={Người dùng chọn biểu tượng tạo mới đơn đăng ký công tác trên ứng dụng.},
     mainflow={
-            1. Hệ thống khởi tạo đơn ở trạng thái nháp (\texttt{DRAFT}). \newline
-            2. Người dùng nhập thông tin qua biểu mẫu từng bước: chọn khoảng thời gian, hình thức (trong nước, nước ngoài), phân loại (cá nhân, đoàn), địa điểm, kinh phí, đính kèm minh chứng (nếu cần), .... \newline
+            1. Người dùng chọn ngày và loại công tác; HRM khởi tạo phiếu ở trạng thái Nháp (\texttt{NHAP}). \newline
+            2. Người dùng hoàn thiện biểu mẫu năm bước: thời gian, hình thức trong nước/nước ngoài, cá nhân/đoàn, địa điểm, kinh phí, thành phần và minh chứng theo yêu cầu. \newline
             3. Người dùng nhấn nút "Lưu" đơn đăng ký công tác. \newline
             4. Hệ thống lưu lại thông tin đã nhập và đơn có trạng thái là "Nháp". \newline
         },
     altflow={
             1.1. Chọn đơn đăng ký công tác từ danh sách các đơn đã tạo có trạng thái là "Nháp" hoặc "Trả lại", hệ thống hiển thị thông tin chi tiết của đơn. Thực hiện tiếp bước 2. \newline
         },
-    post={Đơn ở trạng thái nháp (\texttt{DRAFT}) hoặc trả lại (\texttt{RETURNED}).},
+    exflow={- Thiếu thông tin bắt buộc hoặc địa điểm không phù hợp: yêu cầu bổ sung trước khi tiếp tục. \newline
+ - Thoát biểu mẫu: thay đổi chưa lưu bị bỏ; phiếu nháp đã tạo trên HRM vẫn có thể được mở lại hoặc xóa bằng thao tác riêng.},
+    post={Thông tin đã lưu được ghi nhận; phiếu giữ trạng thái Nháp (\texttt{NHAP}) hoặc Trả lại (\texttt{TRA\_LAI}) đến khi được gửi hợp lệ.},
     label={tab:uc_bt_01}
 }
-
 
 \usecasespec{
     id={UC-BT-02},
     name={Gửi đơn đăng ký công tác},
     actor={Nhân sự},
-    pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền tạo đơn đăng ký công tác.},
-    trigger={Người dùng chọn đơn đăng ký công tác có trạng thái là "Nháp" hoặc "Trả lại"},
+    pre={Đã đăng nhập, có quyền gửi phiếu của bản thân và phiếu ở trạng thái Nháp hoặc Trả lại.},
+    trigger={Người dùng mở phiếu Nháp hoặc Trả lại đã hoàn thiện thông tin},
     mainflow={
             1. Người dùng nhấn nút gửi đơn đăng ký công tác. \newline
             2. Hệ thống kiểm tra tính hợp lệ của thông tin nhập vào. \newline
             3. Hệ thống kiểm tra lịch trình cá nhân để rà soát xem có trùng lịch với các hoạt động khác không. \newline
             4. Hệ thống tạo quy trình phê duyệt tương ứng với thông tin của đơn đăng ký công tác và thêm vào lịch cá nhân của các thành viên tham gia. \newline
             5. Hệ thống gửi đơn đăng ký công tác đến các bên liên quan để thẩm định và phê duyệt. \newline
-            6. Hệ thống khóa lịch trình cá nhân và thông báo cho các bên liên quan. \newline
+            6. Hệ thống ghi nhận khoảng thời gian công tác trong lịch cá nhân phục vụ kiểm tra xung đột và phát sinh thông báo theo quy trình. \newline
             7. Người dùng truy cập đơn đăng ký công tác để xem thông tin chi tiết, trạng thái phê duyệt, lịch sử thao tác.
         },
     exflow={
@@ -114,10 +115,10 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
         },
     trigger={Người duyệt mở phiếu đang chờ tại bước của mình và chọn một trong ba hành động: Duyệt, Trả lại, Từ chối.},
     mainflow={
-            1. Lãnh đạo đơn vị mở phiếu đang chờ duyệt tại bước \texttt{Lãnh đạo đơn vị}. \newline
+            1. Người có thẩm quyền mở phiếu đang chờ tại bước được phân công. \newline
             2. Người duyệt xem xét thông tin chuyến đi, thời gian vắng mặt, phương án phân công thay thế. \newline
             3. Người duyệt chọn "Duyệt". \newline
-            4. Hệ thống chuyển phiếu sang bước tiếp theo và ghi nhật ký quy trình (người duyệt, thời gian duyệt). \newline
+            4. HRM kiểm tra quyền, bước xử lý và dữ liệu, ghi nhận quyết định và nhật ký quy trình. \newline
             5. Hệ thống gửi thông báo đến nhân sự có thẩm quyền duyệt ở bước kế tiếp. \newline
         },
     altflow={
@@ -129,7 +130,7 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
             A3 — Từ chối phiếu: \newline
             3.3. Người duyệt chọn "Từ chối" và nhập ghi chú lý do từ chối. \newline
             4.3. Hệ thống cập nhật trạng thái phiếu thành \texttt{Từ chối}. \newline
-            5.3. Hệ thống giải phóng toàn bộ lịch cá nhân đã khóa của các thành viên tham gia. \newline
+            5.3. HRM xóa các khoảng thời gian công tác gắn với phiếu trong lịch cá nhân của các thành viên. \newline
             6.3. Hệ thống thông báo cho người nộp và mọi thành viên liên quan. \newline
         },
     post={Đơn chuyển sang trạng thái mới thành công.},
@@ -139,30 +140,21 @@ FR-BTR-05 & Thu hồi đơn & Chuyên viên P.TCNS/BGH & Thu hồi đơn đăng 
 \usecasespec{
     id={UC-BT-05},
     name={Thu hồi đơn đăng ký công tác},
-    actor={Chuyên viên/Lãnh đạo Phòng TCNS, Văn phòng BGH},
-    pre={Đã đăng nhập vào ứng dụng và tài khoản có quyền thu hồi đơn đăng ký công tác.},
+    actor={Nhân sự TCNS hoặc Văn phòng BGH được cấp quyền thu hồi},
+    pre={Đã đăng nhập, có quyền xử lý công tác và đáp ứng điều kiện nhân sự thuộc TCNS hoặc vai trò Văn phòng BGH theo HRM.},
     trigger={Người dùng truy cập vào danh sách đơn đăng ký công tác.},
     mainflow={
-            1. Người dùng chọn đơn đăng ký ở bất kỳ trạng thái nào. \newline
+            1. Người có quyền chọn phiếu đăng ký cần thu hồi và xem thông tin hiện tại. \newline
             2. Người dùng nhấn nút "Thu hồi" để thu hồi đơn đăng ký công tác. \newline
             3. Hệ thống hiển thị hộp thoại xác nhận thu hồi đơn đăng ký công tác. \newline
             4. Người dùng xác nhận thu hồi đơn đăng ký công tác. \newline
-            5. Hệ thống cập nhật trạng thái phiếu thành "Đã thu hồi" (\texttt{REVOKED}) và giải phóng lịch trình cá nhân đã khóa của các thành viên tham gia. \newline
+            5. HRM kiểm tra quyền và điều kiện vai trò/đơn vị; cập nhật phiếu thành Đã thu hồi (\texttt{THU\_HOI}), xóa dữ liệu lịch cá nhân và quá trình công tác gắn với phiếu. \newline
             6. Hệ thống thông báo cho người nộp và mọi thành viên liên quan về việc thu hồi phiếu.
         },
-    post={Đơn chuyển sang trạng thái "Đã thu hồi" (\texttt{REVOKED}).},
+    exflow={- Không đủ quyền, không đáp ứng điều kiện vai trò/đơn vị hoặc phiếu không tồn tại: HRM từ chối thao tác.},
+    post={Khi được HRM chấp nhận, phiếu chuyển sang Đã thu hồi (\texttt{THU\_HOI}); dữ liệu liên quan được xử lý theo quy trình.},
     label={tab:uc_bt_05}
 }
-
-\subsubsection{Quy tắc nghiệp vụ}
-\begin{itemize}
-    \item \textbf{BR-BT-01:} Quy trình phê duyệt công tác mặc định là: Duyệt cấp đơn vị → Chuyên viên TCNS → Lãnh đạo TCNS → Văn phòng BGH → Ban Giám hiệu.
-    \item \textbf{BR-BT-02:} Nếu thông tin phiếu có kinh phí là "Kinh phí KHCN", hệ thống sẽ thêm bước thẩm định của Phòng KHCN trước khi chuyển sang Phòng TCNS.
-    \item \textbf{BR-BT-03:} Khi đơn được Văn phòng BGH tạo thì hệ thống sẽ rút gọn quy trình phê duyệt còn: Ban Giám hiệu.
-    \item \textbf{BR-BT-04:} Khi hình thức công tác là "Nước ngoài", người nộp phải đính kèm thư mời và kế hoạch chi tiết chuyến công tác.
-    \item \textbf{BR-BT-05:} Khi phân loại công tác là "Đoàn công tác", người phải thêm các thành viên tham gia và chọn trưởng đoàn cho chuyến công tác.
-    \item \textbf{BR-BT-06:} Khi phân loại công tác là "Đoàn công tác", quy trình phê duyệt sẽ được thực hiện độc lập theo từng đơn vị quản lý trực tiếp của các thành viên tham gia. Hệ thống chỉ chuyển bước tiếp theo khi 100\% đơn vị liên quan đã đồng ý.
-\end{itemize}
 
 \subsubsection{Biểu đồ hoạt động}
 \begin{figure}[H]

@@ -1,39 +1,25 @@
 \section{Các cơ chế tích hợp hệ thống}
 \label{sec:tich_hop_he_thong}
 
-MyHCMUT Mobile khai thác chức năng từ các hệ thống hiện hữu thông qua API và một số cơ chế tích hợp phục vụ thiết bị di động. Mục này trình bày cách ứng dụng phối hợp với Auth Service, HRM Backend, iOffice Backend và các thành phần liên quan trong quá trình xác thực, chuyển tiếp phiên làm việc, tiếp nhận thông báo và tổng hợp dữ liệu nghiệp vụ.
+Mục này trình bày các cơ chế giúp MyHCMUT Mobile kết nối với Auth Service, HRM Backend và iOffice Backend: xác thực và giao tiếp API, đăng ký thiết bị và tiếp nhận thông báo qua FCM, tổng hợp dữ liệu lịch và đồng bộ trạng thái qua Socket.IO.
 
 \subsection{Xác thực và giao tiếp API}
 \label{subsec:xac_thuc_da_he_thong}
 
-Ứng dụng sử dụng Auth Service hiện hữu để đăng nhập và nhận access token. Sau khi đăng nhập thành công, token được ứng dụng quản lý và sử dụng khi gửi yêu cầu đến các backend nghiệp vụ. MyHCMUT Mobile tạo các Dio instance theo địa chỉ của từng dịch vụ; mỗi instance được cấu hình sẵn khóa xác thực (\texttt{domainKey}) để xác định token cần sử dụng.
+Ứng dụng sử dụng Auth Service hiện hữu để đăng nhập và nhận access token. Sau khi đăng nhập thành công, token được sử dụng khi gửi yêu cầu đến các backend nghiệp vụ.
 
-Trong phiên bản hiện tại, các Dio instance phục vụ Auth Service, HRM Backend và iOffice Backend đều sử dụng chung khóa \texttt{auth}. Vì vậy, ứng dụng tái sử dụng cùng access token do Auth Service cấp, không quản lý ba token độc lập. Khi gửi yêu cầu cần xác thực, \texttt{MultiDomainAuthInterceptor} đọc token theo khóa đã cấu hình và gắn vào HTTP header theo dạng \texttt{Authorization: Bearer <token>}.
+MyHCMUT Mobile tạo các Dio instance theo địa chỉ của từng dịch vụ. Mỗi instance được cấu hình khóa xác thực (\texttt{domainKey}) để xác định token cần sử dụng. Trong phiên bản hiện tại, các instance phục vụ Auth Service, HRM Backend và iOffice Backend đều sử dụng chung khóa \texttt{auth}, tương ứng với cùng access token do Auth Service cấp.
 
-HRM Backend và iOffice Backend tiếp nhận yêu cầu, xác thực token và kiểm tra quyền truy cập đối với chức năng nghiệp vụ tương ứng. Ứng dụng di động quản lý phiên đăng nhập và gửi thông tin xác thực; các quyết định phân quyền và xử lý dữ liệu chính thức vẫn thuộc trách nhiệm của backend.
+Khi gửi một yêu cầu cần xác thực, \texttt{MultiDomainAuthInterceptor} lấy token theo khóa được cấu hình và gắn vào HTTP header theo dạng \texttt{Authorization: Bearer <token>}. HRM Backend và iOffice Backend tiếp nhận yêu cầu, xác thực token và kiểm tra quyền thực hiện chức năng tương ứng.
 
-\subsection{Chuyển tiếp phiên làm việc sang HRM Web}
-\label{subsec:sso_bridge}
+Việc hiển thị hoặc ẩn chức năng trên ứng dụng chỉ phục vụ giao diện người dùng và không thay thế bước kiểm tra quyền tại backend. Do đó, kể cả khi một yêu cầu được gửi trực tiếp đến API mà không thông qua giao diện mobile, backend vẫn chịu trách nhiệm quyết định thao tác có được phép thực hiện hay không.
 
-Một số biểu mẫu hồ sơ được cung cấp thông qua HRM Web và được mở từ ứng dụng bằng WebView. Để người dùng không phải đăng nhập lại, hệ thống sử dụng vé xác thực dùng một lần (\textit{One-Time Ticket SSO}) nhằm chuyển tiếp từ phiên đăng nhập trên mobile sang phiên làm việc trên HRM Web mà không đưa access token hoặc refresh token lên URL.
-
-Khi người dùng yêu cầu mở biểu mẫu, ứng dụng gửi yêu cầu đến endpoint \texttt{POST /api/auth/sso/generate-ticket} của HRM Backend. Backend tạo vé xác thực dùng một lần và lưu bản ghi tương ứng trong Redis với thời hạn 60 giây. Payload gắn với vé chứa mã nhân sự, hệ thống đích và thời điểm tạo. Khi tiêu thụ vé, HRM Backend chỉ chấp nhận bản ghi có \texttt{targetSystem} tương ứng với HRM. Backend trả vé cho ứng dụng; WebView mở địa chỉ biểu mẫu HRM Web kèm vé. HRM Web gửi vé trong nội dung yêu cầu đến endpoint \texttt{POST /api/auth/sso/consume-ticket}. HRM Backend dùng thao tác \texttt{GETDEL} của Redis để lấy và xóa vé trong cùng một thao tác; nếu vé hợp lệ, backend tạo và lưu phiên Web mới. Trong quá trình xử lý chuyển tiếp phiên, HRM Web sử dụng \texttt{history.replaceState} để loại bỏ tham số \texttt{ticket} khỏi URL. Toàn bộ luồng chuyển tiếp phiên làm việc được minh họa trong Hình~\ref{fig:sso_sequence}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.78\linewidth,keepaspectratio]{image/architecture/chapter5-sso-flow.png}
-    \caption[Luồng chuyển tiếp phiên làm việc từ MyHCMUT Mobile sang HRM Web bằng One-Time Ticket SSO]{Luồng chuyển tiếp phiên làm việc từ MyHCMUT Mobile sang HRM Web bằng One-Time Ticket SSO}
-    \label{fig:sso_sequence}
-\end{figure}
-
-Việc tiêu thụ vé bằng \texttt{GETDEL} ngăn một vé hợp lệ bị tiêu thụ lại sau lần sử dụng đầu tiên. Tuy nhiên, vé vẫn xuất hiện tạm thời trên URL khi WebView được mở; thao tác xóa tham số sau đó không loại bỏ mọi khả năng lộ vé trước thời điểm này. Khi vé hết hạn hoặc đã được sử dụng, người dùng cần khởi tạo lại luồng chuyển tiếp từ ứng dụng để nhận vé mới.
-
-Trong phạm vi phiên bản hiện tại, WebView được sử dụng để mở biểu mẫu HRM Web; ứng dụng chưa hỗ trợ truy cập các chức năng iOffice thông qua WebView, dù phía iOffice đã có thành phần tiêu thụ vé trong mã nguồn.
+Thông tin phiên và người dùng được ứng dụng lưu để phục vụ quá trình sử dụng. Khi thiếu token, nhận phản hồi xác thực không hợp lệ hoặc người dùng đăng xuất, trạng thái phiên được xóa theo luồng xử lý hiện tại. Interceptor đảm nhiệm việc gắn token và xử lý lỗi xác thực; phiên bản hiện tại không cung cấp cơ chế tự động refresh token rồi phát lại toàn bộ request thất bại.
 
 \subsection{Tích hợp thông báo}
 \label{subsec:tich_hop_thong_bao}
 
-Thông báo hỗ trợ người dùng nhận biết và mở nhanh nội dung nghiệp vụ cần xử lý. MyHCMUT Mobile tiếp nhận thông báo từ HRM và iOffice, hiển thị trên thiết bị và điều hướng đến màn hình tương ứng khi người dùng chọn thông báo. Quyền truy cập và dữ liệu vẫn do hệ thống nguồn quản lý. Điểm tích hợp được khái quát trong Hình~\ref{fig:notification_routing_flow}.
+Thông báo được sử dụng như một cơ chế hỗ trợ người dùng nhận biết những thay đổi hoặc nội dung nghiệp vụ cần xử lý. MyHCMUT Mobile tiếp nhận thông báo phát sinh từ HRM và iOffice thông qua Firebase Cloud Messaging, hiển thị chúng trên thiết bị và điều hướng đến chức năng tương ứng khi người dùng chọn thông báo.
 
 \begin{figure}[H]
     \centering
@@ -42,20 +28,36 @@ Thông báo hỗ trợ người dùng nhận biết và mở nhanh nội dung ng
     \label{fig:notification_routing_flow}
 \end{figure}
 
-Khi người dùng chọn thông báo, ứng dụng mở màn hình nghiệp vụ tương ứng nếu có đường dẫn được hỗ trợ. Màn hình đích tiếp tục tuân theo quyền truy cập của hệ thống nguồn.
+Do HRM và iOffice phát sinh thông báo độc lập, thiết bị đăng ký FCM token với từng backend. Mỗi backend duy trì ánh xạ cần thiết giữa người dùng và token thiết bị để xác định người nhận thông báo thuộc miền nghiệp vụ của mình.
 
-Thông báo chỉ hỗ trợ điều hướng; trạng thái nghiệp vụ vẫn được tải từ hệ thống nguồn khi mở màn hình đích.
+Khi người dùng chọn một thông báo, ứng dụng diễn giải thông tin điều hướng trong payload và mở chức năng tương ứng. Sau khi chuyển đến màn hình đích, trạng thái nghiệp vụ được tải lại từ backend thay vì sử dụng nội dung thông báo làm nguồn dữ liệu chính thức.
 
-\subsection{Tổng hợp lịch công tác và cập nhật điểm danh}
+Đối với thông báo lịch, iOffice xác định người nhận từ thông tin tài khoản và token thiết bị tương ứng. Việc gửi thông báo chỉ phục vụ nhận biết sự kiện và không được sử dụng để xác định rằng một nghiệp vụ đã hoàn tất. Đặc biệt, thông báo mời đối với lịch họp không đồng nghĩa với việc lịch đã được phát hành chính thức; trạng thái và quyền truy cập tiếp tục được xác định tại iOffice.
+
+Như vậy, FCM đóng vai trò kênh hỗ trợ truyền thông tin đến thiết bị, trong khi dữ liệu và quyền xử lý nghiệp vụ vẫn được xác định bởi các hệ thống nguồn.
+
+\subsection{Tổng hợp dữ liệu lịch và đồng bộ thời gian thực}
 \label{subsec:tich_hop_lich_da_nguon}
 
-\textbf{Tổng hợp lịch công tác.} Ứng dụng hiển thị chung lịch họp từ iOffice và lịch nghỉ phép, công tác từ HRM. Các nguồn dữ liệu được tải riêng qua dịch vụ tương ứng rồi tổng hợp trên giao diện di động; dữ liệu vẫn thuộc quyền quản lý của từng hệ thống.
+\textbf{Tổng hợp dữ liệu từ các API độc lập}
 
-Nếu dữ liệu nghỉ phép hoặc công tác không tải được, lịch họp từ iOffice vẫn có thể hiển thị. Lịch cần dữ liệu từ iOffice để tải danh sách sự kiện chính; các hệ thống nguồn không dùng chung cơ sở dữ liệu.
+Lịch tổng hợp trên MyHCMUT Mobile kết hợp ba nhóm dữ liệu: lịch họp từ iOffice, lịch nghỉ phép và lịch công tác từ HRM. Các dữ liệu được tải thông qua API của từng hệ thống nguồn và được tổng hợp tại phía ứng dụng để cung cấp một giao diện lịch thống nhất.
 
-\textbf{Cập nhật điểm danh cuộc họp.} Ứng dụng gửi thao tác điểm danh, hoàn tác hoặc báo vắng đến iOffice Backend. Khi trạng thái thay đổi, các thiết bị đang theo dõi lịch được thông báo để làm mới dữ liệu.
+Thiết kế tổng hợp tại mobile cho phép HRM và iOffice tiếp tục quản lý dữ liệu và quyền thuộc miền nghiệp vụ của mình mà không cần tạo thêm một cơ sở dữ liệu lịch hợp nhất. Dữ liệu nghỉ phép và công tác được chuyển sang mô hình hiển thị \texttt{ScheduleItem}, lọc theo khoảng thời gian cần hiển thị và kết hợp với dữ liệu lịch từ iOffice. Danh sách kết quả sau đó được sắp xếp theo thời điểm bắt đầu.
 
-Sau khi có thay đổi, ứng dụng làm mới dữ liệu từ backend để cập nhật giao diện trên các thiết bị đang theo dõi. Thao tác nghiệp vụ và trạng thái cuối cùng do iOffice Backend xử lý; các cơ chế tích hợp được tổng hợp trong Hình~\ref{fig:multi_source_schedule_flow}.
+Mỗi mục lịch giữ thông tin về loại và định danh nguồn để ứng dụng xác định chức năng cần mở khi người dùng xem chi tiết. Sự kiện nghỉ phép hoặc công tác được điều hướng đến chức năng HRM tương ứng, trong khi cuộc họp được mở bằng chức năng lịch của iOffice.
+
+Các nguồn dữ liệu được tải độc lập nên lỗi của một nguồn không nhất thiết đồng nghĩa với việc mọi dữ liệu lịch đều không thể sử dụng. Trong cách điều phối hiện tại, nếu dữ liệu nghỉ phép hoặc công tác không tải được, ứng dụng vẫn có thể hiển thị phần dữ liệu còn lại. Tuy nhiên, giao diện chưa thể hiện riêng trạng thái lỗi của từng nguồn HRM nên người dùng có thể không nhận biết rằng lịch đang thiếu một phần dữ liệu. Đối với iOffice, lỗi khi tải danh sách sự kiện chính làm luồng tải lịch trả về lỗi trước khi hoàn tất quá trình tổng hợp.
+
+\textbf{Đồng bộ trạng thái qua Socket.IO}
+
+Đối với điểm danh cuộc họp, hệ thống tách kênh thực hiện nghiệp vụ và kênh thông báo thay đổi trạng thái. Các thao tác điểm danh, hoàn tác hoặc báo vắng được gửi thông qua API iOffice. Backend kiểm tra quyền, xử lý yêu cầu và lưu kết quả; sau khi thao tác thành công, ứng dụng tải lại dữ liệu để cập nhật giao diện.
+
+Socket.IO được sử dụng để thông báo cho các thiết bị đang theo dõi khi trạng thái điểm danh thay đổi. Tại màn hình điểm danh, ứng dụng lắng nghe các sự kiện liên quan đến điểm danh, báo vắng và hoàn tác. Khi nhận sự kiện, dữ liệu chi tiết hiện tại được đánh dấu cần cập nhật và ứng dụng tải lại trạng thái từ API.
+
+Payload của sự kiện Socket.IO không được sử dụng để tự ghi trạng thái nghiệp vụ tại client. Trạng thái hiển thị sau cùng vẫn được lấy từ iOffice Backend. Cách tổ chức này giữ backend làm nguồn dữ liệu có thẩm quyền và sử dụng Socket.IO như cơ chế giảm độ trễ khi phản ánh thay đổi giữa các thiết bị.
+
+Khi kết nối Socket.IO bị gián đoạn nhưng API vẫn hoạt động, người dùng vẫn có thể thực hiện thao tác điểm danh và tải lại kết quả của chính thao tác đó. Tuy nhiên, thay đổi được thực hiện từ thiết bị khác có thể chưa xuất hiện ngay cho đến khi ứng dụng tải lại dữ liệu. Phiên bản hiện tại chưa có cơ chế phát lại những sự kiện Socket.IO đã bị bỏ lỡ; do đó việc tải lại từ API vẫn là cơ chế đối chiếu trạng thái cuối cùng.
 
 \begin{figure}[H]
     \centering

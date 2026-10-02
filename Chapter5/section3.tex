@@ -1,9 +1,16 @@
 \section{Mô hình dữ liệu phục vụ ứng dụng}
 \label{sec:thietke_csdl}
 
-Mục này trình bày các nhóm dữ liệu nghiệp vụ liên quan trực tiếp đến những chức năng của MyHCMUT Mobile. HRM và iOffice sử dụng hai cơ sở dữ liệu PostgreSQL riêng biệt đã tồn tại trước đề tài; nhóm không thiết kế mới toàn bộ cơ sở dữ liệu của hai hệ thống. Các lược đồ được rút gọn từ schema thực tế và chỉ giữ những thực thể, quan hệ liên quan đến các tính năng trên ứng dụng.
-\subsection{Tổng quan sơ đồ erd}
+MyHCMUT Mobile khai thác dữ liệu từ hai hệ thống nghiệp vụ hiện hữu là HRM và iOffice. Mỗi hệ thống duy trì cơ sở dữ liệu PostgreSQL riêng và tiếp tục chịu trách nhiệm quản lý dữ liệu thuộc miền nghiệp vụ tương ứng. Ứng dụng di động không truy cập trực tiếp các cơ sở dữ liệu này mà trao đổi dữ liệu thông qua API do các backend cung cấp.
+
+Do cơ sở dữ liệu của hai hệ thống nguồn có phạm vi lớn hơn chức năng của đề tài, nội dung mục này chỉ trình bày các nhóm dữ liệu có liên quan trực tiếp đến những chức năng được tích hợp trên MyHCMUT Mobile. Các nhóm được lựa chọn gồm hồ sơ nhân sự, quy trình phê duyệt, nghỉ phép, công tác, văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp.
+
+Việc trình bày các mô hình dữ liệu nguồn nhằm làm rõ cấu trúc và quan hệ dữ liệu mà ứng dụng khai thác, không thể hiện một cơ sở dữ liệu mới hoặc cơ sở dữ liệu hợp nhất do ứng dụng di động quản lý.
+
+\subsection{Tổng quan sơ đồ ERD}
 \label{subsec:tong_quan_erd}
+
+Hình~\ref{fig:chapter5_erd} trình bày tổng quan các nhóm dữ liệu nghiệp vụ chính thuộc phạm vi đề tài. Miền HRM bao gồm hồ sơ nhân sự, yêu cầu cập nhật hồ sơ, nghỉ phép, công tác và quy trình xử lý liên quan. Miền iOffice bao gồm văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Các sơ đồ chi tiết ở những mục tiếp theo được rút gọn từ mô hình dữ liệu của hệ thống nguồn, chỉ giữ lại những bảng và quan hệ cần thiết để giải thích các chức năng được cung cấp trên ứng dụng di động.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{image/erd/erd.png}
@@ -15,11 +22,11 @@ Mục này trình bày các nhóm dữ liệu nghiệp vụ liên quan trực ti
 \subsection{Tổng quan mô hình dữ liệu}
 \label{subsec:tong_quan_csdl}
 
-Dữ liệu nghiệp vụ được chia thành miền HRM và miền iOffice theo hệ thống sở hữu. Miền HRM bao gồm hồ sơ nhân sự, yêu cầu cập nhật hồ sơ, nghỉ phép, hạn mức phép năm và đi công tác. Miền iOffice bao gồm văn bản, nhiệm vụ, báo cáo tiến độ, lịch công tác và điểm danh cuộc họp. Ứng dụng chỉ trao đổi dữ liệu thông qua API của backend tương ứng và không truy cập trực tiếp cơ sở dữ liệu.
+Dữ liệu phục vụ MyHCMUT Mobile được phân thành hai miền tương ứng với HRM và iOffice. Hai miền được quản lý độc lập tại các hệ thống nguồn và không hình thành một cơ sở dữ liệu dùng chung cho ứng dụng.
 
-Hình~\ref{fig:chapter5_data_overview} kết hợp các bảng đại diện của hai miền để thể hiện phạm vi dữ liệu phục vụ ứng dụng. Đây là lược đồ tổng quan rút gọn, không phải một cơ sở dữ liệu hợp nhất. Giữa HRM và iOffice không có khóa ngoại chéo; lịch tổng hợp được tạo từ các phản hồi API độc lập tại phía ứng dụng thay vì sao chép dữ liệu nguồn sang một bảng chung.
+Hình~\ref{fig:chapter5_data_overview} khái quát các bảng đại diện của hai miền dữ liệu. Đối với các trường được backend sử dụng để liên kết dữ liệu nhưng cơ sở dữ liệu không khai báo ràng buộc khóa ngoại, sơ đồ thể hiện chúng dưới dạng liên kết logic thay vì khóa ngoại vật lý. Việc tổng hợp dữ liệu giữa HRM và iOffice, chẳng hạn lịch công tác tổng hợp, được thực hiện từ kết quả của các API tương ứng tại phía ứng dụng thay vì sao chép dữ liệu nguồn vào một bảng dùng chung.
 
-Redis, token thiết bị và dữ liệu thông báo không thuộc lược đồ nghiệp vụ này. Vai trò của chúng được trình bày tại Mục~\ref{sec:tich_hop_he_thong}; bộ nhớ đệm và SQLite trên thiết bị đã được trình bày tại Mục~\ref{subsec:kientruc_ung_dung_mobile}.
+Lược đồ này tập trung vào dữ liệu nghiệp vụ. Token thiết bị và dữ liệu phục vụ thông báo được giải thích tại Mục~\ref{subsec:tich_hop_thong_bao}; bộ nhớ đệm và danh mục cục bộ được trình bày tại Mục~\ref{subsec:kientruc_ung_dung_mobile}.
 
 \begin{figure}[H]
     \centering
@@ -39,9 +46,12 @@ Redis, token thiết bị và dữ liệu thông báo không thuộc lược đ�
 \end{figure}
 
 \subsection{Dữ liệu quản lý hồ sơ cá nhân}
-\label{subsec:du_lieu_ho_so}
 
-Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính sách cập nhật của từng trường thông tin, HRM Backend có thể ghi trực tiếp một số thay đổi vào hồ sơ chính thức hoặc tiếp nhận đề xuất cần thẩm định. Với các đề xuất này, yêu cầu được lưu tại \texttt{tcns\_ly\_lich\_request}, nội dung thay đổi theo từng trường tại \texttt{tcns\_ly\_lich\_request\_detail} và tệp minh chứng tại \texttt{tcns\_ly\_lich\_request\_file}; sau khi được xử lý theo quy trình, các thay đổi được chấp thuận mới được phản ánh vào hồ sơ chính thức. Các liên kết qua \texttt{shcc}, \texttt{request\_id} và \texttt{request\_detail\_id} là liên kết logic, chưa được khai báo thành khóa ngoại vật lý trong schema đối chiếu. Cấu trúc các bảng của phân hệ hồ sơ cá nhân được thể hiện trong Hình~\ref{fig:chapter5_profile_schema}.
+Dữ liệu hồ sơ nhân sự được quản lý tại HRM và được MyHCMUT Mobile sử dụng cho chức năng tra cứu, cập nhật và gửi đề xuất điều chỉnh thông tin cá nhân. Hồ sơ chính thức được lưu tại nhóm bảng hồ sơ; những thay đổi cần thẩm định được quản lý thông qua yêu cầu cập nhật, chi tiết thay đổi và tệp minh chứng.
+
+\texttt{staff\_ly\_lich\_request} lưu thông tin chung và trạng thái của yêu cầu cập nhật; \texttt{staff\_ly\_lich\_request\_detail} lưu các nội dung được đề xuất thay đổi; \texttt{staff\_ly\_lich\_request\_file} lưu thông tin tệp minh chứng liên quan. Sau quá trình thẩm định, những nội dung được chấp thuận mới được phản ánh vào hồ sơ chính thức theo xử lý của HRM Backend.
+
+Các liên kết thông qua \texttt{shcc}, \texttt{request\_id} và \texttt{request\_detail\_id} được duy trì theo logic của HRM; trong schema được đối chiếu, các trường này chưa được khai báo thành khóa ngoại vật lý.
 
 \begin{figure}[H]
     \centering
@@ -52,24 +62,31 @@ Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính s�
 
 \input{Chapter5/data_dictionary/profile}
 
+\subsubsection{Dữ liệu lý lịch địa chỉ}
 
-\subsubsection{Bảng thông tin lý lịch địa chỉ}
+Nhóm dữ liệu địa chỉ lưu các thông tin liên quan đến địa chỉ trong hồ sơ nhân sự và tham chiếu đến các danh mục địa giới của HRM. MyHCMUT Mobile sử dụng nhóm dữ liệu này để hiển thị và hỗ trợ cập nhật các trường địa chỉ thuộc phạm vi được HRM cho phép.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-lldc.png}
-    \caption[Bảng thông tin lý lịch địa chỉ]{Bảng thông tin lý lịch địa chỉ}
+    \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{image/erd/erd-lldc.png}
+    \caption[ERD nhóm dữ liệu lý lịch địa chỉ]{ERD nhóm dữ liệu lý lịch địa chỉ của HRM}
     \label{fig:chapter5_profile_address}
 \end{figure}
 
-\subsubsection{Bảng thông tin lý lịch gia đình}
+\subsubsection{Dữ liệu lý lịch gia đình}
+
+Nhóm dữ liệu lý lịch gia đình quản lý thông tin người thân gắn với hồ sơ nhân sự. Ứng dụng khai thác dữ liệu này để hiển thị danh sách thành viên gia đình và thực hiện các thao tác cập nhật thuộc phạm vi chức năng hồ sơ được hỗ trợ trên mobile.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llgd.png}
-    \caption[Bảng thông tin lý lịch gia đình]{Bảng thông tin lý lịch gia đình}
+    \includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{image/erd/erd-llgd.png}
+    \caption[ERD nhóm dữ liệu lý lịch gia đình]{ERD nhóm dữ liệu lý lịch gia đình của HRM}
     \label{fig:chapter5_profile_family}
 \end{figure}
 
-\subsubsection{Bảng thông tin quá trình công tác}
+\subsubsection{Dữ liệu quá trình công tác}
+
+Nhóm dữ liệu này lưu các giai đoạn làm việc trong hồ sơ nhân sự và được ứng dụng sử dụng để trình bày lịch sử công tác. Dữ liệu quá trình công tác thuộc hồ sơ nhân sự và được phân biệt với phiếu đăng ký đi công tác được trình bày tại Mục~\ref{subsec:du_lieu_cong_tac}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llct.png}
@@ -77,7 +94,9 @@ Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính s�
     \label{fig:chapter5_profile_work}
 \end{figure}
 
-\subsubsection{Bảng thông tin đào tạo}
+\subsubsection{Dữ liệu đào tạo}
+
+Nhóm dữ liệu đào tạo lưu quá trình đào tạo và các thông tin chuyên môn liên quan của nhân sự. Ứng dụng sử dụng dữ liệu này để hiển thị quá trình đào tạo và hỗ trợ cập nhật đối với các trường thuộc phạm vi editor được cung cấp trên mobile và chính sách cập nhật của HRM.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-lldt.png}
@@ -85,7 +104,9 @@ Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính s�
     \label{fig:chapter5_profile_education}
 \end{figure}
 
-\subsubsection{Bảng thông tin khen thưởng và kỷ luật}
+\subsubsection{Dữ liệu khen thưởng và kỷ luật}
+
+Dữ liệu khen thưởng và kỷ luật được liên kết với hồ sơ nhân sự và được ứng dụng khai thác cho mục đích tra cứu. Các nghiệp vụ ban hành quyết định hoặc quản lý quá trình khen thưởng, kỷ luật không thuộc phạm vi của ứng dụng di động.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llkt.png}
@@ -99,7 +120,9 @@ Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính s�
     \label{fig:chapter5_profile_disciplinary}
 \end{figure}
 
-\subsubsection{Bảng thông tin quá trình lương và phụ cấp}
+\subsubsection{Dữ liệu quá trình lương và phụ cấp}
+
+Nhóm dữ liệu này lưu thông tin về quá trình lương và các khoản phụ cấp của nhân sự theo từng giai đoạn. MyHCMUT Mobile khai thác dữ liệu để phục vụ tra cứu hồ sơ; nghiệp vụ tính lương và quản lý chế độ phụ cấp tiếp tục thuộc phạm vi HRM.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llluong.png}
@@ -114,9 +137,13 @@ Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính s�
 \end{figure}
 
 \subsection{Dữ liệu về các quy trình phê duyệt đơn}
-\label{subsec:workflow}
-Dữ liệu về các loại quy trình phê duyệt được định danh trong bảng \texttt{fw\_quy\_trinh}.
-Các bước phê duyệt tương ứng với loại quy trình được lưu trong \texttt{fw\_quy\_trinh\_step}. Đơn vị, vai trò của những người có quyền xử lý cũng như bước thực hiện tiếp theo tương ứng với các thao tác xử lý được lưu trong \texttt{fw\_quy\_trinh\_target}. được thể hiện trong Hình~\ref{fig:chapter5_workflow_schema}.
+
+Các nghiệp vụ như nghỉ phép và công tác sử dụng cơ chế quy trình của HRM để xác định các bước xử lý và đối tượng có quyền thực hiện thao tác tại từng bước. Cấu hình quy trình được tổ chức thông qua các bảng \texttt{fw\_quy\_trinh}, \texttt{fw\_quy\_trinh\_buoc} và \texttt{fw\_quy\_trinh\_target}.
+
+Trong đó, \texttt{fw\_quy\_trinh} xác định một quy trình; \texttt{fw\_quy\_trinh\_buoc} mô tả các bước thuộc quy trình; \texttt{fw\_quy\_trinh\_target} xác định đối tượng xử lý và thông tin chuyển tiếp tương ứng. Khi một phiếu nghiệp vụ được xử lý, HRM Backend sử dụng cấu hình quy trình cùng trạng thái của phiếu để xác định các thao tác hợp lệ.
+
+Ứng dụng di động nhận trạng thái và những thao tác được phép thông qua API thay vì tự diễn giải hoặc tự thay đổi quy trình tại phía client.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/schemas/work-flow.png}
@@ -129,7 +156,12 @@ Các bước phê duyệt tương ứng với loại quy trình được lưu tr
 \subsection{Dữ liệu quản lý nghỉ phép}
 \label{subsec:du_lieu_nghi_phep}
 
-Dữ liệu nghỉ phép được tổ chức quanh bảng \texttt{tcns\_nghi\_phep\_dang\_ky}. Các bảng lịch cá nhân, quy trình, người xử lý và lịch sử phản ánh những phần khác nhau của vòng đời phiếu. Bảng \texttt{tcns\_so\_nghi\_phep\_nam} lưu hạn mức theo khóa chính phức hợp \texttt{(nam, shcc)}, đúng thứ tự cột trong schema. Các trường \texttt{phieu\_id} và \texttt{shcc} liên kết dữ liệu bằng logic backend, không phải FK vật lý. Mô hình các bảng và mối liên kết của phân hệ nghỉ phép được thể hiện trong Hình~\ref{fig:chapter5_leave_schema}.
+
+Dữ liệu nghỉ phép được tổ chức xoay quanh phiếu đăng ký tại \texttt{tcns\_nghi\_phep\_dang\_ky}. Phiếu lưu thông tin người đăng ký, khoảng thời gian nghỉ, hình thức nghỉ, lý do, tệp đính kèm, quy trình áp dụng và trạng thái xử lý.
+
+Các bảng liên quan phản ánh những phần khác nhau trong vòng đời của phiếu. \texttt{tcns\_lich\_ca\_nhan} cung cấp dữ liệu phục vụ hiển thị khoảng thời gian nghỉ trên lịch; nhóm \texttt{tcns\_quy\_trinh*} lưu trạng thái, người xử lý và lịch sử của quy trình phê duyệt; \texttt{tcns\_so\_nghi\_phep\_nam} quản lý hạn mức nghỉ phép của từng nhân sự theo năm.
+
+MyHCMUT Mobile sử dụng API HRM để tra cứu hạn mức, tạo và theo dõi phiếu, thực hiện những thao tác xử lý được phân quyền và đưa dữ liệu nghỉ phép vào lịch tổng hợp. Việc kiểm tra điều kiện và cập nhật trạng thái nghiệp vụ được thực hiện tại HRM Backend.
 
 \begin{figure}[H]
     \centering
@@ -140,12 +172,15 @@ Dữ liệu nghỉ phép được tổ chức quanh bảng \texttt{tcns\_nghi\_p
 
 \input{Chapter5/data_dictionary/leave}
 
-
-
 \subsection{Dữ liệu quản lý công tác}
 \label{subsec:du_lieu_cong_tac}
 
-Dữ liệu công tác được tổ chức quanh phiếu đăng ký, danh sách người tham gia, kế hoạch và quá trình công tác sau phê duyệt. Các bảng liên kết với phiếu bằng \texttt{dang\_ky\_id} thông qua logic HRM Backend. Trường \texttt{id} của bảng kế hoạch được sinh tự động và không rỗng nhưng schema đối chiếu chưa khai báo là khóa chính vật lý. Cấu trúc dữ liệu của phân hệ công tác được minh họa trong Hình~\ref{fig:chapter5_business_trip_schema}.
+
+Dữ liệu công tác được tổ chức quanh phiếu đăng ký tại \texttt{tcns\_dang\_ky\_cong\_tac}. Ngoài thông tin chung của chuyến đi, các bảng liên quan lưu danh sách người tham gia, kế hoạch thực hiện và quá trình công tác sau khi phiếu được xử lý.
+
+\texttt{tcns\_dang\_ky\_cong\_tac\_tham\_gia} xác định các thành viên tham gia và vai trò trưởng đoàn; \texttt{tcns\_dang\_ky\_cong\_tac\_ke\_hoach} lưu các mốc hoạt động; \texttt{tcns\_qua\_trinh\_di\_cong\_tac} phản ánh quá trình công tác sau khi được phê duyệt. Các dữ liệu này được HRM Backend sử dụng cùng cơ chế quy trình để quản lý vòng đời của phiếu.
+
+Ứng dụng di động khai thác các API tương ứng để tạo, tra cứu và xử lý phiếu theo quyền của người dùng, đồng thời sử dụng khoảng thời gian công tác để phục vụ chức năng lịch tổng hợp.
 
 \begin{figure}[H]
     \centering
@@ -156,16 +191,17 @@ Dữ liệu công tác được tổ chức quanh phiếu đăng ký, danh sách
 
 \input{Chapter5/data_dictionary/business_trip}
 
-
-
 \subsection{Dữ liệu văn phòng số, nhiệm vụ và lịch công tác}
 \label{subsec:du_lieu_ioffice}
 
-Dữ liệu iOffice được chia thành ba nhóm để làm rõ những quan hệ mà ứng dụng cần dùng khi hiển thị văn bản, nhiệm vụ và điểm danh. Trong toàn bộ nhóm bảng được đối chiếu, chỉ hai quan hệ từ \texttt{mission\_report\_batch.mission\_id} và \texttt{mission\_report.mission\_id} đến \texttt{mission\_general.id} là khóa ngoại vật lý. Các đường màu cam còn lại thể hiện liên kết logic.
+
+Dữ liệu iOffice được chia thành ba nhóm tương ứng với các chức năng được tích hợp trên MyHCMUT Mobile: văn bản, nhiệm vụ và lịch công tác. Ứng dụng truy xuất và thực hiện thao tác thông qua API iOffice; các hệ thống nguồn tiếp tục quản lý dữ liệu nghiệp vụ.
 
 \subsubsection{Dữ liệu văn bản}
 
-Hai bảng văn bản lưu dữ liệu văn bản đến và văn bản đi; bảng phân phối lưu người hoặc đơn vị nhận xử lý. \texttt{eoffice\_distribution.distributed\_id} là liên kết đa hình được diễn giải theo \texttt{distributed\_type}, nên không thể khai báo thành một FK đơn đến một bảng văn bản cụ thể. Cấu trúc các bảng của nhóm văn bản được thể hiện trong Hình~\ref{fig:chapter5_ioffice_documents_schema}.
+Nhóm dữ liệu văn bản gồm văn bản đến, văn bản đi và thông tin phân phối xử lý. Các bảng văn bản lưu thông tin nội dung và trạng thái, trong khi \texttt{eoffice\_distribution} xác định người hoặc đơn vị được phân phối xử lý.
+
+Trường \texttt{distributed\_id} được diễn giải cùng \texttt{distributed\_type} để xác định đối tượng văn bản liên quan. Đây là liên kết đa hình được xử lý theo logic của iOffice Backend thay vì một khóa ngoại vật lý duy nhất đến một bảng văn bản cụ thể.
 
 \begin{figure}[H]
     \centering
@@ -176,11 +212,11 @@ Hai bảng văn bản lưu dữ liệu văn bản đến và văn bản đi; b�
 
 \input{Chapter5/data_dictionary/ioffice_documents}
 
-
-
 \subsubsection{Dữ liệu nhiệm vụ}
 
-Nhiệm vụ tổng quát được tách thành các đầu việc, thành viên và các đợt báo cáo tiến độ. \texttt{mission\_outlined.parent\_id} tạo cấu trúc cây bằng liên kết logic đệ quy. Hai FK vật lý đến \texttt{mission\_general} được giữ nguyên trong sơ đồ; các liên kết nhiệm vụ còn lại do iOffice Backend duy trì. Cấu trúc các bảng của nhóm nhiệm vụ được thể hiện trong Hình~\ref{fig:chapter5_ioffice_missions_schema}.
+Dữ liệu nhiệm vụ được tổ chức từ nhiệm vụ tổng quát, các đầu việc, thành viên tham gia và các đợt báo cáo tiến độ. \texttt{mission\_general} lưu thông tin chung của nhiệm vụ; \texttt{mission\_outlined} biểu diễn các đầu việc và quan hệ phân cấp; \texttt{mission\_member} xác định nhân sự tham gia; các bảng báo cáo lưu yêu cầu và kết quả cập nhật tiến độ.
+
+Ứng dụng sử dụng dữ liệu này để phục vụ chức năng tra cứu nhiệm vụ và các thao tác thuộc phạm vi mobile. Trạng thái và quyền xử lý tiếp tục được xác định tại iOffice Backend.
 
 \begin{figure}[H]
     \centering
@@ -191,11 +227,11 @@ Nhiệm vụ tổng quát được tách thành các đầu việc, thành viên
 
 \input{Chapter5/data_dictionary/ioffice_missions}
 
-
-
 \subsubsection{Dữ liệu lịch và điểm danh}
 
-Lịch tổng quát gồm các sự kiện và danh sách phân công tham dự. Bảng điểm danh lưu kết quả có mặt hoặc báo vắng. Các liên kết qua \texttt{general\_id}, \texttt{item\_id} và \texttt{assign\_id} là liên kết logic. Schema hiện tại chưa có \texttt{UNIQUE(item\_id, created\_by)}, vì vậy việc ngăn bản ghi điểm danh trùng phụ thuộc vào kiểm tra của backend. Cấu trúc nhóm dữ liệu lịch và điểm danh được trình bày trong Hình~\ref{fig:chapter5_ioffice_schedule_schema}.
+Dữ liệu lịch được tổ chức từ lịch tổng quát, các sự kiện thuộc lịch và danh sách nhân sự được phân công tham dự. \texttt{schedule\_general\_item} đại diện cho sự kiện hoặc cuộc họp; \texttt{schedule\_general\_assign} lưu thông tin phân công; \texttt{schedule\_meeting\_attendance} ghi nhận kết quả điểm danh hoặc báo vắng.
+
+Các liên kết thông qua \texttt{general\_id}, \texttt{item\_id} và \texttt{assign\_id} được duy trì theo logic của iOffice Backend. MyHCMUT Mobile sử dụng API iOffice để tải thông tin cuộc họp, danh sách tham dự và trạng thái điểm danh; việc ghi nhận hoặc thay đổi kết quả điểm danh cũng được thực hiện thông qua backend. Cơ chế hỗ trợ cập nhật trạng thái điểm danh giữa các thiết bị được trình bày tại Mục~\ref{subsec:tich_hop_lich_da_nguon}.
 
 \begin{figure}[H]
     \centering
@@ -205,3 +241,9 @@ Lịch tổng quát gồm các sự kiện và danh sách phân công tham dự.
 \end{figure}
 
 \input{Chapter5/data_dictionary/ioffice_schedule}
+
+\subsection{Truy vết dữ liệu của các chức năng native}
+
+Đối với chức năng cập nhật hồ sơ native, dữ liệu ban đầu được lấy từ HRM. Khi người dùng đề xuất thay đổi đối với nội dung cần thẩm định, yêu cầu, chi tiết thay đổi và tệp minh chứng được lưu tại các nhóm dữ liệu tương ứng. Sau khi yêu cầu được xử lý, ứng dụng tải lại trạng thái và dữ liệu đã được HRM chấp thuận thay vì duy trì một bản hồ sơ chính thức riêng trên thiết bị.
+
+Đối với chức năng tạo hoặc đăng ký lịch họp, dữ liệu được ghi vào các thành phần lịch và phân công tương ứng của iOffice theo nhánh nghiệp vụ được thực hiện. Tệp đính kèm được liên kết với mục lịch sau khi mục này được tạo. Quyền xem lịch chờ và quyền phát hành lịch được xác định độc lập theo xử lý của iOffice; việc một người có thể xem một mục lịch không đồng nghĩa với quyền phát hành mục lịch đó.

@@ -1,0 +1,10 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests resolves text by language code accurately
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests falls back gracefully when requested language is empty
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests fromDynamic parses JSON string, Map, and plain string
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/localization_test.dart: MultiLanguage Unit Tests isEmpty and isNotEmpty properties work as expected
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests resolves explicit known fields correctly
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests handles contextual overrides (nhomDaoTao & phanLoai)
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests smart lexical parser decomposes undeclared camelCase, snake_case & kebab-case with accurate Vietnamese diacritics
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/packages/shared/localization/test/field_metadata_resolver_test.dart: FieldMetadataResolver Tests handles empty and null keys safely
+00:00 +8: All tests passed!

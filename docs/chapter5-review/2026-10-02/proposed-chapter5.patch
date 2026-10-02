@@ -1,0 +1,605 @@
+--- a/Chapter5/data_dictionary/leave.tex
++++ b/Chapter5/data_dictionary/leave.tex
+@@ -16,7 +16,7 @@
+ \endlastfoot
+ \texttt{tcns\_nghi\_phep\_dang\_ky} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh phiếu nghỉ phép. \\
+ \cline{2-4}
+- & \texttt{shcc} & text (PK, NOT NULL) & Mã số nhân sự đăng ký nghỉ phép. \\
++ & \texttt{shcc} & text & Mã số nhân sự đăng ký nghỉ phép; không thuộc khóa chính của phiếu. \\
+ \cline{2-4}
+  & \mbox{\texttt{ma\_don\_vi}} & text & Đơn vị công tác của nhân sự. \\
+ \cline{2-4}
+--- a/Chapter5/data_dictionary/profile.tex
++++ b/Chapter5/data_dictionary/profile.tex
+@@ -14,7 +14,7 @@
+ \endfoot
+ \hline
+ \endlastfoot
+-\texttt{tcns\_ly\_lich} & \texttt{shcc} & varchar (PK, NOT NULL) & Mã nhân sự và định danh hồ sơ chính thức. \\
++\texttt{staff\_ly\_lich} & \texttt{shcc} & varchar (PK, NOT NULL) & Mã nhân sự và định danh hồ sơ chính thức. \\
+ \cline{2-4}
+  & \texttt{ho} & varchar & Họ và tên đệm của nhân sự. \\
+ \cline{2-4}
+@@ -42,7 +42,7 @@
+ \cline{2-4}
+  & \texttt{vtvl} & varchar  & Vị trí việc làm được phân công. \\
+ \hline
+-\texttt{tcns\_ly\_lich\_request} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh yêu cầu cập nhật hồ sơ. \\
++\texttt{staff\_ly\_lich\_request} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh yêu cầu cập nhật hồ sơ. \\
+ \cline{2-4}
+  & \texttt{shcc} & varchar  & Liên kết logic đến nhân sự gửi yêu cầu. \\
+ \cline{2-4}
+@@ -54,11 +54,13 @@
+ \cline{2-4}
+  & \texttt{trang\_thai} & varchar  & Trạng thái thẩm định của yêu cầu. \\
+ \cline{2-4}
++ & \texttt{is\_phan\_hoi} & boolean & Phân biệt phản hồi với yêu cầu cập nhật hồ sơ. \\
++\cline{2-4}
+  & \texttt{ly\_do} & text  & Lý do đề xuất cập nhật hồ sơ. \\
+ \cline{2-4}
+  & \texttt{ly\_do\_tu\_choi} & text  & Phản hồi lý do khi từ chối yêu cầu. \\
+ \hline
+-\texttt{tcns\_ly\_lich\_request\_detail} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh chi tiết yêu cầu. \\
++\texttt{staff\_ly\_lich\_request\_detail} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh chi tiết yêu cầu. \\
+ \cline{2-4}
+  & \texttt{request\_id} & integer  & Liên kết logic đến yêu cầu cập nhật. \\
+ \cline{2-4}
+@@ -76,7 +78,7 @@
+ \cline{2-4}
+  & \texttt{reviewed\_by} & varchar  & Mã nhân sự thực hiện thẩm định. \\
+ \hline
+-\texttt{tcns\_ly\_lich\_request\_file} & \texttt{file\_id} & uuid (PK, NOT NULL) & Định danh tệp minh chứng. \\
++\texttt{staff\_ly\_lich\_request\_file} & \texttt{file\_id} & uuid (PK, NOT NULL) & Định danh tệp minh chứng. \\
+ \cline{2-4}
+  & \texttt{request\_detail\_id} & integer  & Liên kết logic đến chi tiết yêu cầu. \\
+ \cline{2-4}
+--- a/Chapter5/data_dictionary/workflow.tex
++++ b/Chapter5/data_dictionary/workflow.tex
+@@ -18,9 +18,9 @@
+ \cline{2-4}
+  & \texttt{ten} & text & Tên quy trình. \\
+ \hline
+-\texttt{fw\_quy\_trinh\_buoc} & \texttt{ma} & text (PK) & Định danh bước quy trình. \\
++\texttt{fw\_quy\_trinh\_buoc} & \texttt{ma} & text (PK, NOT NULL) & Mã bước; thuộc khóa chính ghép với \texttt{ma\_quy\_trinh}. \\
+ \cline{2-4}
+- & \texttt{ma\_quy\_trinh} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh}) & Liên kết logic đến quy trình. \\
++ & \texttt{ma\_quy\_trinh} & text (PK, NOT NULL) & Mã quy trình; thuộc khóa chính ghép với \texttt{ma}. \\
+ \cline{2-4}
+  & \texttt{is\_primary} & boolean  & Xác định bước có phải là bước chính hay không. \\
+ \cline{2-4}
+@@ -36,9 +36,9 @@
+ \hline
+ \texttt{fw\_quy\_trinh\_target} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh mục tiêu trong quy trình. \\
+ \cline{2-4}
+- & \texttt{quy\_trinh\_buoc} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh\_buoc}) & Mã bước quy trình. \\
++ & \texttt{quy\_trinh\_buoc} & text & Mã bước; diễn giải cùng \texttt{ma\_quy\_trinh} qua logic backend. \\
+ \cline{2-4}
+- & \texttt{ma\_quy\_trinh} & text (FK với \texttt{ma} trong \texttt{fw\_quy\_trinh}) & Mã quy trình. \\
++ & \texttt{ma\_quy\_trinh} & text & Mã quy trình dùng để xác định cấu hình bước. \\
+ \cline{2-4}
+  & \texttt{role} & jsonb  & Danh sách vai trò có quyền xử lý. \\
+ \cline{2-4}
+@@ -46,7 +46,7 @@
+ \cline{2-4}
+  & \texttt{trang\_thai} & text  & Mã thao tác xử lý. \\
+ \cline{2-4}
+- & \texttt{forward\_to} & text  & Khóa ngoại đến bước tiếp theo trong quy trình. \\
++ & \texttt{forward\_to} & text  & Mã bước tiếp theo do backend diễn giải trong quy trình. \\
+ \cline{2-4}
+  & \texttt{is\_create\_user} & boolean  & Xác định có phải là người tạo đơn xử lý bước này hay không. \\
+ \end{xltabular}
+--- a/Chapter5/index.tex
++++ b/Chapter5/index.tex
+@@ -1,7 +1,7 @@
+ \chapter{THIẾT KẾ HỆ THỐNG}
+ \label{chap:thietke_hethong}
+ 
+-\chapterintro{Chương này trình bày thiết kế hệ thống MyHCMUT Mobile dựa trên các yêu cầu và quy trình nghiệp vụ đã phân tích ở Chương~4. Nội dung chương bao gồm kiến trúc tổng thể, thiết kế thành phần và xử lý chức năng nghiệp vụ, mô hình dữ liệu và các cơ chế tích hợp giữa ứng dụng di động với những hệ thống hiện hữu của Nhà trường.}
++\chapterintro{Chương này trình bày thiết kế hệ thống MyHCMUT Mobile dựa trên các yêu cầu và quy trình nghiệp vụ đã phân tích ở Chương~4. Nội dung tập trung vào kiến trúc tổng thể, cách tổ chức các thành phần, mô hình dữ liệu phục vụ ứng dụng và các cơ chế tích hợp giữa ứng dụng di động với những hệ thống hiện hữu của Nhà trường.}
+ 
+ \input{Chapter5/section1}
+ \newpage
+--- a/Chapter5/section1.tex
++++ b/Chapter5/section1.tex
+@@ -1,9 +1,9 @@
+ \section{Kiến trúc tổng thể hệ thống}
+ \label{sec:kientruc_hethong}
+ 
+-Ứng dụng MyHCMUT Mobile được phát triển nhằm cung cấp một điểm truy cập trên thiết bị di động đến các chức năng nhân sự và văn phòng số của Trường Đại học Bách khoa -- ĐHQG-HCM. Thay vì xây dựng lại các hệ thống nghiệp vụ hiện hữu, đề tài tập trung phát triển ứng dụng Flutter và bổ sung những điểm tích hợp cần thiết để khai thác chức năng, dữ liệu và quy trình xử lý từ HRM và iOffice.
++MyHCMUT Mobile được xây dựng nhằm cung cấp một điểm truy cập trên thiết bị di động cho các nghiệp vụ nhân sự và văn phòng số đang được quản lý bởi HRM và iOffice. Thay vì xây dựng lại các hệ thống nghiệp vụ hiện hữu, ứng dụng tích hợp trực tiếp với các backend tương ứng thông qua API. Theo đó, ứng dụng di động đảm nhiệm tương tác với người dùng và tổng hợp dữ liệu phục vụ hiển thị, trong khi HRM và iOffice tiếp tục quản lý dữ liệu, quy trình nghiệp vụ và quyền truy cập thuộc phạm vi của từng hệ thống.
+ 
+-Kiến trúc tổng thể được thể hiện tại Hình~\ref{fig:mobile_overall_architecture}, gồm ứng dụng native, các dịch vụ backend, tầng dữ liệu và dịch vụ hỗ trợ. Trong đó, ứng dụng di động đảm nhiệm tương tác với người dùng và kết nối đến các hệ thống nghiệp vụ; các backend tiếp tục chịu trách nhiệm xác thực yêu cầu, kiểm tra quyền truy cập, xử lý nghiệp vụ và quản lý dữ liệu thuộc phạm vi của từng hệ thống.
++Kiến trúc tổng thể được thể hiện tại Hình~\ref{fig:mobile_overall_architecture}, bao gồm ứng dụng MyHCMUT Mobile, Auth Service, HRM Backend, iOffice Backend, các cơ sở dữ liệu nghiệp vụ và những dịch vụ hỗ trợ cho ứng dụng di động.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -12,18 +12,18 @@
+     \label{fig:mobile_overall_architecture}
+ \end{figure}
+ 
+-\textbf{Ứng dụng MyHCMUT Mobile} được xây dựng bằng Flutter, cung cấp giao diện cho các chức năng hồ sơ nhân sự, nghỉ phép, đi công tác, văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng kết nối trực tiếp đến các backend thông qua API; các biểu mẫu cập nhật hồ sơ và tạo cuộc họp được hiện thực bằng Flutter. Mobile quản lý dữ liệu nhập và trạng thái giao diện, còn backend quyết định dữ liệu được chấp nhận.
++\textbf{Ứng dụng MyHCMUT Mobile} được xây dựng bằng Flutter, cung cấp giao diện cho các chức năng hồ sơ nhân sự, nghỉ phép, công tác, văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Các biểu mẫu cập nhật hồ sơ và tạo hoặc đăng ký cuộc họp thuộc phạm vi mobile được hiện thực trực tiếp bằng Flutter. Ứng dụng quản lý dữ liệu nhập, trạng thái giao diện và việc gọi API; dữ liệu nghiệp vụ chỉ được xem là cập nhật thành công sau khi được backend tương ứng tiếp nhận và xử lý.
+ 
+-\textbf{Auth Service} tiếp nhận yêu cầu đăng nhập và cấp thông tin xác thực cho ứng dụng di động. Sau khi đăng nhập thành công, ứng dụng sử dụng access token khi gửi yêu cầu đến HRM Backend và iOffice Backend. Mỗi backend tự xác thực token, thiết lập ngữ cảnh người dùng và kiểm tra quyền thực hiện nghiệp vụ tương ứng. Auth Service không đóng vai trò trung gian chuyển tiếp các yêu cầu nghiệp vụ giữa ứng dụng và hai backend này.
++\textbf{Auth Service} cung cấp chức năng đăng nhập và cấp access token cho ứng dụng. Sau khi xác thực thành công, MyHCMUT Mobile sử dụng token khi gửi yêu cầu đến HRM Backend và iOffice Backend. Auth Service không đóng vai trò trung gian chuyển tiếp các yêu cầu nghiệp vụ; mỗi backend trực tiếp xác thực yêu cầu, thiết lập ngữ cảnh người dùng và kiểm tra quyền đối với thao tác được yêu cầu.
+ 
+-\textbf{HRM Backend} cung cấp các chức năng quản lý nhân sự, bao gồm hồ sơ nhân sự, nghỉ phép, đi công tác và các quy trình phê duyệt liên quan. Đề tài kế thừa các nghiệp vụ và quy trình hiện hữu, đồng thời bổ sung hoặc điều chỉnh một số API và cơ chế tích hợp để phục vụ ứng dụng di động. HRM Backend tiếp tục chịu trách nhiệm xử lý nghiệp vụ và quản lý dữ liệu nhân sự tại hệ thống nguồn.
++\textbf{HRM Backend} quản lý các nghiệp vụ liên quan đến hồ sơ nhân sự, nghỉ phép, công tác và các quy trình phê duyệt tương ứng. Đề tài kế thừa dữ liệu và quy trình nghiệp vụ hiện hữu, đồng thời tích hợp, bổ sung hoặc điều chỉnh một số API và cơ chế cần thiết để hỗ trợ ứng dụng di động. Việc kiểm tra điều kiện nghiệp vụ và cập nhật dữ liệu nhân sự chính thức tiếp tục được thực hiện tại HRM Backend.
+ 
+-\textbf{iOffice Backend} cung cấp nghiệp vụ văn bản, nhiệm vụ, lịch và điểm danh. Ngoài khai thác API hiện hữu, tích hợp lịch bổ sung quyền xem mục chưa phát hành có liên quan và cơ chế lời mời sau khi transaction thành công. Tạo trực tiếp lịch Trường giữ bước tổng hợp; phát hành vẫn theo quy trình iOffice.
++\textbf{iOffice Backend} cung cấp các nghiệp vụ văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng khai thác các API của iOffice để truy xuất dữ liệu và thực hiện những thao tác được phân quyền. Đối với chức năng tạo hoặc đăng ký lịch họp trên mobile, iOffice tiếp tục chịu trách nhiệm kiểm tra quyền, lưu dữ liệu và quản lý quy trình phát hành lịch.
+ 
+-\textbf{Tầng dữ liệu} gồm các CSDL nghiệp vụ riêng của HRM và iOffice. Mobile không kết nối trực tiếp CSDL và không tự ghi trạng thái phê duyệt. Giao diện Web của các hệ thống nguồn tiếp tục phục vụ quản trị và những nghiệp vụ ngoài phạm vi mobile; không tham gia như biểu mẫu nhúng trong luồng hồ sơ hiện tại. Mô hình dữ liệu liên quan được trình bày tại Mục~\ref{sec:thietke_csdl}.
++\textbf{Tầng dữ liệu} gồm các cơ sở dữ liệu nghiệp vụ riêng của HRM và iOffice. Ứng dụng di động không kết nối trực tiếp đến các cơ sở dữ liệu và không tự thay đổi trạng thái phê duyệt của nghiệp vụ. Giao diện Web của các hệ thống nguồn tiếp tục phục vụ quản trị và những nghiệp vụ nằm ngoài phạm vi mobile.
+ 
+-Bên cạnh các kết nối API, ứng dụng tiếp nhận thông báo đẩy qua Firebase Cloud Messaging từ các hệ thống nghiệp vụ và sử dụng Socket.IO cho chức năng điểm danh cuộc họp theo thời gian thực. Ứng dụng cũng tổng hợp dữ liệu lịch từ HRM và iOffice để hiển thị trong một giao diện thống nhất. Các cơ chế tích hợp này được trình bày tại Mục~\ref{sec:tich_hop_he_thong}.
++Bên cạnh giao tiếp API, ứng dụng sử dụng Firebase Cloud Messaging để tiếp nhận thông báo từ các hệ thống nghiệp vụ và Socket.IO để hỗ trợ cập nhật trạng thái điểm danh giữa các thiết bị đang theo dõi. Dữ liệu lịch từ HRM và iOffice được tổng hợp tại ứng dụng để cung cấp một giao diện lịch thống nhất cho người dùng.
+ 
+-Việc kết nối trực tiếp đến nhiều backend giúp đề tài tái sử dụng API hiện hữu và duy trì quyền xử lý nghiệp vụ tại từng hệ thống nguồn, nhưng đồng thời yêu cầu ứng dụng tự quản lý cấu hình kết nối, lỗi và trạng thái của từng miền dịch vụ. Việc tách các miền dịch vụ có thể giới hạn ảnh hưởng của sự cố theo từng nhóm chức năng; mức độ suy giảm cụ thể phụ thuộc vào những backend mà chức năng đang sử dụng.
++Việc kết nối với nhiều backend cho phép ứng dụng tái sử dụng các nghiệp vụ và dữ liệu hiện hữu, đồng thời duy trì quyền quản lý dữ liệu tại từng hệ thống nguồn. Đổi lại, ứng dụng cần quản lý riêng cấu hình kết nối, trạng thái và lỗi phát sinh từ từng miền dịch vụ. Khi một hệ thống nguồn gặp sự cố, mức độ ảnh hưởng phụ thuộc vào các chức năng đang sử dụng dữ liệu từ hệ thống đó.
+ 
+-Như vậy, phạm vi phát triển của đề tài tập trung vào ứng dụng MyHCMUT Mobile và các phần mở rộng tích hợp với hệ thống hiện hữu. HRM Backend, iOffice Backend cùng các cơ sở dữ liệu tương ứng được kế thừa mà không xây dựng mới. Cấu trúc các thành phần và điểm mở rộng này được trình bày chi tiết tại Mục~\ref{sec:thietke_kientruc_thanhphan}.
++Phạm vi kế thừa và phần phát triển của đề tài được trình bày cụ thể tại Bảng~\ref{tab:component_ownership_scope}.
+--- a/Chapter5/section2.tex
++++ b/Chapter5/section2.tex
+@@ -1,14 +1,14 @@
+-\section{Thiết kế thành phần và chức năng nghiệp vụ}
++\section{Thiết kế các thành phần hệ thống}
+ \label{sec:thietke_kientruc_thanhphan}
+ 
+-Mục này trình bày cách tổ chức ứng dụng MyHCMUT Mobile, các thành phần backend tham gia cung cấp chức năng và thiết kế xử lý hồ sơ nhân sự, tạo hoặc đăng ký cuộc họp. Nội dung xác định trách nhiệm của giao diện, thành phần quản lý trạng thái và backend, cùng phạm vi kế thừa, mở rộng các hệ thống hiện hữu. Các cơ chế kết nối dùng chung được trình bày riêng tại Mục~\ref{sec:tich_hop_he_thong}.
++Mục này trình bày cách tổ chức ứng dụng MyHCMUT Mobile và phạm vi tham gia của các backend hiện hữu. Các yêu cầu và luồng nghiệp vụ đã được xác định ở Chương~4; nội dung tại đây tập trung vào trách nhiệm và sự phối hợp giữa các thành phần khi hiện thực hệ thống.
+ 
+-Khi đánh giá đóng góp, cần phân biệt giao diện và luồng Flutter do nhóm xây dựng, các API/cơ chế tích hợp bổ sung hoặc điều chỉnh và dữ liệu/quy trình nghiệp vụ kế thừa. Biểu mẫu native sử dụng hợp đồng của HRM, không chuyển quyền quản lý hồ sơ sang thiết bị. Bảng~\ref{tab:component_ownership_scope} cụ thể hóa ranh giới theo từng thành phần.
++Trong phạm vi đề tài, cần phân biệt giữa các thành phần mobile do nhóm phát triển, các API hoặc cơ chế tích hợp được bổ sung hoặc điều chỉnh và những nghiệp vụ, dữ liệu được kế thừa từ HRM và iOffice. Việc đưa một nghiệp vụ lên giao diện native không làm thay đổi hệ thống chịu trách nhiệm quản lý dữ liệu chính thức của nghiệp vụ đó.
+ 
+ \subsection{Thiết kế ứng dụng MyHCMUT Mobile}
+ \label{subsec:kientruc_ung_dung_mobile}
+ 
+-Ứng dụng MyHCMUT Mobile được phát triển bằng Flutter và tổ chức mã nguồn theo mô hình monorepo. Các chức năng được phân chia thành những module nghiệp vụ riêng, trong khi ứng dụng chính chịu trách nhiệm kết hợp các module và các package cung cấp thành phần dùng chung. Bên trong từng module, mã nguồn tiếp tục được tổ chức theo trách nhiệm như giao diện, quản lý trạng thái, mô hình dữ liệu và giao tiếp API.
++Ứng dụng Flutter được tổ chức theo mô hình monorepo nhằm phân chia mã nguồn theo miền nghiệp vụ và tái sử dụng các thành phần dùng chung. Cấu trúc mã nguồn gồm ba nhóm chính: ứng dụng chính, các module nghiệp vụ và các package dùng chung.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -17,16 +17,19 @@
+     \label{fig:mobile_monorepo}
+ \end{figure}
+ 
+-Cấu trúc mã nguồn gồm ba nhóm chính:
+-\begin{itemize}
+-    \item \textbf{Ứng dụng chính (\texttt{apps/myhcmut}):} Là điểm khởi chạy và kết hợp các module thành ứng dụng hoàn chỉnh. Thành phần này đảm nhiệm khởi tạo ứng dụng, cấu hình điều hướng, đăng ký các provider dùng chung và tổ chức các màn hình ở cấp ứng dụng.
+-    \item \textbf{Các module nghiệp vụ (\texttt{modules}):} Được tổ chức thành các nhóm HRM, iOffice và thông báo. Module HRM cung cấp các chức năng hồ sơ nhân sự, nghỉ phép, đi công tác và phê duyệt liên quan. Module iOffice cung cấp các chức năng văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Module thông báo đảm nhiệm tiếp nhận, hiển thị thông báo và xử lý điều hướng đến chức năng tương ứng.
+-    \item \textbf{Các package dùng chung (\texttt{packages}):} Cung cấp những thành phần được nhiều module sử dụng, bao gồm giao tiếp mạng, quản lý thông tin xác thực, thành phần giao diện và các tiện ích hỗ trợ.
+-\end{itemize}
++\textbf{Ứng dụng chính (\texttt{apps/myhcmut})} là điểm khởi chạy và kết hợp các module thành ứng dụng hoàn chỉnh. Thành phần này đảm nhiệm khởi tạo ứng dụng, cấu hình điều hướng, đăng ký các provider dùng chung và tổ chức những màn hình ở cấp ứng dụng.
+ 
+-Cách tổ chức này giúp phân định phạm vi mã nguồn theo nhóm nghiệp vụ, đồng thời cho phép tái sử dụng các thành phần chung giữa nhiều module. Tuy nhiên, cấu trúc nội bộ không hoàn toàn giống nhau ở mọi chức năng; đề tài không áp đặt một chuỗi lớp xử lý cố định cho toàn bộ ứng dụng.
++\textbf{Các module nghiệp vụ (\texttt{modules})} được phân chia theo các miền HRM, iOffice và thông báo. Nhóm HRM cung cấp các chức năng hồ sơ nhân sự, nghỉ phép, công tác và các thao tác phê duyệt liên quan. Nhóm iOffice cung cấp văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Module thông báo đảm nhiệm tiếp nhận thông báo và điều hướng người dùng đến chức năng tương ứng.
+ 
+-\textbf{Luồng xử lý chức năng hồ sơ nhân sự:} Chức năng hồ sơ nhân sự được lựa chọn để minh họa cách các thành phần Flutter phối hợp trong một luồng xử lý thực tế. Màn hình \texttt{PersonalProfilePage} theo dõi trạng thái từ \texttt{profileInfoProvider}; provider này tổng hợp dữ liệu từ ba provider thành phần tương ứng với thông tin cá nhân, đào tạo và quá trình công tác. Mỗi provider thành phần sử dụng \texttt{fetchWithCacheFirst} để đọc dữ liệu cục bộ hoặc gọi HRM Backend thông qua \texttt{hrmDioProvider}. Kết quả được chuyển thành \texttt{ProfileModel}, hợp nhất và cung cấp lại cho giao diện.
++\textbf{Các package dùng chung (\texttt{packages})} cung cấp những thành phần được sử dụng bởi nhiều module, bao gồm giao tiếp mạng, quản lý thông tin xác thực, thành phần giao diện và các tiện ích hỗ trợ.
++
++Cấu trúc này giúp phân định mã nguồn theo nhóm nghiệp vụ và tái sử dụng các thành phần dùng chung. Tuy nhiên, các module không bắt buộc phải tuân theo một chuỗi lớp xử lý giống nhau. Cách tổ chức bên trong từng chức năng được lựa chọn dựa trên yêu cầu và mức độ phức tạp của nghiệp vụ tương ứng.
++
++\subsubsection*{Luồng tải dữ liệu hồ sơ nhân sự}
++
++Chức năng hồ sơ nhân sự được sử dụng làm ví dụ để minh họa sự phối hợp giữa các thành phần Flutter trong một luồng thực tế. \texttt{PersonalProfilePage} theo dõi trạng thái từ \texttt{profileInfoProvider}. Provider này tổng hợp dữ liệu từ các provider thành phần phụ trách thông tin cá nhân, đào tạo và quá trình công tác.
++
++Các provider thành phần sử dụng cơ chế \texttt{fetchWithCacheFirst} để lấy dữ liệu từ bộ nhớ đệm hoặc HRM Backend thông qua Dio. Dữ liệu nhận được được chuyển thành các model tương ứng, sau đó được tổng hợp và cung cấp cho giao diện.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -35,32 +38,40 @@
+     \label{fig:profile_cache_flow}
+ \end{figure}
+ 
+-Luồng trên là ví dụ minh họa, không phải cấu trúc bắt buộc của mọi module. Tùy theo yêu cầu nghiệp vụ, các chức năng khác có thể tổ chức provider và thành phần xử lý dữ liệu theo cách khác nhau. Những quy tắc ảnh hưởng đến dữ liệu chính thức vẫn được kiểm tra tại backend.
++Luồng trên được sử dụng để minh họa cách tổ chức của chức năng hồ sơ, không phải cấu trúc bắt buộc đối với mọi module. Các chức năng khác có thể sử dụng provider và thành phần xử lý dữ liệu khác nhau tùy theo nghiệp vụ. Những quy tắc có ảnh hưởng đến dữ liệu chính thức vẫn được kiểm tra tại backend.
+ 
+-\textbf{Các thành phần dùng chung:} Ứng dụng sử dụng các Dio instance được cấu hình theo địa chỉ của Auth Service, HRM Backend và iOffice Backend. Các instance dùng chung cơ chế quản lý token và gắn thông tin xác thực vào yêu cầu. Trong phiên bản hiện tại, ba miền dịch vụ sử dụng cùng access token do Auth Service cấp. Riverpod quản lý trạng thái phục vụ giao diện, còn GoRouter tổ chức điều hướng giữa các màn hình, bao gồm điều hướng đến chức năng tương ứng từ thông báo. Cơ chế xác thực được trình bày chi tiết tại Mục~\ref{subsec:xac_thuc_da_he_thong}.
++\subsubsection*{Các thành phần dùng chung}
+ 
+-\textbf{Bộ nhớ đệm và lưu trữ cục bộ:} Dữ liệu hồ sơ được lưu theo từng người dùng trong \texttt{SharedPreferences}. Mốc 12 giờ là ngưỡng đánh giá độ mới, không phải thời hạn tự động xóa dữ liệu. Khi cache còn mới, ứng dụng sử dụng dữ liệu cục bộ mà không gọi mạng. Khi cache quá ngưỡng, ứng dụng vẫn trả dữ liệu hiện có để hiển thị và thử cập nhật cache trong nền.
++Ứng dụng tạo các Dio instance theo địa chỉ của Auth Service, HRM Backend và iOffice Backend. Các instance sử dụng cơ chế quản lý token dùng chung để gắn thông tin xác thực vào yêu cầu. Trong phiên bản hiện tại, ba miền dịch vụ sử dụng cùng access token do Auth Service cấp.
+ 
+-Nếu cập nhật nền thất bại, dữ liệu cũ được giữ lại. Nếu thành công, dữ liệu mới được lưu để sử dụng ở lần đọc tiếp theo, nhưng tác vụ này không tự làm mới ngay giao diện đang hiển thị. Khi chưa có cache, ứng dụng cần kết nối đến HRM Backend để tải hồ sơ.
++Riverpod được sử dụng để quản lý trạng thái phục vụ giao diện và phối hợp việc tải dữ liệu. GoRouter tổ chức điều hướng giữa các màn hình, bao gồm điều hướng đến chức năng tương ứng khi người dùng mở thông báo. Cơ chế xác thực và giao tiếp API được trình bày chi tiết tại Mục~\ref{subsec:xac_thuc_da_he_thong}.
+ 
+-Ngoài dữ liệu hồ sơ, một số danh mục tham chiếu của HRM được lưu trong SQLite. Khả năng xem dữ liệu khi mất mạng được hỗ trợ đối với hồ sơ đã có cache; ứng dụng không hỗ trợ tạo, gửi hoặc phê duyệt phiếu ngoại tuyến rồi đồng bộ về sau. Vì vậy, cơ chế này được xác định là bộ nhớ đệm và lưu trữ cục bộ, không phải kiến trúc \textit{offline-first}.
++\subsubsection*{Bộ nhớ đệm và lưu trữ cục bộ}
++
++Đối với dữ liệu hồ sơ, ứng dụng sử dụng \texttt{SharedPreferences} để lưu bộ nhớ đệm theo từng người dùng. Mốc 12 giờ được sử dụng để đánh giá độ mới của dữ liệu và không phải thời hạn tự động xóa cache.
++
++Khi cache còn mới, ứng dụng sử dụng dữ liệu cục bộ mà không cần gọi mạng. Khi cache đã vượt ngưỡng, dữ liệu hiện có vẫn có thể được sử dụng để hiển thị trong khi ứng dụng thử cập nhật cache từ HRM Backend. Nếu cập nhật thất bại, dữ liệu cũ tiếp tục được giữ lại; nếu thành công, dữ liệu mới được lưu để sử dụng cho lần đọc tiếp theo. Quá trình cập nhật nền này không tự động làm mới giao diện đang hiển thị.
++
++Khi thiết bị chưa có dữ liệu cache, ứng dụng cần kết nối đến HRM Backend để tải dữ liệu. Ngoài dữ liệu hồ sơ, một số danh mục tham chiếu của HRM được lưu cục bộ bằng SQLite.
++
++Cơ chế trên cho phép người dùng xem lại một số dữ liệu đã được tải trước đó khi không có kết nối mạng. Tuy nhiên, ứng dụng không hỗ trợ tạo, gửi hoặc phê duyệt phiếu khi ngoại tuyến rồi đồng bộ lại sau. Vì vậy, đây là cơ chế bộ nhớ đệm và lưu trữ cục bộ, không phải kiến trúc \textit{offline-first}.
+ 
+ \subsection{Các backend hiện hữu và phạm vi mở rộng}
+ \label{subsec:backend_hien_huu_va_mo_rong}
+ 
+-MyHCMUT Mobile tích hợp với Auth Service, HRM Backend và iOffice Backend. Đây là các hệ thống hiện hữu; đề tài không xây dựng lại toàn bộ kiến trúc backend hoặc cơ sở dữ liệu nghiệp vụ của chúng. Phần phát triển phía backend tập trung vào các API và cơ chế tích hợp cần thiết để hỗ trợ ứng dụng di động.
++MyHCMUT Mobile tích hợp với Auth Service, HRM Backend và iOffice Backend. Các hệ thống này đã tồn tại trước đề tài; nhóm không xây dựng lại toàn bộ backend hoặc cơ sở dữ liệu mà tập trung vào việc tích hợp và những phần mở rộng cần thiết để cung cấp chức năng trên ứng dụng di động.
+ 
+-\textbf{Auth Service:} Cung cấp chức năng đăng nhập và cấp token cho ứng dụng. Sau khi nhận token, ứng dụng gửi yêu cầu trực tiếp đến HRM Backend hoặc iOffice Backend tùy theo chức năng được sử dụng. Các backend tự xác thực yêu cầu và kiểm tra quyền truy cập nghiệp vụ. Trong phạm vi đề tài, nhóm tích hợp ứng dụng với dịch vụ xác thực hiện hữu, không xây dựng mới một hệ thống xác thực độc lập.
++\textbf{Auth Service} tiếp tục cung cấp chức năng đăng nhập và cấp token. Sau khi nhận token, ứng dụng gửi yêu cầu trực tiếp đến backend tương ứng với chức năng đang sử dụng. Trong phạm vi đề tài, nhóm tích hợp MyHCMUT Mobile với cơ chế xác thực hiện hữu thay vì xây dựng một hệ thống xác thực độc lập.
+ 
+-\textbf{HRM Backend:} Cung cấp các module nghiệp vụ hồ sơ nhân sự, nghỉ phép, đi công tác và quy trình phê duyệt. Trong cấu trúc mã nguồn hiện hữu, middleware được gắn khi đăng ký route để xử lý các yêu cầu dùng chung như xác thực và phân quyền. Controller hoặc handler tiếp nhận yêu cầu và điều phối xử lý; tùy từng module, thành phần này có thể làm việc trực tiếp với model hoặc thông qua service/helper.
++\textbf{HRM Backend} cung cấp các module hồ sơ nhân sự, nghỉ phép, công tác và quy trình phê duyệt. Middleware được sử dụng tại các route để xử lý các yêu cầu dùng chung như xác thực và phân quyền; controller hoặc handler tiếp nhận yêu cầu và điều phối xử lý đến các thành phần nghiệp vụ tương ứng.
+ 
+-Đề tài kế thừa các nghiệp vụ, quy trình và dữ liệu HRM hiện hữu, đồng thời bổ sung hoặc điều chỉnh một số điểm tích hợp phục vụ ứng dụng di động, bao gồm API hồ sơ, kiểm tra điều kiện nghỉ phép, đăng ký token thiết bị, metadata thông báo và tích hợp policy, minh chứng, phản hồi và lịch sử hồ sơ. Các phần mở rộng này hỗ trợ ứng dụng khai thác hệ thống HRM mà không chuyển quyền xử lý nghiệp vụ hoặc quản lý dữ liệu chính thức sang thiết bị di động.
++Đề tài kế thừa các quy trình và dữ liệu HRM, đồng thời tích hợp, bổ sung hoặc điều chỉnh một số API cần thiết cho mobile. Đối với hồ sơ nhân sự, API cung cấp dữ liệu và chính sách trường để ứng dụng xác định những nội dung có thể chỉnh sửa. Khi nhận yêu cầu cập nhật, HRM Backend tiếp tục kiểm tra quyền, dữ liệu đầu vào và chính sách áp dụng trước khi cập nhật dữ liệu chính thức hoặc tạo yêu cầu cần thẩm định. Những nội dung cần minh chứng có thể được gửi cùng tệp đính kèm theo hợp đồng API tương ứng.
+ 
+-\textbf{iOffice Backend:} Cung cấp các module văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Ứng dụng di động khai thác API hiện hữu của các module này để truy xuất dữ liệu và thực hiện thao tác được phân quyền.
++\textbf{iOffice Backend} cung cấp các module văn bản, nhiệm vụ, lịch công tác và điểm danh. Ứng dụng sử dụng các API của iOffice để truy xuất dữ liệu và thực hiện các thao tác được phân quyền.
+ 
+-API chi tiết lịch trả riêng thông tin người được phân công và khách tham dự. Ứng dụng di động chuyển phản hồi này thành các nhóm hiển thị tương ứng; cách xử lý ở Mobile không làm thay đổi API đang phục vụ iOffice Web.
++Đối với chức năng tạo hoặc đăng ký lịch họp, iOffice chịu trách nhiệm lưu thông tin lịch, thành phần tham dự và dữ liệu liên quan. Ở nhánh tạo trực tiếp lịch Trường, dữ liệu lịch và thành phần được ghi trong transaction của request tạo; tệp đính kèm được tải lên bằng request riêng sau khi ứng dụng nhận được định danh của mục lịch. Do đó, transaction tạo lịch không bao phủ quá trình tải tệp hoặc gửi thông báo.
+ 
+-Các điều chỉnh lịch ở iOffice hỗ trợ xem trước mục Trường ở tổng hợp, gửi lời mời sau commit và đăng ký thiết bị nhận thông báo. Với nhánh trực tiếp, lời mời sớm phục vụ demo được gửi từ phân công đã lưu; phát hành có cơ chế gửi riêng. HRM đồng bộ quyền theo chức vụ nhưng bảo toàn quyền được cấp thủ công; cơ chế này không tự cấp permission lịch của iOffice.
++Thông báo mời có thể được kích hoạt sau khi dữ liệu lịch và phân công liên quan được lưu thành công. Việc gửi thông báo phục vụ nhận biết sự kiện và không đồng nghĩa với việc lịch đã được phát hành chính thức; quá trình phát hành vẫn được quản lý theo quy trình của iOffice.
+ 
+ \begin{table}[H]
+ \centering
+@@ -70,45 +81,15 @@
+ \hline
+ \textbf{Thành phần} & \textbf{Phần kế thừa} & \textbf{Phần nhóm phát triển hoặc tích hợp} \\
+ \hline
+-MyHCMUT Mobile & Không áp dụng & Phát triển ứng dụng Flutter, các module nghiệp vụ, thành phần dùng chung, giao tiếp API, hồ sơ native/phản hồi/lịch sử, lịch tổng hợp, tạo họp và xử lý thông báo. \\
++MyHCMUT Mobile & Không áp dụng & Phát triển ứng dụng Flutter, các module nghiệp vụ, thành phần dùng chung, giao tiếp API, hồ sơ native, lịch tổng hợp, tạo hoặc đăng ký cuộc họp và xử lý thông báo. \\
+ \hline
+ Auth Service & Chức năng đăng nhập và cấp token & Tích hợp ứng dụng di động với dịch vụ xác thực hiện hữu. \\
+ \hline
+-HRM Backend & Nghiệp vụ hồ sơ, nghỉ phép, đi công tác, quy trình phê duyệt và dữ liệu nhân sự & Bổ sung hoặc điều chỉnh API phục vụ mobile, kiểm tra nghỉ phép, đăng ký token thiết bị, metadata thông báo; tích hợp policy, minh chứng, phản hồi/lịch sử và bảo toàn quyền thủ công khi đồng bộ. \\
++HRM Backend & Nghiệp vụ hồ sơ, nghỉ phép, đi công tác, quy trình phê duyệt và dữ liệu nhân sự & Tích hợp, bổ sung hoặc điều chỉnh các API và cơ chế cần thiết để hỗ trợ chức năng mobile. \\
+ \hline
+-iOffice Backend & Nghiệp vụ văn bản, nhiệm vụ, lịch công tác, điểm danh và dữ liệu văn phòng số & Tích hợp API hiện hữu; bổ sung metadata, quyền xem lịch chờ, lời mời sau commit và đăng ký thiết bị nhận thông báo. \\
++iOffice Backend & Nghiệp vụ văn bản, nhiệm vụ, lịch công tác, điểm danh và dữ liệu văn phòng số & Tích hợp API hiện hữu và bổ sung hoặc điều chỉnh các điểm tích hợp cần thiết cho lịch, thông báo và ứng dụng di động. \\
+ \hline
+ HRM/iOffice Web & Giao diện nghiệp vụ và quản trị hiện hữu & Nguồn đối chiếu nghiệp vụ; các thao tác ngoài phạm vi mobile tiếp tục thực hiện tại hệ thống nguồn. \\
+ \hline
+ \end{tabularx}
+ \end{table}
+-
+-\subsection{Thiết kế chức năng quản lý hồ sơ}
+-\label{subsec:profile_native_integration}
+-
+-Các editor đảm nhiệm nhập liệu và chọn minh chứng; thành phần quản lý trạng thái phối hợp tải dữ liệu, gửi thay đổi và phản ánh kết quả. Màn hình lịch sử sử dụng yêu cầu, thay đổi và nhật ký do HRM cung cấp; các giá trị danh mục được trình bày theo nhãn khi có dữ liệu tra cứu. Khả năng hiển thị một danh mục không đồng nghĩa đã hỗ trợ editor cho toàn bộ trường của danh mục đó.
+-
+-Ứng dụng gọi API policy phù hợp với quyền tự cập nhật hoặc quyền chuyên viên, tải dữ liệu hiện tại và dựng biểu mẫu Flutter. Policy hỗ trợ xác định trường được thao tác và điều kiện minh chứng. Kiểm tra phía client giúp hướng dẫn nhập liệu; HRM vẫn xác thực quyền, dữ liệu và chính sách tại thời điểm tiếp nhận.
+-
+-Dữ liệu gửi chỉ chứa trường có thay đổi trong phạm vi editor. Với endpoint yêu cầu minh chứng, ứng dụng tạo request multipart chứa thông tin thay đổi và tệp. Các nhóm gia đình, đào tạo và kê khai có hợp đồng riêng; không áp một payload duy nhất cho toàn bộ hồ sơ. HRM ghi nhận cập nhật trực tiếp hoặc đề xuất theo trường; đề xuất cần thẩm định được chuyên viên xử lý theo quyền. Phản hồi có dấu hiệu \texttt{isPhanHoi=true}, phục vụ tiếp nhận thông tin và không tự cập nhật hồ sơ.
+-
+-Màn hình lịch sử có hai nhóm yêu cầu và thay đổi. Chi tiết yêu cầu và log dùng cặp dữ liệu trước/sau; ứng dụng hiển thị các trường khác nhau để nhân sự quan sát nội dung đã chỉnh hoặc đã đề xuất. Các trường định danh và metadata không được coi là thay đổi nghiệp vụ; nếu HRM chưa trả dữ liệu so sánh thì giao diện không tự tái dựng lịch sử từ cache. Trạng thái yêu cầu quyết định nội dung mới là đề xuất đang chờ hay thay đổi đã được ghi nhận.
+-
+-Màn hình lịch sử đọc dữ liệu từ \texttt{/api/staff/ly-lich/profile}. Sau thao tác, ứng dụng làm mới phần dữ liệu liên quan để đối chiếu trạng thái do hệ thống nguồn trả về. Dữ liệu nhập hoặc dữ liệu cache chưa phải kết quả lưu chính thức. Khi mất kết nối, ứng dụng báo lỗi; chưa có cơ chế ghi ngoại tuyến rồi tự đồng bộ thay đổi hồ sơ.
+-
+-\subsection{Thiết kế chức năng tạo và đăng ký lịch họp}
+-\label{subsec:create_schedule_integration}
+-
+-\texttt{ScheduleCreatePage} quản lý nhập liệu và lựa chọn thành phần; notifier tạo lịch điều phối request lưu, giữ ID đã nhận, tải tệp và thử lại. Bộ chọn nhân sự tìm theo tên nhưng gửi mã nhân sự/đơn vị từ backend, tránh coi tên hiển thị là định danh. Lựa chọn nhánh dựa trên quyền, còn controller iOffice kiểm tra lại và xác định người tạo từ phiên.
+-
+-Đối với tạo trực tiếp Trường, notifier gọi \texttt{POST /api/schedule/general-item/general/create}. Controller kiểm tra \texttt{scheduleGeneral:write}, lấy ngữ cảnh người dùng từ phiên và ép cấp lịch thành \texttt{TRUONG}. Mục lịch, thành phần và nhật ký được lưu trong transaction ở bước \texttt{TONG\_HOP} của quy trình đang hoạt động. Ràng buộc thành phần thuộc các đơn vị quy định được kiểm tra theo model iOffice; danh sách hiển thị trên client không thay thế kiểm tra này.
+-
+-Sau commit, controller kích hoạt gửi lời mời cho thành phần hợp lệ đã lưu, rồi trả mục lịch cho client. Ứng dụng nhận ID và gọi upload tại \texttt{/api/schedule/general-files/general/upload} bằng request riêng. Luồng nghiệp vụ được minh họa tại Hình~\ref{fig:schedule_create_integration} ở Chương~4. Nhánh đăng ký Trường tạo phiếu đăng ký, lưu mục/tệp và gửi phiếu; không sử dụng cùng hậu điều kiện với tạo trực tiếp.
+-
+-Ở phiên bản demo, tạo trực tiếp tại tổng hợp gửi lời mời sớm cho thành phần đã ghi nhận. Phát hành chính thức vẫn có quy trình và cơ chế gửi thông báo riêng ở iOffice; nhận lời mời không làm mục lịch chuyển sang đã phát hành. Việc đăng ký thiết bị và phân phối thông báo được trình bày tại Mục~\ref{subsec:tich_hop_thong_bao}.
+-
+-\textbf{Lỗi từng phần và thử lại.} Transaction chỉ bao phủ request lưu mục lịch; không bao phủ upload sau đó hoặc giao nhận push. Vì vậy, tệp lỗi có thể xảy ra khi lịch đã tồn tại và lời mời đã gửi. Notifier giữ ID đã nhận và các tệp đã tải trong phiên form để cập nhật cùng mục khi thử lại; chặn gửi đồng thời trong giao diện. Cơ chế này không bảo đảm phục hồi khi đóng ứng dụng. Khi POST đã commit nhưng phản hồi bị mất, client có thể chưa biết ID; chưa có khóa idempotency backend bảo đảm không tạo trùng khi gửi lại.
+-
+-\textbf{Trạng thái và quyền xem.} Trực tiếp Trường vẫn ở tổng hợp, chưa phát hành. Mobile tải \texttt{includePending=true}; iOffice giới hạn lịch chờ theo người tạo, người được mời đích danh hoặc thành viên đơn vị được mời. Mời đích danh không mở quyền cho toàn đơn vị. Lựa chọn UI \texttt{TRUONG\_DIRECT} không phải cấp dữ liệu \texttt{BGH}; lịch hẹn BGH là nghiệp vụ khác. Phát hành chính thức không thuộc luồng tạo trên mobile.
+-
+-Như vậy, ứng dụng Flutter là thành phần phát triển chính, còn các backend hiện hữu tiếp tục xử lý nghiệp vụ và dữ liệu. Các mở rộng phía backend đóng vai trò tích hợp, giúp ứng dụng khai thác hiệu quả hệ thống sẵn có.
+--- a/Chapter5/section3.tex
++++ b/Chapter5/section3.tex
+@@ -1,9 +1,16 @@
+ \section{Mô hình dữ liệu phục vụ ứng dụng}
+ \label{sec:thietke_csdl}
+ 
+-Mục này trình bày các nhóm dữ liệu nghiệp vụ liên quan trực tiếp đến những chức năng của MyHCMUT Mobile. HRM và iOffice sử dụng hai cơ sở dữ liệu PostgreSQL riêng biệt đã tồn tại trước đề tài; nhóm không thiết kế mới toàn bộ cơ sở dữ liệu của hai hệ thống. Các lược đồ là mô hình nghiệp vụ rút gọn; tên và kiểu của các bảng địa chỉ/gia đình được đối chiếu với model Sequelize tại HRM phiên bản chốt. Những lược đồ còn lại giữ vai trò mô tả quan hệ logic và chưa thay thế việc kiểm tra schema triển khai. Các hình chỉ giữ những thực thể và quan hệ liên quan đến các tính năng trên ứng dụng.
+-\subsection{Tổng quan sơ đồ erd}
++MyHCMUT Mobile khai thác dữ liệu từ hai hệ thống nghiệp vụ hiện hữu là HRM và iOffice. Mỗi hệ thống duy trì cơ sở dữ liệu PostgreSQL riêng và tiếp tục chịu trách nhiệm quản lý dữ liệu thuộc miền nghiệp vụ tương ứng. Ứng dụng di động không truy cập trực tiếp các cơ sở dữ liệu này mà trao đổi dữ liệu thông qua API do các backend cung cấp.
++
++Do cơ sở dữ liệu của hai hệ thống nguồn có phạm vi lớn hơn chức năng của đề tài, nội dung mục này chỉ trình bày các nhóm dữ liệu có liên quan trực tiếp đến những chức năng được tích hợp trên MyHCMUT Mobile. Các nhóm được lựa chọn gồm hồ sơ nhân sự, quy trình phê duyệt, nghỉ phép, công tác, văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp.
++
++Việc trình bày các mô hình dữ liệu nguồn nhằm làm rõ cấu trúc và quan hệ dữ liệu mà ứng dụng khai thác, không thể hiện một cơ sở dữ liệu mới hoặc cơ sở dữ liệu hợp nhất do ứng dụng di động quản lý.
++
++\subsection{Tổng quan sơ đồ ERD}
+ \label{subsec:tong_quan_erd}
++
++Hình~\ref{fig:chapter5_erd} trình bày tổng quan các nhóm dữ liệu nghiệp vụ chính thuộc phạm vi đề tài. Miền HRM bao gồm hồ sơ nhân sự, yêu cầu cập nhật hồ sơ, nghỉ phép, công tác và quy trình xử lý liên quan. Miền iOffice bao gồm văn bản, nhiệm vụ, lịch công tác và điểm danh cuộc họp. Các sơ đồ chi tiết ở những mục tiếp theo được rút gọn từ mô hình dữ liệu của hệ thống nguồn, chỉ giữ lại những bảng và quan hệ cần thiết để giải thích các chức năng được cung cấp trên ứng dụng di động.
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=\textwidth]{image/erd/erd.png}
+@@ -15,11 +22,11 @@
+ \subsection{Tổng quan mô hình dữ liệu}
+ \label{subsec:tong_quan_csdl}
+ 
+-Dữ liệu nghiệp vụ được chia thành miền HRM và miền iOffice theo hệ thống sở hữu. Miền HRM bao gồm hồ sơ nhân sự, yêu cầu cập nhật hồ sơ, nghỉ phép, hạn mức phép năm và đi công tác. Miền iOffice bao gồm văn bản, nhiệm vụ, báo cáo tiến độ, lịch công tác và điểm danh cuộc họp. Ứng dụng chỉ trao đổi dữ liệu thông qua API của backend tương ứng và không truy cập trực tiếp cơ sở dữ liệu.
+-
+-Hình~\ref{fig:chapter5_data_overview} kết hợp các bảng đại diện của hai miền để thể hiện phạm vi dữ liệu phục vụ ứng dụng. Đây là lược đồ tổng quan rút gọn, không phải một cơ sở dữ liệu hợp nhất. Giữa HRM và iOffice không có khóa ngoại chéo; lịch tổng hợp được tạo từ các phản hồi API độc lập tại phía ứng dụng thay vì sao chép dữ liệu nguồn sang một bảng chung.
+-
+-Redis, token thiết bị và dữ liệu thông báo không thuộc lược đồ nghiệp vụ này. Vai trò của chúng được trình bày tại Mục~\ref{sec:tich_hop_he_thong}; bộ nhớ đệm và SQLite trên thiết bị đã được trình bày tại Mục~\ref{subsec:kientruc_ung_dung_mobile}.
++Dữ liệu phục vụ MyHCMUT Mobile được phân thành hai miền tương ứng với HRM và iOffice. Hai miền được quản lý độc lập tại các hệ thống nguồn và không hình thành một cơ sở dữ liệu dùng chung cho ứng dụng.
++
++Hình~\ref{fig:chapter5_data_overview} khái quát các bảng đại diện của hai miền dữ liệu. Đối với các trường được backend sử dụng để liên kết dữ liệu nhưng cơ sở dữ liệu không khai báo ràng buộc khóa ngoại, sơ đồ thể hiện chúng dưới dạng liên kết logic thay vì khóa ngoại vật lý. Việc tổng hợp dữ liệu giữa HRM và iOffice, chẳng hạn lịch công tác tổng hợp, được thực hiện từ kết quả của các API tương ứng tại phía ứng dụng thay vì sao chép dữ liệu nguồn vào một bảng dùng chung.
++
++Lược đồ này tập trung vào dữ liệu nghiệp vụ. Token thiết bị và dữ liệu phục vụ thông báo được giải thích tại Mục~\ref{subsec:tich_hop_thong_bao}; bộ nhớ đệm và danh mục cục bộ được trình bày tại Mục~\ref{subsec:kientruc_ung_dung_mobile}.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -39,9 +46,12 @@
+ \end{figure}
+ 
+ \subsection{Dữ liệu quản lý hồ sơ cá nhân}
+-\label{subsec:du_lieu_ho_so}
+-
+-Dữ liệu hồ sơ thuộc phạm vi quản lý của HRM. Tùy theo chính sách cập nhật của từng trường thông tin, HRM Backend có thể ghi trực tiếp một số thay đổi vào hồ sơ chính thức hoặc tiếp nhận đề xuất cần thẩm định. Với các đề xuất này, yêu cầu được lưu tại \texttt{tcns\_ly\_lich\_request}, nội dung thay đổi theo từng trường tại \texttt{tcns\_ly\_lich\_request\_detail} và tệp minh chứng tại \texttt{tcns\_ly\_lich\_request\_file}; sau khi được xử lý theo quy trình, các thay đổi được chấp thuận mới được phản ánh vào hồ sơ chính thức. Các liên kết qua \texttt{shcc}, \texttt{request\_id} và \texttt{request\_detail\_id} là liên kết logic, chưa được khai báo thành khóa ngoại vật lý trong schema đối chiếu. Cấu trúc các bảng của phân hệ hồ sơ cá nhân được thể hiện trong Hình~\ref{fig:chapter5_profile_schema}.
++
++Dữ liệu hồ sơ nhân sự được quản lý tại HRM và được MyHCMUT Mobile sử dụng cho chức năng tra cứu, cập nhật và gửi đề xuất điều chỉnh thông tin cá nhân. Hồ sơ chính thức được lưu tại nhóm bảng hồ sơ; những thay đổi cần thẩm định được quản lý thông qua yêu cầu cập nhật, chi tiết thay đổi và tệp minh chứng.
++
++\texttt{staff\_ly\_lich\_request} lưu thông tin chung và trạng thái của yêu cầu cập nhật; \texttt{staff\_ly\_lich\_request\_detail} lưu các nội dung được đề xuất thay đổi; \texttt{staff\_ly\_lich\_request\_file} lưu thông tin tệp minh chứng liên quan. Sau quá trình thẩm định, những nội dung được chấp thuận mới được phản ánh vào hồ sơ chính thức theo xử lý của HRM Backend.
++
++Các liên kết thông qua \texttt{shcc}, \texttt{request\_id} và \texttt{request\_detail\_id} được duy trì theo logic của HRM; trong schema được đối chiếu, các trường này chưa được khai báo thành khóa ngoại vật lý.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -52,17 +62,31 @@
+ 
+ \input{Chapter5/data_dictionary/profile}
+ 
+-\subsubsection{Bảng thông tin lý lịch địa chỉ}
+-
+-\input{Chapter5/data_dictionary/profile_addess}
+-
+-\subsubsection{Bảng thông tin lý lịch gia đình}
+-
+-\input{Chapter5/data_dictionary/profile_family}
+-
+-Từ điển địa chỉ và gia đình được đối chiếu riêng theo model nguồn; hình lược đồ cũ không được dùng làm schema vật lý cho hai bảng này. Hai bảng trên dùng tên vật lý \texttt{staff\_ly\_lich\_dia\_chi} và \texttt{staff\_ly\_lich\_gia\_dinh} theo model HRM hiện hành; các trường được trình bày rút gọn. SHCC liên kết logic tới nhân sự, không suy ra FK vật lý khi model chưa khai báo. Các hình tổng quan còn dùng tên nhóm nghiệp vụ TCNS được hiểu là mô hình logic, không phải danh mục tên bảng triển khai.
+-
+-\subsubsection{Bảng thông tin quá trình công tác}
++\subsubsection{Dữ liệu lý lịch địa chỉ}
++
++Nhóm dữ liệu địa chỉ lưu các thông tin liên quan đến địa chỉ trong hồ sơ nhân sự và tham chiếu đến các danh mục địa giới của HRM. MyHCMUT Mobile sử dụng nhóm dữ liệu này để hiển thị và hỗ trợ cập nhật các trường địa chỉ thuộc phạm vi được HRM cho phép.
++
++\begin{figure}[H]
++    \centering
++    \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{image/erd/erd-lldc.png}
++    \caption[ERD nhóm dữ liệu lý lịch địa chỉ]{ERD nhóm dữ liệu lý lịch địa chỉ của HRM}
++    \label{fig:chapter5_profile_address}
++\end{figure}
++
++\subsubsection{Dữ liệu lý lịch gia đình}
++
++Nhóm dữ liệu lý lịch gia đình quản lý thông tin người thân gắn với hồ sơ nhân sự. Ứng dụng khai thác dữ liệu này để hiển thị danh sách thành viên gia đình và thực hiện các thao tác cập nhật thuộc phạm vi chức năng hồ sơ được hỗ trợ trên mobile.
++
++\begin{figure}[H]
++    \centering
++    \includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{image/erd/erd-llgd.png}
++    \caption[ERD nhóm dữ liệu lý lịch gia đình]{ERD nhóm dữ liệu lý lịch gia đình của HRM}
++    \label{fig:chapter5_profile_family}
++\end{figure}
++
++\subsubsection{Dữ liệu quá trình công tác}
++
++Nhóm dữ liệu này lưu các giai đoạn làm việc trong hồ sơ nhân sự và được ứng dụng sử dụng để trình bày lịch sử công tác. Dữ liệu quá trình công tác thuộc hồ sơ nhân sự và được phân biệt với phiếu đăng ký đi công tác được trình bày tại Mục~\ref{subsec:du_lieu_cong_tac}.
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llct.png}
+@@ -70,7 +94,9 @@
+     \label{fig:chapter5_profile_work}
+ \end{figure}
+ 
+-\subsubsection{Bảng thông tin đào tạo}
++\subsubsection{Dữ liệu đào tạo}
++
++Nhóm dữ liệu đào tạo lưu quá trình đào tạo và các thông tin chuyên môn liên quan của nhân sự. Ứng dụng sử dụng dữ liệu này để hiển thị quá trình đào tạo và hỗ trợ cập nhật đối với các trường thuộc phạm vi editor được cung cấp trên mobile và chính sách cập nhật của HRM.
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-lldt.png}
+@@ -78,7 +104,9 @@
+     \label{fig:chapter5_profile_education}
+ \end{figure}
+ 
+-\subsubsection{Bảng thông tin khen thưởng và kỷ luật}
++\subsubsection{Dữ liệu khen thưởng và kỷ luật}
++
++Dữ liệu khen thưởng và kỷ luật được liên kết với hồ sơ nhân sự và được ứng dụng khai thác cho mục đích tra cứu. Các nghiệp vụ ban hành quyết định hoặc quản lý quá trình khen thưởng, kỷ luật không thuộc phạm vi của ứng dụng di động.
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llkt.png}
+@@ -92,7 +120,9 @@
+     \label{fig:chapter5_profile_disciplinary}
+ \end{figure}
+ 
+-\subsubsection{Bảng thông tin quá trình lương và phụ cấp}
++\subsubsection{Dữ liệu quá trình lương và phụ cấp}
++
++Nhóm dữ liệu này lưu thông tin về quá trình lương và các khoản phụ cấp của nhân sự theo từng giai đoạn. MyHCMUT Mobile khai thác dữ liệu để phục vụ tra cứu hồ sơ; nghiệp vụ tính lương và quản lý chế độ phụ cấp tiếp tục thuộc phạm vi HRM.
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/erd/erd-llluong.png}
+@@ -107,9 +137,13 @@
+ \end{figure}
+ 
+ \subsection{Dữ liệu về các quy trình phê duyệt đơn}
+-\label{subsec:workflow}
+-Dữ liệu về các loại quy trình phê duyệt được định danh trong bảng \texttt{fw\_quy\_trinh}.
+-Các bước phê duyệt tương ứng với loại quy trình được lưu trong \texttt{fw\_quy\_trinh\_step}. Đơn vị, vai trò của những người có quyền xử lý cũng như bước thực hiện tiếp theo tương ứng với các thao tác xử lý được lưu trong \texttt{fw\_quy\_trinh\_target}. được thể hiện trong Hình~\ref{fig:chapter5_workflow_schema}.
++
++Các nghiệp vụ như nghỉ phép và công tác sử dụng cơ chế quy trình của HRM để xác định các bước xử lý và đối tượng có quyền thực hiện thao tác tại từng bước. Cấu hình quy trình được tổ chức thông qua các bảng \texttt{fw\_quy\_trinh}, \texttt{fw\_quy\_trinh\_buoc} và \texttt{fw\_quy\_trinh\_target}.
++
++Trong đó, \texttt{fw\_quy\_trinh} xác định một quy trình; \texttt{fw\_quy\_trinh\_buoc} mô tả các bước thuộc quy trình; \texttt{fw\_quy\_trinh\_target} xác định đối tượng xử lý và thông tin chuyển tiếp tương ứng. Khi một phiếu nghiệp vụ được xử lý, HRM Backend sử dụng cấu hình quy trình cùng trạng thái của phiếu để xác định các thao tác hợp lệ.
++
++Ứng dụng di động nhận trạng thái và những thao tác được phép thông qua API thay vì tự diễn giải hoặc tự thay đổi quy trình tại phía client.
++
+ \begin{figure}[H]
+     \centering
+     \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{image/schemas/work-flow.png}
+@@ -122,7 +156,12 @@
+ \subsection{Dữ liệu quản lý nghỉ phép}
+ \label{subsec:du_lieu_nghi_phep}
+ 
+-Dữ liệu nghỉ phép được tổ chức quanh bảng \texttt{tcns\_nghi\_phep\_dang\_ky}. Các bảng lịch cá nhân, quy trình, người xử lý và lịch sử phản ánh những phần khác nhau của vòng đời phiếu. Bảng \texttt{tcns\_so\_nghi\_phep\_nam} lưu hạn mức theo khóa chính phức hợp \texttt{(nam, shcc)}, đúng thứ tự cột trong schema. Các trường \texttt{phieu\_id} và \texttt{shcc} liên kết dữ liệu bằng logic backend, không phải FK vật lý. Mô hình các bảng và mối liên kết của phân hệ nghỉ phép được thể hiện trong Hình~\ref{fig:chapter5_leave_schema}.
++
++Dữ liệu nghỉ phép được tổ chức xoay quanh phiếu đăng ký tại \texttt{tcns\_nghi\_phep\_dang\_ky}. Phiếu lưu thông tin người đăng ký, khoảng thời gian nghỉ, hình thức nghỉ, lý do, tệp đính kèm, quy trình áp dụng và trạng thái xử lý.
++
++Các bảng liên quan phản ánh những phần khác nhau trong vòng đời của phiếu. \texttt{tcns\_lich\_ca\_nhan} cung cấp dữ liệu phục vụ hiển thị khoảng thời gian nghỉ trên lịch; nhóm \texttt{tcns\_quy\_trinh*} lưu trạng thái, người xử lý và lịch sử của quy trình phê duyệt; \texttt{tcns\_so\_nghi\_phep\_nam} quản lý hạn mức nghỉ phép của từng nhân sự theo năm.
++
++MyHCMUT Mobile sử dụng API HRM để tra cứu hạn mức, tạo và theo dõi phiếu, thực hiện những thao tác xử lý được phân quyền và đưa dữ liệu nghỉ phép vào lịch tổng hợp. Việc kiểm tra điều kiện và cập nhật trạng thái nghiệp vụ được thực hiện tại HRM Backend.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -136,7 +175,12 @@
+ \subsection{Dữ liệu quản lý công tác}
+ \label{subsec:du_lieu_cong_tac}
+ 
+-Dữ liệu công tác được tổ chức quanh phiếu đăng ký, danh sách người tham gia, kế hoạch và quá trình công tác sau phê duyệt. Các bảng liên kết với phiếu bằng \texttt{dang\_ky\_id} thông qua logic HRM Backend. Trường \texttt{id} của bảng kế hoạch được sinh tự động và không rỗng nhưng schema đối chiếu chưa khai báo là khóa chính vật lý. Cấu trúc dữ liệu của phân hệ công tác được minh họa trong Hình~\ref{fig:chapter5_business_trip_schema}.
++
++Dữ liệu công tác được tổ chức quanh phiếu đăng ký tại \texttt{tcns\_dang\_ky\_cong\_tac}. Ngoài thông tin chung của chuyến đi, các bảng liên quan lưu danh sách người tham gia, kế hoạch thực hiện và quá trình công tác sau khi phiếu được xử lý.
++
++\texttt{tcns\_dang\_ky\_cong\_tac\_tham\_gia} xác định các thành viên tham gia và vai trò trưởng đoàn; \texttt{tcns\_dang\_ky\_cong\_tac\_ke\_hoach} lưu các mốc hoạt động; \texttt{tcns\_qua\_trinh\_di\_cong\_tac} phản ánh quá trình công tác sau khi được phê duyệt. Các dữ liệu này được HRM Backend sử dụng cùng cơ chế quy trình để quản lý vòng đời của phiếu.
++
++Ứng dụng di động khai thác các API tương ứng để tạo, tra cứu và xử lý phiếu theo quyền của người dùng, đồng thời sử dụng khoảng thời gian công tác để phục vụ chức năng lịch tổng hợp.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -150,11 +194,14 @@
+ \subsection{Dữ liệu văn phòng số, nhiệm vụ và lịch công tác}
+ \label{subsec:du_lieu_ioffice}
+ 
+-Dữ liệu iOffice được chia thành ba nhóm để làm rõ những quan hệ mà ứng dụng cần dùng khi hiển thị văn bản, nhiệm vụ và điểm danh. Trong toàn bộ nhóm bảng được đối chiếu, chỉ hai quan hệ từ \texttt{mission\_report\_batch.mission\_id} và \texttt{mission\_report.mission\_id} đến \texttt{mission\_general.id} là khóa ngoại vật lý. Các đường màu cam còn lại thể hiện liên kết logic.
++
++Dữ liệu iOffice được chia thành ba nhóm tương ứng với các chức năng được tích hợp trên MyHCMUT Mobile: văn bản, nhiệm vụ và lịch công tác. Ứng dụng truy xuất và thực hiện thao tác thông qua API iOffice; các hệ thống nguồn tiếp tục quản lý dữ liệu nghiệp vụ.
+ 
+ \subsubsection{Dữ liệu văn bản}
+ 
+-Hai bảng văn bản lưu dữ liệu văn bản đến và văn bản đi; bảng phân phối lưu người hoặc đơn vị nhận xử lý. \texttt{eoffice\_distribution.distributed\_id} là liên kết đa hình được diễn giải theo \texttt{distributed\_type}, nên không thể khai báo thành một FK đơn đến một bảng văn bản cụ thể. Cấu trúc các bảng của nhóm văn bản được thể hiện trong Hình~\ref{fig:chapter5_ioffice_documents_schema}.
++Nhóm dữ liệu văn bản gồm văn bản đến, văn bản đi và thông tin phân phối xử lý. Các bảng văn bản lưu thông tin nội dung và trạng thái, trong khi \texttt{eoffice\_distribution} xác định người hoặc đơn vị được phân phối xử lý.
++
++Trường \texttt{distributed\_id} được diễn giải cùng \texttt{distributed\_type} để xác định đối tượng văn bản liên quan. Đây là liên kết đa hình được xử lý theo logic của iOffice Backend thay vì một khóa ngoại vật lý duy nhất đến một bảng văn bản cụ thể.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -167,7 +214,9 @@
+ 
+ \subsubsection{Dữ liệu nhiệm vụ}
+ 
+-Nhiệm vụ tổng quát được tách thành các đầu việc, thành viên và các đợt báo cáo tiến độ. \texttt{mission\_outlined.parent\_id} tạo cấu trúc cây bằng liên kết logic đệ quy. Hai FK vật lý đến \texttt{mission\_general} được giữ nguyên trong sơ đồ; các liên kết nhiệm vụ còn lại do iOffice Backend duy trì. Cấu trúc các bảng của nhóm nhiệm vụ được thể hiện trong Hình~\ref{fig:chapter5_ioffice_missions_schema}.
++Dữ liệu nhiệm vụ được tổ chức từ nhiệm vụ tổng quát, các đầu việc, thành viên tham gia và các đợt báo cáo tiến độ. \texttt{mission\_general} lưu thông tin chung của nhiệm vụ; \texttt{mission\_outlined} biểu diễn các đầu việc và quan hệ phân cấp; \texttt{mission\_member} xác định nhân sự tham gia; các bảng báo cáo lưu yêu cầu và kết quả cập nhật tiến độ.
++
++Ứng dụng sử dụng dữ liệu này để phục vụ chức năng tra cứu nhiệm vụ và các thao tác thuộc phạm vi mobile. Trạng thái và quyền xử lý tiếp tục được xác định tại iOffice Backend.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -180,7 +229,9 @@
+ 
+ \subsubsection{Dữ liệu lịch và điểm danh}
+ 
+-Lịch tổng quát gồm các sự kiện và danh sách phân công tham dự. Bảng điểm danh lưu kết quả có mặt hoặc báo vắng. Các liên kết qua \texttt{general\_id}, \texttt{item\_id} và \texttt{assign\_id} là liên kết logic. Schema hiện tại chưa có \texttt{UNIQUE(item\_id, created\_by)}, vì vậy việc ngăn bản ghi điểm danh trùng phụ thuộc vào kiểm tra của backend. Cấu trúc nhóm dữ liệu lịch và điểm danh được trình bày trong Hình~\ref{fig:chapter5_ioffice_schedule_schema}.
++Dữ liệu lịch được tổ chức từ lịch tổng quát, các sự kiện thuộc lịch và danh sách nhân sự được phân công tham dự. \texttt{schedule\_general\_item} đại diện cho sự kiện hoặc cuộc họp; \texttt{schedule\_general\_assign} lưu thông tin phân công; \texttt{schedule\_meeting\_attendance} ghi nhận kết quả điểm danh hoặc báo vắng.
++
++Các liên kết thông qua \texttt{general\_id}, \texttt{item\_id} và \texttt{assign\_id} được duy trì theo logic của iOffice Backend. MyHCMUT Mobile sử dụng API iOffice để tải thông tin cuộc họp, danh sách tham dự và trạng thái điểm danh; việc ghi nhận hoặc thay đổi kết quả điểm danh cũng được thực hiện thông qua backend. Cơ chế hỗ trợ cập nhật trạng thái điểm danh giữa các thiết bị được trình bày tại Mục~\ref{subsec:tich_hop_lich_da_nguon}.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -193,6 +244,6 @@
+ 
+ \subsection{Truy vết dữ liệu của các chức năng native}
+ 
+-Cập nhật hồ sơ nối dữ liệu hiện tại với đề xuất, chi tiết thay đổi và tệp minh chứng; phản hồi và lịch sử sử dụng dữ liệu yêu cầu/nhật ký do HRM cung cấp, không tạo một CSDL hồ sơ chính thức trên thiết bị. Khi một nội dung được thẩm định, trạng thái yêu cầu và dữ liệu đã chấp thuận cần được đối chiếu tại backend.
+-
+-Luồng tạo trực tiếp lịch ghi mục lịch, thành phần và nhật ký; tệp gắn với ID mục sau upload. Phiếu đăng ký và các mục của phiếu thuộc nhánh đăng ký Trường, không phải bản ghi bắt buộc của mọi thao tác tạo trực tiếp. Người tạo và đơn vị được xác định theo phiên, còn phân công có thể đích danh hoặc theo đơn vị. Lịch chờ sử dụng những liên kết này để quyết định người được xem; đây không phải quyền phát hành.
++Đối với chức năng cập nhật hồ sơ native, dữ liệu ban đầu được lấy từ HRM. Khi người dùng đề xuất thay đổi đối với nội dung cần thẩm định, yêu cầu, chi tiết thay đổi và tệp minh chứng được lưu tại các nhóm dữ liệu tương ứng. Sau khi yêu cầu được xử lý, ứng dụng tải lại trạng thái và dữ liệu đã được HRM chấp thuận thay vì duy trì một bản hồ sơ chính thức riêng trên thiết bị.
++
++Đối với chức năng tạo hoặc đăng ký lịch họp, dữ liệu được ghi vào các thành phần lịch và phân công tương ứng của iOffice theo nhánh nghiệp vụ được thực hiện. Tệp đính kèm được liên kết với mục lịch sau khi mục này được tạo. Quyền xem lịch chờ và quyền phát hành lịch được xác định độc lập theo xử lý của iOffice; việc một người có thể xem một mục lịch không đồng nghĩa với quyền phát hành mục lịch đó.
+--- a/Chapter5/section4.tex
++++ b/Chapter5/section4.tex
+@@ -1,23 +1,25 @@
+ \section{Các cơ chế tích hợp hệ thống}
+ \label{sec:tich_hop_he_thong}
+ 
+-Mục này trình bày các cơ chế giúp MyHCMUT Mobile kết nối với Auth Service, HRM Backend và iOffice Backend: xác thực và giao tiếp API, đăng ký thiết bị và tiếp nhận thông báo qua FCM, tổng hợp dữ liệu lịch và đồng bộ trạng thái qua Socket.IO. Thiết kế xử lý hồ sơ nhân sự và tạo hoặc đăng ký cuộc họp được trình bày tại Mục~\ref{subsec:profile_native_integration} và Mục~\ref{subsec:create_schedule_integration}.
++Mục này trình bày các cơ chế giúp MyHCMUT Mobile kết nối với Auth Service, HRM Backend và iOffice Backend: xác thực và giao tiếp API, đăng ký thiết bị và tiếp nhận thông báo qua FCM, tổng hợp dữ liệu lịch và đồng bộ trạng thái qua Socket.IO.
+ 
+ \subsection{Xác thực và giao tiếp API}
+ \label{subsec:xac_thuc_da_he_thong}
+ 
+-Ứng dụng sử dụng Auth Service hiện hữu để đăng nhập và nhận access token. Sau khi đăng nhập thành công, token được ứng dụng quản lý và sử dụng khi gửi yêu cầu đến các backend nghiệp vụ. MyHCMUT Mobile tạo các Dio instance theo địa chỉ của từng dịch vụ; mỗi instance được cấu hình sẵn khóa xác thực (\texttt{domainKey}) để xác định token cần sử dụng.
++Ứng dụng sử dụng Auth Service hiện hữu để đăng nhập và nhận access token. Sau khi đăng nhập thành công, token được sử dụng khi gửi yêu cầu đến các backend nghiệp vụ.
+ 
+-Trong phiên bản hiện tại, các Dio instance phục vụ Auth Service, HRM Backend và iOffice Backend đều sử dụng chung khóa \texttt{auth}. Vì vậy, ứng dụng tái sử dụng cùng access token do Auth Service cấp, không quản lý ba token độc lập. Khi gửi yêu cầu cần xác thực, \texttt{MultiDomainAuthInterceptor} đọc token theo khóa đã cấu hình và gắn vào HTTP header theo dạng \texttt{Authorization: Bearer <token>}.
++MyHCMUT Mobile tạo các Dio instance theo địa chỉ của từng dịch vụ. Mỗi instance được cấu hình khóa xác thực (\texttt{domainKey}) để xác định token cần sử dụng. Trong phiên bản hiện tại, các instance phục vụ Auth Service, HRM Backend và iOffice Backend đều sử dụng chung khóa \texttt{auth}, tương ứng với cùng access token do Auth Service cấp.
+ 
+-HRM Backend và iOffice Backend tiếp nhận yêu cầu, xác thực token và kiểm tra quyền truy cập đối với chức năng nghiệp vụ tương ứng. Ứng dụng di động quản lý phiên đăng nhập và gửi thông tin xác thực; các quyết định phân quyền và xử lý dữ liệu chính thức vẫn thuộc trách nhiệm của backend.
++Khi gửi một yêu cầu cần xác thực, \texttt{MultiDomainAuthInterceptor} lấy token theo khóa được cấu hình và gắn vào HTTP header theo dạng \texttt{Authorization: Bearer <token>}. HRM Backend và iOffice Backend tiếp nhận yêu cầu, xác thực token và kiểm tra quyền thực hiện chức năng tương ứng.
+ 
+-Thông tin người dùng được tải từ API trạng thái và lưu đệm. Khi gặp lỗi mạng hoặc lỗi không phải 401, ứng dụng có thể giữ thông tin đã lưu; khi thiếu token, nhận 401 hoặc đăng xuất, trạng thái phiên được xóa theo luồng hiện hành. Interceptor hiện tại gắn token và xử lý lỗi xác thực, không cung cấp cơ chế tự động refresh rồi phát lại mọi request. Một request tạo bị mất phản hồi cần được phân biệt với request chắc chắn bị từ chối.
++Việc hiển thị hoặc ẩn chức năng trên ứng dụng chỉ phục vụ giao diện người dùng và không thay thế bước kiểm tra quyền tại backend. Do đó, kể cả khi một yêu cầu được gửi trực tiếp đến API mà không thông qua giao diện mobile, backend vẫn chịu trách nhiệm quyết định thao tác có được phép thực hiện hay không.
++
++Thông tin phiên và người dùng được ứng dụng lưu để phục vụ quá trình sử dụng. Khi thiếu token, nhận phản hồi xác thực không hợp lệ hoặc người dùng đăng xuất, trạng thái phiên được xóa theo luồng xử lý hiện tại. Interceptor đảm nhiệm việc gắn token và xử lý lỗi xác thực; phiên bản hiện tại không cung cấp cơ chế tự động refresh token rồi phát lại toàn bộ request thất bại.
+ 
+ \subsection{Tích hợp thông báo}
+ \label{subsec:tich_hop_thong_bao}
+ 
+-Thông báo hỗ trợ người dùng nhận biết và mở nhanh nội dung nghiệp vụ cần xử lý. MyHCMUT Mobile tiếp nhận thông báo từ HRM và iOffice, hiển thị trên thiết bị và điều hướng đến màn hình tương ứng khi người dùng chọn thông báo. Quyền truy cập và dữ liệu vẫn do hệ thống nguồn quản lý. Điểm tích hợp được khái quát trong Hình~\ref{fig:notification_routing_flow}.
++Thông báo được sử dụng như một cơ chế hỗ trợ người dùng nhận biết những thay đổi hoặc nội dung nghiệp vụ cần xử lý. MyHCMUT Mobile tiếp nhận thông báo phát sinh từ HRM và iOffice thông qua Firebase Cloud Messaging, hiển thị chúng trên thiết bị và điều hướng đến chức năng tương ứng khi người dùng chọn thông báo.
+ 
+ \begin{figure}[H]
+     \centering
+@@ -26,22 +28,36 @@
+     \label{fig:notification_routing_flow}
+ \end{figure}
+ 
+-Khi người dùng chọn thông báo, ứng dụng mở màn hình nghiệp vụ tương ứng nếu có đường dẫn được hỗ trợ. Màn hình đích tiếp tục tuân theo quyền truy cập của hệ thống nguồn.
++Do HRM và iOffice phát sinh thông báo độc lập, thiết bị đăng ký FCM token với từng backend. Mỗi backend duy trì ánh xạ cần thiết giữa người dùng và token thiết bị để xác định người nhận thông báo thuộc miền nghiệp vụ của mình.
+ 
+-Thiết bị đăng ký FCM token với cả HRM và iOffice; mỗi backend có trách nhiệm ánh xạ token tới tài khoản đang hoạt động. Phản hồi lỗi cấu hình sender không phải căn cứ mặc định xóa mọi token của người dùng. Thông báo chỉ hỗ trợ nhận biết và điều hướng; quyền và trạng thái nghiệp vụ vẫn phải được tải từ hệ thống nguồn.
++Khi người dùng chọn một thông báo, ứng dụng diễn giải thông tin điều hướng trong payload và mở chức năng tương ứng. Sau khi chuyển đến màn hình đích, trạng thái nghiệp vụ được tải lại từ backend thay vì sử dụng nội dung thông báo làm nguồn dữ liệu chính thức.
+ 
+-Đối với thông báo lịch, iOffice ánh xạ mã nhân sự tới tài khoản hoạt động và token thiết bị, khử trùng người nhận trước khi gửi. Phân công chỉ chứa đơn vị không tự mở rộng thành mọi tài khoản để gửi push. Đường gửi lời mời hiện hành chưa có outbox/retry bền vững riêng dù iOffice có hạ tầng outbox cho một số luồng khác; không bảo đảm exactly-once hoặc mọi thiết bị đều nhận. Bấm push lịch hiện mở màn hình Lịch biểu, chưa mở thẳng chi tiết theo ID. Thời điểm phát sinh lời mời thuộc thiết kế chức năng tại Mục~\ref{subsec:create_schedule_integration}; kết quả nhận và mở thông báo trên Android được nêu riêng ở Chương~6.
++Đối với thông báo lịch, iOffice xác định người nhận từ thông tin tài khoản và token thiết bị tương ứng. Việc gửi thông báo chỉ phục vụ nhận biết sự kiện và không được sử dụng để xác định rằng một nghiệp vụ đã hoàn tất. Đặc biệt, thông báo mời đối với lịch họp không đồng nghĩa với việc lịch đã được phát hành chính thức; trạng thái và quyền truy cập tiếp tục được xác định tại iOffice.
++
++Như vậy, FCM đóng vai trò kênh hỗ trợ truyền thông tin đến thiết bị, trong khi dữ liệu và quyền xử lý nghiệp vụ vẫn được xác định bởi các hệ thống nguồn.
+ 
+ \subsection{Tổng hợp dữ liệu lịch và đồng bộ thời gian thực}
+ \label{subsec:tich_hop_lich_da_nguon}
+ 
+-\textbf{Tổng hợp dữ liệu từ các API độc lập.} Ứng dụng tải lịch họp từ iOffice và lịch nghỉ phép, công tác từ HRM qua các dịch vụ tương ứng, rồi tổng hợp kết quả trên giao diện di động. Mỗi nguồn tiếp tục quản lý dữ liệu và quyền truy cập riêng; việc hiển thị chung không tạo một CSDL nghiệp vụ hợp nhất.
++\textbf{Tổng hợp dữ liệu từ các API độc lập}
+ 
+-Nếu dữ liệu nghỉ phép hoặc công tác không tải được, lịch họp từ iOffice vẫn có thể hiển thị. Lịch cần dữ liệu từ iOffice để tải danh sách sự kiện chính; các hệ thống nguồn không dùng chung cơ sở dữ liệu.
++Lịch tổng hợp trên MyHCMUT Mobile kết hợp ba nhóm dữ liệu: lịch họp từ iOffice, lịch nghỉ phép và lịch công tác từ HRM. Các dữ liệu được tải thông qua API của từng hệ thống nguồn và được tổng hợp tại phía ứng dụng để cung cấp một giao diện lịch thống nhất.
+ 
+-\textbf{Đồng bộ trạng thái qua Socket.IO.} Các thao tác điểm danh, hoàn tác hoặc báo vắng được ghi nhận qua API iOffice. Socket.IO hỗ trợ truyền sự kiện thay đổi tới các thiết bị đang theo dõi để ứng dụng tải lại dữ liệu; sự kiện thời gian thực không thay thế bước kiểm tra quyền và ghi dữ liệu ở backend.
++Thiết kế tổng hợp tại mobile cho phép HRM và iOffice tiếp tục quản lý dữ liệu và quyền thuộc miền nghiệp vụ của mình mà không cần tạo thêm một cơ sở dữ liệu lịch hợp nhất. Dữ liệu nghỉ phép và công tác được chuyển sang mô hình hiển thị \texttt{ScheduleItem}, lọc theo khoảng thời gian cần hiển thị và kết hợp với dữ liệu lịch từ iOffice. Danh sách kết quả sau đó được sắp xếp theo thời điểm bắt đầu.
+ 
+-Trạng thái hiển thị sau khi làm mới dựa trên phản hồi từ hệ thống nguồn. Quan hệ giữa các nguồn API, bước tổng hợp và đường cập nhật trạng thái được thể hiện trong Hình~\ref{fig:multi_source_schedule_flow}.
++Mỗi mục lịch giữ thông tin về loại và định danh nguồn để ứng dụng xác định chức năng cần mở khi người dùng xem chi tiết. Sự kiện nghỉ phép hoặc công tác được điều hướng đến chức năng HRM tương ứng, trong khi cuộc họp được mở bằng chức năng lịch của iOffice.
++
++Các nguồn dữ liệu được tải độc lập nên lỗi của một nguồn không nhất thiết đồng nghĩa với việc mọi dữ liệu lịch đều không thể sử dụng. Trong cách điều phối hiện tại, nếu dữ liệu nghỉ phép hoặc công tác không tải được, ứng dụng vẫn có thể hiển thị phần dữ liệu còn lại. Tuy nhiên, giao diện chưa thể hiện riêng trạng thái lỗi của từng nguồn HRM nên người dùng có thể không nhận biết rằng lịch đang thiếu một phần dữ liệu. Đối với iOffice, lỗi khi tải danh sách sự kiện chính làm luồng tải lịch trả về lỗi trước khi hoàn tất quá trình tổng hợp.
++
++\textbf{Đồng bộ trạng thái qua Socket.IO}
++
++Đối với điểm danh cuộc họp, hệ thống tách kênh thực hiện nghiệp vụ và kênh thông báo thay đổi trạng thái. Các thao tác điểm danh, hoàn tác hoặc báo vắng được gửi thông qua API iOffice. Backend kiểm tra quyền, xử lý yêu cầu và lưu kết quả; sau khi thao tác thành công, ứng dụng tải lại dữ liệu để cập nhật giao diện.
++
++Socket.IO được sử dụng để thông báo cho các thiết bị đang theo dõi khi trạng thái điểm danh thay đổi. Tại màn hình điểm danh, ứng dụng lắng nghe các sự kiện liên quan đến điểm danh, báo vắng và hoàn tác. Khi nhận sự kiện, dữ liệu chi tiết hiện tại được đánh dấu cần cập nhật và ứng dụng tải lại trạng thái từ API.
++
++Payload của sự kiện Socket.IO không được sử dụng để tự ghi trạng thái nghiệp vụ tại client. Trạng thái hiển thị sau cùng vẫn được lấy từ iOffice Backend. Cách tổ chức này giữ backend làm nguồn dữ liệu có thẩm quyền và sử dụng Socket.IO như cơ chế giảm độ trễ khi phản ánh thay đổi giữa các thiết bị.
++
++Khi kết nối Socket.IO bị gián đoạn nhưng API vẫn hoạt động, người dùng vẫn có thể thực hiện thao tác điểm danh và tải lại kết quả của chính thao tác đó. Tuy nhiên, thay đổi được thực hiện từ thiết bị khác có thể chưa xuất hiện ngay cho đến khi ứng dụng tải lại dữ liệu. Phiên bản hiện tại chưa có cơ chế phát lại những sự kiện Socket.IO đã bị bỏ lỡ; do đó việc tải lại từ API vẫn là cơ chế đối chiếu trạng thái cuối cùng.
+ 
+ \begin{figure}[H]
+     \centering
+--- a/Chapter5/section5.tex
++++ b/Chapter5/section5.tex
+@@ -1,6 +1,4 @@
+ \section{Tổng kết chương}
+ \label{sec:tong_ket_chuong_5}
+ 
+-Chương này đã trình bày kiến trúc tổng thể, cấu trúc các thành phần, mô hình dữ liệu và các cơ chế tích hợp của MyHCMUT Mobile với những hệ thống hiện hữu. Thiết kế hồ sơ native bao gồm policy, cập nhật hoặc đề xuất, minh chứng, phản hồi và lịch sử so sánh dữ liệu trước--sau. Thiết kế tạo cuộc họp phân biệt quyền tạo, trạng thái tổng hợp và phát hành; đồng thời làm rõ trường hợp lịch đã lưu nhưng tài liệu chưa tải thành công. Các quyết định về quyền, dữ liệu và quy trình vẫn thuộc hệ thống nguồn.
+-
+-Trên cơ sở thiết kế này, Chương~\ref{chap:hienthuc_kiemthu} trình bày giao diện hiện thực và kết quả kiểm thử theo từng lớp bằng chứng. Những luồng đã được xác nhận từ mã nguồn nhưng còn thiếu phép thử trên thiết bị được tách khỏi các kết quả đã kiểm chứng, thay vì xem mô tả thiết kế là căn cứ nghiệm thu.
++Chương này trình bày thiết kế hệ thống MyHCMUT Mobile từ kiến trúc tổng thể, cách tổ chức các thành phần, mô hình dữ liệu phục vụ ứng dụng đến những cơ chế tích hợp với các hệ thống hiện hữu. HRM và iOffice tiếp tục quản lý dữ liệu, quyền truy cập và quy trình nghiệp vụ thuộc miền tương ứng; ứng dụng di động cung cấp giao diện, phối hợp các API và tổng hợp dữ liệu phục vụ người dùng. Các kết quả hiện thực và kiểm thử được trình bày tại Chương~\ref{chap:hienthuc_kiemthu}.

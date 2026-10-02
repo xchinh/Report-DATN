@@ -20,6 +20,10 @@ Người dùng có quyền tạo cuộc họp ngay từ Lịch tổng hợp bằ
 
 **Tác nhân:** Người dùng có quyền lịch tương ứng. Quyền thực tế của tài khoản quyết định thao tác, không chỉ chức danh.
 
+**Tác nhân nghiệp vụ bổ sung theo yêu cầu của nhóm:** Chuyên viên Ban Giám hiệu (chuyên viên BGH) thực hiện tạo trực tiếp lịch họp cấp Trường trên mobile khi được cấp quyền `scheduleGeneral:write` và có ngữ cảnh lịch hợp lệ. Dùng “Nhân sự” cho tác nhân chung; chuyên viên BGH là vai trò chuyên môn của nhân sự, khác người chủ trì, người tham dự và thư ký cuộc họp. UI hiện có chú thích “Thư ký VP.BGH”, nhưng quyền chọn nhánh dựa trên permission, không dựa trên nhãn chức danh. Chưa có bằng chứng từ cấu hình tài khoản để kết luận quyền này chỉ được cấp cho chuyên viên BGH.
+
+Luồng này chọn `TRUONG_DIRECT` trên UI, gọi API `general/create` và backend lưu `cap=TRUONG`, bước `TONG_HOP`; không phải chức năng tạo lịch hẹn `cap=BGH` của phân hệ appointment. Chuyên viên tạo lịch không mặc nhiên là người chủ trì hoặc người có quyền phát hành. Nội dung cần bổ sung theo chương và nguồn code được ghi ở mục 8 của [danh mục chỉnh sửa](14_REPORT_7_CHAPTER_AUDIT.md).
+
 **Tiền điều kiện:** Đã đăng nhập iOffice; có ngữ cảnh đơn vị/lịch và quy trình đang hoạt động. Mobile hiển thị nút Tạo lịch khi có `scheduleGeneral:read`.
 
 **Luồng chính:**

@@ -1,0 +1,12 @@
+{
+  "command": "make run-dev",
+  "head": "61722adcb66d0fb50deb6e529dd7a5a10103147d",
+  "build": "debug",
+  "apk_sha256": "998d68f4cfdc92af086369f16e4a78fc9782d86f784f2ecdec2c77fef61fed99",
+  "installed": true,
+  "device": "RMX2151 Android 12",
+  "date": "2026-10-02T02:14:47.509265",
+  "auth_hrm_start": "IS_SERVICE=false DOTENV_CONFIG_PATH=.env.local node -r dotenv/config -r ts-node/register/transpile-only -r tsconfig-paths/register main.ts",
+  "service_consumers_disabled": true,
+  "authenticated_e2e": "Not run; existing phone JWT rejected by local backends"
+}

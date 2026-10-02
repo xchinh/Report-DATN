@@ -1,0 +1,230 @@
+[
+  {
+    "path": "apps_myhcmut.log",
+    "sha256": "bde608aea3f4c1e3b0142c8db0f45b1b00686c4ffe4ab0888ca6568b74f8231e",
+    "original_sha256": "bde608aea3f4c1e3b0142c8db0f45b1b00686c4ffe4ab0888ca6568b74f8231e",
+    "sanitized": false
+  },
+  {
+    "path": "checks/hrm_approval_claims.unit.test.ts",
+    "sha256": "680ba47f3ef0ea634ff9448042910e97603270fee466545b7fd4b9971413b510"
+  },
+  {
+    "path": "checks/hrm_procedure_probe.cjs",
+    "sha256": "1d5835b671c10f01a526c02342da5af83f6fa3796290a30dcf0212c7375910b1"
+  },
+  {
+    "path": "checks/ioffice_claims.test.cjs",
+    "sha256": "3baffa21e518e03f7c7a3ac891939cdd00c89b009d92fd2792a61aa4a169ea53"
+  },
+  {
+    "path": "checks/mobile_claims_test.dart",
+    "sha256": "9433eb150ff284e2fd3294bffcb18a71b3e257582f60c326f9d72323c8f52f31"
+  },
+  {
+    "path": "cleanup.json",
+    "sha256": "eaa0177eb14cb7ff21ef3687bb97cac4dba853a3d59be31dfee12003ffface74"
+  },
+  {
+    "path": "deployed-leave-insert-function.txt",
+    "sha256": "a3eeddba8e5add106dfe3bec2db71e96e252e81800647955d85f645a708f7900"
+  },
+  {
+    "path": "e2e-leave-draft.json",
+    "sha256": "fcf328c0d1f417b7d588e891c9df9ba8c1c055cf45d12fa4427472f968ff3bb7"
+  },
+  {
+    "path": "e2e-profile-read-validation.json",
+    "sha256": "f874827807c7bf93d9ecbb3bd575b632455376ef5fb9e4f8d78eebec9549c848"
+  },
+  {
+    "path": "e2e-school-create-attendance.json",
+    "sha256": "c5cc6a94d7fe80888c6b06186cb478d6f10c0f88a9c7e8b593329d4becf8a06b"
+  },
+  {
+    "path": "e2e-school-validation.json",
+    "sha256": "b24d6b3925d80901740d03d7cb2218e315fbb2c717717497ba712d9ddda4833f"
+  },
+  {
+    "path": "e2e-trip-draft.json",
+    "sha256": "fb3c39807eccd60550cf458466ef9459e37ddb16397c351f381c8a0c7e0d5d90"
+  },
+  {
+    "path": "hrm-claims.log",
+    "sha256": "eb7efbc90b2f785ed03459dc3a786b10af03da428c5798a07eb343427cceddc1",
+    "original_sha256": "eb7efbc90b2f785ed03459dc3a786b10af03da428c5798a07eb343427cceddc1",
+    "sanitized": false
+  },
+  {
+    "path": "hrm-live-metadata.json",
+    "sha256": "a0dad5a50d2f5742f27b18d68f01370ba5b01b3b330293b4fad3fc2c9a725a4f"
+  },
+  {
+    "path": "hrm-procedure-probe.log",
+    "sha256": "37a44516945095dd004644cbadd9538c724e831c31a79c6144931a922c00bd6b",
+    "original_sha256": "37a44516945095dd004644cbadd9538c724e831c31a79c6144931a922c00bd6b",
+    "sanitized": false
+  },
+  {
+    "path": "hrm-results.json",
+    "sha256": "e1d89884d9a001f6d83b9283d541ae4b9f242ddc36e280fc2e74cc41f45e189a"
+  },
+  {
+    "path": "hrm-typecheck.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sanitized": false
+  },
+  {
+    "path": "hrm-unit.log",
+    "sha256": "7bda333409f3e5b9036666bca8f8d29cc189e48e8745bf2134d62de08f48d40c",
+    "original_sha256": "3311a1f7ed8f974ecaba6b6b35f255468d864319395f44631eefbf3f4dc497d1",
+    "sanitized": true
+  },
+  {
+    "path": "ioffice-claims.log",
+    "sha256": "5a1b99eaf5a1ebdd6f8038e7d3d37b05644f24358ed6d2699387c6bd554f581c",
+    "original_sha256": "5a1b99eaf5a1ebdd6f8038e7d3d37b05644f24358ed6d2699387c6bd554f581c",
+    "sanitized": false
+  },
+  {
+    "path": "ioffice-mobile-rerun.json",
+    "sha256": "7c616796bbd6fd3071035b345e3f0a976b494a3a2c664dd585aaa4327b44785f"
+  },
+  {
+    "path": "ioffice-mobile-rerun.log",
+    "sha256": "d73d801cbcd1887c1ed752b6761186dd423b2d02597f9c130732abdab1b3ad88",
+    "original_sha256": "d73d801cbcd1887c1ed752b6761186dd423b2d02597f9c130732abdab1b3ad88",
+    "sanitized": false
+  },
+  {
+    "path": "ioffice-result.json",
+    "sha256": "b1b02c1584c7b8e9e99a5a96a2557a41a0b34c7eb3ddd197c5f9f7a21b085e92"
+  },
+  {
+    "path": "ioffice-tests.log",
+    "sha256": "2f899f5031affbebe8dbc81dd275d8750b963456eb2c5bd3d3f3df5df6a6f69d",
+    "original_sha256": "2f899f5031affbebe8dbc81dd275d8750b963456eb2c5bd3d3f3df5df6a6f69d",
+    "sanitized": false
+  },
+  {
+    "path": "live-anonymous.json",
+    "sha256": "fa72c2ebab7334f98c8516bbff65f241223fdb5691baf0552085243dddc63e70"
+  },
+  {
+    "path": "live-api-readonly.json",
+    "sha256": "d88e85a0aa827f831221f2dde4a4154892cae077fc0b11fd2012ce645acc5f71"
+  },
+  {
+    "path": "live-build-and-start.json",
+    "sha256": "c2eed2bedecaaca87f1e0c79c0d29667d97e47ddde9d9a097fb96cfb008e5a51"
+  },
+  {
+    "path": "live-readiness.json",
+    "sha256": "c88a7826144a893b3f40c8782ca268f3681b7cccf7345556be8e453fd92407ec"
+  },
+  {
+    "path": "live-session-after-start.json",
+    "sha256": "fba51cf89b6870bdf00e1bf972786b9eec8624b98e98cfd402e2ce75df106a87"
+  },
+  {
+    "path": "manifest.md",
+    "sha256": "b233ba74e49801d8042a10f29ff58f9a0c90dd3c2f34cf1d59f524a99939e39b"
+  },
+  {
+    "path": "mobile-analyze-result.json",
+    "sha256": "40120b96a6a393f5d507803959990935991c1667d0cc5920f82c56dc0a41ac30"
+  },
+  {
+    "path": "mobile-analyze.log",
+    "sha256": "d08f670157e8092a8c3c60adbd3714104e9e62a325f0f9e6316e782cd53ae6c3",
+    "original_sha256": "17c5584ffb9d88175a104d6294dbd671eab980783b7c41afcff01091b66ad84a",
+    "sanitized": true
+  },
+  {
+    "path": "mobile-claims.log",
+    "sha256": "8f60d1e0646394da33736dc8deec9e73faa0f233a47a7ccb40b426e3f4de9f9d",
+    "original_sha256": "8f60d1e0646394da33736dc8deec9e73faa0f233a47a7ccb40b426e3f4de9f9d",
+    "sanitized": false
+  },
+  {
+    "path": "mobile-midnight-repro.log",
+    "sha256": "5d4eaaa5aa2b0bbb7ee9de77553119c778f871cd29676b93959f5eb1942ee63a",
+    "original_sha256": "5d4eaaa5aa2b0bbb7ee9de77553119c778f871cd29676b93959f5eb1942ee63a",
+    "sanitized": false
+  },
+  {
+    "path": "mobile-results.json",
+    "sha256": "1b47a1b4393dd6d3d4ebc819118c5ce3adc266ca0a8f31ed7e830661e37e4ae7"
+  },
+  {
+    "path": "modules_hrm.log",
+    "sha256": "345f0523b4fc39cd52817d4d7fa87b5ce3824c0299c711c1ea83c641e8faea4c",
+    "original_sha256": "345f0523b4fc39cd52817d4d7fa87b5ce3824c0299c711c1ea83c641e8faea4c",
+    "sanitized": false
+  },
+  {
+    "path": "modules_ioffice.log",
+    "sha256": "815869ebae9035016dcbb8489684bf6ce75d19b0f10d6c678db71b0db19b431d",
+    "original_sha256": "815869ebae9035016dcbb8489684bf6ce75d19b0f10d6c678db71b0db19b431d",
+    "sanitized": false
+  },
+  {
+    "path": "modules_notification.log",
+    "sha256": "6bf9f597c12b78df5b377c9c16ceb6769a62557f8766d1d917fe88847491ebfd",
+    "original_sha256": "6bf9f597c12b78df5b377c9c16ceb6769a62557f8766d1d917fe88847491ebfd",
+    "sanitized": false
+  },
+  {
+    "path": "packages_core_global_system.log",
+    "sha256": "d51570a3d3776dd047bfc405cf90499b4c7ea58b35a8ee7a292e1099314314ca",
+    "original_sha256": "d51570a3d3776dd047bfc405cf90499b4c7ea58b35a8ee7a292e1099314314ca",
+    "sanitized": false
+  },
+  {
+    "path": "packages_core_network.log",
+    "sha256": "8e46ad06b8aa6dd36474651f07a95b16b6ebb47cba1c71d059c45d55782e999d",
+    "original_sha256": "8e46ad06b8aa6dd36474651f07a95b16b6ebb47cba1c71d059c45d55782e999d",
+    "sanitized": false
+  },
+  {
+    "path": "packages_shared_auth.log",
+    "sha256": "b144ee44247922d72bedf4004c773e4c76ddf90cc6c390aec73fb6487afcabc0",
+    "original_sha256": "b144ee44247922d72bedf4004c773e4c76ddf90cc6c390aec73fb6487afcabc0",
+    "sanitized": false
+  },
+  {
+    "path": "packages_shared_localization.log",
+    "sha256": "e73e7754126390c1fde89320105f5ed1dd3427a628c60d47e4099f2b430d119f",
+    "original_sha256": "e73e7754126390c1fde89320105f5ed1dd3427a628c60d47e4099f2b430d119f",
+    "sanitized": false
+  },
+  {
+    "path": "phone-home-empty-calendar-before-role-switch.png",
+    "sha256": "013d810199218c5724c2d20e5127ff2404ccf0eb54bd4387b86ac2ddcc29ef85"
+  },
+  {
+    "path": "phone-service-error.png",
+    "sha256": "42237454df4b30b1b8e24de0c131eb0ff016169d9a52eef84508644c828edefb"
+  },
+  {
+    "path": "schedule-created-native.png",
+    "sha256": "7d9511afb5908f4d4cceb4487ac1339d11ab3601eee17dfcd29ab68f170b6959"
+  },
+  {
+    "path": "session-correction.json",
+    "sha256": "1cc97ef638e3fca46c480f57a3306a805cd504a15e9f6f141b3a6f4f342a9087"
+  },
+  {
+    "path": "source-baseline.json",
+    "sha256": "48574d323b2489f87cfd215f227cbee628044d5c5a0bc1eac697b83089f65f6d"
+  },
+  {
+    "path": "ui-role-switches.json",
+    "sha256": "33d8eef65c9739e2aa15c1da442740954beee79f4e0349dc351e43613762ebca"
+  },
+  {
+    "path": "verification.json",
+    "sha256": "d371a542d5f754ed1496dabec206d58e2dd87bc4e7950d5ba2c4ef9c8624e231"
+  }
+]

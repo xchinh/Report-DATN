@@ -1,6 +1,30 @@
 # MA TRẬN TRUY VẾT UC/FR – HIỆN THỰC
 
+> **Nguồn hiện hành 02/10/2026:** [audit đủ 25 FR / 20 UC / 5 NFR](13_chapter4_chapter6_claim_audit_20261002.md) và [kết quả chạy lại / quyết định sửa](14_retest_and_rewrite_gate_20261002.md). Các phần Stage A và hiệu chỉnh tháng 9 bên dưới là lưu vết lịch sử, không dùng làm ma trận nghiệm thu tại HEAD. Hai tệp đặc tả không được nạp đã được xoá; FR-IOFF-02 giữ vì có phân công văn bản native, với giới hạn kiểm tra quyền theo đối tượng được ghi trong đợt mới.
+
 > **Hiệu chỉnh nghiệp vụ ngày 24/09:** Các hàng lịch sử về `FR-SCH-01` và `UC-SCH-01` bên dưới còn dùng tiêu chí từ chối người ngoài danh sách mời. Đặc tả Chương 4 hiện hành cho phép khách tự điểm danh với `assignId = null`; xem [hồ sơ đối chiếu mới](09_workflow_accounts_and_retest_evidence.md). Không dùng các hàng lịch sử để nghiệm thu nhánh này.
+
+## Cập nhật hiện hành khi viết lại báo cáo ngày 01/10/2026
+
+Bảng này thay thế diễn giải hiện trạng của các hàng lịch sử về hồ sơ/lịch. Mốc source: mobile `61722ad`, iOffice `4ca9249`, HRM `250274c`, Auth `7e687a6`. Tệp có hiệu lực vẫn theo chuỗi input; các hàng UC-BTR trong kiểm kê cũ không phải UC công tác đang nạp.
+
+| FR / UC | Tệp đặc tả | Hình | Source / dữ liệu | Bằng chứng và giới hạn |
+| --- | --- | --- | --- | --- |
+| FR-PRO-01 / UC-PRO-01 | `Chapter4/section2/profile/index.tex` | UC_PROFILE; ảnh tra cứu Ch6 | `profile.dart`, cache, API HRM | Kết quả tra cứu lịch sử; không chứng minh nộp native |
+| FR-PRO-02 / UC-PRO-02 | Cùng tệp hồ sơ | seq_profile_request native; profile_activity | `profile_edit_provider.dart`, editor, policy/request/detail/file | Có hiện thực; thiếu log E2E đầy đủ cho từng editor/minh chứng |
+| FR-PRO-03 / UC-PRO-03 | Cùng tệp hồ sơ | UC_PROFILE; ảnh thẩm định | approve_profile và HRM request controller | Biên bản thẩm định lịch sử, không suy nghiệm thu mọi quyền ở HEAD |
+| FR-PRO-04 / UC-PRO-04 | Cùng tệp hồ sơ | UC_PROFILE (hình hiện có); đặc tả văn bản | provider với `isPhanHoi=true` | Có hiện thực; cần log phản hồi thật |
+| FR-PRO-05 / UC-PRO-05 | Cùng tệp hồ sơ | Đặc tả văn bản UC-PRO-05 | `profile_history_provider.dart`, `profile_history_page.dart` (`_HistoryDiff`), `/api/staff/ly-lich/profile`; trường before/after theo yêu cầu và log | Có hiện thực; cần log/ảnh lịch sử thật |
+| FR-SCH-03/04 / UC-SCH-03 | `Chapter4/section2/ioffice_schedule/index.tex` | UC_DOC; seq_schedule_create | ScheduleCreatePage/notifier; general item/assign/file/log | Tạo trực tiếp `TRUONG/TONG_HOP`; API demo có bằng chứng, form chuyên viên BGH còn cần E2E |
+| FR-SCH-05 / UC-SCH-02 | Cùng tệp lịch | UC_DOC | includePending, canViewPending/getPendingForUser | Test backend mô phỏng; cần xác minh tài khoản thật |
+| FR-SCH-06 / UC-SCH-02 | Cùng tệp lịch | UC_DOC | Bộ chuyển đổi/điều hướng lịch nguồn | Mã điều hướng; không suy mọi đối tượng đã được thử |
+| FR-SCH-07 / UC-SCH-03 | Cùng tệp lịch | Ảnh push 01/10 | Sender sau commit, FCM token hai backend | Android mở/chạy nền nhận push; bấm mở Lịch biểu; chưa E2E form/iOS/phát hành |
+| FR-SCH-01 / UC-SCH-01 | Cùng tệp lịch | attendant_activity; seq_attendance | checkin/absence/rollback; khách assignId null | Có mặt/hủy và vắng có hạn thời gian khác; khách UI chưa có kết quả đủ căn cứ |
+| FR-BTR-01..05 / UC-BT-01..05 | `Chapter4/section2/hrm/business_trip.tex` | UC_BT; bt_activity; seq_trip_submit | HRM đăng ký/duyệt; điều kiện báo cáo chỉ chuyến đã kết thúc | Kết quả mobile/backend lịch sử phân biệt theo biên bản |
+
+Nguồn: [đối chiếu](../14_REPORT_7_CHAPTER_AUDIT.md), [push thiết bị](12_school_schedule_push_device_verification.md), [kế hoạch](../superpowers/plans/2026-10-01-report-native-schedule-rewrite.md). Bảng kịch bản N-PRO/N-SCH trong Chương 6 giữ trạng thái cần kiểm chứng cho phần chưa có log, không dùng số test mô phỏng để gán Pass E2E.
+
+**Vị trí thiết kế sau điều chỉnh ngày 02/10:** hồ sơ ở [Mục 5.2.3](../../Chapter5/section2.tex), tạo/đăng ký lịch ở Mục 5.2.4 cùng tệp. Sequence nghiệp vụ tạo trực tiếp lịch Trường nằm trong mục Biểu đồ tuần tự của [Chương 4](../../Chapter4/section2/ioffice_schedule/index.tex), Hình 4.15. [Mục 5.4](../../Chapter5/section4.tex) trình bày xác thực/API, thông báo FCM và tổng hợp API/đồng bộ Socket.IO. Đây là điều chỉnh bố cục, không phải bằng chứng kiểm thử mới; các vị trí 5.4 trong bảng lịch sử bên dưới không còn là vị trí hiện hành của hai chức năng này.
 
 ## 1. Mốc kiểm kê và nguồn thẩm quyền
 

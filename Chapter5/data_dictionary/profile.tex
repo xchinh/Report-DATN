@@ -14,7 +14,7 @@
 \endfoot
 \hline
 \endlastfoot
-\texttt{tcns\_ly\_lich} & \texttt{shcc} & varchar (PK, NOT NULL) & Mã nhân sự và định danh hồ sơ chính thức. \\
+\texttt{staff\_ly\_lich} & \texttt{shcc} & varchar (PK, NOT NULL) & Mã nhân sự và định danh hồ sơ chính thức. \\
 \cline{2-4}
  & \texttt{ho} & varchar & Họ và tên đệm của nhân sự. \\
 \cline{2-4}
@@ -42,7 +42,7 @@
 \cline{2-4}
  & \texttt{vtvl} & varchar  & Vị trí việc làm được phân công. \\
 \hline
-\texttt{tcns\_ly\_lich\_request} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh yêu cầu cập nhật hồ sơ. \\
+\texttt{staff\_ly\_lich\_request} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh yêu cầu cập nhật hồ sơ. \\
 \cline{2-4}
  & \texttt{shcc} & varchar  & Liên kết logic đến nhân sự gửi yêu cầu. \\
 \cline{2-4}
@@ -54,11 +54,13 @@
 \cline{2-4}
  & \texttt{trang\_thai} & varchar  & Trạng thái thẩm định của yêu cầu. \\
 \cline{2-4}
+ & \texttt{is\_phan\_hoi} & boolean & Phân biệt phản hồi với yêu cầu cập nhật hồ sơ. \\
+\cline{2-4}
  & \texttt{ly\_do} & text  & Lý do đề xuất cập nhật hồ sơ. \\
 \cline{2-4}
  & \texttt{ly\_do\_tu\_choi} & text  & Phản hồi lý do khi từ chối yêu cầu. \\
 \hline
-\texttt{tcns\_ly\_lich\_request\_detail} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh chi tiết yêu cầu. \\
+\texttt{staff\_ly\_lich\_request\_detail} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh chi tiết yêu cầu. \\
 \cline{2-4}
  & \texttt{request\_id} & integer  & Liên kết logic đến yêu cầu cập nhật. \\
 \cline{2-4}
@@ -76,7 +78,7 @@
 \cline{2-4}
  & \texttt{reviewed\_by} & varchar  & Mã nhân sự thực hiện thẩm định. \\
 \hline
-\texttt{tcns\_ly\_lich\_request\_file} & \texttt{file\_id} & uuid (PK, NOT NULL) & Định danh tệp minh chứng. \\
+\texttt{staff\_ly\_lich\_request\_file} & \texttt{file\_id} & uuid (PK, NOT NULL) & Định danh tệp minh chứng. \\
 \cline{2-4}
  & \texttt{request\_detail\_id} & integer  & Liên kết logic đến chi tiết yêu cầu. \\
 \cline{2-4}

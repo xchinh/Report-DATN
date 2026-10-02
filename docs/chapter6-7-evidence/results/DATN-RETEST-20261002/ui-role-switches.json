@@ -1,0 +1,835 @@
+[
+  {
+    "actor": "DV-A",
+    "at": "2026-10-02T02:38:17.652985+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": [],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 35,
+        "relevant_permissions": [],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 25,
+        "relevant_permissions": [
+          "eofficeVanBanDen:read",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read"
+        ],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      }
+    ]
+  },
+  {
+    "actor": "CV-TCNS",
+    "at": "2026-10-02T02:39:15.156395+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": [],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 282,
+        "relevant_permissions": [],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 21,
+        "relevant_permissions": [
+          "eofficeVanBanDen:read",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read"
+        ],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      }
+    ]
+  },
+  {
+    "actor": "TP-TCNS",
+    "at": "2026-10-02T02:40:18.878936+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": [],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 380,
+        "relevant_permissions": [
+          "tcns:request_ly_lich:duyet:khen_thuong_ky_luat",
+          "tcns:request_ly_lich:duyet:luong_ngach_phu_cap",
+          "tcns:request_ly_lich:duyet:qua_trinh_cong_tac",
+          "tcns:request_ly_lich:duyet:qua_trinh_dao_tao",
+          "tcns:request_ly_lich:duyet:thong_tin_ca_nhan",
+          "tcns:request_ly_lich:duyet:thong_tin_dia_chi",
+          "tcns:request_ly_lich:duyet:thong_tin_gia_dinh",
+          "tcns:request_ly_lich:duyet:thong_tin_khac",
+          "tcns:request_ly_lich:read",
+          "tcns:request_ly_lich:write"
+        ],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 40,
+        "relevant_permissions": [
+          "eofficeVanBanDen:read",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read"
+        ],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      }
+    ]
+  },
+  {
+    "actor": "BGH-A",
+    "at": "2026-10-02T02:40:43.148972+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": [],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 35,
+        "relevant_permissions": [],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 51,
+        "relevant_permissions": [
+          "eofficeVanBanDen:chiDao",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:assign",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read"
+        ],
+        "relevant_permissions_capture": "Partial keyword filter in early capture; absence here does not establish absence from full permission list"
+      }
+    ]
+  },
+  {
+    "actor": "BGH-A",
+    "at": "2026-10-02T02:41:07.058543+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 35,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:bao_cao_di_cong_tac:manage",
+          "dv:bao_cao_di_cong_tac:read",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:manage",
+          "dv:nghi_phep:read"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 51,
+        "relevant_permissions": [
+          "eofficeVanBanDen:chiDao",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:assign",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CV-BGH",
+    "at": "2026-10-02T02:41:18.958233+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 29,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:read",
+          "tcns:nghi_phep:write"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 47,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:readAll",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:write"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CV-TCNS",
+    "at": "2026-10-02T02:48:33.108439+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 282,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:di_cong_tac:read"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 21,
+        "relevant_permissions": [
+          "eofficeVanBanDen:read",
+          "scheduleGeneral:read"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CB-A",
+    "at": "2026-10-02T02:49:14.612067+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 10,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 51,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:delete",
+          "eofficeVanBanDen:pgqHistory",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:readAll",
+          "eofficeVanBanDen:thamMuu",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:read"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "ADMIN",
+    "at": "2026-10-02T02:58:36.411214+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 367,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:bao_cao_di_cong_tac:manage",
+          "dv:bao_cao_di_cong_tac:read",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:manage",
+          "dv:nghi_phep:read",
+          "tcns:bao_cao_di_cong_tac:read",
+          "tcns:bao_cao_di_cong_tac:write",
+          "tcns:di_cong_tac:read",
+          "tcns:di_cong_tac:write",
+          "tcns:nghi_phep:read",
+          "tcns:nghi_phep:write",
+          "tcns:request_ly_lich:duyet:khen_thuong_ky_luat",
+          "tcns:request_ly_lich:duyet:luong_ngach_phu_cap",
+          "tcns:request_ly_lich:duyet:qua_trinh_cong_tac",
+          "tcns:request_ly_lich:duyet:qua_trinh_dao_tao",
+          "tcns:request_ly_lich:duyet:thong_tin_ca_nhan",
+          "tcns:request_ly_lich:duyet:thong_tin_dia_chi",
+          "tcns:request_ly_lich:duyet:thong_tin_gia_dinh",
+          "tcns:request_ly_lich:duyet:thong_tin_khac",
+          "tcns:request_ly_lich:read",
+          "tcns:request_ly_lich:write",
+          "tcns:so_nghi_phep_nam:read",
+          "tcns:so_nghi_phep_nam:write"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 102,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:chiDao",
+          "eofficeVanBanDen:delete",
+          "eofficeVanBanDen:pgqHistory",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:dvTongHop",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:write"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "ADMIN",
+    "at": "2026-10-02T02:58:44.958980+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply; API state verification may repeat after one UI switch",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 367,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:bao_cao_di_cong_tac:manage",
+          "dv:bao_cao_di_cong_tac:read",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:manage",
+          "dv:nghi_phep:read",
+          "tcns:bao_cao_di_cong_tac:read",
+          "tcns:bao_cao_di_cong_tac:write",
+          "tcns:di_cong_tac:read",
+          "tcns:di_cong_tac:write",
+          "tcns:nghi_phep:read",
+          "tcns:nghi_phep:write",
+          "tcns:request_ly_lich:duyet:khen_thuong_ky_luat",
+          "tcns:request_ly_lich:duyet:luong_ngach_phu_cap",
+          "tcns:request_ly_lich:duyet:qua_trinh_cong_tac",
+          "tcns:request_ly_lich:duyet:qua_trinh_dao_tao",
+          "tcns:request_ly_lich:duyet:thong_tin_ca_nhan",
+          "tcns:request_ly_lich:duyet:thong_tin_dia_chi",
+          "tcns:request_ly_lich:duyet:thong_tin_gia_dinh",
+          "tcns:request_ly_lich:duyet:thong_tin_khac",
+          "tcns:request_ly_lich:read",
+          "tcns:request_ly_lich:write",
+          "tcns:so_nghi_phep_nam:read",
+          "tcns:so_nghi_phep_nam:write"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 102,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:chiDao",
+          "eofficeVanBanDen:delete",
+          "eofficeVanBanDen:pgqHistory",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:dvTongHop",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:write"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CV-BGH",
+    "at": "2026-10-02T03:13:27.898682+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 29,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:read",
+          "tcns:nghi_phep:write"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 47,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:readAll",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read",
+          "scheduleGeneral:write"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "BGH-A",
+    "at": "2026-10-02T03:18:04.677147+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 35,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:bao_cao_di_cong_tac:manage",
+          "dv:bao_cao_di_cong_tac:read",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:manage",
+          "dv:nghi_phep:read"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 51,
+        "relevant_permissions": [
+          "eofficeVanBanDen:chiDao",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:assign",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CB-A",
+    "at": "2026-10-02T03:20:47.767852+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 10,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 51,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:delete",
+          "eofficeVanBanDen:pgqHistory",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:readAll",
+          "eofficeVanBanDen:thamMuu",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CV-BGH",
+    "at": "2026-10-02T03:21:53.142035+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 29,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:read",
+          "tcns:nghi_phep:write"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 47,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:readAll",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read",
+          "scheduleGeneral:write"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CV-TCNS",
+    "at": "2026-10-02T03:22:38.259816+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 282,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:di_cong_tac:read"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 21,
+        "relevant_permissions": [
+          "eofficeVanBanDen:read",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "CV-BGH",
+    "at": "2026-10-02T03:23:33.190360+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 29,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:read",
+          "tcns:nghi_phep:write"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 47,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:readAll",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:read",
+          "scheduleGeneral:write"
+        ]
+      }
+    ]
+  },
+  {
+    "actor": "ADMIN",
+    "at": "2026-10-02T03:25:01.150377+07:00",
+    "switch_action": "Android Switch User dropdown -> Apply",
+    "domains": [
+      {
+        "domain": "Auth",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 0,
+        "relevant_permissions": []
+      },
+      {
+        "domain": "HRM",
+        "http": 200,
+        "status": 200,
+        "expected_actor_matches": true,
+        "permission_count": 367,
+        "relevant_permissions": [
+          "cn:di_cong_tac",
+          "cn:ly_lich",
+          "cn:nghi_phep",
+          "dv:bao_cao_di_cong_tac:manage",
+          "dv:bao_cao_di_cong_tac:read",
+          "dv:di_cong_tac:manage",
+          "dv:di_cong_tac:read",
+          "dv:nghi_phep:manage",
+          "dv:nghi_phep:read",
+          "tcns:bao_cao_di_cong_tac:read",
+          "tcns:bao_cao_di_cong_tac:write",
+          "tcns:di_cong_tac:read",
+          "tcns:di_cong_tac:write",
+          "tcns:nghi_phep:read",
+          "tcns:nghi_phep:write",
+          "tcns:request_ly_lich:duyet:khen_thuong_ky_luat",
+          "tcns:request_ly_lich:duyet:luong_ngach_phu_cap",
+          "tcns:request_ly_lich:duyet:qua_trinh_cong_tac",
+          "tcns:request_ly_lich:duyet:qua_trinh_dao_tao",
+          "tcns:request_ly_lich:duyet:thong_tin_ca_nhan",
+          "tcns:request_ly_lich:duyet:thong_tin_dia_chi",
+          "tcns:request_ly_lich:duyet:thong_tin_gia_dinh",
+          "tcns:request_ly_lich:duyet:thong_tin_khac",
+          "tcns:request_ly_lich:read",
+          "tcns:request_ly_lich:write",
+          "tcns:so_nghi_phep_nam:read",
+          "tcns:so_nghi_phep_nam:write"
+        ]
+      },
+      {
+        "domain": "iOffice",
+        "http": 200,
+        "status": "success",
+        "expected_actor_matches": true,
+        "permission_count": 102,
+        "relevant_permissions": [
+          "eofficeVanBanDen:add",
+          "eofficeVanBanDen:chiDao",
+          "eofficeVanBanDen:delete",
+          "eofficeVanBanDen:pgqHistory",
+          "eofficeVanBanDen:read",
+          "eofficeVanBanDen:write",
+          "scheduleGeneral:dvTongHop",
+          "scheduleGeneral:manage",
+          "scheduleGeneral:read",
+          "scheduleGeneral:write"
+        ]
+      }
+    ]
+  }
+]

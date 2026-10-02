@@ -1,0 +1,14 @@
+[
+  {
+    "name": "hrm-unit",
+    "command": "node_modules/.bin/vitest run test/unit",
+    "exit": 1,
+    "seconds": 4.1
+  },
+  {
+    "name": "hrm-typecheck",
+    "command": "node_modules/.bin/tsc --noEmit",
+    "exit": 0,
+    "seconds": 18.8
+  }
+]

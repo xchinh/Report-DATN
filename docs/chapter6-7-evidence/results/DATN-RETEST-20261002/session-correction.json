@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-02T02:30:58.379992+07:00",
+  "correction": "Previous probes sent access|||refresh as one Bearer credential. Correct access token is first component. The phone session is valid; previous rejection does not demonstrate the app session was invalid.",
+  "results_after_ui_switch_to_admin": [
+    {
+      "port": 4000,
+      "http_status": 200,
+      "status": 200,
+      "user_present": true,
+      "admin_user": true,
+      "permission_count": 0,
+      "identity_check": "username for Auth; shcc for HRM/iOffice"
+    },
+    {
+      "port": 6023,
+      "http_status": 200,
+      "status": 200,
+      "user_present": true,
+      "admin_user": true,
+      "permission_count": 367,
+      "identity_check": "username for Auth; shcc for HRM/iOffice"
+    },
+    {
+      "port": 3001,
+      "http_status": 200,
+      "status": "success",
+      "user_present": true,
+      "admin_user": true,
+      "permission_count": 102,
+      "identity_check": "username for Auth; shcc for HRM/iOffice"
+    }
+  ],
+  "prior_files_superseded": [
+    "live-session-after-start.json",
+    "live-api-readonly.json"
+  ],
+  "M06_scope": "Mocked interceptor/provider check remains valid; empty-calendar screenshot is not a live reproduction of invalid app session.",
+  "identity_check_correction": "Initial admin_user flags for HRM/iOffice checked an absent username field. Use domain shcc; final real admin state confirms both domains."
+}

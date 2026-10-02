@@ -1,27 +1,30 @@
 sequenceDiagram
-    autonumber
-    actor User as Đại biểu cuộc họp
-    participant App as MyHCMUT Mobile
-    participant IOffice as Hệ thống iOffice
-    participant DB as CSDL iOffice
-
-    User->>App: Mở chi tiết cuộc họp
-    App->>IOffice: Lấy thông tin cuộc họp và trạng thái tham dự
-    IOffice->>DB: Kiểm tra quyền và cấu hình điểm danh
-    DB-->>IOffice: Thông tin cuộc họp
-    IOffice-->>App: Trả trạng thái có thể thao tác
-    alt Cuộc họp cho phép điểm danh
-        User->>App: Chọn có mặt hoặc báo vắng kèm lý do
-        App->>IOffice: Gửi trạng thái tham dự
-        IOffice->>DB: Kiểm tra thời gian, quyền và trạng thái hiện tại
-        alt Thao tác hợp lệ
-            IOffice->>DB: Ghi nhận trạng thái tham dự
-            IOffice-->>App: Trả kết quả thành công
-            App-->>User: Cập nhật trạng thái hiển thị
-        else Không hợp lệ
-            IOffice-->>App: Trả lý do từ chối
-            App-->>User: Hiển thị thông báo
-        end
-    else Không hỗ trợ hoặc đã hết thời gian
-        App-->>User: Thông báo không thể điểm danh
-    end
+ autonumber
+ actor User as Nhân sự
+ participant App as MyHCMUT Mobile
+ participant API as API iOffice
+ participant DB as Dữ liệu iOffice
+ User->>App: Chọn có mặt, báo vắng hoặc hủy
+ App->>API: Gửi thao tác, lý do nếu báo vắng
+ API->>API: Kiểm tra quyền, cuộc họp và trạng thái
+ alt Có mặt hoặc hủy
+  API->>API: Kiểm tra từ một giờ trước bắt đầu đến hết ngày kết thúc
+ else Báo vắng
+  API->>API: Kiểm tra lý do và hạn hết ngày bắt đầu
+ end
+ alt Không hợp lệ
+  API-->>App: Trả lý do từ chối
+  App-->>User: Hiển thị lỗi
+ else Hợp lệ
+  API->>DB: Tra phân công đích danh hoặc theo đơn vị
+  alt Có phân công
+   API->>DB: Ghi hoặc hủy trạng thái trên dòng phân công
+  else Không có phân công
+   API->>DB: Ghi hoặc hủy trạng thái khách, assignId null
+  end
+  API->>DB: Nhật ký và commit
+  API-->>App: Kết quả, sự kiện làm mới
+  App->>API: Tải lại trạng thái
+  API-->>App: Nhóm được mời và khách
+  App-->>User: Cập nhật giao diện
+ end

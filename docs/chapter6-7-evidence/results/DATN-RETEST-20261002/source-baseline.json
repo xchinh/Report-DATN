@@ -1,0 +1,33 @@
+{
+  "myhcmut-mobile": {
+    "head": "61722adcb66d0fb50deb6e529dd7a5a10103147d",
+    "branch": "feat/leaveRequest",
+    "working_tree": [],
+    "source_tree_digest": "cfea44c880fc250174914dc4a2dd83d7d6da22a0839b9d1058c181d6485a1ebb"
+  },
+  "hrm-be": {
+    "head": "250274cac7db8f2f4c2f188c9e4084b3e1e52308",
+    "branch": "chinh-dev",
+    "working_tree": [
+      " M .env.local"
+    ],
+    "source_tree_digest": "07859d8d7c76fa3e4ec114960673c7954a67688f57f2c4ef25b146fea93de36d"
+  },
+  "ioffice-be": {
+    "head": "4ca9249c2ab4a478ee62ea3d53d961ca5de8e2fb",
+    "branch": "chinh-khang",
+    "working_tree": [
+      " M .env.local",
+      "?? AGENTS.md"
+    ],
+    "source_tree_digest": "1e9d1ab46ccaf9a2535f1e362f9afa526a1e71495748e2dfc4fc5624eee21cf1"
+  },
+  "myhcmut-be": {
+    "head": "7e687a6005ceb6264f3467072081c784a6f9c7bc",
+    "branch": "dev/khang-chinh",
+    "working_tree": [
+      " M config/app/app.env.ts"
+    ],
+    "source_tree_digest": "e3558e48512d0a80de642de32b268fbda9f33d477555e55a9e39a28d7cb7c30a"
+  }
+}

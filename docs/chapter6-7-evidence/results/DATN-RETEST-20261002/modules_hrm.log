@@ -1,0 +1,357 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) profile WebView allows only the profile route
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-01: Accepts valid HRM local origin (localhost:6022)
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-02: Accepts valid Android emulator HRM origin (10.0.2.2:6022)
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-03: Accepts valid 127.0.0.1 HRM origin (127.0.0.1:6022)
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-LAN: Accepts valid private LAN IP origins (192.168.1.11:6022, 10.0.0.5:3000)
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-04: Accepts valid HRM production origin (hrm.hcmut.edu.vn)
+00:00 +6: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-05: Accepts valid iOffice origins (localhost:3000, 10.0.2.2:3000, ioffice.hcmut.edu.vn)
+00:00 +7: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-06: Rejects malicious origins (evil.com, untrusted domains)
+00:00 +8: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-07: Rejects untrusted local ports (http://localhost:9999, 10.0.2.2:9999)
+00:00 +9: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-08: Rejects non-HTTP(S) schemes (javascript, file, data)
+00:00 +10: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-09: Rejects insecure HTTP for production domain
+00:00 +11: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 1. Domain Allowlist Validator (SsoDomainValidator) TC-VAL-10: Rejects empty or malformed URLs
+00:00 +12: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-01: Successfully generates ticket and parses response
+00:00 +13: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-02: Generates ticket for ioffice targetSystem
+00:00 +14: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-03: Throws descriptive Exception when response missing ticket
+00:00 +15: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-04: Throws descriptive Exception on connection timeout
+00:00 +16: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-05: Throws descriptive Exception on server error response with message
+00:00 +17: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 2. SSO Ticket Service & Provider (SsoTicketService) TC-TKT-06: Resolves ssoTicketServiceProvider via Riverpod ProviderContainer
+00:00 +18: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-01: Appends ?ticket= to clean URL without query parameters
+00:00 +19: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-02: Appends or updates ticket query param when other params exist
+00:00 +20: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-03: Replaces existing ticket query param with fresh ticket
+00:00 +21: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-04: Maps localhost:6022 to 10.0.2.2:6022 for Android emulator
+00:00 +22: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-05: Maps 127.0.0.1:6022 to 10.0.2.2:6022 for Android emulator
+00:00 +23: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-06: Maps localhost:3000 to 10.0.2.2:3000 for Android emulator
+00:00 +24: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-07: Maps 127.0.0.1:3000 to 10.0.2.2:3000 for Android emulator
+00:00 +25: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-08: Does not transform localhost when isEmulator is false
+00:00 +26: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-09: Does not transform production URLs on Android emulator
+00:00 +27: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-10: buildTargetUrl combines baseUrl, path, ticket, and applies emulator mapping
+00:00 +28: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-11: buildTargetUrl works without emulator mapping (desktop/iOS/web)
+00:00 +29: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_webview_test.dart: 3. URL Builder & Android Emulator Transformation (SsoUrlHelper) TC-URL-12: resolveInitialUrl handles both relative and absolute paths
+00:00 +30: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 1. SSO Cookie Manager (clearAllWebViewCookies) TC-CKM-01: Successfully calls deleteAllCookies on CookieManager instance
+[SsoCookieManager] Successfully cleared all WebView cookies.
+00:00 +31: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 1. SSO Cookie Manager (clearAllWebViewCookies) TC-CKM-02: Gracefully handles exceptions from CookieManager without throwing
+[SsoCookieManager] Error clearing WebView cookies: Exception: Native platform channel error
+#0      MockCookieManager.deleteAllCookies (file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart:16:7)
+#1      clearAllWebViewCookies (package:hrm/src/webview/sso_cookie_manager.dart:12:19)
+#2      main.<anonymous closure>.<anonymous closure> (file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart:48:27)
+#3      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#4      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#5      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:00 +32: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 1. SSO Cookie Manager (clearAllWebViewCookies) TC-CKM-03: Default invocation without parameter completes safely
+[SsoCookieManager] Error clearing WebView cookies: 'package:flutter_inappwebview_platform_interface/src/platform_cookie_manager.dart': Failed assertion: line 49 pos 7: 'InAppWebViewPlatform.instance != null': A platform implementation for `flutter_inappwebview` has not been set. Please ensure that an implementation of `InAppWebViewPlatform` has been set to `WebViewPlatform.instance` before use. For unit testing, `WebViewPlatform.instance` can be set with your own test implementation.
+#0      _AssertionError._doThrowNew (dart:core-patch/errors_patch.dart:67:4)
+#1      _AssertionError._throwNew (dart:core-patch/errors_patch.dart:49:5)
+#2      new PlatformCookieManager (package:flutter_inappwebview_platform_interface/src/platform_cookie_manager.dart:49:7)
+#3      new CookieManager.fromPlatformCreationParams (package:flutter_inappwebview/src/cookie_manager.dart:20:25)
+#4      new CookieManager (package:flutter_inappwebview/src/cookie_manager.dart:12:14)
+#5      CookieManager.instance (package:flutter_inappwebview/src/cookie_manager.dart:43:21)
+#6      clearAllWebViewCookies (package:hrm/src/webview/sso_cookie_manager.dart:11:52)
+#7      main.<anonymous closure>.<anonymous closure> (file:///home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart:57:27)
+#8      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:253:25)
+<asynchronous suspension>
+#9      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:250:11)
+<asynchronous suspension>
+#10     Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:318:9)
+<asynchronous suspension>
+
+00:00 +33: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-01: Correctly parses request_logout bridge message
+00:00 +34: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-02: Dispatches request_logout to onRequestLogout callback
+00:00 +35: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-03: handleEvent dispatches request_logout when origin is allowed
+00:00 +36: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 2. SSO Bridge Logout Handling (request_logout) TC-BRG-LGT-04: handleEvent rejects request_logout when origin is untrusted
+[Security] Bridge event rejected from untrusted origin: https://evil-untrusted-site.com/logout
+00:00 +37: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 3. Mobile Session Transition Listener (authStateProvider -> clearAllWebViewCookies) TC-AUTH-TRN-01: Triggers cookie cleanup when auth state transitions from non-null to null
+00:00 +38: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 3. Mobile Session Transition Listener (authStateProvider -> clearAllWebViewCookies) TC-AUTH-TRN-02: Does not trigger cookie cleanup on initial login (null to non-null)
+00:00 +39: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_logout_test.dart: 3. Mobile Session Transition Listener (authStateProvider -> clearAllWebViewCookies) TC-AUTH-TRN-03: Does not trigger cookie cleanup when remaining authenticated (non-null to non-null)
+00:00 +40: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-01: Successfully parses valid Map with action, data, and timestamp
+00:00 +41: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-02: Successfully parses valid JSON string payload
+00:00 +42: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-03: Successfully parses payload without data field (profile_updated)
+00:00 +43: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-04: Safely parses timestamp from numbers and string numbers
+00:00 +44: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-05: Rejects null, empty map, and invalid types
+00:00 +45: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-06: Rejects malformed JSON strings
+00:00 +46: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-07: Rejects payloads missing action or empty action
+00:00 +47: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 1. Bridge Event Parsing (SsoBridgeMessage.fromRaw) TC-BRG-PARSE-08: Correctly serializes message to JSON
+00:00 +48: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-01: Allows valid local development origins (port 6022)
+00:00 +49: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-02: Allows valid iOffice development origins (port 3000)
+00:00 +50: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-03: Allows valid production HTTPS origins
+00:00 +51: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-04: Rejects untrusted domains
+00:00 +52: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-05: Rejects insecure HTTP on production host
+00:00 +53: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-06: Rejects untrusted local ports
+00:00 +54: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-07: Rejects null or non-HTTP(S) origins
+00:00 +55: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-08: parseAndValidate returns null when origin is untrusted
+[Security] Bridge event rejected from untrusted origin: https://evil.com/phishing
+00:00 +56: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 2. Origin Validation (SsoBridgeHandler.isOriginAllowed & parseAndValidate) TC-BRG-ORIGIN-09: parseAndValidate returns SsoBridgeMessage when origin is trusted
+00:00 +57: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-01: Dispatches profile_updated action to onProfileUpdated callback
+00:00 +58: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-02: Dispatches close_webview action to onCloseWebView callback
+00:00 +59: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-03: Dispatches request_logout action to onRequestLogout callback
+00:00 +60: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-04: Returns false and triggers nothing for unrecognized action
+[Bridge] Unhandled bridge action: unrecognized_random_action
+00:00 +61: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-05: handleEvent blocks execution if origin is untrusted
+[Security] Bridge event rejected from untrusted origin: https://evil-hacker.com
+00:00 +62: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-06: handleEvent returns false if args list is empty
+00:00 +63: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/webview/sso_bridge_test.dart: 3. Action Dispatching (SsoBridgeHandler.dispatchAction & handleEvent) TC-BRG-DISP-07: handleEvent successfully handles valid event from allowed origin
+00:00 +64: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/workflows/leave_business_trip_workflow_test.dart: leave and business trip requests follow their end-to-end workflows
+00:00 +65: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/workflows/leave_business_trip_workflow_test.dart: failed leave update returns null and exposes AsyncError
+00:01 +66: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: NHAP at NHAP leaves 9.0 available days
+00:01 +67: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: GUI at NHAP leaves 9.0 available days
+00:01 +68: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: GUI at TRUONG_DV leaves 7.0 available days
+00:01 +69: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: GUI_LAI at TRUONG_DV leaves 7.0 available days
+00:01 +70: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: DUYET at CV_TCCB leaves 7.0 available days
+00:01 +71: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: THU_HOI at NHAP leaves 9.0 available days
+00:01 +72: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: TRA_LAI at TRUONG_DV leaves 9.0 available days
+00:01 +73: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: TU_CHOI at TRUONG_DV leaves 9.0 available days
+00:01 +74: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: DUYET at KET_THUC leaves 7.0 available days
+00:01 +75: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Keeps other registration types with colliding IDs
+00:01 +76: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Refreshes quota across draft, sent, recalled and completed states
+00:01 +77: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Propagates status loading failure instead of giving extra quota
+00:01 +78: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:01 +79: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:01 +80: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:01 +81: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:01 +82: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +83: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +84: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +85: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +86: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +87: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +88: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +89: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +90: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +91: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +92: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +93: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +94: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +95: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +96: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +97: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +98: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +99: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +100: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +101: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/leave_summary_status_test.dart: Separates used, drafts and awaiting approval on a narrow screen
+00:02 +102: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.thuHoi (Đã thu hồi) badge correctly
+00:02 +103: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.traLai (Trả lại) badge correctly
+00:02 +104: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.tuChoi (Từ chối) badge correctly
+00:02 +105: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_badge_test.dart: Widget Test: LeaveStatusBadge Renders LeaveStatus.nhap (Bản nháp) badge correctly
+00:02 +106: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +107: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +108: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +109: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +110: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +111: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +112: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +113: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +114: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +115: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +116: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:02 +117: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +118: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +119: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +120: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +121: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +122: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +123: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +124: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +125: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +126: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +127: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +128: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +129: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +130: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +131: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +132: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders uncommitted state and toggles on tap
+00:03 +133: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/riverpod_providers_test.dart: Riverpod Notifier: LeaveRequest State Management LeaveRequest updates step 2 and commitment correctly
+00:03 +134: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders error message when hasError is true
+00:03 +135: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CommitmentWidget Renders error message when hasError is true
+00:03 +136: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: VacationBalanceWidget Renders balance summary cards and limit exceeded warning when remaining < 0
+00:03 +137: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: FileCard Renders uploaded file information and delete action
+00:03 +138: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +139: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +140: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +141: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +142: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +143: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +144: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/time_off/widget_form_validation_test.dart: Widget Test: CreateTimeDialog Renders CreateTimeDialog with default elements
+00:03 +145: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/approve_profile_model_test.dart: ProfileReviewCountStatus Parsing parses status counts from JSON correctly
+00:03 +146: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/approve_profile_model_test.dart: StaffLyLichRequestItem & Detail Parsing parses request item with nested details and files
+00:03 +147: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/approve_profile_model_test.dart: StaffLyLichRequestPageResponse Parsing parses paginated list correctly
+00:04 +148: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +149: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +150: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +151: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +152: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +153: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +154: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +155: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +156: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +157: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +158: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_profile/review_diff_card_test.dart: ReviewDiffCard Widget Tests renders field label, before value, and after value
+00:04 +159: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_time_off/popup_workflow_buttons_test.dart: PopupWorkflowButtons & LeaveCardWidget Null Safety & Rendering PopupWorkflowButtons renders SizedBox.shrink when user is null (no crash)
+00:04 +160: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/approve_time_off/popup_workflow_buttons_test.dart: PopupWorkflowButtons & LeaveCardWidget Null Safety & Rendering PopupWorkflowButtons renders SizedBox.shrink when user is null (no crash)
+00:05 +161: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_list_edit_contract_test.dart: income card displays the saved total
+00:05 +162: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_list_edit_contract_test.dart: income card displays the saved total
+00:05 +163: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_list_edit_contract_test.dart: income card displays the saved total
+00:05 +164: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_list_edit_contract_test.dart: income card displays the saved total
+00:05 +165: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +166: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +167: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +168: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +169: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +170: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +171: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +172: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +173: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_profile_banner_test.dart: Widget: ProfileHeaderCard / ProfileBanner TC-WB-01: renders full name and display title properly
+00:05 +174: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:05 +175: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:05 +176: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:05 +177: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:05 +178: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:05 +179: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:05 +180: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +181: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +182: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +183: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +184: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +185: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +186: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +187: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +188: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +189: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +190: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_submission_refresh_test.dart: submission refreshes requests only on success, fail=false
+00:06 +191: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:06 +192: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:06 +193: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:06 +194: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:06 +195: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +196: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +197: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +198: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +199: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +200: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +201: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +202: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +203: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +204: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +205: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +206: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +207: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +208: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +209: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +210: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +211: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +212: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_navigation_test.dart: action selects its sections and editor, direct=true
+00:07 +213: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:07 +214: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:07 +215: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:07 +216: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:07 +217: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:07 +218: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +219: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +220: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +221: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +222: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +223: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +224: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +225: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +226: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +227: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +228: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +229: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +230: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_modal_keyboard_test.dart: add asset keeps actions above keyboard on a narrow phone
+00:08 +231: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_edit_web_contract_test.dart: editing family preserves employer and special history fields
+00:08 +232: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_edit_web_contract_test.dart: editing family preserves employer and special history fields
+00:08 +233: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_edit_web_contract_test.dart: editing family preserves employer and special history fields
+00:09 +234: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_edit_web_contract_test.dart: editing family preserves employer and special history fields
+00:09 +235: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_edit_web_contract_test.dart: editing family preserves employer and special history fields
+00:09 +236: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/family_edit_web_contract_test.dart: editing family preserves employer and special history fields
+00:09 +237: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +238: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +239: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +240: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +241: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +242: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +243: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +244: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +245: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +246: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +247: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +248: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +249: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +250: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +251: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:09 +252: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +253: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +254: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +255: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +256: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +257: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +258: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +259: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +260: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +261: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +262: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +263: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +264: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +265: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +266: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +267: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +268: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +269: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +270: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +271: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +272: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +273: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +274: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +275: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +276: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +277: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +278: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +279: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +280: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +281: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +282: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +283: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +284: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +285: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +286: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +287: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +288: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +289: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +290: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +291: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +292: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +293: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +294: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +295: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:10 +296: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:11 +297: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: first own-profile visit explains actions once and can replay
+00:11 +298: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_branches_test.dart: feedback selection suggests only feedback fields
+00:11 +299: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_branches_test.dart: feedback selection suggests only feedback fields
+00:11 +300: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_branches_test.dart: feedback selection suggests only feedback fields
+00:11 +301: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_first_visit_guide_test.dart: TCNS view does not show employee first-visit guidance
+00:11 +302: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:11 +303: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:11 +304: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:11 +305: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:11 +306: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:11 +307: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/widget_work_timeline_test.dart: Widget: WorkHistoryTimelineWidget TC-WT-01: empty or null lyLichCongTac renders empty state placeholder
+00:11 +308: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_guidance_test.dart: edit entry explains direct, approval and feedback actions
+00:11 +309: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_guidance_test.dart: edit entry explains direct, approval and feedback actions
+00:11 +310: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_guidance_test.dart: edit entry explains direct, approval and feedback actions
+00:12 +311: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_guidance_test.dart: edit entry explains direct, approval and feedback actions
+00:12 +312: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_guidance_test.dart: edit entry explains direct, approval and feedback actions
+00:12 +313: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/profile_edit_guidance_test.dart: edit entry explains direct, approval and feedback actions
+00:12 +314: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: request sends changed personal codes and policy text
+00:12 +315: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: request sends changed personal codes and policy text
+00:12 +316: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: request sends changed personal codes and policy text
+00:12 +317: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: request sends changed personal codes and policy text
+00:12 +318: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: request sends changed personal codes and policy text
+00:12 +319: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: request sends changed personal codes and policy text
+00:12 +320: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: personal JSON preserves marital status code
+00:12 +321: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: web personal fields follow FieldEditMode.pendingApproval permissions
+00:12 +322: /home/xchinh/workspace/myhcmut-mobile/modules/hrm/test/profile/personal_edit_web_fields_test.dart: web personal fields follow FieldEditMode.directEdit permissions
+00:13 +323: All tests passed!

@@ -1,0 +1,10 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/app_batch_action_bar_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/app_batch_action_bar_test.dart: AppBatchActionBar Widget Tests renders action buttons and triggers toggle and actions
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/app_dropdown_field_test.dart: AppDropdownField renders selected value and opens bottom sheet on tap
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/app_dropdown_field_test.dart: AppDropdownField renders selected value and opens bottom sheet on tap
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/app_dropdown_field_test.dart: AppDropdownField renders selected value and opens bottom sheet on tap
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/tab_bar_interaction_test.dart: ThemeMode.light tabs switch without a pressed background
+00:01 +5: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/tab_bar_interaction_test.dart: ThemeMode.light tabs switch without a pressed background
+00:01 +6: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/app_dropdown_field_test.dart: AppDropdownField disabled does not open sheet
+00:01 +7: /home/xchinh/workspace/myhcmut-mobile/packages/core/global_system/test/widgets/tab_bar_interaction_test.dart: ThemeMode.dark tabs switch without a pressed background
+00:01 +8: All tests passed!

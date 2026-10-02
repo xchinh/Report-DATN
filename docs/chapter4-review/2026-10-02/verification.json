@@ -1,0 +1,47 @@
+{
+  "status": "Applied to active Chapter 4 source and main report rebuilt",
+  "date": "2026-10-02",
+  "pdf_pages": {
+    "report": 153,
+    "chapter4": 37,
+    "chapter4_first_physical_page": 46,
+    "chapter4_last_physical_page": 82
+  },
+  "inventory": {
+    "functional_requirements": 25,
+    "use_cases": 20,
+    "nonfunctional_requirements": 5,
+    "figures": 15,
+    "business_trip_rules": 0
+  },
+  "checks": {
+    "latexmk_exit_code": 0,
+    "unresolved_references": 0,
+    "duplicate_labels": 0,
+    "oversized_floats": 0,
+    "chapter4_contains_no_e2e_terminology": true,
+    "trip_br_rules_removed": true,
+    "chapter4_pages_rendered_and_visually_reviewed": 37,
+    "chapter4_pdf_content_checked": true,
+    "standalone_pdf_has_no_draft_watermark": true
+  },
+  "artifacts": {
+    "main.pdf": {
+      "sha256": "a6bdbc14d6b773c3ff987641da7ce7284354f2a023d2cb02bc7e1883098febbb",
+      "bytes": 22757542
+    },
+    "output/pdf/chapter4-final-2026-10-02.pdf": {
+      "sha256": "6dae20b7cb5022fb6eba822be2670c3d1992b4f8f2a72e6a8ccd904b28432bd5",
+      "bytes": 1583085
+    },
+    "docs/chapter4-review/2026-10-02/chapter4-applied.tex": {
+      "sha256": "d1e67ba6cbb896ffb6d5975a422aa19194557d9b552ba55b80f00a576f472e15",
+      "bytes": 70936
+    },
+    "docs/chapter4-review/2026-10-02/README.md": {
+      "sha256": "63db190d5416ed060fa9cdc70577146fd79321005147ebbd3d3531222c60f33e",
+      "bytes": 2250
+    }
+  },
+  "page_limit_note": "The full PDF is 3 pages above the 150-page limit."
+}

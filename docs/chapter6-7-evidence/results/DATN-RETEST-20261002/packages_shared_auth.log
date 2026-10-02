@@ -1,0 +1,8 @@
+00:00 +0: loading /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_state_test.dart
+00:00 +0: /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_state_test.dart: AuthState Provider Tests returns cached user and preserves token when /api/state encounters network error (hot restart resilience)
+00:00 +1: /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_state_test.dart: AuthState Provider Tests purges token and cached user when /api/state returns 401
+00:00 +2: /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_state_test.dart: AuthState Provider Tests updates cached user when /api/state succeeds
+00:00 +3: /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_state_test.dart: AuthState Provider Tests logout clears both token and cached user
+00:00 +4: /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_models_test.dart: Auth Package Models & DTO Tests AuthUser fromJson and toJson serialization
+00:00 +5: /home/xchinh/workspace/myhcmut-mobile/packages/shared/auth/test/auth_models_test.dart: Auth Package Models & DTO Tests LoginResponse fromJson parses tokens and user correctly
+00:00 +6: All tests passed!

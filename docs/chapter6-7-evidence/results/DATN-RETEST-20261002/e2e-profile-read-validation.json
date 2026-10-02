@@ -1,0 +1,19 @@
+{
+  "id": "E-PRO-READ-VALIDATION-01",
+  "at": "2026-10-02T02:57:41.567110+07:00",
+  "actor": "CB-A",
+  "execution": "Android UI and real HRM read-only endpoints",
+  "observed": [
+    "Native personal profile loaded",
+    "Native request-history and edit-history tabs opened",
+    "Native edit menu exposes feedback/direct update/change request",
+    "Backend policy returns 19 sections; personal-information section marks sdt direct and ngaySinh evidence-required",
+    "Native feedback with non-empty reason and no attachment stays in form; message Chọn mục, nhập phản hồi và đính kèm minh chứng."
+  ],
+  "requests_and_logs_unchanged": true,
+  "limits": [
+    "No direct update/change request persisted or approved in this case",
+    "History read uses existing entries; no new before/after edit evidence created",
+    "Policy checks selected fields only, not every field in every section"
+  ]
+}

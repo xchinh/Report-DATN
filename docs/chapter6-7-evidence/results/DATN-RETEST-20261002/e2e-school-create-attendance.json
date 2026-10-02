@@ -1,0 +1,515 @@
+{
+  "id": "E-SCH-CREATE-ATTENDANCE-01",
+  "at": "2026-10-02T03:25:38.425149+07:00",
+  "source_manifest": "manifest.md",
+  "fixture": {
+    "id": 387,
+    "title": "DATN20261002SCH0314",
+    "creator": "CV-BGH",
+    "creator_unit_from_real_detail_api": "93",
+    "invited_actor": "BGH-A",
+    "assign_id": 1349,
+    "cap": "TRUONG",
+    "step_name": "TONG_HOP",
+    "start_time": "1790885640000",
+    "end_time": "1790889240000"
+  },
+  "cases": [
+    {
+      "id": "SCH-CREATE-01",
+      "execution": "Android UI -> real API/DB",
+      "result": "Pass",
+      "observed": "Direct school-calendar created at TRUONG/TONG_HOP; expected creator and BGH chair; calendar UI shows Chưa phát hành"
+    },
+    {
+      "id": "SCH-GUEST-01",
+      "execution": "Android UI -> real API/DB",
+      "result": "Pass",
+      "actor": "CV-BGH (creator, not assigned)",
+      "observed": "Guest checkin assign_id=null, visible under Khách / Ngoài danh sách; UI rollback removes own attendance"
+    },
+    {
+      "id": "SCH-INVITED-01",
+      "execution": "Android UI -> real API/DB",
+      "result": "Pass",
+      "actor": "BGH-A",
+      "observed": "Pending item visible to invited user; checkin uses assign_id=1349; UI rollback removes own row"
+    },
+    {
+      "id": "SCH-DUPLICATE-01",
+      "execution": "Real API after native invited checkin",
+      "result": "Pass",
+      "http": 400,
+      "observed": "Bạn đã điểm danh cho lịch này; attendance and log counts unchanged"
+    },
+    {
+      "id": "SCH-ABSENCE-01",
+      "execution": "Android UI + real API/DB",
+      "result": "Pass",
+      "observed": "Empty reason disables UI submit and real API returns 400; nonempty DATN reason persists absent row"
+    },
+    {
+      "id": "SCH-ABSENCE-TO-PRESENT-01",
+      "execution": "Android UI -> real API/DB",
+      "result": "Pass",
+      "observed": "Checkin changes same absence row to present, clears reason; final UI rollback removes row"
+    },
+    {
+      "id": "SCH-SAME-UNIT-GUEST-01",
+      "execution": "Android list read; detail/checkin/rollback via real API",
+      "result": "Observed behavior",
+      "actor": "CB-A",
+      "observed": "Not invited, same unit as creator: item absent from relative list but detail HTTP 200 and direct checkin HTTP 200 create guest row; rollback removes row",
+      "native_checkin_executed": false
+    },
+    {
+      "id": "SCH-OUTSIDE-UNIT-GUEST-01",
+      "execution": "Real API/DB",
+      "result": "Observed authorization limitation",
+      "actor": "CV-TCNS",
+      "detail_http": 400,
+      "checkin_http": 200,
+      "observed": "Not invited, different unit: relative list excludes item and detail denied, but direct API checkin still creates own guest row; rollback removes it",
+      "native_checkin_executed": false
+    },
+    {
+      "id": "SCH-TIME-1",
+      "result": "Pass",
+      "case": "more_than_one_hour_early",
+      "execution": "Real API; temporarily retimed only fixture #387",
+      "http": 400,
+      "status": "error",
+      "message": "Chỉ có thể điểm danh trong vòng 1 giờ trước giờ họp"
+    },
+    {
+      "id": "SCH-TIME-2",
+      "result": "Pass",
+      "case": "after_schedule_day",
+      "execution": "Real API; temporarily retimed only fixture #387",
+      "http": 400,
+      "status": "error",
+      "message": "Đã hết thời gian điểm danh cho lịch này"
+    },
+    {
+      "id": "SCH-DELETED-01",
+      "execution": "Real API/DB",
+      "result": "Pass",
+      "http": 400,
+      "observed": "After own fixture soft delete, checkin rejected with Không tìm thấy lịch này; no attendance remains"
+    }
+  ],
+  "db_snapshots": [
+    {
+      "stage": "created",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "create",
+          "count": 1
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "creator-checkin",
+      "attendance": [
+        {
+          "id": 82,
+          "assign_id": null,
+          "attended": true,
+          "ly_do": null,
+          "actor": "CV-BGH"
+        }
+      ],
+      "logs": [
+        {
+          "action": "checkin",
+          "count": 1
+        },
+        {
+          "action": "create",
+          "count": 1
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "creator-rollback",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "checkin",
+          "count": 1
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 1
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "invitee-checkin",
+      "attendance": [
+        {
+          "id": 83,
+          "assign_id": 1349,
+          "attended": true,
+          "ly_do": null,
+          "actor": "BGH-A"
+        }
+      ],
+      "logs": [
+        {
+          "action": "checkin",
+          "count": 2
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 1
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "invitee-duplicate",
+      "attendance": [
+        {
+          "id": 83,
+          "assign_id": 1349,
+          "attended": true,
+          "ly_do": null,
+          "actor": "BGH-A"
+        }
+      ],
+      "logs": [
+        {
+          "action": "checkin",
+          "count": 2
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 1
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "invitee-rollback",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "checkin",
+          "count": 2
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 2
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "invitee-absence",
+      "attendance": [
+        {
+          "id": 84,
+          "assign_id": 1349,
+          "attended": false,
+          "ly_do": "DATN20261002ABSENCE",
+          "actor": "BGH-A"
+        }
+      ],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 2
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 2
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "invitee-absence-to-checkin",
+      "attendance": [
+        {
+          "id": 84,
+          "assign_id": 1349,
+          "attended": true,
+          "ly_do": null,
+          "actor": "BGH-A"
+        }
+      ],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 3
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 2
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "invitee-final-rollback",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 3
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 3
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "uninvited-checkin",
+      "attendance": [
+        {
+          "id": 85,
+          "assign_id": null,
+          "attended": true,
+          "ly_do": null,
+          "actor": "CB-A"
+        }
+      ],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 4
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 3
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "uninvited-rollback",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 4
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 4
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "outsider-checkin",
+      "attendance": [
+        {
+          "id": 86,
+          "assign_id": null,
+          "attended": true,
+          "ly_do": null,
+          "actor": "CV-TCNS"
+        }
+      ],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 5
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 4
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "outsider-rollback",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 5
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 5
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "after-time-boundaries",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 5
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 5
+        },
+        {
+          "action": "update",
+          "count": 3
+        }
+      ],
+      "is_deleted": false,
+      "step_name": "TONG_HOP"
+    },
+    {
+      "stage": "cleanup",
+      "attendance": [],
+      "logs": [
+        {
+          "action": "absence",
+          "count": 1
+        },
+        {
+          "action": "checkin",
+          "count": 5
+        },
+        {
+          "action": "create",
+          "count": 1
+        },
+        {
+          "action": "delete",
+          "count": 1
+        },
+        {
+          "action": "rollback_checkin",
+          "count": 5
+        },
+        {
+          "action": "update",
+          "count": 3
+        }
+      ],
+      "is_deleted": true,
+      "step_name": "TONG_HOP"
+    }
+  ],
+  "time_changes_restored": {
+    "http": 200,
+    "original_times_restored": true,
+    "stepName": "TONG_HOP"
+  },
+  "cleanup": {
+    "method": "Creator DELETE /api/schedule/general-item/don-vi/item/387 (real API)",
+    "soft_deleted": true,
+    "attendance_rows_remaining": 0,
+    "assignments_and_history_retained": "Normal soft-delete semantics; only new fixture #387 affected"
+  },
+  "ui_observation": "Attendance summary counts assigned slots, excluding guest rows; guest group still displayed. This is not a count of all people present.",
+  "limits": [
+    "Only direct school creation mode tested here, not department/register modes",
+    "No attachment upload/retry or official publication executed",
+    "No new claim of push delivery; create uses existing invitation behavior for approved test account",
+    "Native guest path proved for creator. Other uninvited cases use direct API, not mobile E2E",
+    "Time tests cover representative early/expired cases through API, not exact millisecond boundaries",
+    "Screenshots with names and raw responses remain private; published list screenshot contains only synthetic fixture"
+  ]
+}

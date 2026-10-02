@@ -1,5 +1,7 @@
 # HƯỚNG DẪN CHI TIẾT ĐỀ MỤC VÀ NỘI DUNG CẦN THỰC HIỆN CHO 7 CHƯƠNG ĐATN
 
+> **Hướng dẫn tham khảo:** Phạm vi, claim và số kiểm thử hiện hành phải lấy từ [đợt kiểm thử 02/10](chapter6-7-evidence/14_retest_and_rewrite_gate_20261002.md) và audit Chương 4–6. Không sao chép các mô tả WebView hay mục tiêu kỹ thuật cũ như chức năng đã đạt.
+
 > **Trạng thái tài liệu:** Bản hướng dẫn lịch sử. Cấu trúc báo cáo hiện hành được xác định bởi các tệp `Chapter1`--`Chapter7` và `docs/KE_HOACH_THUC_HIEN_VIET_BAO_CAO_DATN_V3.md`; không sử dụng các số liệu, phạm vi module hoặc claim kỹ thuật trong tài liệu này làm nguồn trực tiếp cho luận văn.
 **Đề tài:** Phát triển Ứng dụng Di động Phục vụ Nhân sự Trường Đại học (MyHCMUT)  
 **Tỷ trọng Luận văn:** 70% Ứng dụng Di động (Mobile Client) – 30% Backend & Kiến trúc Tích hợp  

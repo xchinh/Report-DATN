@@ -1,7 +1,9 @@
 # HỒ SƠ TÀI KHOẢN NGHIỆP VỤ & KẾT QUẢ KIỂM THỬ CÁC QUY TRÌNH PHÊ DUYỆT
 
+> **Cập nhật 02/10/2026:** giữ tệp này để chọn tài khoản kiểm thử theo chỉ định của người dùng. Ma trận quyền và kết quả bên dưới thuộc mốc 24/09, cần kiểm tra lại với `/api/state`. Lượt mới đổi user thành công qua UI ở cả Auth/HRM/iOffice. Tài khoản `camduylt` hiện không có `tcns:nghi_phep:read/write`, `tcns:request_ly_lich:read/write` hoặc quyền duyệt theo trường; không dùng nhãn chuyên viên TCNS để kết luận tài khoản này duyệt được các luồng đó. Các tài khoản thay thế chưa được kiểm tra lại. Quyền cá nhân hiện dùng tiền tố `cn:...`; các tên `staff:...` bên dưới không phải ma trận quyền hiện hành. Kết quả mới và các nhánh chưa chạy nằm trong [biên bản 14](14_retest_and_rewrite_gate_20261002.md).
+
 > **Tài liệu tham chiếu nội bộ:** Phục vụ thẩm định, đối chiếu chéo kết quả kiểm thử hệ thống và làm cơ sở số liệu cho Chương 6, Chương 7 của Đồ án Tốt nghiệp.  
-> **Thời điểm xác lập:** 24/09/2026.  
+> **Thời điểm xác lập:** 24/09/2026. Kết quả tạo lịch Trường/điểm danh chạy mới ngày 02/10 được ghi riêng trong [biên bản 14](14_retest_and_rewrite_gate_20261002.md); câu giới hạn phạm vi tạo lịch bên dưới thuộc mốc 24/09.
 > **Nguồn dữ liệu:** Cơ sở dữ liệu thử nghiệm PostgreSQL (`hcmut_hrm_release`, `tcns-dev`, `hcmut_hanh_chinh_dev`) kết hợp mã nguồn thực tế (`hrm-be`, `ioffice-be`, `myhcmut-be`, `myhcmut-mobile`).
 
 > **Quy tắc chốt cho báo cáo:** iOffice cho phép khách ngoài danh sách phân công tự điểm danh với `assign_id = null`. `SCH-01` ngày 23/09 đã kiểm tra theo kỳ vọng cũ là phải từ chối khách; nhãn Fail của kịch bản đó được giữ như lịch sử, không dùng làm kết luận lỗi sản phẩm theo đặc tả Chương 4 đã cập nhật. Việc chuẩn bị cuộc họp thử chỉ phục vụ kiểm tra điểm danh; báo cáo không đánh giá quy trình tạo lịch.
