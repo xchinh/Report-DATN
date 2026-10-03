@@ -1,0 +1,42 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
+    \caption[Từ điển dữ liệu bảng lý lịch khen thưởng - kỷ luật]{Từ điển dữ liệu bảng lý lịch khen thưởng - kỷ luật}\label{tab:profile_ktkl}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endfirsthead
+    \multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endhead
+    \hline
+    \multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+    \endfoot
+    \hline
+    \endlastfoot
+    \texttt{tcns\_khen\_thuong} & \texttt{id} & integer (PK, NOT NULL) & Mã định danh các trường hợp khen thưởng. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) & Nhân sự tương ứng. \\
+    \cline{2-4}
+    & \texttt{xep\_loai\_thi\_dua} & varchar(100) & Xếp loại thi đua của mục khen thưởng. \\
+    \cline{2-4}
+    & \texttt{hinh\_thuc} & varchar(100) & Hình thức khen thưởng. \\
+    \cline{2-4}
+    & \texttt{nam} & bigint & Năm khen thưởng. \\
+    \cline{2-4}
+    & \texttt{xep\_loai\_chuyen\_mon} & varchar(50)  & Xếp loại chuyên môn của thành tích (vd: Hoàn thành xuất sắc, hoàn thành tốt, ...). \\
+    \hline
+    \texttt{tcns\_ky\_luat} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh các trường hợp kỷ luật. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) & Nhân sự tương ứng. \\
+    \cline{2-4}
+    & \texttt{hanh\_vi\_vi\_pham} & varchar(500) & Hành vi vi phạm. \\
+    \cline{2-4}
+    & \texttt{co\_quan\_quyet\_dinh} & varchar(300)  & Cơ quan ra quyết định kỷ luật. \\
+    \cline{2-4}
+    & \texttt{ngay\_bat\_dau} & bigint  & Ngày bắt đầu kỷ luật. \\
+    \cline{2-4}
+    & \texttt{ngay\_ket\_thuc} & bigint  & Ngày kết thúc kỷ luật. \\
+    \cline{2-4}
+    & \texttt{hinh\_thuc} & text  & Hình thức kỷ luật. \\
+\end{xltabular}

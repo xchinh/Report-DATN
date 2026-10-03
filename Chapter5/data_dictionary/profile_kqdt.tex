@@ -1,0 +1,48 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
+    \caption[\textit{Từ điển dữ liệu bảng kết quả đào tạo}]{\textit{Từ điển dữ liệu bảng kết quả đào tạo}}\label{tab:profile_kqdt}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endfirsthead
+    \multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endhead
+    \hline
+    \multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+    \endfoot
+    \hline
+    \endlastfoot
+    \texttt{tcns\_ket\_qua\_dao\_tao} & \texttt{id} & integer (PK, NOT NULL) & Định danh kết quả đào tạo. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) (FK với \texttt{shcc} trong \texttt{tcns\_ly\_lich}) & Mã nhân sự tương ứng. \\
+    \cline{2-4}
+    & \texttt{quoc\_gia} & varchar(5) & Quốc gia nơi đào tạo. \\
+    \cline{2-4}
+    & \texttt{trinh\_do} & varchar(5) & Trình độ học vị (vd: Cử nhân, Thạc sĩ, Tiến sĩ, ...). \\
+    \cline{2-4}
+    & \texttt{chuyen\_nganh} & varchar(50) & Chuyên ngành đào tạo. \\
+    \cline{2-4}
+    & \texttt{ten\_khoa\_luan} & text  & Tên khóa luận của khóa đào tạo (nếu có). \\
+    \cline{2-4}
+    & \texttt{hinh\_thuc\_dao\_tao} & varchar(5) & Hình thức đào tạo (vd: Chính quy, Liên kết, ...). \\
+    \cline{2-4}
+    & \texttt{ngay\_bat\_dau} & bigint & Ngày bắt đầu khóa đào tạo. \\
+    \cline{2-4}
+    & \texttt{ngay\_ket\_thuc} & bigint & Ngày kết thúc khóa đào tạo. \\
+    \cline{2-4}
+    & \texttt{co\_so\_dao\_tao} & varchar(200) & Cơ sở đào tạo. \\
+    \cline{2-4}
+    & \texttt{chuc\_danh} & boolean & Chức danh sau khi hoàn thành khóa đào tạo. \\
+    \cline{2-4}
+    & \texttt{nhom\_dao\_tao} & varchar(50) & Nhóm đào tạo của khóa đào tạo (vd: Lý luận chính trị, Ngoại ngữ, ...). \\
+    \cline{2-4}
+    & \texttt{minh\_chung} & jsonb & Minh chứng liên quan đến khóa đào tạo. \\
+    \cline{2-4}
+    & \texttt{trang\_thai} & varchar(20) & Trạng thái của nhân sự trong khóa đào tạo (vd: Đang học, Đã hoàn thành, ...). \\
+    \cline{2-4}
+    & \texttt{diem\_so} & text & Điểm số của khóa đào tạo đó. \\
+    \cline{2-4}
+    & \texttt{ten\_ngoai\_ngu} & text & Tên ngoại ngữ của chứng chỉ (nếu là nhóm Ngoại ngữ). \\
+\end{xltabular}

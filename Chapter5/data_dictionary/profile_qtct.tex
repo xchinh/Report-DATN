@@ -1,0 +1,42 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
+    \caption[\textit{Từ điển dữ liệu bảng quá trình công tác}]{\textit{Từ điển dữ liệu bảng quá trình công tác}}\label{tab:profile_qtct}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endfirsthead
+    \multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endhead
+    \hline
+    \multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+    \endfoot
+    \hline
+    \endlastfoot
+    \texttt{tcns\_ly\_lich\_cong\_tac} & \texttt{id} & integer (PK, NOT NULL) & Định danh quá trình công tác. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) (FK với \texttt{shcc} trong \texttt{tcns\_ly\_lich}) & Mã nhân sự tương ứng. \\
+    \cline{2-4}
+    & \texttt{ma\_chuc\_vu} & varchar(5) & Chức vụ của nhân sự. \\
+    \cline{2-4}
+    & \texttt{ma\_don\_vi} & varchar(5) & Đơn vị công tác của nhân sự. \\
+    \cline{2-4}
+    & \texttt{ngay\_bat\_dau} & bigint  & Ngày bắt đầu công tác của nhân sự tại chức vụ đó. \\
+    \cline{2-4}
+    & \texttt{ngay\_ket\_thuc} & bigint & Ngày kết thúc công tác của nhân sự tại chức vụ đó. \\
+    \cline{2-4}
+    & \texttt{ghi\_chu} & text & Ghi chú về quá trình công tác. \\
+    \cline{2-4}
+    & \texttt{is\_chinh} & boolean & Vì nhân sự có thể đảm nhận nhiều chức vụ, trường này đánh dấu chức vụ chính. \\
+    \cline{2-4}
+    & \texttt{quyet\_dinh\_bo\_nhiem} & text & Quyết định bổ nhiệm của nhân sự vào chức vụ đó. \\
+    \cline{2-4}
+    & \texttt{ngay\_quyet\_dinh\_bo\_nhiem} & bigint & Ngày quyết định bổ nhiệm của nhân sự vào chức vụ đó. \\
+    \cline{2-4}
+    & \texttt{loai\_quyet\_dinh} & varchar(50) & Loại quyết định bổ nhiệm. \\
+    \cline{2-4}
+    & \texttt{quyet\_dinh\_thoi\_cv} & text & Quyết định thôi chức vụ của nhân sự. \\
+    \cline{2-4}
+    & \texttt{ngay\_qd\_thoi\_cv} & bigint & Ngày quyết định thôi chức vụ của nhân sự. \\
+\end{xltabular}

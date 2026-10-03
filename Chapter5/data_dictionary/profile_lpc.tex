@@ -1,0 +1,52 @@
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
+    \caption[Từ điển dữ liệu bảng lý lịch lương - phụ cấp]{Từ điển dữ liệu bảng lý lịch lương - phụ cấp}\label{tab:profile_lpc}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endfirsthead
+    \multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endhead
+    \hline
+    \multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+    \endfoot
+    \hline
+    \endlastfoot
+    \texttt{tcns\_qua\_trinh\_luong} & \texttt{id} & integer (PK, NOT NULL) & Mã định danh các mục trong quá trình lương. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) & Nhân sự tương ứng. \\
+    \cline{2-4}
+    & \texttt{ngay\_bat\_dau} & bigint  & Ngày bắt đầu hưởng lương. \\
+    \cline{2-4}
+    & \texttt{ngay\_ket\_thuc} & bigint  & Ngày kết thúc hưởng lương. \\
+    \cline{2-4}
+    & \texttt{he\_so\_luong} & numeric & Hệ số lương. \\
+    \cline{2-4}
+    & \texttt{phan\_tram\_luong} & integer & Phần trăm lương. \\
+    \cline{2-4}
+    & \texttt{bac\_luong} & varchar(20) & Bậc lương. \\
+    \cline{2-4}
+    & \texttt{ngach} & varchar(20) & Ngạch công chức. \\
+    \cline{2-4}
+    & \texttt{tien\_dong} & integer & Tiền đồng. \\
+    \hline
+    \texttt{tcns\_phu\_cap} & \texttt{id} & integer (PK, tự tăng, NOT NULL) & Định danh các mục phụ cấp. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) & Nhân sự tương ứng. \\
+    \cline{2-4}
+    & \texttt{ngay\_bat\_dau} & bigint  & Ngày bắt đầu hưởng mức phụ cấp. \\
+    \cline{2-4}
+    & \texttt{ngay\_ket\_thuc} & bigint  & Ngày kết thúc hưởng mức phụ cấp. \\
+    \cline{2-4}
+    & \texttt{loai\_phu\_cap} & varchar(10) & Loại phụ cấp. \\
+    \cline{2-4}
+    & \texttt{phan\_tram\_huong} & numeric & Phần trăm hưởng phụ cấp. \\
+    \cline{2-4}
+    & \texttt{he\_so} & numeric  & Hệ số phụ cấp. \\
+    \cline{2-4}
+    & \texttt{so\_tien} & integer & Số tiền phụ cấp. \\
+    \cline{2-4}
+    & \texttt{hinh\_thuc} & text  & Hình thức phụ cấp. \\
+\end{xltabular}

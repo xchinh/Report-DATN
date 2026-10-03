@@ -1,14 +1,33 @@
-\begin{xltabular}{\textwidth}{|L{2.9cm}|L{3cm}|Y|}
-\caption{Từ điển rút gọn bảng địa chỉ}\label{tab:profile_address}\\\hline
-\textbf{Trường} & \textbf{Kiểu trong model} & \textbf{Vai trò} \\\hline
-\endfirsthead\hline\textbf{Trường} & \textbf{Kiểu trong model} & \textbf{Vai trò} \\\hline\endhead
-\texttt{id} & integer, PK & Định danh địa chỉ. \\\hline
-\texttt{shcc} & varchar(20) & Mã nhân sự; liên kết logic tới hồ sơ. \\\hline
-\texttt{so\_nha} & varchar(200) & Số nhà. \\\hline
-\texttt{xa\_phuong} & varchar(10) & Mã xã/phường. \\\hline
-\texttt{loai\_dia\_chi} & varchar(20) & Loại địa chỉ. \\\hline
-\texttt{quoc\_gia} & varchar(5) & Mã quốc gia. \\\hline
-\texttt{tinh\_thanh} & varchar(5) & Mã tỉnh/thành. \\\hline
-\texttt{quan\_huyen} & varchar(10) & Mã quận/huyện trong cấu trúc địa chỉ tương ứng. \\\hline
+\begin{xltabular}{\textwidth}{|L{2.7cm}|L{2.6cm}|L{4.2cm}|Y|}
+    \caption[\textit{Từ điển dữ liệu bảng lý lịch địa chỉ}]{\textit{Từ điển dữ liệu bảng lý lịch địa chỉ}}\label{tab:profile_address}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endfirsthead
+    \multicolumn{4}{r}{\textit{\footnotesize(tiếp theo trang trước)}}\\
+    \hline
+    \textbf{Bảng} & \textbf{Trường} & \textbf{Kiểu} & \textbf{Vai trò} \\
+    \hline
+    \endhead
+    \hline
+    \multicolumn{4}{r}{\textit{\footnotesize(xem tiếp trang sau)}}\\
+    \endfoot
+    \hline
+    \endlastfoot
+    \texttt{tcns\_ly\_lich\_dia\_chi} & \texttt{id} & integer (PK, NOT NULL) & Định danh địa chỉ. \\
+    \cline{2-4}
+    & \texttt{xa\_phuong} & text & Mã xã/phường. \\
+    \cline{2-4}
+    & \texttt{shcc} & varchar(20) (FK với \texttt{shcc} trong \texttt{tcns\_ly\_lich}) & Mã nhân sự. \\
+    \cline{2-4}
+    & \texttt{so\_nha} & varchar(200)  & Số nhà. \\
+    \cline{2-4}
+    & \texttt{loai\_dia\_chi} & varchar(20) & Loại địa chỉ. Vd: nơi sinh, thường trú, .... \\
+    \cline{2-4}
+    & \texttt{quoc\_gia} & varchar(5)  & Quốc gia. \\
+    \cline{2-4}
+    & \texttt{tinh\_thanh} & varchar(5)  & Tỉnh/thành. \\
+    \cline{2-4}
+    & \texttt{quan\_huyen} & varchar(10)  & Quận/huyện nếu là địa chỉ cũ. \\
 \end{xltabular}
 Bảng nguồn: \texttt{staff\_ly\_lich\_dia\_chi}. Kiểu dữ liệu được đối chiếu model Sequelize; bảng này chỉ liệt kê các trường liên quan, không khẳng định là toàn bộ schema CSDL triển khai.
