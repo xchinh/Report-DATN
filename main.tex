@@ -1,13 +1,19 @@
+% !TeX program = xelatex
 \documentclass[a4paper]{report}
 \usepackage[fontsize=13pt]{scrextend}
+% Keep table text and continuation notes within the required 12--13 pt range.
+\renewcommand{\small}{\fontsize{12pt}{14.5pt}\selectfont}
+\renewcommand{\footnotesize}{\small}
 \usepackage{longtable}
 \usepackage{amsmath}
 \usepackage{indentfirst}
 \usepackage{ragged2e}
 \usepackage{blindtext}
 \usepackage{a4wide,amssymb,epsfig,latexsym,multicol,array,hhline,fancyhdr}
-\usepackage{vntex}
-\usepackage{mathptmx}[ptm]
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setmonofont{Times New Roman}
+\frenchspacing
 \usepackage[normalem]{ulem}
 \usepackage{lastpage}
 \usepackage{enumerate}
@@ -32,7 +38,6 @@
 \usepackage{pdfpages}
 \usepackage{listings}
 \usepackage{textcomp}
-\usepackage{gensymb}
 \usepackage{xltabular}
 \usepackage{enumitem}
 \usepackage{etoolbox}
@@ -48,7 +53,6 @@
 \makeatother
 \usepackage{comment}
 \usepackage{microtype}
-\usepackage[htt]{hyphenat}
 \usepackage{tocloft}
 \usepackage{appendix}
 \usepackage{algorithm}
@@ -74,10 +78,10 @@
 
 \def\thesislayout{	% A4: 210 × 297
 	\newgeometry{
-		left=35mm,
-		top=25mm,
-		bottom=30mm,
-		right=30mm
+		left=30mm,
+		top=20mm,
+		bottom=20mm,
+		right=20mm
 	}
 }
 \def\thesisheadlayout{	% A4: 210 × 297
@@ -90,7 +94,6 @@
 	}
 }
 \AtBeginDocument{\renewcommand*\contentsname{Mục lục}}
-\AtBeginDocument{\renewcommand*\refname{Tài liệu tham khảo}}
 \AtBeginDocument{\renewcommand*\bibname{Tài liệu tham khảo}}
 \AtBeginDocument{\renewcommand*\listfigurename{Danh sách hình ảnh}}
 \AtBeginDocument{\renewcommand*\listtablename{Danh sách bảng}}
@@ -361,6 +364,7 @@
 {\fontsize{12pt}{0pt} TP. HỒ CHÍ MINH, Tháng 10/2026}
 \end{center}
 \end{titlepage}
+\thesislayout
 \hypersetup{pageanchor=true}
 
 \renewcommand{\figurename}{\textbf{Hình}}
@@ -392,7 +396,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagenumbering{arabic}
 \setcounter{page}{1}
-\thesislayout
 
 \include{Chapter1/index}
 \include{Chapter2/index}

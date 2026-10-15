@@ -7,6 +7,8 @@ Các ảnh trong thư mục này chỉ minh họa giao diện và thao tác; k�
 | `profile_review_demo.png` | `DATN-FIX-RECHECK-20260924/screenshots/PRO_mobile_diff_detail.png` | Thay tên, SHCC và tên tệp minh chứng bằng dữ liệu mẫu; chỉ dùng để minh họa bố cục thẩm định. |
 | `leave_content_demo.png`, `leave_history_demo.png` | Ảnh chụp chi tiết phiếu trên Android ngày 02/10/2026 | Thay tên người làm đơn và người thao tác bằng nhãn mẫu; giữ nội dung nghiệp vụ, vai trò, hành động và thời điểm hiển thị. |
 | `leave_workflow_live.png` | Ảnh chụp tab Quy trình trên Android ngày 02/10/2026 | Ảnh giao diện quy trình; không hiển thị tên cá nhân. |
+| `business_trip_content_demo.png`, `business_trip_history_demo.png` | Ảnh chụp chi tiết phiếu trên Android ngày 03/10/2026 | Thay tên người làm đơn và người thao tác bằng nhãn mẫu; giữ nội dung nghiệp vụ, vai trò, hành động và thời điểm hiển thị. |
+| `business_trip_workflow_live.png` | Ảnh chụp tab Quy trình trên Android ngày 03/10/2026 | Ảnh giao diện quy trình; không hiển thị tên cá nhân. |
 | `meeting_checkin_demo.png`, `meeting_absence_demo.png` | `DATN-FIX-RECHECK-20260924/screenshots/IOF_mobile_checkin_flow.png` và `IOF_mobile_absence_flow.png` | Thay tên người tham dự và lý do vắng bằng dữ liệu mẫu; giữ hai trạng thái giao diện sau thao tác. |
 | Các ảnh còn lại | Ảnh chụp từ đợt kiểm thử `DATN-RERUN-20260923` | Không thay dữ liệu trong ảnh sao chép. |
 

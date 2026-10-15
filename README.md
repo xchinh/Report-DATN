@@ -87,7 +87,10 @@ KHCN, ký số PKI và họp trực tuyến WebRTC không thuộc phạm vi nghi
 
 ### 1. Yêu cầu hệ thống
 - Phân phối TeX: **TeX Live** (Linux/Windows), **MacTeX** (macOS), hoặc **MiKTeX**.
-- Gói bổ trợ tiếng Việt: `vntex`, `geometry`, `fancyhdr`, `tikz`, `algorithm2e`, `listings`, `hyperref`.
+- Trình biên dịch: **XeLaTeX**, hỗ trợ trực tiếp tiếng Việt Unicode và font hệ thống.
+- Font hệ thống: **Times New Roman**, đủ bốn kiểu Regular, Bold, Italic và Bold Italic. Cần cài font trước khi biên dịch; không thay bằng Nimbus Roman/Liberation Serif.
+- Gói bổ trợ: `fontspec`, `geometry`, `fancyhdr`, `tikz`, `algorithm`, `listings`, `hyperref`.
+- Nội dung dùng cỡ chữ 13 pt, chữ nhỏ trong bảng và ghi chú tiếp trang dùng 12 pt; từ Lời cam đoan trở đi, lề trái 3 cm, phải/trên/dưới 2 cm. Bố cục bìa hiện tại được giữ để nhóm hoàn thiện sau.
 
 ### 2. Biên dịch bằng dòng lệnh (Terminal)
 
@@ -95,17 +98,19 @@ Khuyến nghị sử dụng `latexmk` để tự động hóa quá trình biên 
 
 ```bash
 # Biên dịch tài liệu ra file PDF
-latexmk -pdf -interaction=nonstopmode main.tex
+latexmk -interaction=nonstopmode main.tex
 
 # Dọn dẹp các file phụ trợ sinh ra khi build
 latexmk -c
 ```
 
-Hoặc sử dụng `pdflatex`:
+File `.latexmkrc` chọn XeLaTeX mặc định và cũng hỗ trợ các recipe hiện có dùng `latexmk -pdf`. Không chạy `pdflatex` trực tiếp vì trình biên dịch này không hỗ trợ `fontspec`.
+
+Hoặc sử dụng `xelatex` (chạy thêm nếu còn cảnh báo yêu cầu biên dịch lại):
 
 ```bash
-pdflatex -interaction=nonstopmode main.tex
-pdflatex -interaction=nonstopmode main.tex
+xelatex -interaction=nonstopmode main.tex
+xelatex -interaction=nonstopmode main.tex
 ```
 
 ### 3. Biên dịch trên Visual Studio Code
